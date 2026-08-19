@@ -17,6 +17,7 @@ SalesIQ will generate a professional invoice containing the relevant business, c
 
 > *Outcome:
 Every completed sale becomes a professional, identifiable, and traceable financial record rather than remaining only in a WhatsApp conversation, bank statement, notebook, or the business owner's memory*.
+---
 
 **2. Customer Management**
 
@@ -26,6 +27,7 @@ Where an existing customer is identified through information such as their phone
 
 > *Outcome:
 The business develops an organized digital customer history, reducing repeated data entry while making it easier to understand individual customer transactions and outstanding obligations.*
+---
 
 **3. Product Management**
 
@@ -35,6 +37,7 @@ Products previously recorded in SalesIQ can be searched and selected when creati
 
 > *Outcome:
 The business can record sales faster and build a structured history of what products are being sold, creating the foundation for product-level sales analysis without introducing inventory management into the platform.*
+---
 
 **4. Dashboard & Business Intelligence**
 
