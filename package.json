@@ -1,0 +1,34 @@
+{
+  "name": "salesiq",
+  "version": "1.0.0",
+  "description": "SalesIQ is a digital sales and financial intelligence platform designed to help businesses record, organize, and understand the transactions they make in the course of their business.",
+  "main": "index.js",
+  "type": "module",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sammykingx/SalesIQ.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sammykingx/SalesIQ/issues"
+  },
+  "homepage": "https://github.com/sammykingx/SalesIQ#readme",
+  "devDependencies": {
+    "vite": "^8.2.2"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "tailwindcss": "^4.3.3"
+  }
+}

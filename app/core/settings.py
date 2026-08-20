@@ -11,19 +11,18 @@ https://docs.djangoproject.com/en/6.1/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+ENVIRONMENT = config("ENV", default="local")
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-g-#*5w34-8=wbi_n0z$qaw60%33sc&aav^1+s^b0!0p-1z!b(k"
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+SECRET_KEY = config("SECRET_KEY") or "django-insecure-g-#*5w34-8=wbi_n0z$qaw60%33sc&aav^1+s^b0!0p-1z!b(k"
+DEBUG = config("DEBUG", default=True, cast=bool)
 
 ALLOWED_HOSTS = []
 
@@ -37,6 +36,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_extensions",
+    "django_vite",
 ]
 
 MIDDLEWARE = [
@@ -115,6 +116,19 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.1/howto/static-files/
 
 STATIC_URL = "static/"
+MEDIA_URL = "media/"
+
+STATICFILES_DIRS = [BASE_DIR / "static"]
+
+match ENVIRONMENT:
+    case "local":
+        STATIC_ROOT = BASE_DIR / "staticfiles"
+        MEDIA_ROOT = BASE_DIR / "mediafiles"
+        
+    case "prod":
+        DOCUMENT_ROOT = Path(config("DOCUMENT_ROOT", default=BASE_DIR))
+        STATIC_ROOT = DOCUMENT_ROOT / "static"
+        MEDIA_ROOT = DOCUMENT_ROOT / "media"
 
 
 # Email
@@ -124,4 +138,16 @@ MAILERS = {
     "default": {
         "BACKEND": "django.core.mail.backends.console.EmailBackend",
     },
+}
+
+DJANGO_VITE = {
+    "default": {
+        "dev_mode": DEBUG,
+        # "dev_server": {
+        #     "name": "vite",
+        #     "url": "http://localhost:5173",
+        # },
+        # "build_dir": BASE_DIR / "app/static/dist",
+        # "static_url": "/static/dist/",
+    }
 }
