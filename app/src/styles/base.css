@@ -1,17 +1,22 @@
+/* Inter - body font */
+@import "@fontsource/inter";
+
 @import "tailwindcss";
 
-
-/* Inter - body font */
-@import "@fontsource/inter/300.css";
-@import "@fontsource/inter/400.css";
+/* @import "@fontsource/inter/400.css";
 @import "@fontsource/inter/500.css";
-@import "@fontsource/inter/600.css";
+@import "@fontsource/inter/600.css"; */
 
-/* Quicksand - bold only, for headings/branding */
-@import "@fontsource/quicksand/600.css";
-@import "@fontsource/quicksand/700.css";
+/* For headings */
+@import "@fontsource/space-grotesk";
 
+/* mono */
+@import "@fontsource/jetbrains-mono";
 
 .animate-spin-slow {
   animation: spin-slow 20s linear infinite;
 }
+
+/* used in coming soon */
+.animate-float-slow { animation: float-slow 5s ease-in-out infinite; }
+.animate-float-delayed { animation: float-delayed 6s ease-in-out infinite 1s; }
