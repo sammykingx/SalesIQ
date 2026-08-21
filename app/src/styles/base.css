@@ -1,1 +1,17 @@
 @import "tailwindcss";
+
+
+/* Inter - body font */
+@import "@fontsource/inter/300.css";
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+
+/* Quicksand - bold only, for headings/branding */
+@import "@fontsource/quicksand/600.css";
+@import "@fontsource/quicksand/700.css";
+
+
+.animate-spin-slow {
+  animation: spin-slow 20s linear infinite;
+}
