@@ -5,7 +5,8 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
     plugins: [tailwindcss()],
     root: resolve(import.meta.dirname, 'app/'),
-    base: '/static/',
+    base: '/static/dist',
+    publicDir: false,
     build: {
         manifest: 'manifest.json',
         outDir: resolve(import.meta.dirname, 'app/static/dist/'),
@@ -36,5 +37,4 @@ export default defineConfig({
             },
         },
     },
-    server: { origin: 'http://localhost:5173' },
 })

@@ -7,33 +7,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token }}">
     <title>SalesIQ | Digital Sales & Financial Intelligence</title>
-    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
+    <meta name="description" content="Turn every completed sale into a professional, traceable financial record. SalesIQ is a digital sales book and business intelligence platform built for Instagram, WhatsApp, and other informal sales channels.">
+    <link rel="canonical" href="https://salesiq.com.ng/">
+
+    <!-- Open Graph / Facebook, WhatsApp, LinkedIn -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://salesiq.com.ng/">
+    <meta property="og:site_name" content="SalesIQ">
+    <meta property="og:locale" content="en_NG">
+    <meta property="og:title" content="SalesIQ | Know Your Sales. Grow Your Business.">
+    <meta property="og:description" content="Turn every completed sale into a professional, traceable financial record. SalesIQ is a digital sales book and business intelligence platform built for Instagram, WhatsApp, and other informal sales channels.">
+    <meta property="og:image" content="https://salesiq.com.ng{% static 'images/logo/light-favicon.png' %}">
+    <meta property="og:image:width" content="512">
+    <meta property="og:image:height" content="512">
+    <meta property="og:image:alt" content="SalesIQ logo">
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="SalesIQ | Know Your Sales. Grow Your Business.">
+    <meta name="twitter:description" content="Turn every completed sale into a professional, traceable financial record. SalesIQ is a digital sales book and business intelligence platform built for Instagram, WhatsApp, and other informal sales channels.">
+    <meta name="twitter:image" content="https://salesiq.com.ng{% static 'images/logo/light-favicon.png' %}">
+
+    <meta name="theme-color" content="#f8fafc">
+
+    <link rel="icon" type="image/png" href="{% static 'images/logo/light-favicon.png' %}">
+    <link rel="apple-touch-icon" href="{% static 'images/logo/light-favicon.png' %}">
     <style>
         [x-cloak] { display: none !important; }
-        body {
-            background-color: #f8fafc; 
-            visibility: hidden;
-        }
-        body.ready {
-            visibility: visible;
-        }
     </style>
-
-    <!-- Safety fallback script -->
-    <script>
-        // Reveal page immediately when DOM is ready, or force it after 1.5 seconds max
-        document.addEventListener("DOMContentLoaded", () => {
-            document.body.classList.add("ready");
-        });
-        setTimeout(() => {
-            document.body.classList.add("ready");
-        }, 1500);
-    </script>
-
     {% vite_asset 'src/entries/coming-soon.js' %}
 </head>
 
 <body x-data="comingSoon()" data-launch-timestamp="{{ launch_date|date:'U' }}" data-endpoint="{% url 'coming-soon' %}" data-csrf-token="{{ csrf_token }}" class="bg-surface text-ink min-h-screen flex flex-col justify-between font-sans antialiased relative overflow-x-hidden">
+
+    {% include "partials/_preloader.html" %}
 
     <!-- Background Image & Light Overlay -->
     <div class="pointer-events-none absolute inset-0 z-0 overflow-hidden">
@@ -59,7 +66,7 @@
         </div>
 
         <!-- Invoices (Top Right Mobile - Slightly Offset) -->
-        <div class="animate-float-delayed absolute top-20 right-5 inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-white/80 backdrop-blur-md border border-slate-200/80 shadow-md scale-90 opacity-90">
+        <div class="animate-float-delayed absolute top-25 right-5 inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-white/80 backdrop-blur-md border border-slate-200/80 shadow-md scale-90 opacity-90">
             <div class="p-1 rounded-full bg-purple-100 text-purple-600">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
             </div>
@@ -75,7 +82,7 @@
         </div>
 
         <!-- Insights (Mid Right Mobile) -->
-        <div class="animate-float-slow absolute top-84 right-4 inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-white/80 backdrop-blur-md border border-slate-200/80 shadow-md scale-85 opacity-80">
+        <div class="animate-float-slow absolute top-80 right-4 inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-white/80 backdrop-blur-md border border-slate-200/80 shadow-md scale-85 opacity-80">
             <div class="p-1 rounded-full bg-amber-100 text-amber-600">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 01-2 2h-1.5a2 2 0 01-2-2v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
             </div>
@@ -140,7 +147,7 @@
             </div>
 
             <!-- Badge 5: Organize (Bottom Floating Desktop) -->
-            <div class="hidden lg:inline-flex animate-float-slow absolute top-96 -left-8 items-center gap-2 px-3.5 py-2 rounded-full bg-white/90 backdrop-blur-md border border-slate-200/80 shadow-lg shadow-indigo-500/5 hover:scale-105 transition-all duration-300 cursor-default">
+            <div class="hidden lg:inline-flex animate-float-slow absolute top-90 -left-8 items-center gap-2 px-3.5 py-2 rounded-full bg-white/90 backdrop-blur-md border border-slate-200/80 shadow-lg shadow-indigo-500/5 hover:scale-105 transition-all duration-300 cursor-default">
                 <div class="p-1.5 rounded-full bg-indigo-100 text-indigo-600">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
                 </div>
@@ -148,11 +155,11 @@
             </div>
 
             <!-- Centralized Logo -->
-            <a href="#" class="focus:outline-none group -my-6 sm:-my-8 inline-block">
+            <a href="#" class="focus:outline-none group my-6 sm:my-8 inline-block">
                 <img 
                     src="{% static 'images/logo/main-logo-light.png' %}" 
                     alt="SalesIQ Logo" 
-                    class="h-40 sm:h-52 w-auto max-w-none object-contain transition-transform duration-300 group-hover:scale-105"
+                    class="h-14 sm:h-18 w-auto max-w-none object-contain transition-transform duration-300 group-hover:scale-105"
                 >
             </a>
         </div>

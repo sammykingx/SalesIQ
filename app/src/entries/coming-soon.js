@@ -1,11 +1,13 @@
 import "../styles/theme.css";
 import "../styles/keyframes.css";
 import Alpine from 'alpinejs';
+
 import { apiRequest } from '../lib/http/index.js';
+import { initPreloader } from "../lib/preloader/preloader.js";
 
 const TOAST_STYLES = {
     success: 'bg-success text-white',
-    error: 'bg-red-600 text-white',
+    error: 'bg-rose-500 text-white',
     warning: 'bg-amber-500 text-white',
 };
 
@@ -71,16 +73,16 @@ function comingSoon({ launchTimestamp, endpoint }) {
 
             try {
                 const response = await apiRequest(this.endpoint, 'POST', { email: this.email });
+                const body = await response.json().catch(() => null);
 
                 if (response.ok) {
-                    this.triggerToast('Thanks for subscribing! We will keep you updated.');
+                    this.triggerToast(body.message ?? 'Thanks for subscribing! We will keep you updated.');
                     this.email = '';
                 } else if (response.status === 403) {
                     this.triggerToast('Session expired — please refresh the page and try again.', 'warning');
                 } else if (response.status >= 500) {
                     this.triggerToast('Something went wrong on our end. Please try again shortly.', 'error');
                 } else {
-                    const body = await response.json().catch(() => null);
                     this.triggerToast(body?.message ?? 'Something went wrong. Please try again.', 'error');
                 }
             } catch (err) {
@@ -103,3 +105,4 @@ document.addEventListener('alpine:init', () => {
 
 window.Alpine = Alpine;
 Alpine.start();
+initPreloader();

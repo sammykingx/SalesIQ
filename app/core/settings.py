@@ -25,7 +25,7 @@ ENVIRONMENT = config("ENV", default="local")
 SECRET_KEY = config("SECRET_KEY") or "django-insecure-g-#*5w34-8=wbi_n0z$qaw60%33sc&aav^1+s^b0!0p-1z!b(k"
 DEBUG = config("DEBUG", default=True, cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost"]
 
 
 # Application definition
@@ -116,8 +116,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.1/howto/static-files/
 
-STATIC_URL = "static/"
-MEDIA_URL = "media/"
+STATIC_URL = "/static/"
+MEDIA_URL = "/media/"
 
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
@@ -149,6 +149,8 @@ MAILERS = {
 DJANGO_VITE = {
     "default": {
         "dev_mode": DEBUG,
+        "static_url_prefix": "dist",
+        "manifest_path": BASE_DIR / "static" / "dist" / "manifest.json",
         # "dev_server": {
         #     "name": "vite",
         #     "url": "http://localhost:5173",

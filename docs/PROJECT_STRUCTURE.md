@@ -50,13 +50,18 @@ app/
 |
 |-- src/                       # Vite input — source for compiled frontend assets
 |   |-- entries/               # Per-page JS entry points
-|   |   |-- app.js             # Main entry point
+|   |   |-- app.js             # app entry point
+|   |   |-- coming-soon.js     # coming soon page
+|   |   |-- ...
 |   |-- lib/                   # Shared JS components/utilities
+|   |   |-- http               # http modules
+|   |       |-- ...         # http  related methods like getCsrfTOken(), apiRequest() etc
+|   |   |-- preloader/         # preloader modules
 |   |-- assets/                # Images etc. that Vite bundles/optimizes
 |   |-- styles/                # CSS
 |       |-- base.css
 |       |-- components.css
-|       |-- keyframes.css
+|       |-- keyframes
 |       |-- theme.css
 |       |-- utilities.css
 |
@@ -142,10 +147,10 @@ templates/
 ├── public/                      # Public pages
 │   ├── index.html             # Extends _base_public.html
 │   ├── coming_soon.html       # Standalone
-|
-├── legal/
-│   └── tos.html             # Extends _base_legal.html
-│   └── privacy.html             # Extends _base_legal.html
+|   |
+|   └── legal/
+│       ├── tos.html             # Extends _base_legal.html
+│       └── privacy.html             # Extends _base_legal.html
 │
 ├── accounts/                  # Auth pages
 │   ├── login.html             # Extends _base_auth.html

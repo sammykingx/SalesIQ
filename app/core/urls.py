@@ -18,7 +18,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from public.views.coming_soon import ComingSoonView
+from core.views import ComingSoonView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
