@@ -1,15 +1,3 @@
-# from django.shortcuts import render
-# from template_map.errors import Errors
-
-
-# def custom_404(request, exception):
-#     return render(request, Errors.ERROR_404, status=404)
-
-
-# def custom_500(request):
-#     return render(request, Errors.ERROR_500, status=500)
-
-
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.utils import timezone
 from django.views.generic import View
@@ -25,11 +13,11 @@ logger = logging.getLogger(__name__)
 class ComingSoonView(View):
     def get(self, request: HttpRequest) -> HttpResponse:
         ctx = {
-            "launch_date": timezone.make_aware(datetime(2026, 9, 25, 8, 0, 0))
+            "launch_date": timezone.make_aware(datetime(2026, 9, 14, 8, 0, 0))
         }
         return render(request, template_name="public/coming-soon.html", context=ctx)
         
-    def post(self, request: HttpRequest):
-        logger.info(f"POST: {request.body}")
+    def post(self, request: HttpRequest)-> JsonResponse:
+        print("POST request body received: %s", request.body)
         return JsonResponse({"status": 200})
     

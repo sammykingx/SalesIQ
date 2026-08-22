@@ -10,7 +10,6 @@ wheels/
 .venv
 
 # exclude the following dev files
-*.txt
 *.sqlite3
 *.env
 *.secrets

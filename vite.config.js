@@ -13,7 +13,7 @@ export default defineConfig({
         rollupOptions: {
             input: {
                 app: resolve(import.meta.dirname, 'app/src/entries/app.js'),
-                // dashboard: resolve(import.meta.dirname, 'app/src/entries/dashboard.js'),
+                "coming-soon": resolve(import.meta.dirname, 'app/src/entries/coming-soon.js'),
                 // saleEntry: resolve(import.meta.dirname, 'app/src/entries/sale-entry.js'),
                 // receipt: resolve(import.meta.dirname, 'app/src/entries/receipt.js'),
             },

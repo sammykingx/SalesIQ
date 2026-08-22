@@ -1,6 +1,8 @@
 # SalesIQ - Know your sales, Grow your business
 SalesIQ is a digital sales and financial intelligence platform designed to help businesses record, organize, and understand the transactions they make in the course of their business.
 
+![slaesiq dekstop view](./business/mockups/salesiq-v2.png)
+
 The primary outcome of the project is to provide the business with a digital sales book that turns every completed business transaction into a professional, traceable financial record, and then turns those records into meaningful business intelligence.
 
 SalesIQ is designed particularly for businesses that sell through channels such as Instagram, WhatsApp, direct communication, referrals, physical interactions, and other informal sales channels where transactions may currently be completed through direct payment without a structured digital sales record.

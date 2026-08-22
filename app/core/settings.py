@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/6.1/ref/settings/
 
 from pathlib import Path
 from decouple import config
+from typing import cast
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -105,7 +106,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Africa/Lagos"
 
 USE_I18N = True
 
@@ -126,9 +127,14 @@ match ENVIRONMENT:
         MEDIA_ROOT = BASE_DIR / "mediafiles"
         
     case "prod":
-        DOCUMENT_ROOT = Path(config("DOCUMENT_ROOT", default=BASE_DIR))
+        DOCUMENT_ROOT = Path(
+            cast(str, config("DOCUMENT_ROOT", default=(BASE_DIR)))
+        )
         STATIC_ROOT = DOCUMENT_ROOT / "static"
         MEDIA_ROOT = DOCUMENT_ROOT / "media"
+        
+    case _:
+        pass
 
 
 # Email

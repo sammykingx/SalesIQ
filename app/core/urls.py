@@ -17,9 +17,10 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path
-from django.views.generic import TemplateView
+
+from public.views.coming_soon import ComingSoonView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", TemplateView.as_view(template_name="public/coming-soon.html"), name="coming_soon"),
+    path("", ComingSoonView.as_view(), name="coming-soon"),
 ]
