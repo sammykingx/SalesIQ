@@ -23,9 +23,9 @@ ENVIRONMENT = config("ENV", default="local")
 # See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
 
 SECRET_KEY = config("SECRET_KEY") or "django-insecure-g-#*5w34-8=wbi_n0z$qaw60%33sc&aav^1+s^b0!0p-1z!b(k"
-DEBUG = False
+DEBUG = config("DEBUG", default=True, cast=bool)
 
-ALLOWED_HOSTS = ["salesiq.com.ng", "www.salesiq.com.ng", "salesiq.afoventures.com", "www.salesiq.afoventures.com", "localhost"]
+ALLOWED_HOSTS = ["localhost"]
 
 
 # Application definition
@@ -151,6 +151,7 @@ DJANGO_VITE = {
         "dev_mode": DEBUG,
         "static_url_prefix": "dist",
         "manifest_path": BASE_DIR / "static" / "dist" / "manifest.json",
+        "dev_server_port": 5173,
         # "dev_server": {
         #     "name": "vite",
         #     "url": "http://localhost:5173",

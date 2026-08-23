@@ -26,9 +26,9 @@ class ComingSoonView(View):
         
         saved = WaitlistStorage().add_entry(payload)
         msg = (
-            "You're on the VIP list, cheers my friend 🥂"
+            "You're officially on the VIP list, cheers my friend 🥂"
             if saved
-            else "You're on-board ✨, stay tuned."
+            else "Already locked in ✨, we're building something iconic."
         )
         
         return JsonResponse({"message": msg}, status=200)

@@ -67,20 +67,8 @@ function comingSoon({ launchTimestamp, endpoint }) {
             setTimeout(() => { this.showToast = false; }, 4000);
         },
 
-        async submitWaitlist(event) {
+        async submitWaitlist() {
             if (!this.email) return;
-
-            // 1. Dismiss mobile soft keyboard
-            if (event && event.target) {
-                const activeElement = event.target.querySelector('input:focus') || document.activeElement;
-                if (activeElement && typeof activeElement.blur === 'function') {
-                    activeElement.blur();
-                }
-            }
-
-            // 2. Smoothly scroll to the top of the screen so the toast is immediately visible
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-
             this.submitting = true;
 
             try {
