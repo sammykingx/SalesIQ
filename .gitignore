@@ -16,3 +16,4 @@ wheels/
 staticfiles/
 node_modules/
 private_data/
+app/**/migrations/

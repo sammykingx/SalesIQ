@@ -38,8 +38,12 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    
     "django_extensions",
     "django_vite",
+    
+    "accounts.apps.AccountsConfig",
+    "customers.apps.CustomersConfig",
 ]
 
 MIDDLEWARE = [
@@ -164,3 +168,5 @@ DJANGO_VITE = {
 
 if not DEBUG:
     DJANGO_VITE["default"]["static_url_prefix"] = "dist"
+    
+AUTH_USER_MODEL = "accounts.CustomUserModel"

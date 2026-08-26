@@ -92,27 +92,41 @@ Each of these is a self-contained Django app representing one business domain, s
 
 ```sh
 accounts/
-|-- domain/                    # Core business rules, independent of Django/DB
-|   |-- entities.py            # Plain domain objects / value objects
-|   |-- exceptions.py          # Domain-specific exceptions
+|-- domain/                         # Core business rules, independent of Django/DB
+|   |-- entities.py                 # Plain domain objects / value objects
+    |   |-- exceptions.py           # Domain-specific exceptions
+|   |-- policies.py                 # Domain-specific policies
+|   |-- validators.py               # Domain-specific validators
+|   |-- ...
 |
-|-- models.py                  # Django ORM models (persistence layer)
-|-- services.py                # Application/business logic — use cases that orchestrate models
-|-- selectors.py                # Read-only query logic (fetching/filtering data for views)
-|-- repositories.py            # Abstraction over data access, if decoupling from the ORM directly
-|-- serializers.py              # DRF (or plain) serializers for API I/O
-|-- forms.py                    # Django forms, if used
-|-- views.py
+|-- models/                         # Django ORM models (persistence layer)
+|   |-- __init__.py
+|   |-- ...
+|
+|-- repositories/                   # Abstraction over Writing/Mutating data to ORM,
+|   |-- ...
+|
+|-- views/                          # Views,
+|   |-- ...
+|
+|-- services.py                     # Application/business logic — use cases that orchestrate models
+|
+|-- migrations/                     # Migrations folder that shouldn't be committed to git
+|-- selectors.py                    # Read-only query logic (fetching/filtering data for views)
+|
+|
+|-- serializers.py                  # DRF (or plain) serializers for API I/O
+|-- forms.py                        # Django forms, if used
 |-- urls.py
 |-- admin.py
 |-- apps.py
-|-- signals.py                  # Django signal handlers, if any
-|-- constants.py                # App-level enums/constants
+|-- signals.py                      # Django signal handlers, if any
+|-- constants.py                    # App-level enums/constants
 |-- tests/
 |   |-- test_models.py
 |   |-- test_services.py
 |   |-- test_views.py
-|-- migrations/
+|
 ```
 
 The intent of this layout is to keep **business rules (`domain/`, `services.py`)** separate from **framework/persistence concerns (`models.py`, `views.py`, `serializers.py`)**, so the core logic of "what an invoice is" or "how notifications get triggered" isn't tightly coupled to Django internals and stays easy to test in isolation.
