@@ -52,11 +52,19 @@ app/
 |   |-- entries/               # Per-page JS entry points
 |   |   |-- app.js             # app entry point
 |   |   |-- coming-soon.js     # coming soon page
+|   |   |-- auth/
+|   |   |   |-- index.js       # entry point for all authentication
+|   |   |   |-- signup.js
+|   |   |   |-- password-reset.js
+|   |   |   |-- ...
 |   |   |-- ...
 |   |-- lib/                   # Shared JS components/utilities
 |   |   |-- http               # http modules
 |   |       |-- ...         # http  related methods like getCsrfTOken(), apiRequest() etc
 |   |   |-- preloader/         # preloader modules
+|   |   |-- auth/              # auth modules
+|   |       |-- alpine-helpers.js
+|   |       |-- validators.js
 |   |-- assets/                # Images etc. that Vite bundles/optimizes
 |   |-- styles/                # CSS
 |       |-- base.css
@@ -69,6 +77,7 @@ app/
 |   |-- images/                # Images served directly by Django (not run through Vite)
 |   |   |-- backgrounds/
 |   |   |-- favicon/
+|   |-- lottie/                  # lottie animations
 |   |-- dist/                  # Vite's compiled/bundled output (JS, CSS, hashed assets)
 |
 |-- templates/                 # Django HTML templates

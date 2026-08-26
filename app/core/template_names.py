@@ -13,8 +13,8 @@ class APP_TEMPLATES:
         ONBOARDING = f'{_ACCOUNTS_BASE}/onboarding.html'
 
         class AUTH:
-            SIGNIN = f'{_AUTH_BASE}/signin.html'
-            SIGNUP = f'{_AUTH_BASE}/signup.html'
+            LOGIN = f'{_AUTH_BASE}/login.html'
+            REGISTER = f'{_AUTH_BASE}/register.html'
             PASSWORD_RESET = f'{_AUTH_BASE}/password_reset.html'
             PASSWORD_CHANGE = f'{_AUTH_BASE}/password_change.html'
 

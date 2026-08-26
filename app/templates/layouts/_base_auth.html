@@ -30,6 +30,7 @@
       setTimeout(() => { this.showToast = false; }, 4000);
     }
   }"
+  @toast.window="triggerToast($event.detail.message, $event.detail.type)"
   class="relative min-h-screen font-sans text-ink-900 dark:text-surface flex flex-col justify-between items-center overflow-x-hidden transition-colors duration-300"
 >
 
@@ -85,7 +86,7 @@
   <div class="fixed inset-0 z-0 pointer-events-none">
     <div 
       class="absolute inset-0 bg-cover bg-center bg-no-repeat"
-      style="background-image: url('{% static 'images/backgrounds/onboarding-bg.jpg' %}');"
+      style="background-image: url('{% static 'images/backgrounds/auth-bg.jpg' %}');"
     ></div>
 
     <div class="absolute inset-0 bg-surface/70 dark:bg-ink/80 backdrop-blur-sm transition-colors duration-300"></div>

@@ -1,3 +1,3 @@
-from django.shortcuts import render
+from .registration import AccountRegistrationView
+from .passwords import *
 
-# Create your views here.

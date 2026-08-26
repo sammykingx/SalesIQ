@@ -13,7 +13,7 @@ import json
 class ComingSoonView(View):
     def get(self, request: HttpRequest) -> HttpResponse:
         ctx = {
-            "launch_date": timezone.make_aware(datetime(2026, 9, 14, 8, 0, 0))
+            "launch_date": timezone.make_aware(datetime(2026, 9, 15, 8, 0, 0))
         }
         return render(request, template_name="public/coming-soon.html", context=ctx)
         

@@ -6,48 +6,12 @@
 
 {% block auth_card %}
 <form 
-  x-data="{
-    form: {
-      first_name: '',
-      last_name: '',
-      email: '',
-      password: '',
-      confirm_password: ''
-    },
-    showPassword: false,
-    showConfirmPassword: false,
-    
-    // Validation computed properties
-    get isFirstNameValid() { return this.form.first_name.trim().length >= 2; },
-    get isLastNameValid() { return this.form.last_name.trim().length >= 2; },
-    get isEmailValid() { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.form.email); },
-    get hasMinLength() { return this.form.password.length >= 8; },
-    get hasUpper() { return /[A-Z]/.test(this.form.password); },
-    get hasLower() { return /[a-z]/.test(this.form.password); },
-    get hasNumber() { return /[0-9]/.test(this.form.password); },
-    get hasSpecial() { return /[^A-Za-z0-9]/.test(this.form.password); },
-    get isPasswordValid() { return this.hasMinLength && this.hasUpper && this.hasLower && this.hasNumber && this.hasSpecial; },
-    get doPasswordsMatch() { return this.form.password === this.form.confirm_password && this.form.confirm_password.length > 0; },
-    get isFormValid() { 
-      return this.isFirstNameValid && this.isLastNameValid && this.isEmailValid && this.isPasswordValid && this.doPasswordsMatch; 
-    },
-
-    handleSubmit() {
-      if (!this.isFormValid) return;
-      const payload = JSON.stringify(this.form);
-      
-      // Native payload prepared for custom JS data transport layer
-      if (typeof window.handleSignupSubmit === 'function') {
-        window.handleSignupSubmit(payload);
-      } else {
-        // Fallback custom event dispatch for external script binding
-        this.$el.dispatchEvent(new CustomEvent('signup-payload-ready', { detail: payload, bubbles: true }));
-      }
-    }
-  }"
+  x-data="signUpForm('{% url ACCOUNTS.AUTH.REGISTER %}')"
   @submit.prevent="handleSubmit"
   class="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500 fill-mode-both"
 >
+  {% csrf_token %}
+
   <!-- Name Fields Row -->
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 animate-in fade-in slide-in-from-bottom-2 duration-500 delay-75 fill-mode-both">
     <!-- First Name -->
@@ -59,7 +23,7 @@
         id="first_name" 
         required 
         placeholder="John"
-        class="w-full px-3.5 py-2.5 rounded-xl bg-white  border text-ink-600 placeholder-ink-400 dark:placeholder-slate-400 focus:outline-none focus:ring-1 transition-all shadow-xs"
+        class="w-full px-3.5 py-2.5 rounded-xl bg-white border text-ink-600 placeholder-ink-400 dark:placeholder-slate-400 focus:outline-none focus:ring-1 transition-all shadow-xs"
         :class="form.first_name === '' ? 'border-slate-300 dark:border-white/10 focus:ring-primary/40 focus:border-primary' : (isFirstNameValid ? 'border-emerald-500 dark:border-emerald-500 focus:ring-emerald-500/30' : 'border-rose-500 dark:border-rose-500 focus:ring-rose-500/30')"
       />
     </div>
@@ -73,7 +37,7 @@
         id="last_name" 
         required 
         placeholder="Doe"
-        class="w-full px-3.5 py-2.5  rounded-xl bg-white  border text-ink-600 placeholder-ink-400 dark:placeholder-slate-400 focus:outline-none focus:ring-1 transition-all shadow-xs"
+        class="w-full px-3.5 py-2.5 rounded-xl bg-white border text-ink-600 placeholder-ink-400 dark:placeholder-slate-400 focus:outline-none focus:ring-1 transition-all shadow-xs"
         :class="form.last_name === '' ? 'border-slate-300 dark:border-white/10 focus:ring-primary/40 focus:border-primary' : (isLastNameValid ? 'border-emerald-500 dark:border-emerald-500 focus:ring-emerald-500/30' : 'border-rose-500 dark:border-rose-500 focus:ring-rose-500/30')"
       />
     </div>
@@ -89,7 +53,7 @@
         id="email" 
         required 
         placeholder="name@company.com"
-        class="w-full px-3.5 py-2.5  rounded-xl bg-white  border text-ink-600 placeholder-ink-400 dark:placeholder-slate-400 focus:outline-none focus:ring-1 transition-all shadow-xs"
+        class="w-full px-3.5 py-2.5 rounded-xl bg-white border text-ink-600 placeholder-ink-400 dark:placeholder-slate-400 focus:outline-none focus:ring-1 transition-all shadow-xs"
         :class="form.email === '' ? 'border-slate-300 dark:border-white/10 focus:ring-primary/40 focus:border-primary' : (isEmailValid ? 'border-emerald-500 dark:border-emerald-500 focus:ring-emerald-500/30' : 'border-rose-500 dark:border-rose-500 focus:ring-rose-500/30')"
       />
     </div>
@@ -98,16 +62,15 @@
   <!-- Password -->
   <div class="animate-in fade-in slide-in-from-bottom-2 duration-500 delay-[225ms] fill-mode-both">
     <label for="password" class="block text-xs font-semibold text-ink-600 dark:text-slate-500 mb-1">Password</label>
-    <div class="relative" x-data="{ focused: false }">
+    <div class="relative">
       <input 
         :type="showPassword ? 'text' : 'password'" 
         x-model="form.password" 
         id="password" 
-        @focus="focused = true"
         required 
         placeholder="••••••••"
-        class="w-full px-3.5 pr-10 py-2.5  rounded-xl bg-white  border text-ink-600 placeholder-ink-400 dark:placeholder-slate-400 focus:outline-none focus:ring-1 transition-all shadow-xs"
-        :class="form.password === '' ? 'border-slate-300 dark:border-white/10 focus:ring-primary/40 focus:border-primary' : (isPasswordValid ? 'border-emerald-500 dark:border-emerald-500 focus:ring-emerald-500/30' : 'border-rose-500 dark:border-rose-500 focus:ring-rose-500/30')"
+        class="w-full px-3.5 pr-10 py-2.5 rounded-xl bg-white border text-ink-600 placeholder-ink-400 dark:placeholder-slate-400 focus:outline-none focus:ring-1 transition-all shadow-xs"
+        :class="form.password === '' ? 'border-slate-300 dark:border-white/10 focus:ring-primary/40 focus:border-primary' : (passwordRules.isValid ? 'border-emerald-500 dark:border-emerald-500 focus:ring-emerald-500/30' : 'border-rose-500 dark:border-rose-500 focus:ring-rose-500/30')"
       />
       <button 
         type="button" 
@@ -126,24 +89,24 @@
 
     <!-- Live Password Requirements Checklist -->
     <div class="mt-2 grid grid-cols-2 gap-1 text-[11px]" x-show="form.password.length > 0" x-transition:enter="animate-in fade-in slide-in-from-top-1 duration-200" x-transition:leave="animate-out fade-out duration-150">
-      <div class="flex items-center gap-1.5" :class="hasMinLength ? 'text-emerald-600 dark:text-emerald-400 font-medium' : 'text-ink-400'">
-        <span class="w-1.5 h-1.5 rounded-full" :class="hasMinLength ? 'bg-emerald-500 animate-in zoom-in-50 duration-200' : 'bg-ink-300 dark:bg-ink-600'"></span>
+      <div class="flex items-center gap-1.5" :class="passwordRules.hasMinLength ? 'text-emerald-600 dark:text-emerald-400 font-medium' : 'text-ink-400'">
+        <span class="w-1.5 h-1.5 rounded-full" :class="passwordRules.hasMinLength ? 'bg-emerald-500 animate-in zoom-in-50 duration-200' : 'bg-ink-300 dark:bg-ink-600'"></span>
         <span>Min. 8 characters</span>
       </div>
-      <div class="flex items-center gap-1.5" :class="hasUpper ? 'text-emerald-600 dark:text-emerald-400 font-medium' : 'text-ink-400'">
-        <span class="w-1.5 h-1.5 rounded-full" :class="hasUpper ? 'bg-emerald-500 animate-in zoom-in-50 duration-200' : 'bg-ink-300 dark:bg-ink-600'"></span>
+      <div class="flex items-center gap-1.5" :class="passwordRules.hasUpper ? 'text-emerald-600 dark:text-emerald-400 font-medium' : 'text-ink-400'">
+        <span class="w-1.5 h-1.5 rounded-full" :class="passwordRules.hasUpper ? 'bg-emerald-500 animate-in zoom-in-50 duration-200' : 'bg-ink-300 dark:bg-ink-600'"></span>
         <span>Uppercase letter</span>
       </div>
-      <div class="flex items-center gap-1.5" :class="hasLower ? 'text-emerald-600 dark:text-emerald-400 font-medium' : 'text-ink-400'">
-        <span class="w-1.5 h-1.5 rounded-full" :class="hasLower ? 'bg-emerald-500 animate-in zoom-in-50 duration-200' : 'bg-ink-300 dark:bg-ink-600'"></span>
+      <div class="flex items-center gap-1.5" :class="passwordRules.hasLower ? 'text-emerald-600 dark:text-emerald-400 font-medium' : 'text-ink-400'">
+        <span class="w-1.5 h-1.5 rounded-full" :class="passwordRules.hasLower ? 'bg-emerald-500 animate-in zoom-in-50 duration-200' : 'bg-ink-300 dark:bg-ink-600'"></span>
         <span>Lowercase letter</span>
       </div>
-      <div class="flex items-center gap-1.5" :class="hasNumber ? 'text-emerald-600 dark:text-emerald-400 font-medium' : 'text-ink-400'">
-        <span class="w-1.5 h-1.5 rounded-full" :class="hasNumber ? 'bg-emerald-500 animate-in zoom-in-50 duration-200' : 'bg-ink-300 dark:bg-ink-600'"></span>
+      <div class="flex items-center gap-1.5" :class="passwordRules.hasNumber ? 'text-emerald-600 dark:text-emerald-400 font-medium' : 'text-ink-400'">
+        <span class="w-1.5 h-1.5 rounded-full" :class="passwordRules.hasNumber ? 'bg-emerald-500 animate-in zoom-in-50 duration-200' : 'bg-ink-300 dark:bg-ink-600'"></span>
         <span>Number (0-9)</span>
       </div>
-      <div class="flex items-center gap-1.5 col-span-2" :class="hasSpecial ? 'text-emerald-600 dark:text-emerald-400 font-medium' : 'text-ink-400'">
-        <span class="w-1.5 h-1.5 rounded-full" :class="hasSpecial ? 'bg-emerald-500 animate-in zoom-in-50 duration-200' : 'bg-ink-300 dark:bg-ink-600'"></span>
+      <div class="flex items-center gap-1.5 col-span-2" :class="passwordRules.hasSpecial ? 'text-emerald-600 dark:text-emerald-400 font-medium' : 'text-ink-400'">
+        <span class="w-1.5 h-1.5 rounded-full" :class="passwordRules.hasSpecial ? 'bg-emerald-500 animate-in zoom-in-50 duration-200' : 'bg-ink-300 dark:bg-ink-600'"></span>
         <span>Special character (!@#$%^&*)</span>
       </div>
     </div>
@@ -159,7 +122,7 @@
         id="confirm_password" 
         required 
         placeholder="••••••••"
-        class="w-full px-3.5 pr-10 py-2.5 rounded-xl bg-white  border text-ink-600 placeholder-ink-400 dark:placeholder-slate-400 focus:outline-none focus:ring-1 transition-all shadow-xs"
+        class="w-full px-3.5 pr-10 py-2.5 rounded-xl bg-white border text-ink-600 placeholder-ink-400 dark:placeholder-slate-400 focus:outline-none focus:ring-1 transition-all shadow-xs"
         :class="form.confirm_password === '' ? 'border-slate-300 dark:border-white/10 focus:ring-primary/40 focus:border-primary' : (doPasswordsMatch ? 'border-emerald-500 dark:border-emerald-500 focus:ring-emerald-500/30' : 'border-rose-500 dark:border-rose-500 focus:ring-rose-500/30')"
       />
       <button 
@@ -181,13 +144,16 @@
   <!-- Submit Button -->
   <button 
     type="submit" 
-    :disabled="!isFormValid"
-    x-data="{ prevValid: false }"
+    :disabled="!isFormValid || submitting"
     x-effect="if (isFormValid && !prevValid) { $el.classList.add('animate-in', 'zoom-in-95'); setTimeout(() => $el.classList.remove('animate-in', 'zoom-in-95'), 300) }; prevValid = isFormValid"
-    class="w-full mt-2 py-2.5 px-4 rounded-xl bg-primary text-white font-semibold  shadow-md transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-primary/50 cursor-pointer animate-in fade-in slide-in-from-bottom-2 delay-[375ms] fill-mode-both"
-    :class="isFormValid ? 'hover:bg-emerald-600 shadow-primary/20 opacity-100 active:scale-[0.99]' : 'opacity-50 cursor-not-allowed'"
+    class="w-full mt-2 py-2.5 px-4 rounded-xl bg-primary text-white font-semibold shadow-md transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-primary/50 flex justify-center items-center gap-2 cursor-pointer animate-in fade-in slide-in-from-bottom-2 delay-[375ms] fill-mode-both"
+    :class="isFormValid && !submitting ? 'hover:bg-emerald-600 shadow-primary/20 opacity-100 active:scale-[0.99]' : 'opacity-50 cursor-not-allowed'"
   >
-    Create Account
+    <svg x-show="submitting" class="animate-spin w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" style="display: none;">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+    </svg>
+    <span x-text="submitting ? 'Creating Account...' : 'Create Account'"></span>
   </button>
 </form>
 {% endblock %}
