@@ -5,7 +5,7 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
     plugins: [tailwindcss()],
     root: resolve(import.meta.dirname, 'app/'),
-    base: '/static/dist/',
+    base: '/static/', // prod build change to /static/dist/
     publicDir: false,
     build: {
         manifest: 'manifest.json',

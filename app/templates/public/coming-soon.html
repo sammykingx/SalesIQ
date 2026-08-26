@@ -35,8 +35,14 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="SalesIQ">
 
-    <link rel="icon" type="image/png" href="{% static 'images/logo/light-favicon.png' %}">
-    <link rel="apple-touch-icon" href="{% static 'images/logo/light-favicon.png' %}">
+    <!-- Favicon for Light Mode -->
+    <link rel="icon" type="image/png" href="{% static 'images/logo/light-favicon.png' %}" media="(prefers-color-scheme: light)">
+    <link rel="apple-touch-icon" href="{% static 'images/logo/light-favicon.png' %}" media="(prefers-color-scheme: light)">
+
+    <!-- Favicon for Dark Mode -->
+    <link rel="icon" type="image/png" href="{% static 'images/logo/dark-favicon.png' %}" media="(prefers-color-scheme: dark)">
+    <link rel="apple-touch-icon" href="{% static 'images/logo/dark-favicon.png' %}" media="(prefers-color-scheme: dark)">
+
     <style>
         [x-cloak] { display: none !important; }
     </style>

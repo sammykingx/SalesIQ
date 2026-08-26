@@ -1,0 +1,176 @@
+{# layouts/_base_auth.html #}
+{% extends "layouts/_base.html" %}
+{% load static %}
+
+{% block body %}
+<div 
+  x-data="{
+    darkMode: document.documentElement.classList.contains('dark'),
+    selectedLang: 'Africa/Lagos',
+    showToast: false,
+    toastMessage: '',
+    toastType: 'success', // 'success' | 'error' | 'warning' | 'info'
+    init() {
+      this.$watch('darkMode', value => {
+        localStorage.setItem('theme', JSON.stringify(value ? 'dark' : 'light'));
+        if (value) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      });
+    },
+    toggleTheme() {
+      this.darkMode = !this.darkMode;
+    },
+    triggerToast(msg, type = 'success') {
+      this.toastMessage = msg;
+      this.toastType = type;
+      this.showToast = true;
+      setTimeout(() => { this.showToast = false; }, 4000);
+    }
+  }"
+  class="relative min-h-screen font-sans text-ink-900 dark:text-surface flex flex-col justify-between items-center overflow-x-hidden transition-colors duration-300"
+>
+
+  <!-- Soft-Tone Responsive Toast Notification (Pill Design) -->
+  <div 
+    x-show="showToast" 
+    x-transition:enter="transition ease-out duration-300"
+    x-transition:enter-start="opacity-0 -translate-y-4 scale-95"
+    x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+    x-transition:leave="transition ease-in duration-200"
+    x-transition:leave-start="opacity-100 translate-y-0 scale-100"
+    x-transition:leave-end="opacity-0 -translate-y-4 scale-95"
+    class="fixed top-6 left-4 right-4 sm:left-auto sm:right-6 sm:translate-x-0 z-50 w-full max-w-[calc(100vw-2rem)] sm:w-auto sm:max-w-md px-4.5 py-3 rounded-2xl border backdrop-blur-md shadow-lg shadow-black/5 flex items-start sm:items-center gap-3 font-medium text-xs sm:text-sm text-left wrap-break-words"
+    :class="{
+      'bg-emerald-500/70 border-emerald-500 text-white': toastType === 'success',
+      'bg-rose-500/70 dark:bg-rose-800/50 border-rose-500 dark:border-rose-500/30 text-white dark:text-rose-200': toastType === 'error',
+      'bg-amber-500/70 border-amber-500/20 text-white dark:text-ink-400': toastType === 'warning',
+      'bg-sky-500/70 border-slate-500/20 text-white dark:text-slate-200': toastType === 'info'
+    }"
+    style="display: none;"
+  >
+    <!-- Success Icon -->
+    <template x-if="toastType === 'success'">
+      <svg class="w-4.5 h-4.5 shrink-0 text-emerald-200 dark:text-emerald-50 mt-0.5 sm:mt-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+      </svg>
+    </template>
+    
+    <!-- Error Icon -->
+    <template x-if="toastType === 'error'">
+      <svg class="w-4.5 h-4.5 shrink-0 text-rose-200 dark:text-rose-50 mt-0.5 sm:mt-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </template>
+
+    <!-- Warning Icon -->
+    <template x-if="toastType === 'warning'">
+      <svg class="w-4.5 h-4.5 shrink-0 text-amber-200 dark:text-amber-50 mt-0.5 sm:mt-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+      </svg>
+    </template>
+
+    <!-- Info Icon -->
+    <template x-if="toastType === 'info'">
+      <svg class="w-4.5 h-4.5 shrink-0 text-sky-200 dark:text-sky-100 mt-0.5 sm:mt-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    </template>
+
+    <span class="flex-1 leading-snug" x-text="toastMessage"></span>
+  </div>
+
+  <div class="fixed inset-0 z-0 pointer-events-none">
+    <div 
+      class="absolute inset-0 bg-cover bg-center bg-no-repeat"
+      style="background-image: url('{% static 'images/backgrounds/onboarding-bg.jpg' %}');"
+    ></div>
+
+    <div class="absolute inset-0 bg-surface/70 dark:bg-ink/80 backdrop-blur-sm transition-colors duration-300"></div>
+
+    <div class="absolute -top-40 -left-40 w-md h-112 bg-primary/15 dark:bg-primary/20 rounded-full blur-[120px] mix-blend-multiply dark:mix-blend-screen"></div>
+    <div class="absolute -bottom-40 -right-40 w-md h-112 bg-secondary/15 dark:bg-secondary/20 rounded-full blur-[120px] mix-blend-multiply dark:mix-blend-screen"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-140 h-140 bg-accent/10 dark:bg-accent/15 rounded-full blur-[160px] pointer-events-none"></div>
+  </div>
+
+  <!-- Utility Header -->
+  <header class="relative z-10 w-full max-w-7xl px-6 py-6 flex justify-end items-center gap-4 animate-fade-in-down">
+    <div class="relative flex items-center bg-slate-200 dark:bg-slate-900 rounded-3xl gap-1.5 text-xs font-semibold text-ink-400 px-3.5 py-2 hover:text-ink-900 dark:hover:text-white transition-colors cursor-pointer">
+      <svg class="w-4 h-4 text-primary dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+      </svg>
+      <span x-text="selectedLang"></span>
+    </div>
+
+    <!-- Theme Toggle Switch -->
+    <button 
+      @click="toggleTheme()" 
+      type="button"
+      class="text-ink-600 dark:text-ink-400 hover:text-ink-900 dark:hover:text-white transition-colors p-2 rounded-xl bg-slate-200 dark:bg-slate-900 border border-ink-100 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-primary/50 dark:focus:ring-slate-700 shadow-xs backdrop-blur-md cursor-pointer"
+      aria-label="Toggle Theme"
+    >
+      <svg x-show="darkMode" class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+      </svg>
+      <svg x-show="!darkMode" class="w-4 h-4 text-ink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+      </svg>
+    </button>
+  </header>
+
+  <!-- Centralized Container Area -->
+  <main class="relative z-10 w-full flex-1 flex flex-col items-center justify-center px-4 py-5">
+    
+    <!-- Brand Logo -->
+    <div class="flex flex-col items-center mb-6 text-center animate-fade-in-down">
+      <a href="#" class="flex justify-center items-center mb-2 group focus:outline-none">
+        <template x-if="!darkMode">
+          <img 
+            src="{% static 'images/logo/main-logo-light.png' %}" 
+            alt="SalesIQ Logo" 
+            class="h-14 sm:h-16 w-auto object-contain transition-transform duration-200 group-hover:scale-105"
+          />
+        </template>
+        <template x-if="darkMode">
+          <img 
+            src="{% static 'images/logo/main-logo-dark.png' %}" 
+            alt="SalesIQ Logo" 
+            class="h-14 sm:h-16 w-auto object-contain transition-transform duration-200 group-hover:scale-105"
+          />
+        </template>
+      </a>
+    </div>
+
+    <!-- Glassmorphic Elevated Card Slot -->
+    <div class="w-full max-w-115 bg-surface dark:bg-ink-900/70 backdrop-blur-xl border border-white/40 dark:border-white/10 rounded-3xl p-7 sm:p-9 shadow-2xl shadow-ink-900/10 dark:shadow-black/40 animate-fade-in-up">
+      
+      <div class="text-center mb-6">
+        <h2 class="text-2xl font-bold text-ink-900 dark:text-white tracking-tight">{% block auth_title %}Welcome to SalesIQ{% endblock %}</h2>
+        <p class="text-xs text-ink-600 dark:text-ink-400 mt-1">{% block auth_subtitle %}Know your sales. Grow your business.{% endblock %}</p>
+      </div>
+
+      <!-- Child Form Insertion -->
+      {% block auth_card %}{% endblock %}
+
+      <!-- Contextual Action Redirect -->
+      <div class="mt-6 text-center">
+        {% block auth_footer_link %}{% endblock %}
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Legal Footer -->
+  <footer class="relative z-10 py-5 text-center animate-fade-in-up">
+    <p class="text-xs text-ink-600 dark:text-ink-400">
+      By continuing you agree to our 
+      <a href="#" class="text-primary hover:underline font-medium">Terms</a> 
+      and 
+      <a href="#" class="text-primary hover:underline font-medium">Privacy Policy</a>.
+    </p>
+  </footer>
+
+</div>
+{% endblock %}

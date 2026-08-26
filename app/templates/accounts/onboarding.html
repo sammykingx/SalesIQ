@@ -1,0 +1,410 @@
+{% block page_content %}
+<div 
+  x-data="{
+    // Onboarding State
+    currentStep: 0, // 0: Welcome, 1: Identity, 2: Structure & Location, 3: Social & Online, 4: Review & Complete
+    submitting: false,
+    completed: false,
+
+    // Form Data Model
+    formData: {
+      businessName: '',
+      officialNumber: '',
+      businessType: '', // 'online' | 'physical' | 'both'
+      address: '',
+      instagram: '',
+      tiktok: '',
+      websiteUrl: ''
+    },
+
+    // Step 1 Validation: Business Name & Official Phone/Reg Number
+    get isStep1Valid() {
+      return this.formData.businessName.trim().length >= 2 && 
+             this.formData.officialNumber.trim().length >= 7;
+    },
+
+    // Step 2 Validation: Business Type & Address (if physical or both)
+    get isStep2Valid() {
+      if (!this.formData.businessType) return false;
+      if (this.formData.businessType === 'online') return true;
+      return this.formData.address.trim().length >= 5;
+    },
+
+    // Step 3 Validation: Optional socials, but Web URL must be a valid format if provided
+    get isStep3Valid() {
+      if (!this.formData.websiteUrl.trim()) return true;
+      try {
+        const url = this.formData.websiteUrl.startsWith('http') 
+          ? this.formData.websiteUrl 
+          : 'https://' + this.formData.websiteUrl;
+        new URL(url);
+        return true;
+      } catch (_) {
+        return false;
+      }
+    },
+
+    // Navigation Methods
+    nextStep() {
+      if (this.currentStep === 1 && !this.isStep1Valid) return;
+      if (this.currentStep === 2 && !this.isStep2Valid) return;
+      if (this.currentStep === 3 && !this.isStep3Valid) return;
+      if (this.currentStep < 4) {
+        this.currentStep++;
+      }
+    },
+
+    prevStep() {
+      if (this.currentStep > 0 && !this.submitting) {
+        this.currentStep--;
+      }
+    },
+
+    // Final Step Mock Payload Submission
+    async completeOnboarding() {
+      this.submitting = true;
+
+      // Clean up Web URL before sending payload
+      let formattedUrl = this.formData.websiteUrl.trim();
+      if (formattedUrl && !formattedUrl.startsWith('http://') && !formattedUrl.startsWith('https://')) {
+        formattedUrl = 'https://' + formattedUrl;
+      }
+
+      const payload = {
+        business_name: this.formData.businessName.trim(),
+        official_number: this.formData.officialNumber.trim(),
+        business_type: this.formData.businessType,
+        address: this.formData.businessType === 'online' ? null : this.formData.address.trim(),
+        socials: {
+          instagram: this.formData.instagram.trim() ? `@${this.formData.instagram.replace(/^@/, '')}` : null,
+          tiktok: this.formData.tiktok.trim() ? `@${this.formData.tiktok.replace(/^@/, '')}` : null,
+          website: formattedUrl || null
+        }
+      };
+
+      console.log('Sending Onboarding Payload:', payload);
+
+      // Simulate API response delay
+      await new Promise(resolve => setTimeout(resolve, 1500));
+
+      this.submitting = false;
+      this.completed = true;
+      
+      // Trigger notification toast from root layout
+      if (typeof this.triggerToast === 'function') {
+        this.triggerToast('Business profile successfully setup!', 'success');
+      }
+    }
+  }"
+  class="w-full max-w-2xl mx-auto"
+>
+
+  <!-- WELCOME STEP (Step 0) -->
+  <div 
+    x-show="currentStep === 0" 
+    x-transition:enter="transition ease-out duration-300"
+    x-transition:enter-start="opacity-0 translate-y-4"
+    x-transition:enter-end="opacity-100 translate-y-0"
+    class="bg-surface dark:bg-ink-900/70 backdrop-blur-xl border border-white/40 dark:border-white/10 rounded-3xl p-8 sm:p-12 shadow-2xl shadow-ink-900/10 dark:shadow-black/40 text-center"
+  >
+    <div class="w-16 h-16 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mx-auto mb-6">
+      <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+      </svg>
+    </div>
+
+    <h1 class="text-3xl font-extrabold text-ink-900 dark:text-white tracking-tight">
+      Welcome to SalesIQ
+    </h1>
+    
+    <p class="mt-3 text-sm text-ink-600 dark:text-ink-400 max-w-md mx-auto leading-relaxed">
+      Let's get your store configured. Set up your business profile, operational channels, and online presence in under 1 minute.
+    </p>
+
+    <div class="mt-8 flex items-center justify-center gap-6 text-xs font-semibold text-ink-600 dark:text-ink-400">
+      <div class="flex items-center gap-2">
+        <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+        </svg>
+        <span>4 Quick Steps</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+        </svg>
+        <span>No Credit Card</span>
+      </div>
+    </div>
+
+    <div class="mt-10">
+      <button 
+        @click="nextStep()" 
+        type="button"
+        class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-primary text-white font-semibold text-base hover:bg-primary/90 transition-all shadow-lg shadow-primary/25 cursor-pointer"
+      >
+        Begin Setup
+      </button>
+    </div>
+  </div>
+
+  <!-- MULTI-STEP WIZARD CONTAINER (Steps 1 to 4) -->
+  <div 
+    x-show="currentStep > 0 && !completed" 
+    x-transition:enter="transition ease-out duration-300"
+    x-transition:enter-start="opacity-0 scale-98"
+    x-transition:enter-end="opacity-100 scale-100"
+    class="bg-surface dark:bg-ink-900/70 backdrop-blur-xl border border-white/40 dark:border-white/10 rounded-3xl p-6 sm:p-10 shadow-2xl shadow-ink-900/10 dark:shadow-black/40"
+    style="display: none;"
+  >
+    <!-- Stepper Progress Header -->
+    <div class="mb-8">
+      <div class="flex items-center justify-between text-xs font-semibold text-ink-600 dark:text-ink-400 mb-3">
+        <span class="uppercase tracking-wider">Step <span x-text="currentStep"></span> of 4</span>
+        <span x-text="currentStep === 1 ? 'Business Identity' : (currentStep === 2 ? 'Structure & Location' : (currentStep === 3 ? 'Online Presence' : 'Confirmation'))"></span>
+      </div>
+
+      <!-- Step Bar Indicators -->
+      <div class="grid grid-cols-4 gap-2">
+        <div class="h-1.5 rounded-full transition-all duration-300" :class="currentStep >= 1 ? 'bg-primary' : 'bg-slate-200 dark:bg-slate-800'"></div>
+        <div class="h-1.5 rounded-full transition-all duration-300" :class="currentStep >= 2 ? 'bg-primary' : 'bg-slate-200 dark:bg-slate-800'"></div>
+        <div class="h-1.5 rounded-full transition-all duration-300" :class="currentStep >= 3 ? 'bg-primary' : 'bg-slate-200 dark:bg-slate-800'"></div>
+        <div class="h-1.5 rounded-full transition-all duration-300" :class="currentStep >= 4 ? 'bg-primary' : 'bg-slate-200 dark:bg-slate-800'"></div>
+      </div>
+    </div>
+
+    <!-- FORM STEP 1: Business Identity -->
+    <div x-show="currentStep === 1" class="space-y-5">
+      <div>
+        <h2 class="text-xl font-bold text-ink-900 dark:text-white">Business Identity</h2>
+        <p class="text-xs text-ink-600 dark:text-ink-400 mt-1">Provide your registered business name and contact number.</p>
+      </div>
+
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-ink-900 dark:text-ink-300 mb-1.5">Business Name *</label>
+          <input 
+            type="text" 
+            x-model="formData.businessName" 
+            placeholder="e.g. Apex Retail Store"
+            class="w-full px-4 py-3 rounded-xl border border-ink-100 dark:border-white/10 bg-white/80 dark:bg-ink-900/80 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-colors"
+          />
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-ink-900 dark:text-ink-300 mb-1.5">Official Phone Number *</label>
+          <input 
+            type="tel" 
+            x-model="formData.officialNumber" 
+            placeholder="e.g. +234 800 000 0000"
+            class="w-full px-4 py-3 rounded-xl border border-ink-100 dark:border-white/10 bg-white/80 dark:bg-ink-900/80 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-colors"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- FORM STEP 2: Business Type & Address -->
+    <div x-show="currentStep === 2" class="space-y-5" style="display: none;">
+      <div>
+        <h2 class="text-xl font-bold text-ink-900 dark:text-white">Operations & Location</h2>
+        <p class="text-xs text-ink-600 dark:text-ink-400 mt-1">Select how you conduct business transactions.</p>
+      </div>
+
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-ink-900 dark:text-ink-300 mb-2">Business Type *</label>
+          <div class="grid grid-cols-3 gap-3">
+            <button 
+              @click="formData.businessType = 'online'" 
+              type="button"
+              class="p-3.5 rounded-xl border text-center transition-all cursor-pointer"
+              :class="formData.businessType === 'online' ? 'border-primary bg-primary/10 text-primary font-semibold' : 'border-ink-100 dark:border-white/10 text-ink-600 dark:text-ink-400 hover:border-primary/50'"
+            >
+              <div class="text-xs font-bold">Online Only</div>
+            </button>
+
+            <button 
+              @click="formData.businessType = 'physical'" 
+              type="button"
+              class="p-3.5 rounded-xl border text-center transition-all cursor-pointer"
+              :class="formData.businessType === 'physical' ? 'border-primary bg-primary/10 text-primary font-semibold' : 'border-ink-100 dark:border-white/10 text-ink-600 dark:text-ink-400 hover:border-primary/50'"
+            >
+              <div class="text-xs font-bold">Physical Store</div>
+            </button>
+
+            <button 
+              @click="formData.businessType = 'both'" 
+              type="button"
+              class="p-3.5 rounded-xl border text-center transition-all cursor-pointer"
+              :class="formData.businessType === 'both' ? 'border-primary bg-primary/10 text-primary font-semibold' : 'border-ink-100 dark:border-white/10 text-ink-600 dark:text-ink-400 hover:border-primary/50'"
+            >
+              <div class="text-xs font-bold">Both</div>
+            </button>
+          </div>
+        </div>
+
+        <div x-show="formData.businessType === 'physical' || formData.businessType === 'both'" x-collapse>
+          <label class="block text-xs font-semibold text-ink-900 dark:text-ink-300 mb-1.5">Physical Address *</label>
+          <textarea 
+            x-model="formData.address" 
+            rows="3"
+            placeholder="Suite 12, Commercial Block, Lagos, Nigeria"
+            class="w-full px-4 py-3 rounded-xl border border-ink-100 dark:border-white/10 bg-white/80 dark:bg-ink-900/80 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-colors"
+          ></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- FORM STEP 3: Social Handles & Website -->
+    <div x-show="currentStep === 3" class="space-y-5" style="display: none;">
+      <div>
+        <h2 class="text-xl font-bold text-ink-900 dark:text-white">Socials & Online Channels</h2>
+        <p class="text-xs text-ink-600 dark:text-ink-400 mt-1">Connect your brand presence (optional).</p>
+      </div>
+
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-ink-900 dark:text-ink-300 mb-1.5">Instagram Handle</label>
+          <div class="relative flex items-center">
+            <span class="absolute left-4 text-xs font-semibold text-ink-400">@</span>
+            <input 
+              type="text" 
+              x-model="formData.instagram" 
+              placeholder="yourbrand"
+              class="w-full pl-8 pr-4 py-3 rounded-xl border border-ink-100 dark:border-white/10 bg-white/80 dark:bg-ink-900/80 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-colors"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-ink-900 dark:text-ink-300 mb-1.5">TikTok Handle</label>
+          <div class="relative flex items-center">
+            <span class="absolute left-4 text-xs font-semibold text-ink-400">@</span>
+            <input 
+              type="text" 
+              x-model="formData.tiktok" 
+              placeholder="yourbrand"
+              class="w-full pl-8 pr-4 py-3 rounded-xl border border-ink-100 dark:border-white/10 bg-white/80 dark:bg-ink-900/80 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-colors"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-ink-900 dark:text-ink-300 mb-1.5">Website URL</label>
+          <input 
+            type="text" 
+            x-model="formData.websiteUrl" 
+            placeholder="www.yourbrand.com"
+            class="w-full px-4 py-3 rounded-xl border border-ink-100 dark:border-white/10 bg-white/80 dark:bg-ink-900/80 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-colors"
+            :class="!isStep3Valid ? 'border-rose-500 text-rose-500' : ''"
+          />
+          <p x-show="!isStep3Valid" class="text-[11px] text-rose-500 mt-1">Please enter a valid website domain.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FORM STEP 4: Review & Finalize -->
+    <div x-show="currentStep === 4" class="space-y-5" style="display: none;">
+      <div>
+        <h2 class="text-xl font-bold text-ink-900 dark:text-white">Review Business Details</h2>
+        <p class="text-xs text-ink-600 dark:text-ink-400 mt-1">Confirm your profile settings before finishing setup.</p>
+      </div>
+
+      <div class="bg-slate-50 dark:bg-ink-900/90 rounded-2xl p-5 border border-ink-100 dark:border-white/10 space-y-3 text-xs">
+        <div class="flex justify-between py-1 border-b border-ink-100/60 dark:border-white/5">
+          <span class="text-ink-600 dark:text-ink-400">Business Name</span>
+          <span class="font-bold text-ink-900 dark:text-white" x-text="formData.businessName"></span>
+        </div>
+        <div class="flex justify-between py-1 border-b border-ink-100/60 dark:border-white/5">
+          <span class="text-ink-600 dark:text-ink-400">Official Phone</span>
+          <span class="font-bold text-ink-900 dark:text-white" x-text="formData.officialNumber"></span>
+        </div>
+        <div class="flex justify-between py-1 border-b border-ink-100/60 dark:border-white/5">
+          <span class="text-ink-600 dark:text-ink-400">Type</span>
+          <span class="font-bold text-ink-900 dark:text-white uppercase" x-text="formData.businessType"></span>
+        </div>
+        <div x-show="formData.address" class="flex justify-between py-1 border-b border-ink-100/60 dark:border-white/5">
+          <span class="text-ink-600 dark:text-ink-400">Address</span>
+          <span class="font-bold text-ink-900 dark:text-white text-right max-w-[200px]" x-text="formData.address"></span>
+        </div>
+        <div class="flex justify-between py-1">
+          <span class="text-ink-600 dark:text-ink-400">Online Channels</span>
+          <span class="font-bold text-ink-900 dark:text-white text-right">
+            <span x-text="formData.instagram ? '@' + formData.instagram.replace(/^@/, '') : '—'"></span> | 
+            <span x-text="formData.tiktok ? '@' + formData.tiktok.replace(/^@/, '') : '—'"></span>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Controller -->
+    <div class="mt-8 pt-6 border-t border-ink-100 dark:border-white/10 flex items-center justify-between">
+      <button 
+        @click="prevStep()" 
+        type="button"
+        :disabled="submitting"
+        class="px-5 py-2.5 rounded-xl border border-ink-100 dark:border-white/10 text-xs font-semibold text-ink-600 dark:text-ink-300 hover:text-ink-900 dark:hover:text-white transition-colors cursor-pointer disabled:opacity-50"
+      >
+        Back
+      </button>
+
+      <!-- Step 1 to 3 Next Button -->
+      <button 
+        x-show="currentStep < 4" 
+        @click="nextStep()" 
+        type="button"
+        :disabled="(currentStep === 1 && !isStep1Valid) || (currentStep === 2 && !isStep2Valid) || (currentStep === 3 && !isStep3Valid)"
+        class="px-6 py-2.5 rounded-xl bg-primary text-white text-xs font-semibold hover:bg-primary/90 transition-all shadow-md shadow-primary/20 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+      >
+        Continue
+      </button>
+
+      <!-- Step 4 Final Submission Button -->
+      <button 
+        x-show="currentStep === 4" 
+        @click="completeOnboarding()" 
+        type="button"
+        :disabled="submitting"
+        class="px-7 py-2.5 rounded-xl bg-primary text-white text-xs font-semibold hover:bg-primary/90 transition-all shadow-md shadow-primary/20 cursor-pointer disabled:opacity-50 flex items-center gap-2"
+        style="display: none;"
+      >
+        <svg x-show="submitting" class="animate-spin w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <span x-text="submitting ? 'Saving Profile...' : 'Complete Setup'"></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- COMPLETION SUCCESS SCREEN -->
+  <div 
+    x-show="completed" 
+    x-transition:enter="transition ease-out duration-300"
+    x-transition:enter-start="opacity-0 scale-95"
+    x-transition:enter-end="opacity-100 scale-100"
+    class="bg-surface dark:bg-ink-900/70 backdrop-blur-xl border border-white/40 dark:border-white/10 rounded-3xl p-8 sm:p-12 shadow-2xl shadow-ink-900/10 dark:shadow-black/40 text-center"
+    style="display: none;"
+  >
+    <div class="w-16 h-16 rounded-full bg-emerald-500/10 text-emerald-500 flex items-center justify-center mx-auto mb-6">
+      <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+      </svg>
+    </div>
+
+    <h2 class="text-2xl font-bold text-ink-900 dark:text-white">You're All Set!</h2>
+    <p class="mt-2 text-xs text-ink-600 dark:text-ink-400 max-w-sm mx-auto">
+      Your business profile has been configured. You can now access your dashboard and start processing sales.
+    </p>
+
+    <div class="mt-8">
+      <a 
+        href="/dashboard/" 
+        class="inline-block px-8 py-3.5 rounded-2xl bg-primary text-white font-semibold text-sm hover:bg-primary/90 transition-all shadow-lg shadow-primary/20"
+      >
+        Go to Dashboard
+      </a>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

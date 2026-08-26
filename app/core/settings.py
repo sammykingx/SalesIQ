@@ -23,9 +23,10 @@ ENVIRONMENT = config("ENV", default="local")
 # See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
 
 SECRET_KEY = config("SECRET_KEY") or "django-insecure-g-#*5w34-8=wbi_n0z$qaw60%33sc&aav^1+s^b0!0p-1z!b(k"
-DEBUG = False
+DEBUG = config("DEBUG", default=False, cast=bool)
 
-ALLOWED_HOSTS = ["salesiq.com.ng", "www.salesiq.com.ng", "salesiq.afoventures.com", "www.salesiq.afoventures.com", "localhost"]
+ALLOWED_DOMAINS = cast(str, config("ALLOWED_DOMAINS", default="")).split(", ")
+ALLOWED_HOSTS = ALLOWED_DOMAINS or []
 
 
 # Application definition
@@ -63,6 +64,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "core.context_processors.url_name_registry",
             ],
         },
     },
@@ -149,7 +151,7 @@ MAILERS = {
 DJANGO_VITE = {
     "default": {
         "dev_mode": DEBUG,
-        "static_url_prefix": "dist",
+        # "static_url_prefix": "dist", # enable to build prod dist
         "manifest_path": BASE_DIR / "static" / "dist" / "manifest.json",
         # "dev_server": {
         #     "name": "vite",
@@ -159,3 +161,6 @@ DJANGO_VITE = {
         # "static_url": "/static/dist/",
     }
 }
+
+if not DEBUG:
+    DJANGO_VITE["default"]["static_url_prefix"] = "dist"

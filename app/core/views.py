@@ -35,8 +35,8 @@ class ComingSoonView(View):
     
     
     
-# def custom_404(request, exception):
-#     return render(request, Errors.ERROR_404, status=404)
+def custom_404(request, exception):
+    return render(request, "errors/error-404.html", status=404)
 
 
 # def custom_500(request):

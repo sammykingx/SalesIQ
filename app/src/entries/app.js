@@ -9,5 +9,3 @@ window.Alpine = Alpine;
 Alpine.start();
 
 createIcons({ icons });
-
-console.log("Hello from app.js!");

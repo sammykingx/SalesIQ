@@ -14,6 +14,8 @@
 /* mono */
 @import "@fontsource/jetbrains-mono";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 .animate-spin-slow {
   animation: spin-slow 20s linear infinite;
 }

@@ -1,0 +1,200 @@
+{% extends "layouts/_base_auth.html" %}
+{% load static %}
+
+{% block auth_title %}Create an Account{% endblock %}
+{% block auth_subtitle %}Get started with SalesIQ today{% endblock %}
+
+{% block auth_card %}
+<form 
+  x-data="{
+    form: {
+      first_name: '',
+      last_name: '',
+      email: '',
+      password: '',
+      confirm_password: ''
+    },
+    showPassword: false,
+    showConfirmPassword: false,
+    
+    // Validation computed properties
+    get isFirstNameValid() { return this.form.first_name.trim().length >= 2; },
+    get isLastNameValid() { return this.form.last_name.trim().length >= 2; },
+    get isEmailValid() { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.form.email); },
+    get hasMinLength() { return this.form.password.length >= 8; },
+    get hasUpper() { return /[A-Z]/.test(this.form.password); },
+    get hasLower() { return /[a-z]/.test(this.form.password); },
+    get hasNumber() { return /[0-9]/.test(this.form.password); },
+    get hasSpecial() { return /[^A-Za-z0-9]/.test(this.form.password); },
+    get isPasswordValid() { return this.hasMinLength && this.hasUpper && this.hasLower && this.hasNumber && this.hasSpecial; },
+    get doPasswordsMatch() { return this.form.password === this.form.confirm_password && this.form.confirm_password.length > 0; },
+    get isFormValid() { 
+      return this.isFirstNameValid && this.isLastNameValid && this.isEmailValid && this.isPasswordValid && this.doPasswordsMatch; 
+    },
+
+    handleSubmit() {
+      if (!this.isFormValid) return;
+      const payload = JSON.stringify(this.form);
+      
+      // Native payload prepared for custom JS data transport layer
+      if (typeof window.handleSignupSubmit === 'function') {
+        window.handleSignupSubmit(payload);
+      } else {
+        // Fallback custom event dispatch for external script binding
+        this.$el.dispatchEvent(new CustomEvent('signup-payload-ready', { detail: payload, bubbles: true }));
+      }
+    }
+  }"
+  @submit.prevent="handleSubmit"
+  class="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500 fill-mode-both"
+>
+  <!-- Name Fields Row -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 animate-in fade-in slide-in-from-bottom-2 duration-500 delay-75 fill-mode-both">
+    <!-- First Name -->
+    <div>
+      <label for="first_name" class="block text-xs font-semibold text-ink-600 dark:text-slate-500 mb-1">First Name</label>
+      <input 
+        type="text" 
+        x-model="form.first_name" 
+        id="first_name" 
+        required 
+        placeholder="John"
+        class="w-full px-3.5 py-2.5 rounded-xl bg-white  border text-ink-600 placeholder-ink-400 dark:placeholder-slate-400 focus:outline-none focus:ring-1 transition-all shadow-xs"
+        :class="form.first_name === '' ? 'border-slate-300 dark:border-white/10 focus:ring-primary/40 focus:border-primary' : (isFirstNameValid ? 'border-emerald-500 dark:border-emerald-500 focus:ring-emerald-500/30' : 'border-rose-500 dark:border-rose-500 focus:ring-rose-500/30')"
+      />
+    </div>
+
+    <!-- Last Name -->
+    <div>
+      <label for="last_name" class="block text-xs font-semibold text-ink-600 dark:text-slate-500 mb-1">Last Name</label>
+      <input 
+        type="text" 
+        x-model="form.last_name" 
+        id="last_name" 
+        required 
+        placeholder="Doe"
+        class="w-full px-3.5 py-2.5  rounded-xl bg-white  border text-ink-600 placeholder-ink-400 dark:placeholder-slate-400 focus:outline-none focus:ring-1 transition-all shadow-xs"
+        :class="form.last_name === '' ? 'border-slate-300 dark:border-white/10 focus:ring-primary/40 focus:border-primary' : (isLastNameValid ? 'border-emerald-500 dark:border-emerald-500 focus:ring-emerald-500/30' : 'border-rose-500 dark:border-rose-500 focus:ring-rose-500/30')"
+      />
+    </div>
+  </div>
+
+  <!-- Email Address -->
+  <div class="animate-in fade-in slide-in-from-bottom-2 duration-500 delay-150 fill-mode-both">
+    <label for="email" class="block text-xs font-semibold text-ink-600 dark:text-slate-500 mb-1">Email Address</label>
+    <div class="relative">
+      <input 
+        type="email" 
+        x-model="form.email" 
+        id="email" 
+        required 
+        placeholder="name@company.com"
+        class="w-full px-3.5 py-2.5  rounded-xl bg-white  border text-ink-600 placeholder-ink-400 dark:placeholder-slate-400 focus:outline-none focus:ring-1 transition-all shadow-xs"
+        :class="form.email === '' ? 'border-slate-300 dark:border-white/10 focus:ring-primary/40 focus:border-primary' : (isEmailValid ? 'border-emerald-500 dark:border-emerald-500 focus:ring-emerald-500/30' : 'border-rose-500 dark:border-rose-500 focus:ring-rose-500/30')"
+      />
+    </div>
+  </div>
+
+  <!-- Password -->
+  <div class="animate-in fade-in slide-in-from-bottom-2 duration-500 delay-[225ms] fill-mode-both">
+    <label for="password" class="block text-xs font-semibold text-ink-600 dark:text-slate-500 mb-1">Password</label>
+    <div class="relative" x-data="{ focused: false }">
+      <input 
+        :type="showPassword ? 'text' : 'password'" 
+        x-model="form.password" 
+        id="password" 
+        @focus="focused = true"
+        required 
+        placeholder="••••••••"
+        class="w-full px-3.5 pr-10 py-2.5  rounded-xl bg-white  border text-ink-600 placeholder-ink-400 dark:placeholder-slate-400 focus:outline-none focus:ring-1 transition-all shadow-xs"
+        :class="form.password === '' ? 'border-slate-300 dark:border-white/10 focus:ring-primary/40 focus:border-primary' : (isPasswordValid ? 'border-emerald-500 dark:border-emerald-500 focus:ring-emerald-500/30' : 'border-rose-500 dark:border-rose-500 focus:ring-rose-500/30')"
+      />
+      <button 
+        type="button" 
+        @click="showPassword = !showPassword"
+        class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-ink-400 hover:text-ink-600 dark:hover:text-ink-200 transition-colors cursor-pointer"
+      >
+        <svg x-show="!showPassword" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+        </svg>
+        <svg x-show="showPassword" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display: none;">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858-5.908a10.04 10.04 0 013.982-.863c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m-6.165-4.505a3 3 0 003.818-3.818m-6.16 6.16l12.728-12.728" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Live Password Requirements Checklist -->
+    <div class="mt-2 grid grid-cols-2 gap-1 text-[11px]" x-show="form.password.length > 0" x-transition:enter="animate-in fade-in slide-in-from-top-1 duration-200" x-transition:leave="animate-out fade-out duration-150">
+      <div class="flex items-center gap-1.5" :class="hasMinLength ? 'text-emerald-600 dark:text-emerald-400 font-medium' : 'text-ink-400'">
+        <span class="w-1.5 h-1.5 rounded-full" :class="hasMinLength ? 'bg-emerald-500 animate-in zoom-in-50 duration-200' : 'bg-ink-300 dark:bg-ink-600'"></span>
+        <span>Min. 8 characters</span>
+      </div>
+      <div class="flex items-center gap-1.5" :class="hasUpper ? 'text-emerald-600 dark:text-emerald-400 font-medium' : 'text-ink-400'">
+        <span class="w-1.5 h-1.5 rounded-full" :class="hasUpper ? 'bg-emerald-500 animate-in zoom-in-50 duration-200' : 'bg-ink-300 dark:bg-ink-600'"></span>
+        <span>Uppercase letter</span>
+      </div>
+      <div class="flex items-center gap-1.5" :class="hasLower ? 'text-emerald-600 dark:text-emerald-400 font-medium' : 'text-ink-400'">
+        <span class="w-1.5 h-1.5 rounded-full" :class="hasLower ? 'bg-emerald-500 animate-in zoom-in-50 duration-200' : 'bg-ink-300 dark:bg-ink-600'"></span>
+        <span>Lowercase letter</span>
+      </div>
+      <div class="flex items-center gap-1.5" :class="hasNumber ? 'text-emerald-600 dark:text-emerald-400 font-medium' : 'text-ink-400'">
+        <span class="w-1.5 h-1.5 rounded-full" :class="hasNumber ? 'bg-emerald-500 animate-in zoom-in-50 duration-200' : 'bg-ink-300 dark:bg-ink-600'"></span>
+        <span>Number (0-9)</span>
+      </div>
+      <div class="flex items-center gap-1.5 col-span-2" :class="hasSpecial ? 'text-emerald-600 dark:text-emerald-400 font-medium' : 'text-ink-400'">
+        <span class="w-1.5 h-1.5 rounded-full" :class="hasSpecial ? 'bg-emerald-500 animate-in zoom-in-50 duration-200' : 'bg-ink-300 dark:bg-ink-600'"></span>
+        <span>Special character (!@#$%^&*)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirm Password -->
+  <div class="animate-in fade-in slide-in-from-bottom-2 duration-500 delay-300 fill-mode-both">
+    <label for="confirm_password" class="block text-xs font-semibold text-ink-600 dark:text-slate-500 mb-1">Confirm Password</label>
+    <div class="relative">
+      <input 
+        :type="showConfirmPassword ? 'text' : 'password'" 
+        x-model="form.confirm_password" 
+        id="confirm_password" 
+        required 
+        placeholder="••••••••"
+        class="w-full px-3.5 pr-10 py-2.5 rounded-xl bg-white  border text-ink-600 placeholder-ink-400 dark:placeholder-slate-400 focus:outline-none focus:ring-1 transition-all shadow-xs"
+        :class="form.confirm_password === '' ? 'border-slate-300 dark:border-white/10 focus:ring-primary/40 focus:border-primary' : (doPasswordsMatch ? 'border-emerald-500 dark:border-emerald-500 focus:ring-emerald-500/30' : 'border-rose-500 dark:border-rose-500 focus:ring-rose-500/30')"
+      />
+      <button 
+        type="button" 
+        @click="showConfirmPassword = !showConfirmPassword"
+        class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-ink-400 hover:text-ink-600 dark:hover:text-ink-200 transition-colors cursor-pointer"
+      >
+        <svg x-show="!showConfirmPassword" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+        </svg>
+        <svg x-show="showConfirmPassword" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display: none;">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858-5.908a10.04 10.04 0 013.982-.863c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m-6.165-4.505a3 3 0 003.818-3.818m-6.16 6.16l12.728-12.728" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Submit Button -->
+  <button 
+    type="submit" 
+    :disabled="!isFormValid"
+    x-data="{ prevValid: false }"
+    x-effect="if (isFormValid && !prevValid) { $el.classList.add('animate-in', 'zoom-in-95'); setTimeout(() => $el.classList.remove('animate-in', 'zoom-in-95'), 300) }; prevValid = isFormValid"
+    class="w-full mt-2 py-2.5 px-4 rounded-xl bg-primary text-white font-semibold  shadow-md transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-primary/50 cursor-pointer animate-in fade-in slide-in-from-bottom-2 delay-[375ms] fill-mode-both"
+    :class="isFormValid ? 'hover:bg-emerald-600 shadow-primary/20 opacity-100 active:scale-[0.99]' : 'opacity-50 cursor-not-allowed'"
+  >
+    Create Account
+  </button>
+</form>
+{% endblock %}
+
+{% block auth_footer_link %}
+<p class="text-xs text-ink-600 dark:text-ink-400">
+  Already have an account? 
+  <a href="{% url ACCOUNTS.AUTH.LOGIN %}" class="text-primary hover:underline font-semibold">Sign in</a>
+</p>
+{% endblock %}

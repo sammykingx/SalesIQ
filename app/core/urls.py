@@ -16,11 +16,20 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from django.views.generic import TemplateView
+
 
 from core.views import ComingSoonView
 
+handler404 = "core.views.custom_404"
+
 urlpatterns = [
     path("admin/", admin.site.urls),
+    
     path("", ComingSoonView.as_view(), name="coming-soon"),
+    path("accounts/", include("accounts.urls")),
+    # products
+    # sales
+    # invoices
 ]

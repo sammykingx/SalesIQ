@@ -1,0 +1,104 @@
+{% extends "layouts/_base_auth.html" %}
+{% load static %}
+
+{% block auth_title %}Welcome Back{% endblock %}
+{% block auth_subtitle %}Sign in to your SalesIQ account{% endblock %}
+
+{% block auth_card %}
+<form method="post" 
+  action=""
+  x-data="{ hasError: {{ form.errors|yesno:'true,false' }} }"
+  :class="hasError && 'animate-shake'"
+  class="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500 fill-mode-both">
+  {% csrf_token %}
+
+  <!-- Email Input Group -->
+  <div class="animate-in fade-in slide-in-from-bottom-2 duration-500 delay-75 fill-mode-both">
+    <label for="email" class="block text-xs font-semibold text-ink-600 dark:text-slate-500 mb-1.5">Email Address</label>
+    <div class="relative">
+      <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-ink-400">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 018 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+        </svg>
+      </div>
+      <input 
+        type="email" 
+        name="email" 
+        id="email" 
+        required 
+        placeholder="name@company.com"
+        class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white  border border-slate-300 dark:border-white/10 text-ink-600 placeholder-ink-400 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all shadow-xs"
+      />
+    </div>
+  </div>
+
+  <!-- Password Input Group -->
+  <div class="animate-in fade-in slide-in-from-bottom-2 duration-500 delay-150 fill-mode-both">
+    <div class="flex items-center justify-between mb-1.5">
+      <label for="password" class="block text-xs font-semibold text-ink-600 dark:text-slate-500">Password</label>
+      <a href="{% url ACCOUNTS.AUTH.PASSWORD_RESET %}" class="text-xs text-primary hover:underline font-medium">Forgot password?</a>
+    </div>
+    <div class="relative" x-data="{ showPassword: false }">
+      <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-ink-400">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+        </svg>
+      </div>
+      <input 
+        :type="showPassword ? 'text' : 'password'" 
+        name="password" 
+        id="password" 
+        required 
+        placeholder="••••••••"
+        class="w-full pl-10 pr-10 py-2.5 rounded-xl bg-white  border border-slate-300 dark:border-white/10 text-ink-600 placeholder-ink-400 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all shadow-xs"
+      />
+      <button 
+        type="button" 
+        @click="showPassword = !showPassword"
+        class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-ink-400 hover:text-ink-600 dark:hover:text-ink-200 transition-colors"
+      >
+        <svg x-show="!showPassword" x-transition:enter="animate-in fade-in zoom-in-50 duration-150" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+        </svg>
+        <svg x-show="showPassword" x-transition:enter="animate-in fade-in zoom-in-50 duration-150" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display: none;">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858-5.908a10.04 10.04 0 013.982-.863c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m-6.165-4.505a3 3 0 003.818-3.818m-6.16 6.16l12.728-12.728" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Remember Me Option -->
+  <div class="flex items-center animate-in fade-in slide-in-from-bottom-2 duration-500 delay-200 fill-mode-both">
+    <input 
+      id="remember" 
+      name="remember" 
+      type="checkbox" 
+      class="h-4 w-4 rounded border-ink-300 dark:border-white/20 text-primary focus:ring-primary/40 bg-white dark:bg-ink-800"
+    />
+    <label for="remember" class="ml-2 block text-xs text-ink-600 dark:text-ink-400 select-none">
+      Keep me signed in on this device
+    </label>
+  </div>
+
+  <!-- Submit Button -->
+  <button 
+    type="submit" 
+    class="w-full py-2.5 px-4 rounded-xl bg-primary hover:bg-emerald-600 
+      text-white font-semibold text-sm shadow-md shadow-primary/20 
+      transition-all duration-200 focus:outline-none focus:ring-2 
+      focus:ring-primary/50 cursor-pointer active:scale-[0.99] 
+      animate-in fade-in slide-in-from-bottom-2 delay-300 
+      fill-mode-both"
+  >
+    Sign In
+  </button>
+</form>
+{% endblock %}
+
+{% block auth_footer_link %}
+<p class="text-xs text-ink-600 dark:text-ink-400">
+  Don't have an account yet? 
+  <a href={% url ACCOUNTS.AUTH.REGISTER %} class="text-primary hover:underline font-semibold">Sign up</a>
+</p>
+{% endblock %}
