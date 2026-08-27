@@ -25,7 +25,7 @@
 
         {% vite_asset 'src/entries/app.js' %}
     </head>
-    <body class="relative min-h-screen bg-neutral-50 text-neutral-900 antialiased dark:bg-neutral-950 dark:text-neutral-100">
+    <body class="relative min-h-screen bg-surface/95 text-neutral-900 antialiased dark:bg-neutral-950 dark:text-neutral-100">
 
         <!-- Ambient background glow (was: ax-ambient) — purely decorative, no JS needed -->
         <div class="pointer-events-none fixed inset-0 -z-10 overflow-hidden" aria-hidden="true">
@@ -33,19 +33,34 @@
             <div class="absolute top-1/3 -right-40 h-96 w-96 rounded-full bg-fuchsia-400/20 blur-3xl dark:bg-fuchsia-500/10"></div>
         </div>
 
-        <!-- App layout (was: ax-layout) -->
+        <!-- GLOBAL MOBILE BACKDROP OVERLAY -->
+        <div
+            x-show="$store.sidebar.mobileOpen"
+            x-transition:enter="transition-opacity ease-out duration-300"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="transition-opacity ease-in duration-200"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            @click="$store.sidebar.closeMobile()"
+            class="fixed inset-0 z-40 bg-neutral-900/60 backdrop-blur-md lg:hidden"
+            aria-hidden="true"
+            x-cloak
+        ></div>
+
+        <!-- App layout -->
         <div class="flex min-h-screen">
 
-            <!-- Sidebar (was: sidebar include) — width/collapse behavior depends on the partial's markup -->
+            <!-- Sidebar -->
             {% include "components/app/_sidebar.html" %}
 
-            <!-- Shell / content wrapper (was: ax-shell) -->
+            <!-- Shell -->
             <div class="flex min-w-0 flex-1 flex-col">
 
-                <!-- Dashboard header (was: header include) -->
+                <!-- Dashboard header -->
                 {% include "components/app/_header.html" %}
 
-                <!-- Main page content area (was: ax-main) -->
+                <!-- Main page content area -->
                 <main id="app-main" class="flex-1 overflow-y-auto p-4 md:p-6">
 
                     <!-- ════════════════ PAGE HEAD ════════════════ -->

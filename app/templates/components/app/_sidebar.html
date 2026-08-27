@@ -1,51 +1,81 @@
-<!-- dashboard sidebar -->
+<!-- app/templates/components/_sidebar.html -->
+ {% load static %}
+
+<!-- ===== MOBILE BACKDROP OVERLAY ===== -->
+{% comment %} <div
+    x-show="$store.sidebar.mobileOpen"
+    x-transition:enter="transition-opacity ease-out duration-300"
+    x-transition:enter-start="opacity-0"
+    x-transition:enter-end="opacity-100"
+    x-transition:leave="transition-opacity ease-in duration-200"
+    x-transition:leave-start="opacity-100"
+    x-transition:leave-end="opacity-0"
+    @click="$store.sidebar.closeMobile()"
+    class="fixed inset-0 z-100 bg-neutral-900/60 backdrop-blur-md lg:hidden"
+    aria-hidden="true"
+    x-cloak
+></div> {% endcomment %}
+
+
+<!-- ===== DASHBOARD SIDEBAR ===== -->
 <aside
     x-data="sidebarNav()"
-    :class="$store.sidebar.collapsed ? 'w-18' : 'w-64'"
+    :class="{
+        'w-64': !$store.sidebar.collapsed || $store.sidebar.mobileOpen,
+        'w-18': $store.sidebar.collapsed && !$store.sidebar.mobileOpen,
+        'translate-x-0': $store.sidebar.mobileOpen,
+        '-translate-x-full lg:translate-x-0': !$store.sidebar.mobileOpen
+    }"
     :data-collapsed="$store.sidebar.collapsed"
-    class="sticky top-0 flex h-screen shrink-0 flex-col border-r border-neutral-200 bg-white/70 backdrop-blur-xl transition-[width] duration-200 dark:border-neutral-800 dark:bg-neutral-900/60"
+    class="fixed inset-y-0 left-0 z-50 flex h-screen shrink-0 flex-col border-r border-neutral-200 bg-surface/95 backdrop-blur-xl transition-all duration-300 lg:sticky lg:top-0 dark:border-neutral-800 dark:bg-neutral-900/95"
     role="navigation"
     aria-label="Primary"
 >
-    <!-- ===== BRAND (aligns to header height) ===== -->
-    <div class="flex h-16 shrink-0 items-center border-b border-neutral-200 px-4 dark:border-neutral-800">
-        <a class="flex items-center gap-2 overflow-hidden" href="#" aria-label="Vireo home">
-            <span class="shrink-0" aria-hidden="true">
-                <svg class="h-6 w-6" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                    <defs>
-                        <linearGradient id="axmk0" x1="4" y1="4" x2="28" y2="28" gradientUnits="userSpaceOnUse">
-                            <stop stop-color="#2BC4B0" />
-                            <stop offset="0.55" stop-color="#1E9E96" />
-                            <stop offset="1" stop-color="#6D5CF0" />
-                        </linearGradient>
-                    </defs>
-                    <path
-                        d="M4 4 H16 A12 12 0 0 1 28 16 V28 A0 0 0 0 1 28 28 H16 A12 12 0 0 1 4 16 V4 Z"
-                        fill="url(#axmk0)"
-                        stroke="none"
-                    />
-                    <circle cx="20.5" cy="11.5" r="2.6" fill="#0A0C11" fill-opacity="0.92" stroke="none" />
-                </svg>
+    <!-- ===== BRAND ===== -->
+    <div class="flex h-16 shrink-0 items-center justify-between border-b border-neutral-200 px-4 dark:border-neutral-800">
+        <a class="flex items-center justify-center gap-2.5 overflow-hidden focus:outline-none" href="#" aria-label="SalesIQ home">
+            <span class="flex shrink-0 items-center justify-center" aria-hidden="true">
+                <!-- Light mode logo -->
+                <img 
+                    src="{% static 'images/logo/dark-favicon.png' %}" 
+                    alt="Logo" 
+                    class="h-6 w-6 object-contain block dark:hidden"
+                />
+                <!-- Dark mode logo -->
+                <img 
+                    src="{% static 'images/logo/light-favicon.png' %}" 
+                    alt="Logo" 
+                    class="h-6 w-6 object-contain hidden dark:block"
+                />
             </span>
+
             <span
-                x-show="!$store.sidebar.collapsed"
+                x-show="!$store.sidebar.collapsed || $store.sidebar.mobileOpen"
                 x-transition.opacity
-                class="whitespace-nowrap font-display text-lg font-semibold tracking-wide text-neutral-900 dark:text-white"
-            >VIREO</span>
+                class="flex items-center text-2xl font-semibold mb-2 font-display tracking-tight leading-none text-neutral-900 dark:text-white"
+            >
+                sales<span class="text-emerald-500">iq</span>
+            </span>
         </a>
+
+        <!-- Mobile Close Button -->
+        <button
+            type="button"
+            class="flex items-center justify-center rounded-lg p-1.5 text-neutral-400 hover:bg-neutral-100 hover:text-neutral-600 lg:hidden dark:hover:bg-neutral-800 dark:hover:text-neutral-200"
+            @click="$store.sidebar.closeMobile()"
+            aria-label="Close sidebar"
+        >
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 6L6 18M6 6l12 12" />
+            </svg>
+        </button>
     </div>
 
-    <!-- ===== MENU FILTER (distinct from ⌘K) ===== -->
-    <div x-show="!$store.sidebar.collapsed" class="relative border-b border-neutral-200 px-3 py-3 dark:border-neutral-800">
+    <!-- ===== MENU FILTER ===== -->
+    <div x-show="!$store.sidebar.collapsed || $store.sidebar.mobileOpen" class="relative border-b border-neutral-200 px-3 py-3 dark:border-neutral-800">
         <svg
             class="pointer-events-none absolute left-6 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.75"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"
         >
             <path d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
             <path d="M21 21l-6 -6" />
@@ -66,19 +96,19 @@
             @click="clearFilter()"
             aria-label="Clear filter"
         >
-            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M18 6l-12 12" />
                 <path d="M6 6l12 12" />
             </svg>
         </button>
     </div>
 
-    <!-- ===== NAV TREE (only scrolling zone) ===== -->
+    <!-- ===== NAV TREE ===== -->
     <nav class="flex-1 space-y-1 overflow-y-auto px-2 py-3" role="tree" aria-label="Main menu" @keydown="onTreeKey($event)" x-ref="tree">
-        <!-- ====================== MAIN ====================== -->
-        <p x-show="!$store.sidebar.collapsed" class="px-3 pb-1 pt-1 text-xs font-semibold uppercase tracking-wider text-neutral-400" role="presentation">Main</p>
+        <!-- MAIN -->
+        <p x-show="!$store.sidebar.collapsed || $store.sidebar.mobileOpen" class="px-3 pb-1 pt-1 text-xs font-semibold uppercase tracking-wider text-neutral-400" role="presentation">Main</p>
 
-        <div class="nav_grp" x-show="matchesGroup('dashboards')">
+        <div class="nav_grp" data-group-name="dashboards" x-show="matchesGroup('dashboards')">
             <button
                 type="button"
                 class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:hover:text-white"
@@ -88,19 +118,19 @@
                 @click="toggle('dashboards')"
                 tabindex="0"
             >
-                <svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M5 4h4a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1v-6a1 1 0 0 1 1 -1" />
                     <path d="M5 16h4a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1v-2a1 1 0 0 1 1 -1" />
                     <path d="M15 12h4a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1v-6a1 1 0 0 1 1 -1" />
                     <path d="M15 4h4a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1v-2a1 1 0 0 1 1 -1" />
                 </svg>
-                <span x-show="!$store.sidebar.collapsed" class="flex-1 truncate text-left">Dashboards</span>
-                <span x-show="!$store.sidebar.collapsed" class="ml-auto rounded-full bg-neutral-100 px-1.5 py-0.5 text-[10px] font-semibold text-neutral-500 dark:bg-neutral-800 dark:text-neutral-400">17</span>
+                <span x-show="!$store.sidebar.collapsed || $store.sidebar.mobileOpen" class="flex-1 truncate text-left">Dashboards</span>
+                <span x-show="!$store.sidebar.collapsed || $store.sidebar.mobileOpen" class="ml-auto rounded-full bg-neutral-100 px-1.5 py-0.5 text-[10px] font-semibold text-neutral-500 dark:bg-neutral-800 dark:text-neutral-400">17</span>
                 <svg
-                    x-show="!$store.sidebar.collapsed"
+                    x-show="!$store.sidebar.collapsed || $store.sidebar.mobileOpen"
                     class="h-4 w-4 shrink-0 text-neutral-400 transition-transform duration-200"
                     :class="{ 'rotate-90': groups.dashboards }"
-                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"
                 >
                     <path d="M9 6l6 6l-6 6" />
                 </svg>
@@ -108,33 +138,18 @@
             <div
                 class="ml-3 space-y-0.5 border-l border-neutral-200 py-1 pl-3 dark:border-neutral-800"
                 role="group"
-                x-show="!$store.sidebar.collapsed && (groups.dashboards || filterOpen.dashboards)"
+                x-show="(! $store.sidebar.collapsed || $store.sidebar.mobileOpen) && (groups.dashboards || filterOpen.dashboards)"
                 x-collapse
             >
-                <a
-                    class="flex items-center gap-2 rounded-lg py-1.5 pl-4 pr-3 text-sm text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 aria-[current=page]:bg-indigo-50 aria-[current=page]:text-indigo-600 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white dark:aria-[current=page]:bg-indigo-500/10 dark:aria-[current=page]:text-indigo-400"
-                    role="treeitem"
-                    aria-level="2"
-                    href=""
-                    data-nav-label="Sales"
-                    tabindex="-1"
-                >Sales</a>
-                <a
-                
-                    class="flex items-center gap-2 rounded-lg py-1.5 pl-4 pr-3 text-sm text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 aria-[current=page]:bg-indigo-50 aria-[current=page]:text-indigo-600 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white dark:aria-[current=page]:bg-indigo-500/10 dark:aria-[current=page]:text-indigo-400"
-                    role="treeitem"
-                    aria-level="2"
-                    href="#"
-                    data-nav-label="Analytics"
-                    tabindex="-1"
-                >Analytics</a>
+                <a class="flex items-center gap-2 rounded-lg py-1.5 pl-4 pr-3 text-sm text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white" role="treeitem" aria-level="2" href="#" data-nav-label="Sales" tabindex="-1">Sales</a>
+                <a class="flex items-center gap-2 rounded-lg py-1.5 pl-4 pr-3 text-sm text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white" role="treeitem" aria-level="2" href="#" data-nav-label="Analytics" tabindex="-1">Analytics</a>
             </div>
         </div>
 
-        <!-- ====================== MODULES ====================== -->
-        <p x-show="!$store.sidebar.collapsed" class="px-3 pb-1 pt-4 text-xs font-semibold uppercase tracking-wider text-neutral-400" role="presentation">Modules</p>
+        <!-- MODULES -->
+        <p x-show="!$store.sidebar.collapsed || $store.sidebar.mobileOpen" class="px-3 pb-1 pt-4 text-xs font-semibold uppercase tracking-wider text-neutral-400" role="presentation">Modules</p>
 
-        <div class="nav_grp" x-show="matchesGroup('crm')">
+        <div class="nav_grp" data-group-name="crm" x-show="matchesGroup('crm')">
             <button
                 type="button"
                 class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:hover:text-white"
@@ -144,7 +159,7 @@
                 @click="toggle('crm')"
                 tabindex="-1"
             >
-                <svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M10 13a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
                     <path d="M8 21v-1a2 2 0 0 1 2 -2h4a2 2 0 0 1 2 2v1" />
                     <path d="M15 5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
@@ -152,12 +167,12 @@
                     <path d="M5 5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
                     <path d="M3 13v-1a2 2 0 0 1 2 -2h2" />
                 </svg>
-                <span x-show="!$store.sidebar.collapsed" class="flex-1 truncate text-left">CRM</span>
+                <span x-show="!$store.sidebar.collapsed || $store.sidebar.mobileOpen" class="flex-1 truncate text-left">CRM</span>
                 <svg
-                    x-show="!$store.sidebar.collapsed"
+                    x-show="!$store.sidebar.collapsed || $store.sidebar.mobileOpen"
                     class="h-4 w-4 shrink-0 text-neutral-400 transition-transform duration-200"
                     :class="{ 'rotate-90': groups.crm }"
-                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"
                 >
                     <path d="M9 6l6 6l-6 6" />
                 </svg>
@@ -165,35 +180,31 @@
             <div
                 class="ml-3 space-y-0.5 border-l border-neutral-200 py-1 pl-3 dark:border-neutral-800"
                 role="group"
-                x-show="!$store.sidebar.collapsed && (groups.crm || filterOpen.crm)"
+                x-show="(! $store.sidebar.collapsed || $store.sidebar.mobileOpen) && (groups.crm || filterOpen.crm)"
                 x-collapse
             >
-                <a class="flex items-center gap-2 rounded-lg py-1.5 pl-4 pr-3 text-sm text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 aria-[current=page]:bg-indigo-50 aria-[current=page]:text-indigo-600 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white dark:aria-[current=page]:bg-indigo-500/10 dark:aria-[current=page]:text-indigo-400"
-                   role="treeitem" aria-level="2" href="" data-nav-label="CRM Dashboard" tabindex="-1">CRM Dashboard</a>
-                <a class="flex items-center gap-2 rounded-lg py-1.5 pl-4 pr-3 text-sm text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 aria-[current=page]:bg-indigo-50 aria-[current=page]:text-indigo-600 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white dark:aria-[current=page]:bg-indigo-500/10 dark:aria-[current=page]:text-indigo-400"
-                   role="treeitem" aria-level="2" href="#" data-nav-label="Contacts" tabindex="-1">Contacts</a>
-                <a class="flex items-center gap-2 rounded-lg py-1.5 pl-4 pr-3 text-sm text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 aria-[current=page]:bg-indigo-50 aria-[current=page]:text-indigo-600 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white dark:aria-[current=page]:bg-indigo-500/10 dark:aria-[current=page]:text-indigo-400"
-                   role="treeitem" aria-level="2" href="" data-nav-label="Companies" tabindex="-1">Companies</a>
+                <a class="flex items-center gap-2 rounded-lg py-1.5 pl-4 pr-3 text-sm text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white" role="treeitem" aria-level="2" href="#" data-nav-label="CRM Dashboard" tabindex="-1">CRM Dashboard</a>
+                <a class="flex items-center gap-2 rounded-lg py-1.5 pl-4 pr-3 text-sm text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white" role="treeitem" aria-level="2" href="#" data-nav-label="Contacts" tabindex="-1">Contacts</a>
+                <a class="flex items-center gap-2 rounded-lg py-1.5 pl-4 pr-3 text-sm text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white" role="treeitem" aria-level="2" href="#" data-nav-label="Companies" tabindex="-1">Companies</a>
             </div>
         </div>
     </nav>
 
-    <!-- ===== FOOT: mini user card ===== -->
+    <!-- ===== USER FOOTER ===== -->
     <div class="mt-auto shrink-0 border-t border-neutral-200 p-3 dark:border-neutral-800">
         <div class="flex items-center gap-3">
             <img class="h-9 w-9 shrink-0 rounded-full object-cover ring-1 ring-neutral-200 dark:ring-neutral-700" src="https://i.pravatar.cc/80?img=12" alt="" width="36" height="36" />
-            <span x-show="!$store.sidebar.collapsed" class="flex min-w-0 flex-col leading-tight">
+            <span x-show="!$store.sidebar.collapsed || $store.sidebar.mobileOpen" class="flex min-w-0 flex-col leading-tight">
                 <b class="truncate text-sm font-semibold text-neutral-900 dark:text-white">Jacob Gerrald</b>
                 <small class="truncate text-xs text-neutral-400">jacob@vireo.io</small>
             </span>
             <a
-            
-                x-show="!$store.sidebar.collapsed"
+                x-show="!$store.sidebar.collapsed || $store.sidebar.mobileOpen"
                 class="ml-auto shrink-0 rounded-lg p-2 text-neutral-400 hover:bg-neutral-100 hover:text-neutral-600 dark:hover:bg-neutral-800 dark:hover:text-neutral-200"
-                href=""
+                href="#"
                 aria-label="Log out"
             >
-                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2" />
                     <path d="M9 12h12l-3 -3" />
                     <path d="M18 15l3 -3" />

@@ -1,13 +1,23 @@
+// app/src/entries/components/sidebar.js
 import collapse from '@alpinejs/collapse';
 
 export function initSidebarModule(Alpine) {
     Alpine.plugin(collapse);
 
-    // Shared store so the header toggle button can also collapse the sidebar
     Alpine.store('sidebar', {
         collapsed: false,
+        mobileOpen: false,
+
         toggle() {
-            this.collapsed = !this.collapsed;
+            if (window.matchMedia('(min-width: 1024px)').matches) {
+                this.collapsed = !this.collapsed;
+            } else {
+                this.mobileOpen = !this.mobileOpen;
+            }
+        },
+
+        closeMobile() {
+            this.mobileOpen = false;
         },
     });
 
@@ -15,7 +25,6 @@ export function initSidebarModule(Alpine) {
         q: '',
         groups: { dashboards: true, crm: false },
         filterOpen: {},
-        defaultGroups: { dashboards: true, crm: false },
 
         toggle(name) {
             this.groups[name] = !this.groups[name];
@@ -36,8 +45,8 @@ export function initSidebarModule(Alpine) {
             items.forEach((el) => {
                 const match = el.dataset.navLabel.toLowerCase().includes(this.q);
                 el.classList.toggle('hidden', !match);
-                const groupEl = el.closest('.ax-nav__group');
-                const groupName = groupEl?.querySelector('[aria-level="1"]')?.getAttribute('data-ax-group')?.replace('grp.', '');
+                const groupEl = el.closest('.nav_grp');
+                const groupName = groupEl?.getAttribute('data-group-name');
                 if (match && groupName) groupHasMatch[groupName] = true;
             });
 
@@ -48,8 +57,10 @@ export function initSidebarModule(Alpine) {
             this.q = '';
             this.filterOpen = {};
             this.$refs.tree.querySelectorAll('[data-nav-label]').forEach((el) => el.classList.remove('hidden'));
-            this.$refs.filter.value = '';
-            this.$refs.filter.focus();
+            if (this.$refs.filter) {
+                this.$refs.filter.value = '';
+                this.$refs.filter.focus();
+            }
         },
 
         onTreeKey(e) {
