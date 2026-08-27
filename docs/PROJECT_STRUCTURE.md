@@ -74,11 +74,11 @@ app/
 |       |-- utilities.css
 |
 |-- static/                    # Django-served static files
-|   |-- images/                # Images served directly by Django (not run through Vite)
+|   |-- images/                # Images served directly by Django
 |   |   |-- backgrounds/
 |   |   |-- favicon/
-|   |-- lottie/                  # lottie animations
-|   |-- dist/                  # Vite's compiled/bundled output (JS, CSS, hashed assets)
+|   |-- lottie/                # lottie animations
+|   |-- dist/                  # Vite's bundled output
 |
 |-- templates/                 # Django HTML templates
 |-- manage.py
@@ -94,7 +94,7 @@ Each of these is a self-contained Django app representing one business domain, s
 accounts/
 |-- domain/                         # Core business rules, independent of Django/DB
 |   |-- entities.py                 # Plain domain objects / value objects
-    |   |-- exceptions.py           # Domain-specific exceptions
+|   |-- exceptions.py               # Domain-specific exceptions
 |   |-- policies.py                 # Domain-specific policies
 |   |-- validators.py               # Domain-specific validators
 |   |-- ...

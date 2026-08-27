@@ -1,0 +1,298 @@
+<!-- dashboard sidebar -->
+<aside
+                class="ax-sidebar"
+                role="navigation"
+                aria-label="Primary"
+                x-data="axSidebar()"
+                :data-collapsed="collapsed"
+            >
+                <!-- ===== BRAND (aligns to header height) ===== -->
+                <div class="ax-sidebar__brand">
+                    <a class="ax-sidebar__logo" href="/src/html/index.html" aria-label="Vireo home">
+                        <span class="ax-sidebar__mark" aria-hidden="true">
+                            <svg
+                                class="ax-icon"
+                                viewBox="0 0 32 32"
+                                width="24"
+                                height="24"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                                aria-hidden="true"
+                            >
+                                <defs>
+                                    <linearGradient
+                                        id="axmk0"
+                                        x1="4"
+                                        y1="4"
+                                        x2="28"
+                                        y2="28"
+                                        gradientUnits="userSpaceOnUse"
+                                    >
+                                        <stop stop-color="#2BC4B0" />
+                                        <stop offset="0.55" stop-color="#1E9E96" />
+                                        <stop offset="1" stop-color="#6D5CF0" />
+                                    </linearGradient>
+                                </defs>
+                                <path
+                                    d="M4 4 H16 A12 12 0 0 1 28 16 V28 A0 0 0 0 1 28 28 H16 A12 12 0 0 1 4 16 V4 Z"
+                                    fill="url(#axmk0)"
+                                    stroke="none"
+                                />
+                                <circle cx="20.5" cy="11.5" r="2.6" fill="#0A0C11" fill-opacity="0.92" stroke="none" />
+                            </svg>
+                        </span>
+                        <span class="ax-sidebar__wordmark">VIREO</span>
+                    </a>
+                </div>
+
+                <!-- ===== MENU FILTER (distinct from ⌘K) ===== -->
+                <div class="ax-sidebar__search">
+                    <svg
+                        class="ax-icon ax-sidebar__search-icon"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.75"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        width="24"
+                        height="24"
+                        aria-hidden="true"
+                    >
+                        <path d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
+                        <path d="M21 21l-6 -6" />
+                    </svg>
+                    <input
+                        type="search"
+                        class="ax-sidebar__filter"
+                        placeholder="Filter menu…"
+                        aria-label="Filter menu"
+                        @input.debounce.120ms="filter($event.target.value)"
+                        @keydown.escape="clearFilter()"
+                        x-ref="filter"
+                    />
+                    <button
+                        type="button"
+                        class="ax-sidebar__filter-clear"
+                        x-show="q"
+                        @click="clearFilter()"
+                        aria-label="Clear filter"
+                    >
+                        <svg
+                            class="ax-icon"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.75"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            width="24"
+                            height="24"
+                            aria-hidden="true"
+                        >
+                            <path d="M18 6l-12 12" />
+                            <path d="M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- ===== NAV TREE (only scrolling zone) ===== -->
+                <nav
+                    class="ax-sidebar__nav"
+                    role="tree"
+                    aria-label="Main menu"
+                    @keydown="onTreeKey($event)"
+                    x-ref="tree"
+                >
+                    <!-- ====================== MAIN ====================== -->
+                    <p class="ax-sidebar__section" role="presentation">Main</p>
+
+                    <div class="ax-nav__group" data-ax-collapse>
+                        <button
+                            type="button"
+                            class="ax-nav__item ax-nav__item--parent"
+                            role="treeitem"
+                            aria-level="1"
+                            aria-expanded="true"
+                            data-ax-group="grp.dashboards"
+                            @click="toggle('grp.dashboards')"
+                            tabindex="0"
+                        >
+                            <svg
+                                class="ax-nav__icon"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.75"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                width="24"
+                                height="24"
+                                aria-hidden="true"
+                            >
+                                <path d="M5 4h4a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1v-6a1 1 0 0 1 1 -1" />
+                                <path d="M5 16h4a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1v-2a1 1 0 0 1 1 -1" />
+                                <path
+                                    d="M15 12h4a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1v-6a1 1 0 0 1 1 -1"
+                                />
+                                <path d="M15 4h4a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1v-2a1 1 0 0 1 1 -1" />
+                            </svg>
+                            <span class="ax-nav__label">Dashboards</span>
+                            <span class="ax-nav__badge ax-nav__badge--count">17</span>
+                            <svg
+                                class="ax-nav__caret ax-icon--directional"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.75"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                width="24"
+                                height="24"
+                                aria-hidden="true"
+                            >
+                                <path d="M9 6l6 6l-6 6" />
+                            </svg>
+                        </button>
+                        <div class="ax-nav__children" role="group" data-ax-collapse-panel>
+                            <a
+                                class="ax-nav__item ax-nav__item--child"
+                                role="treeitem"
+                                aria-level="2"
+                                href="/src/html/dashboards/sales.html"
+                                tabindex="-1"
+                            >
+                                <span class="ax-nav__bar" aria-hidden="true"></span
+                                ><span class="ax-nav__label">Sales</span>
+                            </a>
+                            <a
+                                class="ax-nav__item ax-nav__item--child"
+                                role="treeitem"
+                                aria-level="2"
+                                href="/src/html/dashboards/analytics.html"
+                                tabindex="-1"
+                                ><span class="ax-nav__bar" aria-hidden="true"></span
+                                ><span class="ax-nav__label">Analytics</span></a
+                            >
+                        </div>
+                    </div>
+
+                    
+                    <!-- ====================== MODULES ====================== -->
+                    <p class="ax-sidebar__section" role="presentation">Modules</p>
+
+                    <div class="ax-nav__group" data-ax-collapse>
+                        <button
+                            type="button"
+                            class="ax-nav__item ax-nav__item--parent"
+                            role="treeitem"
+                            aria-level="1"
+                            aria-expanded="false"
+                            data-ax-group="grp.crm"
+                            @click="toggle('grp.crm')"
+                            tabindex="-1"
+                        >
+                            <svg
+                                class="ax-nav__icon"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.75"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                width="24"
+                                height="24"
+                                aria-hidden="true"
+                            >
+                                <path d="M10 13a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                                <path d="M8 21v-1a2 2 0 0 1 2 -2h4a2 2 0 0 1 2 2v1" />
+                                <path d="M15 5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                                <path d="M17 10h2a2 2 0 0 1 2 2v1" />
+                                <path d="M5 5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                                <path d="M3 13v-1a2 2 0 0 1 2 -2h2" />
+                            </svg>
+                            <span class="ax-nav__label">CRM</span>
+                            <svg
+                                class="ax-nav__caret ax-icon--directional"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.75"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                width="24"
+                                height="24"
+                                aria-hidden="true"
+                            >
+                                <path d="M9 6l6 6l-6 6" />
+                            </svg>
+                        </button>
+                        <div class="ax-nav__children" role="group" data-ax-collapse-panel hidden>
+                            <a
+                                class="ax-nav__item ax-nav__item--child"
+                                role="treeitem"
+                                aria-level="2"
+                                href="/src/html/dashboards/crm.html"
+                                tabindex="-1"
+                                ><span class="ax-nav__bar" aria-hidden="true"></span
+                                ><span class="ax-nav__label">CRM Dashboard</span></a
+                            >
+                            <a
+                                class="ax-nav__item ax-nav__item--child"
+                                role="treeitem"
+                                aria-level="2"
+                                href="/src/html/crm/contacts.html"
+                                tabindex="-1"
+                                ><span class="ax-nav__bar" aria-hidden="true"></span
+                                ><span class="ax-nav__label">Contacts</span></a
+                            >
+                            <a
+                                class="ax-nav__item ax-nav__item--child"
+                                role="treeitem"
+                                aria-level="2"
+                                href="/src/html/crm/companies.html"
+                                tabindex="-1"
+                                ><span class="ax-nav__bar" aria-hidden="true"></span
+                                ><span class="ax-nav__label">Companies</span></a
+                            >
+                            
+                        </div>
+                    </div>
+
+                <!-- ===== FOOT: mini user card ===== -->
+                <div class="ax-sidebar__foot">
+                    <div class="ax-sidebar__user">
+                        <img
+                            class="ax-avatar ax-sidebar__user-avatar"
+                            src="https://i.pravatar.cc/80?img=12"
+                            alt=""
+                            width="36"
+                            height="36"
+                        />
+                        <span class="ax-sidebar__user-meta">
+                            <b class="ax-sidebar__user-name">Jacob Gerrald</b>
+                            <small class="ax-sidebar__user-mail">jacob@vireo.io</small>
+                        </span>
+                        <a class="ax-sidebar__logout" href="/src/html/pages/logout.html" aria-label="Log out">
+                            <svg
+                                class="ax-icon"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.75"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                width="24"
+                                height="24"
+                                aria-hidden="true"
+                            >
+                                <path
+                                    d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2"
+                                />
+                                <path d="M9 12h12l-3 -3" />
+                                <path d="M18 15l3 -3" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </aside>

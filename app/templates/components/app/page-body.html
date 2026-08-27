@@ -1,0 +1,136 @@
+<div class="grid grid-cols-12 gap-6">
+    <!-- ───── Canonical empty-state (first-run) — full width on mobile, 8/12 on desktop ───── -->
+    <!-- ┌────────────────────────────────────────────────────────────┐ -->
+    <!-- │  REGION: primary content. Replace this empty-state block    │ -->
+    <!-- │  with your page's cards / table / chart / form.             │ -->
+    <!-- └────────────────────────────────────────────────────────────┘ -->
+    <section class="col-span-12 rounded-2xl border border-neutral-200 bg-white lg:col-span-8 dark:border-neutral-800 dark:bg-neutral-900" role="region" aria-label="Get started">
+        <div class="py-16 px-6">
+            <div class="mx-auto flex max-w-[105] flex-col items-center gap-5 text-center">
+                <!-- thin-line two-tone illustration (single accent highlight) -->
+                <span aria-hidden="true" class="relative grid h-32 w-32 place-items-center rounded-full bg-[radial-gradient(circle_at_50%_40%,var(--color-indigo-100),transparent_70%)] dark:bg-[radial-gradient(circle_at_50%_40%,var(--color-indigo-500),transparent_70%)]/10">
+                    <span class="absolute inset-0 rounded-full border border-dashed border-neutral-300 dark:border-neutral-700"></span>
+                    <svg viewBox="0 0 24 24" class="h-14 w-14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+                        <path class="text-neutral-400 dark:text-neutral-500" d="M14 3v4a1 1 0 0 0 1 1h4" />
+                        <path class="text-neutral-400 dark:text-neutral-500" d="M5 21v-16a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />
+                        <path class="text-indigo-500" d="M12 11l0 6" />
+                        <path class="text-indigo-500" d="M9 14l3 -3l3 3" />
+                    </svg>
+                </span>
+                <div>
+                    <h2 class="font-display text-lg font-semibold text-neutral-900 dark:text-white">Nothing here yet</h2>
+                    <p class="mt-2 text-sm leading-relaxed text-neutral-500 dark:text-neutral-400">
+                        This is the canonical empty-state pattern reused across every list, table and feed. Create your first item to get going.
+                    </p>
+                </div>
+                <div class="flex items-center justify-center gap-3">
+                    <button type="button" class="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500">
+                        <svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M12 5l0 14" />
+                            <path d="M5 12l14 0" />
+                        </svg>
+                        <span>Create item</span>
+                    </button>
+                    <a class="text-sm font-medium text-indigo-600 hover:underline dark:text-indigo-400" href="#">or import from a file</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ───── Empty-state variant reference ───── -->
+    <section class="col-span-12 rounded-2xl border border-neutral-200 bg-white lg:col-span-4 dark:border-neutral-800 dark:bg-neutral-900" role="region" aria-label="Empty-state variants">
+        <div class="border-b border-neutral-200 px-5 py-4 dark:border-neutral-800">
+            <h2 class="text-base font-semibold text-neutral-900 dark:text-white">State Variants</h2>
+            <p class="text-sm text-neutral-500 dark:text-neutral-400">One pattern, four contexts</p>
+        </div>
+        <div class="px-5 py-4">
+            <ul class="space-y-3">
+                <li class="flex items-center gap-3">
+                    <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-indigo-100 text-indigo-600 dark:bg-indigo-500/10 dark:text-indigo-400">
+                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M12 5l0 14" />
+                            <path d="M5 12l14 0" />
+                        </svg>
+                    </span>
+                    <span class="flex flex-col">
+                        <span class="text-sm font-medium text-neutral-900 dark:text-white">First-run</span>
+                        <span class="text-xs text-neutral-400">CTA to create the first record</span>
+                    </span>
+                </li>
+                <li class="flex items-center gap-3">
+                    <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-cyan-100 text-cyan-600 dark:bg-cyan-500/10 dark:text-cyan-400">
+                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M4 6h16" />
+                            <path d="M6 12h12" />
+                            <path d="M9 18h6" />
+                        </svg>
+                    </span>
+                    <span class="flex flex-col">
+                        <span class="text-sm font-medium text-neutral-900 dark:text-white">Filtered-empty</span>
+                        <span class="text-xs text-neutral-400">"Clear filters" secondary action</span>
+                    </span>
+                </li>
+                <li class="flex items-center gap-3">
+                    <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-violet-100 text-violet-600 dark:bg-violet-500/10 dark:text-violet-400">
+                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
+                            <path d="M21 21l-6 -6" />
+                        </svg>
+                    </span>
+                    <span class="flex flex-col">
+                        <span class="text-sm font-medium text-neutral-900 dark:text-white">Search-empty</span>
+                        <span class="text-xs text-neutral-400">No matches + spelling tips</span>
+                    </span>
+                </li>
+                <li class="flex items-center gap-3">
+                    <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-rose-100 text-rose-600 dark:bg-rose-500/10 dark:text-rose-400">
+                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4" />
+                            <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4" />
+                        </svg>
+                    </span>
+                    <span class="flex flex-col">
+                        <span class="text-sm font-medium text-neutral-900 dark:text-white">Error-empty</span>
+                        <span class="text-xs text-neutral-400">"Retry" action after a failure</span>
+                    </span>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- ───── Skeleton placeholder reference (the only place gray boxes are allowed) ───── -->
+    <section class="col-span-12 rounded-2xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800" role="region" aria-label="Loading skeleton reference">
+        <div class="flex items-center justify-between gap-4 border-b border-neutral-200 px-5 py-4 dark:border-neutral-800">
+            <div>
+                <h2 class="text-base font-semibold text-neutral-900 dark:text-white">Loading Skeleton</h2>
+                <p class="text-sm text-neutral-500 dark:text-neutral-400">Reserve layout while async data resolves — no content shift</p>
+            </div>
+            <span class="inline-flex items-center rounded-full bg-neutral-100 px-2.5 py-1 text-xs font-medium text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300" aria-live="polite">Loading…</span>
+        </div>
+        <div class="px-5 py-4">
+            <div class="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-4">
+                <div class="flex items-center gap-3 rounded-lg border border-neutral-200 p-3 dark:border-neutral-700 dark:bg-neutral-600">
+                    <span class="h-10 w-10 shrink-0 animate-pulse rounded-lg bg-neutral-200 dark:bg-neutral-800"></span>
+                    <div class="flex flex-1 flex-col gap-2">
+                        <span class="h-2.5 w-4/5 animate-pulse rounded-full bg-neutral-200 dark:bg-neutral-800"></span>
+                        <span class="h-2.5 w-1/2 animate-pulse rounded-full bg-neutral-200 dark:bg-neutral-800"></span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3 rounded-lg border border-neutral-200 p-3 dark:border-neutral-700 dark:bg-neutral-600">
+                    <span class="h-10 w-10 shrink-0 animate-pulse rounded-lg bg-neutral-200 dark:bg-neutral-800"></span>
+                    <div class="flex flex-1 flex-col gap-2">
+                        <span class="h-2.5 w-[70%] animate-pulse rounded-full bg-neutral-200 dark:bg-neutral-800"></span>
+                        <span class="h-2.5 w-[45%] animate-pulse rounded-full bg-neutral-200 dark:bg-neutral-800"></span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3 rounded-lg border border-neutral-200 p-3 dark:border-neutral-700 dark:bg-neutral-600">
+                    <span class="h-10 w-10 shrink-0 animate-pulse rounded-lg bg-neutral-200 dark:bg-neutral-800"></span>
+                    <div class="flex flex-1 flex-col gap-2">
+                        <span class="h-2.5 w-[85%] animate-pulse rounded-full bg-neutral-200 dark:bg-neutral-800"></span>
+                        <span class="h-2.5 w-3/5 animate-pulse rounded-full bg-neutral-200 dark:bg-neutral-800"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

@@ -6,9 +6,11 @@ import Alpine from "alpinejs";
 import { createIcons, icons } from "lucide";
 
 import { initAuthModule } from "./auth/index.js";
+import { initComponentsModule } from "./components/index.js";
 
-/* register auth alpine componetns before start */
+/* register alpine components before start */
 initAuthModule(Alpine);
+initComponentsModule(Alpine);
 
 
 

@@ -1,0 +1,353 @@
+<!-- Dashboard header -->
+<header
+    x-data="axHeader()"
+    class="sticky top-0 z-20 flex h-16 shrink-0 items-center gap-2 border-b border-neutral-200 bg-white/70 px-4 backdrop-blur-xl dark:border-neutral-800 dark:bg-neutral-900/60"
+    role="banner"
+>
+    <!-- 1 · SIDEBAR TOGGLE -->
+    <button
+        type="button"
+        class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white"
+        @click="$store.sidebar.toggle()"
+        aria-label="Toggle menu"
+        :aria-expanded="!$store.sidebar.collapsed"
+    >
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 6l16 0" />
+            <path d="M4 12l16 0" />
+            <path d="M4 18l16 0" />
+        </svg>
+    </button>
+
+    <!-- 2 · COMMAND SEARCH (⌘K trigger) -->
+    <button
+        type="button"
+        class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-neutral-500 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-neutral-800 md:h-auto md:w-full md:max-w-sm md:justify-start md:gap-2 md:rounded-lg md:border md:border-neutral-200 md:bg-neutral-100/70 md:px-3 md:py-2 md:text-neutral-400 md:hover:border-neutral-300 md:dark:border-neutral-700 md:dark:bg-neutral-800/60"
+        @click="$dispatch('ax-command-open')"
+        aria-haspopup="dialog"
+        aria-controls="ax-command"
+        aria-label="Search or jump to"
+    >
+        <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
+            <path d="M21 21l-6 -6" />
+        </svg>
+        <span class="hidden text-sm md:inline">Search or jump to…</span>
+        <kbd class="ml-auto hidden rounded border border-neutral-300 bg-white px-1.5 py-0.5 font-mono text-[10px] text-neutral-400 md:inline dark:border-neutral-600 dark:bg-neutral-900">⌘K</kbd>
+    </button>
+
+    <span class="flex-1"></span>
+
+    <!-- ===== RIGHT UTILITY CLUSTER ===== -->
+
+    <!-- 4 · LANGUAGE (hidden on narrow screens — see More menu) -->
+    <div class="relative hidden lg:block" x-data="axDropdown()" @keydown.escape="close()" @click.outside="close()">
+        <button
+            type="button"
+            class="inline-flex h-9 items-center rounded-lg px-2.5 text-sm font-medium text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white"
+            @click="toggle()"
+            aria-haspopup="menu"
+            :aria-expanded="open"
+            aria-controls="ax-lang-menu"
+            aria-label="Change language"
+        >
+            <span x-text="$store.ax.lang">EN</span>
+        </button>
+        <div
+            id="ax-lang-menu"
+            class="absolute right-0 z-30 mt-2 min-w-40 rounded-xl border border-neutral-200 bg-white p-1 text-sm shadow-lg shadow-black/5 dark:border-neutral-800 dark:bg-neutral-900"
+            role="menu"
+            x-show="open"
+            x-transition.opacity.duration.150ms
+            x-cloak
+        >
+            <button type="button" class="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left hover:bg-neutral-100 dark:hover:bg-neutral-800" role="menuitemradio" :aria-checked="$store.ax.lang === 'EN'" @click="$store.ax.setLang('EN'); close()">
+                <span class="w-6 font-medium">EN</span><span class="flex-1 text-neutral-600 dark:text-neutral-300">English</span>
+                <svg x-show="$store.ax.lang === 'EN'" class="h-4 w-4 text-indigo-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5l10 -10" /></svg>
+            </button>
+            <button type="button" class="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left hover:bg-neutral-100 dark:hover:bg-neutral-800" role="menuitemradio" :aria-checked="$store.ax.lang === 'ES'" @click="$store.ax.setLang('ES'); close()">
+                <span class="w-6 font-medium">ES</span><span class="text-neutral-600 dark:text-neutral-300">Español</span>
+            </button>
+            <button type="button" class="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left hover:bg-neutral-100 dark:hover:bg-neutral-800" role="menuitemradio" :aria-checked="$store.ax.lang === 'FR'" @click="$store.ax.setLang('FR'); close()">
+                <span class="w-6 font-medium">FR</span><span class="text-neutral-600 dark:text-neutral-300">Français</span>
+            </button>
+            <button type="button" class="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left hover:bg-neutral-100 dark:hover:bg-neutral-800" role="menuitemradio" :aria-checked="$store.ax.lang === 'AR'" @click="$store.ax.setLang('AR'); close()">
+                <span class="w-6 font-medium">AR</span><span class="text-neutral-600 dark:text-neutral-300">العربية</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- 6 · LIGHT/DARK QUICK-TOGGLE -->
+    <button
+        type="button"
+        class="inline-flex h-9 w-9 items-center justify-center rounded-lg text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white"
+        @click="toggleTheme()"
+        :aria-pressed="theme === 'dark'"
+        aria-label="Toggle dark mode"
+    >
+        <svg class="h-5 w-5" x-show="theme === 'dark'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M8 12a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+            <path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7" />
+        </svg>
+        <svg class="h-5 w-5" x-show="theme !== 'dark'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454l0 .008" />
+        </svg>
+    </button>
+
+    <!-- 7 · APP-GRID (hidden on narrow screens — see More menu) -->
+    <div class="relative hidden md:block" x-data="axDropdown()" @keydown.escape="close()" @click.outside="close()">
+        <button type="button" class="inline-flex h-9 w-9 items-center justify-center rounded-lg text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white" @click="toggle()" aria-haspopup="menu" :aria-expanded="open" aria-controls="ax-apps-menu" aria-label="Open apps">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 5a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -4" />
+                <path d="M14 5a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -4" />
+                <path d="M4 15a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -4" />
+                <path d="M14 15a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -4" />
+            </svg>
+        </button>
+        <div id="ax-apps-menu" class="absolute right-0 z-30 mt-2 w-72 rounded-xl border border-neutral-200 bg-white p-2 text-sm shadow-lg shadow-black/5 dark:border-neutral-800 dark:bg-neutral-900" role="menu" x-show="open" x-transition.opacity.duration.150ms x-cloak>
+            <p class="px-2 pb-1 pt-1 text-xs font-semibold uppercase tracking-wide text-neutral-400">Quick apps</p>
+            <div class="grid grid-cols-3 gap-1">
+                <a class="flex flex-col items-center gap-1.5 rounded-lg p-3 text-center text-xs text-neutral-500 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-neutral-800" role="menuitem" href="#">
+                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10" /><path d="M3 7l9 6l9 -6" /></svg>
+                    <span>Email</span>
+                </a>
+                <a class="flex flex-col items-center gap-1.5 rounded-lg p-3 text-center text-xs text-neutral-500 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-neutral-800" role="menuitem" href="#">
+                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20l1.3 -3.9c-2.324 -3.437 -1.426 -7.872 2.1 -10.374c3.526 -2.501 8.59 -2.296 11.845 .48c3.255 2.777 3.695 7.266 1.029 10.501c-2.666 3.235 -7.615 4.215 -11.574 2.293l-4.7 1" /></svg>
+                    <span>Chat</span>
+                </a>
+                <a class="flex flex-col items-center gap-1.5 rounded-lg p-3 text-center text-xs text-neutral-500 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-neutral-800" role="menuitem" href="#">
+                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12" /><path d="M16 3v4" /><path d="M8 3v4" /><path d="M4 11h16" /><path d="M11 15h1" /><path d="M12 15v3" /></svg>
+                    <span>Calendar</span>
+                </a>
+                <a class="flex flex-col items-center gap-1.5 rounded-lg p-3 text-center text-xs text-neutral-500 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-neutral-800" role="menuitem" href="#">
+                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4l6 0" /><path d="M14 4l6 0" /><path d="M4 10a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2l0 -8" /><path d="M14 10a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v2a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2l0 -2" /></svg>
+                    <span>Kanban</span>
+                </a>
+                <a class="flex flex-col items-center gap-1.5 rounded-lg p-3 text-center text-xs text-neutral-500 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-neutral-800" role="menuitem" href="#">
+                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l3 3h7a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-11a2 2 0 0 1 2 -2" /></svg>
+                    <span>Files</span>
+                </a>
+                <a class="flex flex-col items-center gap-1.5 rounded-lg p-3 text-center text-xs text-neutral-500 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-neutral-800" role="menuitem" href="#">
+                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6v12a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2" /><path d="M10 16h6" /><path d="M11 11a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M4 8h3" /><path d="M4 12h3" /><path d="M4 16h3" /></svg>
+                    <span>Contacts</span>
+                </a>
+            </div>
+            <a class="mt-1 block rounded-lg px-3 py-2 text-center text-sm font-medium text-indigo-600 hover:bg-neutral-100 dark:text-indigo-400 dark:hover:bg-neutral-800" href="#">View all apps</a>
+        </div>
+    </div>
+
+    <!-- 8 · CART -->
+    <div class="relative" x-data="axDropdown()" @keydown.escape="close()" @click.outside="close()">
+        <button type="button" class="relative inline-flex h-9 w-9 items-center justify-center rounded-lg text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white" @click="toggle()" aria-haspopup="menu" :aria-expanded="open" aria-controls="ax-cart-menu" aria-label="Shopping cart, 3 items">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M6.331 8h11.339a2 2 0 0 1 1.977 2.304l-1.255 8.152a3 3 0 0 1 -2.966 2.544h-6.852a3 3 0 0 1 -2.965 -2.544l-1.255 -8.152a2 2 0 0 1 1.977 -2.304" />
+                <path d="M9 11v-5a3 3 0 0 1 6 0v5" />
+            </svg>
+            <span class="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-rose-500 px-1 text-[10px] font-semibold text-white" aria-hidden="true">3</span>
+        </button>
+        <div id="ax-cart-menu" class="absolute right-0 z-30 mt-2 w-80 rounded-xl border border-neutral-200 bg-white p-2 text-sm shadow-lg shadow-black/5 dark:border-neutral-800 dark:bg-neutral-900" role="menu" x-show="open" x-transition.opacity.duration.150ms x-cloak>
+            <div class="flex items-center justify-between px-2 pb-2 pt-1 text-xs font-semibold uppercase tracking-wide text-neutral-400">
+                <span>Cart</span><span>3 items</span>
+            </div>
+            <ul class="space-y-1" role="presentation">
+                <li class="flex items-center gap-3 rounded-lg p-2 hover:bg-neutral-50 dark:hover:bg-neutral-800/60">
+                    <img class="h-10 w-10 shrink-0 rounded-lg object-cover" src="https://picsum.photos/seed/ax-prod-1/80" alt="" width="40" height="40" />
+                    <span class="flex min-w-0 flex-1 flex-col">
+                        <b class="truncate text-sm font-medium text-neutral-900 dark:text-white">Aurora Wireless Buds</b>
+                        <span class="font-mono text-xs text-neutral-400">1 × $129.00</span>
+                    </span>
+                    <button type="button" class="shrink-0 rounded p-1 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200" aria-label="Remove item">
+                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg>
+                    </button>
+                </li>
+                <li class="flex items-center gap-3 rounded-lg p-2 hover:bg-neutral-50 dark:hover:bg-neutral-800/60">
+                    <img class="h-10 w-10 shrink-0 rounded-lg object-cover" src="https://picsum.photos/seed/ax-prod-2/80" alt="" width="40" height="40" />
+                    <span class="flex min-w-0 flex-1 flex-col">
+                        <b class="truncate text-sm font-medium text-neutral-900 dark:text-white">Verdigris Mechanical Keyboard</b>
+                        <span class="font-mono text-xs text-neutral-400">1 × $189.00</span>
+                    </span>
+                    <button type="button" class="shrink-0 rounded p-1 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200" aria-label="Remove item">
+                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg>
+                    </button>
+                </li>
+                <li class="flex items-center gap-3 rounded-lg p-2 hover:bg-neutral-50 dark:hover:bg-neutral-800/60">
+                    <img class="h-10 w-10 shrink-0 rounded-lg object-cover" src="https://picsum.photos/seed/ax-prod-3/80" alt="" width="40" height="40" />
+                    <span class="flex min-w-0 flex-1 flex-col">
+                        <b class="truncate text-sm font-medium text-neutral-900 dark:text-white">Glass Desk Mat — XL</b>
+                        <span class="font-mono text-xs text-neutral-400">2 × $34.00</span>
+                    </span>
+                    <button type="button" class="shrink-0 rounded p-1 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200" aria-label="Remove item">
+                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg>
+                    </button>
+                </li>
+            </ul>
+            <div class="flex items-center justify-between border-t border-neutral-200 px-2 pt-2 text-sm font-medium dark:border-neutral-800">
+                <span>Subtotal</span><span class="font-mono">$386.00</span>
+            </div>
+            <div class="mt-2 grid grid-cols-2 gap-2">
+                <a class="inline-flex items-center justify-center rounded-lg border border-neutral-200 px-3 py-1.5 text-xs font-medium text-neutral-600 hover:bg-neutral-100 dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800" href="#">View cart</a>
+                <a class="inline-flex items-center justify-center rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-indigo-500" href="#">Checkout</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 9 · NOTIFICATIONS -->
+    <div class="relative" x-data="axDropdown()" @keydown.escape="close()" @click.outside="close()">
+        <button type="button" class="relative inline-flex h-9 w-9 items-center justify-center rounded-lg text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white" @click="toggle()" aria-haspopup="dialog" :aria-expanded="open" aria-controls="ax-notif-menu" aria-label="Notifications, 2 unread">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" />
+                <path d="M9 17v1a3 3 0 0 0 6 0v-1" />
+            </svg>
+            <span class="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-rose-500 px-1 text-[10px] font-semibold text-white" aria-hidden="true">2</span>
+        </button>
+        <div id="ax-notif-menu" class="absolute right-0 z-30 mt-2 w-80 rounded-xl border border-neutral-200 bg-white p-2 text-sm shadow-lg shadow-black/5 dark:border-neutral-800 dark:bg-neutral-900" role="dialog" aria-label="Notifications" x-show="open" x-transition.opacity.duration.150ms x-cloak>
+            <div class="flex items-center justify-between px-2 pb-1 pt-1">
+                <span class="text-xs font-semibold uppercase tracking-wide text-neutral-400">Notifications</span>
+                <button type="button" class="text-xs font-medium text-indigo-600 hover:underline dark:text-indigo-400">Mark all read</button>
+            </div>
+            <div class="mb-1 flex gap-1 border-b border-neutral-200 px-1 pb-2 dark:border-neutral-800" role="tablist" aria-label="Notification filter">
+                <button type="button" class="rounded-lg bg-neutral-100 px-2.5 py-1 text-xs font-medium text-neutral-900 dark:bg-neutral-800 dark:text-white" role="tab" aria-selected="true">All</button>
+                <button type="button" class="rounded-lg px-2.5 py-1 text-xs font-medium text-neutral-500 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-neutral-800" role="tab" aria-selected="false">Unread</button>
+            </div>
+            <ul class="space-y-1" role="presentation">
+                <li class="relative flex gap-3 rounded-lg bg-indigo-50/60 p-2 dark:bg-indigo-500/5">
+                    <img class="h-8 w-8 shrink-0 rounded-full" src="https://i.pravatar.cc/64?img=32" alt="" width="34" height="34" />
+                    <span class="flex min-w-0 flex-1 flex-col">
+                        <b class="truncate text-sm font-medium text-neutral-900 dark:text-white">Mara Chen mentioned you</b>
+                        <span class="text-xs text-neutral-500 dark:text-neutral-400">"Can you review the Q3 revenue figures before the sync?"</span>
+                        <time class="font-mono text-[11px] text-neutral-400">2m ago</time>
+                    </span>
+                    <span class="mt-1 h-2 w-2 shrink-0 rounded-full bg-indigo-500" aria-label="Unread"></span>
+                </li>
+                <li class="relative flex gap-3 rounded-lg bg-indigo-50/60 p-2 dark:bg-indigo-500/5">
+                    <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400">
+                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5l10 -10" /></svg>
+                    </span>
+                    <span class="flex min-w-0 flex-1 flex-col">
+                        <b class="truncate text-sm font-medium text-neutral-900 dark:text-white">Payment received</b>
+                        <span class="text-xs text-neutral-500 dark:text-neutral-400">Invoice #INV-2049 was paid — $1,280.00.</span>
+                        <time class="font-mono text-[11px] text-neutral-400">1h ago</time>
+                    </span>
+                    <span class="mt-1 h-2 w-2 shrink-0 rounded-full bg-indigo-500" aria-label="Unread"></span>
+                </li>
+                <li class="flex gap-3 rounded-lg p-2 hover:bg-neutral-50 dark:hover:bg-neutral-800/60">
+                    <img class="h-8 w-8 shrink-0 rounded-full" src="https://i.pravatar.cc/64?img=15" alt="" width="34" height="34" />
+                    <span class="flex min-w-0 flex-1 flex-col">
+                        <b class="truncate text-sm font-medium text-neutral-900 dark:text-white">New follower</b>
+                        <span class="text-xs text-neutral-500 dark:text-neutral-400">Devin Park started following your store.</span>
+                        <time class="font-mono text-[11px] text-neutral-400">5h ago</time>
+                    </span>
+                </li>
+                <li class="flex gap-3 rounded-lg p-2 hover:bg-neutral-50 dark:hover:bg-neutral-800/60">
+                    <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-amber-100 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400">
+                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 9v4" /><path d="M10.363 3.591l-8.106 13.534a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636 -2.87l-8.106 -13.536a1.914 1.914 0 0 0 -3.274 0" /><path d="M12 16h.01" /></svg>
+                    </span>
+                    <span class="flex min-w-0 flex-1 flex-col">
+                        <b class="truncate text-sm font-medium text-neutral-900 dark:text-white">Low stock alert</b>
+                        <span class="text-xs text-neutral-500 dark:text-neutral-400">"Glass Desk Mat — XL" dropped below 10 units.</span>
+                        <time class="font-mono text-[11px] text-neutral-400">yesterday</time>
+                    </span>
+                </li>
+            </ul>
+            <a class="mt-1 block rounded-lg px-3 py-2 text-center text-sm font-medium text-indigo-600 hover:bg-neutral-100 dark:text-indigo-400 dark:hover:bg-neutral-800" href="#">View all notifications</a>
+        </div>
+    </div>
+
+    <!-- 10 · PROFILE -->
+    <div class="relative" x-data="axDropdown()" @keydown.escape="close()" @click.outside="close()">
+        <button type="button" class="rounded-full" @click="toggle()" aria-haspopup="menu" :aria-expanded="open" aria-controls="ax-profile-menu" aria-label="Account menu">
+            <img class="h-8 w-8 rounded-full ring-2 ring-transparent hover:ring-neutral-200 dark:hover:ring-neutral-700" src="https://i.pravatar.cc/64?img=12" alt="Jacob Gerrald" width="32" height="32" />
+        </button>
+        <div id="ax-profile-menu" class="absolute right-0 z-30 mt-2 w-64 rounded-xl border border-neutral-200 bg-white p-1 text-sm shadow-lg shadow-black/5 dark:border-neutral-800 dark:bg-neutral-900" role="menu" x-show="open" x-transition.opacity.duration.150ms x-cloak>
+            <div class="flex items-center gap-3 rounded-lg p-2">
+                <img class="h-10 w-10 rounded-full" src="https://i.pravatar.cc/80?img=12" alt="" width="40" height="40" />
+                <span class="flex min-w-0 flex-col">
+                    <b class="truncate text-sm font-semibold text-neutral-900 dark:text-white">Jacob Gerrald</b>
+                    <small class="truncate text-xs text-neutral-400">jacob@vireo.io</small>
+                </span>
+            </div>
+            <a class="flex items-center gap-2 rounded-lg px-3 py-2 text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800" role="menuitem" href="#">
+                <svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /><path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /></svg>
+                View Profile
+            </a>
+            <a class="flex items-center gap-2 rounded-lg px-3 py-2 text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800" role="menuitem" href="#">
+                <svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065" /><path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /></svg>
+                Account Settings
+            </a>
+            <a class="flex items-center gap-2 rounded-lg px-3 py-2 text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800" role="menuitem" href="#">
+                <svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 12a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M15 15l3.35 3.35" /><path d="M9 15l-3.35 3.35" /><path d="M5.65 5.65l3.35 3.35" /><path d="M18.35 5.65l-3.35 3.35" /></svg>
+                Support
+            </a>
+            <a class="flex items-center gap-2 rounded-lg px-3 py-2 text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800" role="menuitem" href="#">
+                <svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8l0 4l2 2" /><path d="M3.05 11a9 9 0 1 1 .5 4m-.5 5v-5h5" /></svg>
+                Activity Log
+            </a>
+            <a class="flex items-center gap-2 rounded-lg px-3 py-2 text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800" role="menuitem" href="#">
+                <svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2l0 -12" /><path d="M16 3l0 4" /><path d="M8 3l0 4" /><path d="M4 11l16 0" /><path d="M8 15h2v2h-2l0 -2" /></svg>
+                Events
+            </a>
+            <div class="my-1 h-px bg-neutral-200 dark:bg-neutral-800" role="separator"></div>
+            <a class="flex items-center gap-2 rounded-lg px-3 py-2 text-rose-600 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-500/10" role="menuitem" href="#">
+                <svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2" /><path d="M9 12h12l-3 -3" /><path d="M18 15l3 -3" /></svg>
+                Log Out
+            </a>
+        </div>
+    </div>
+
+    <!-- 11 · MORE (mobile/tablet shed — visible below lg) -->
+    <div class="relative lg:hidden" x-data="axDropdown()" @keydown.escape="close()" @click.outside="close()">
+        <button type="button" class="inline-flex h-9 w-9 items-center justify-center rounded-lg text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white" @click="toggle()" aria-haspopup="menu" :aria-expanded="open" aria-controls="ax-overflow-menu" aria-label="More">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M11 12a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                <path d="M11 19a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                <path d="M11 5a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+            </svg>
+        </button>
+        <div id="ax-overflow-menu" class="absolute right-0 z-30 mt-2 w-72 rounded-xl border border-neutral-200 bg-white p-2 text-sm shadow-lg shadow-black/5 dark:border-neutral-800 dark:bg-neutral-900" role="menu" x-show="open" x-transition.opacity.duration.150ms x-cloak>
+            <!-- Language chips — only shown here below lg -->
+            <div class="mb-2">
+                <p class="px-1 pb-1 text-xs font-semibold uppercase tracking-wide text-neutral-400">Language</p>
+                <div class="flex gap-1 px-1" role="group" aria-label="Change language">
+                    <button type="button" class="rounded-lg px-2.5 py-1 text-xs font-medium" :class="$store.ax.lang === 'EN' ? 'bg-indigo-600 text-white' : 'text-neutral-500 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-neutral-800'" @click="$store.ax.setLang('EN'); close()">EN</button>
+                    <button type="button" class="rounded-lg px-2.5 py-1 text-xs font-medium" :class="$store.ax.lang === 'ES' ? 'bg-indigo-600 text-white' : 'text-neutral-500 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-neutral-800'" @click="$store.ax.setLang('ES'); close()">ES</button>
+                    <button type="button" class="rounded-lg px-2.5 py-1 text-xs font-medium" :class="$store.ax.lang === 'FR' ? 'bg-indigo-600 text-white' : 'text-neutral-500 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-neutral-800'" @click="$store.ax.setLang('FR'); close()">FR</button>
+                </div>
+            </div>
+            <!-- App grid — only shown here below md -->
+            <div class="mb-2 md:hidden">
+                <p class="px-1 pb-1 text-xs font-semibold uppercase tracking-wide text-neutral-400">Quick apps</p>
+                <div class="grid grid-cols-3 gap-1">
+                    <a class="flex flex-col items-center gap-1.5 rounded-lg p-3 text-center text-xs text-neutral-500 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-neutral-800" role="menuitem" href="#" @click="close()">
+                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10" /><path d="M3 7l9 6l9 -6" /></svg>
+                        <span>Email</span>
+                    </a>
+                    <a class="flex flex-col items-center gap-1.5 rounded-lg p-3 text-center text-xs text-neutral-500 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-neutral-800" role="menuitem" href="#" @click="close()">
+                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20l1.3 -3.9c-2.324 -3.437 -1.426 -7.872 2.1 -10.374c3.526 -2.501 8.59 -2.296 11.845 .48c3.255 2.777 3.695 7.266 1.029 10.501c-2.666 3.235 -7.615 4.215 -11.574 2.293l-4.7 1" /></svg>
+                        <span>Chat</span>
+                    </a>
+                    <a class="flex flex-col items-center gap-1.5 rounded-lg p-3 text-center text-xs text-neutral-500 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-neutral-800" role="menuitem" href="#" @click="close()">
+                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12" /><path d="M16 3v4" /><path d="M8 3v4" /><path d="M4 11h16" /><path d="M11 15h1" /><path d="M12 15v3" /></svg>
+                        <span>Calendar</span>
+                    </a>
+                    <a class="flex flex-col items-center gap-1.5 rounded-lg p-3 text-center text-xs text-neutral-500 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-neutral-800" role="menuitem" href="#" @click="close()">
+                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4l6 0" /><path d="M14 4l6 0" /><path d="M4 10a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2l0 -8" /><path d="M14 10a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v2a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2l0 -2" /></svg>
+                        <span>Kanban</span>
+                    </a>
+                    <a class="flex flex-col items-center gap-1.5 rounded-lg p-3 text-center text-xs text-neutral-500 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-neutral-800" role="menuitem" href="#" @click="close()">
+                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l3 3h7a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-11a2 2 0 0 1 2 -2" /></svg>
+                        <span>Files</span>
+                    </a>
+                    <a class="flex flex-col items-center gap-1.5 rounded-lg p-3 text-center text-xs text-neutral-500 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-neutral-800" role="menuitem" href="#" @click="close()">
+                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6v12a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2" /><path d="M10 16h6" /><path d="M11 11a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M4 8h3" /><path d="M4 12h3" /><path d="M4 16h3" /></svg>
+                        <span>Contacts</span>
+                    </a>
+                </div>
+            </div>
+            <a class="flex items-center gap-2 rounded-lg px-3 py-2 text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800" role="menuitem" href="#" @click="close()">
+                <svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.331 8h11.339a2 2 0 0 1 1.977 2.304l-1.255 8.152a3 3 0 0 1 -2.966 2.544h-6.852a3 3 0 0 1 -2.965 -2.544l-1.255 -8.152a2 2 0 0 1 1.977 -2.304" /><path d="M9 11v-5a3 3 0 0 1 6 0v5" /></svg>
+                <span class="flex-1">Cart</span>
+                <span class="font-mono text-xs text-neutral-400">3</span>
+            </a>
+        </div>
+    </div>
+</header>
