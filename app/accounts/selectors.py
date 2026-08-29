@@ -1,0 +1,24 @@
+from django.contrib.auth import get_user_model
+
+from .domains.entities import UserEntity
+
+from pydantic import EmailStr
+from typing import Union
+
+class UserSelector:
+    def __init__(self) -> None:
+        self.model = get_user_model()
+        
+    def get_user_by_email(self, email:EmailStr) -> Union[UserEntity, None]:
+        obj = self.model.objects.filter(email=email).first()
+        return self._to_entity(instance=obj) if obj else None
+    
+    def _to_entity(self, instance):
+        return UserEntity(
+            id=instance.id,
+            first_name=instance.first_name,
+            last_name=instance.last_name,
+            email=instance.email,
+            mobile_number=instance.mobile_number,
+            is_verified=instance.is_verified,
+        )

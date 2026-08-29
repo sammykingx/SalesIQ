@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from uuid6 import uuid7
 
 
 # Fields from django user models
@@ -9,6 +10,7 @@ from django.contrib.auth.models import AbstractUser
 
 class CustomUserModel(AbstractUser):
     username = None
+    id = models.UUIDField(primary_key=True, default=uuid7, editable=False)
     email = models.EmailField(unique=True)
     mobile_number =  models.CharField(max_length=20, blank=True)
     is_verified = models.BooleanField(default=False)

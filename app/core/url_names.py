@@ -7,6 +7,7 @@ ACCOUNTS = SimpleNamespace(
     PROFILE='accounts_profile',
     DASHBOARD='accounts_settings',
     ONBOARDING='accounts_onboarding',
+    ACTIVATION='accounts_activation',
     AUTH=SimpleNamespace(
         LOGIN='accounts_auth_login',
         LOGOUT='accounts_auth_logout',
