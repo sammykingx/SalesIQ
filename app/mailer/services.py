@@ -1,34 +1,45 @@
 # mailer/services.py
 from django.conf import settings
-from django.template.loader import render_to_string
-from .providers.base import EmailMessage
-# from .providers.smtp_provider import SMTPProvider
-# from .providers.resend_provider import ResendProvider
-# from .exceptions import EmailSendError
+from django.utils.html import strip_tags
+from typing import Union
+from .providers.base import EmailMessage, Providers, EmailProvider
+from .providers.resend import ResendProvider
+from .exceptions import EmailSendError
 # from .models import EmailLog
 
 
-# _PROVIDERS = {'resend': ResendProvider(), 'smtp': SMTPProvider()}
+class AppMailerService:
+    _PROVIDERS: dict[str, EmailProvider] = {
+        Providers.RESEND: ResendProvider(),
+        # Providers.SMTP: SMTPProvider(),
+    }
 
-def send_email(*, to, subject, template_name, context, from_email=None, attachments=None):
-    pass
-#     to = to if isinstance(to, list) else [to]
-#     message = EmailMessage(
-#         to=to,
-#         subject=subject,
-#         html_body=render_to_string(template_name, context),
-#         text_body=render_to_string(template_name.replace('.html', '.txt'), context),
-#         from_email=from_email or settings.DEFAULT_FROM_EMAIL,
-#         attachments=attachments,
-#     )
+    def __init__(self, provider: Providers) -> None:
+        # provider = provider or settings.DEFAULT_EMAIL_PROVIDER
+        try:
+            self.mail_client = self._PROVIDERS[provider]
+        except KeyError:
+            raise ValueError(f"No provider registered for '{provider}'")
+        self.provider_name = provider
+        self.message: Union[EmailMessage, None] = None
 
-#     for provider_name in settings.EMAIL_PROVIDER_PRIORITY:  # e.g. ['resend', 'smtp']
-#         try:
-#             _PROVIDERS[provider_name].send(message)
-#             EmailLog.objects.create(to=to, subject=subject, provider=provider_name, status='sent')
-#             return
-#         except EmailSendError:
-#             continue
+    def prepare_message(
+        self, *, subject: str, html_msg: str, recipients: Union[list[str], str],
+        from_email: Union[str, None] = None, attachments: Union[list[str], None] = None,
+    ) -> "AppMailerService":
+        self.message = EmailMessage(
+            to=recipients if isinstance(recipients, list) else [recipients],
+            subject=subject,
+            html_body=html_msg,
+            text_body=strip_tags(html_msg),
+            from_email=from_email or settings.DEFAULT_FROM_EMAIL,
+            attachments=attachments,
+        )
+        return self
 
-#     EmailLog.objects.create(to=to, subject=subject, provider='none', status='failed')
-#     raise EmailSendError('All providers failed')
+    def send_email(self) -> None:
+        if self.message is None:
+            raise ValueError("Call prepare_message() before send_email()")
+
+        self.mail_client.send(self.message)
+            

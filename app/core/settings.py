@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     
     "django_extensions",
     "django_vite",
+    "anymail",
     
     "accounts.apps.AccountsConfig",
     "customers.apps.CustomersConfig",
@@ -151,6 +152,16 @@ MAILERS = {
         "BACKEND": "django.core.mail.backends.console.EmailBackend",
     },
 }
+
+EMAIL_BACKEND = "anymail.backends.resend.EmailBackend"
+ANYMAIL = {
+    "RESEND_API_KEY": config("RESEND_API_KEY"),
+    "REQUESTS_TIMEOUT": (5, 10),
+}
+
+DEFAULT_FROM_EMAIL = "SalesIQ <no-reply@salesiq.com.ng>"
+EMAIL_TIMEOUT = 10
+
 
 DJANGO_VITE = {
     "default": {

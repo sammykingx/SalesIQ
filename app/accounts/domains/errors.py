@@ -12,21 +12,25 @@ class FailureDetail(NamedTuple):
 
     code: str
     title: str
+    message: str
     
 
 class AccountRegistrationErrors:
     """Centralized error definitions for the account registration process."""
     DUPLICATE_EMAIL = FailureDetail(
         code="DUPLICATE_EMAIL",
-        title="An account with this email address already exists."
+        title="Duplicate Email",
+        message="An account with this email address already exists."
     )
     WEAK_PASSWORD = FailureDetail(
         code="WEAK_PASSWORD",
-        title="The provided password does not meet complexity standards."
+        title="Week Passoword",
+        message="The provided password does not meet complexity standards."
     )
     PASSWORDS_MISMATCH = FailureDetail(
         code="PASSWORDS_MISMATCH",
-        title="The entered passwords do not match."
+        title="Passwords Mismatch",
+        message="The entered passwords do not match."
     )
 
 
@@ -34,15 +38,18 @@ class AccountActivationErrors:
     """Centralized error definitions for the account activation process."""
     INVALID_TOKEN = FailureDetail(
         code="INVALID_TOKEN",
-        title="The activation link is invalid or malformed."
+        title="Invalid User Token",
+        message="The activation link is invalid or malformed."
     )
     EXPIRED_TOKEN = FailureDetail(
         code="EXPIRED_TOKEN",
-        title="The activation link has expired. Please request a new one."
+        title="Expired User Token",
+        message="The activation link has expired. Please request a new one."
     )
     ALREADY_ACTIVATED = FailureDetail(
         code="ALREADY_ACTIVATED",
-        title="This account has already been activated."
+        title="No Action Required",
+        message="This account has already been activated."
     )
 
 
@@ -50,17 +57,21 @@ class PasswordResetErrors:
     """Centralized error definitions for password reset and update workflows."""
     USER_NOT_FOUND = FailureDetail(
         code="USER_NOT_FOUND",
-        title="No account was found matching this email address."
+        title="No User Found",
+        message="No account was found matching this email address."
     )
     INVALID_RESET_TOKEN = FailureDetail(
         code="INVALID_RESET_TOKEN",
-        title="The password reset link is invalid or has already been used."
+        title="Invalid reset token",
+        message="The password reset link is invalid or has already been used."
     )
     EXPIRED_RESET_TOKEN = FailureDetail(
         code="EXPIRED_RESET_TOKEN",
-        title="The password reset link has expired."
+        title="Expired reset token",
+        message="The password reset link has expired."
     )
     SAME_AS_OLD_PASSWORD = FailureDetail(
         code="SAME_AS_OLD_PASSWORD",
-        title="Your new password cannot be the same as your previous password."
+        title="Same password as before",
+        message="Your new password cannot be the same as your previous password."
     )

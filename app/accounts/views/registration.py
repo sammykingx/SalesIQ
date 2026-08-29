@@ -4,61 +4,77 @@ from django.urls import reverse
 from django.shortcuts import render
 from django.http import HttpRequest, JsonResponse
 
-from ..services import UserRegistrationService
-from ..domains.exceptions import AccountsDomainException
 from core.template_names import APP_TEMPLATES
 from core.url_names import ACCOUNTS
-from mailer.services import send_email
-
+from mailer.exceptions import EmailSendError, EmailTimeoutError
+from ..services import UserRegistrationService
+from ..domains.exceptions import AccountsDomainException
 from ..serializers import UserRegistrationSchema, UserRegistrationResponseSchema
-import json
 
-from typing import cast
+from pydantic import ValidationError
+
+import json, logging
+
+logger = logging.getLogger(__name__)
 
 
 class AccountRegistrationView(View):
     model = get_user_model()
     
     def get(self, request: HttpRequest):
-        print("This is the host", request.build_absolute_uri('/'))
         return render(request, template_name=APP_TEMPLATES.ACCOUNTS.AUTH.REGISTER)
     
     def post(self, request: HttpRequest):
         try:
-            pasyload = UserRegistrationSchema.model_validate_json(request.body, strict=True)
+            payload = UserRegistrationSchema.model_validate_json(request.body, strict=True)
             user_service = UserRegistrationService(request)
-            user_service.create_account(pasyload)
-            is_sent = user_service.send_activtivation_link(pasyload)
-            # create user service
-            # 1. call selector to get a record for that email if found raise domain
-            #   duplicate exception which is caught in the view layer and proagated cleanly
-            # 2. if no user is found then call repo create_user to save
+            user_service.create_account(payload)
+            user_service.send_activation_link(payload)
+            response_data = UserRegistrationResponseSchema(
+                message="Registration successful! Please check your email to activate your account.",
+                status="success",
+                redirect=True,
+                url=reverse(ACCOUNTS.AUTH.LOGIN),
+            )
+                    
+            return JsonResponse(response_data.model_dump(mode="json"), status=201)
             
-            
-        except json.JSONDecodeError:
-            pass
+        except ValidationError as err:
+            response_data = UserRegistrationResponseSchema(
+                message="Invalid data format. Please check your input.",
+                status="warning",
+                redirect=False
+            )
+            return JsonResponse(response_data.model_dump(mode="json"), status=400)
         
-        except AccountsDomainException:
-            pass
+        except AccountsDomainException as err:
+            response_data = UserRegistrationResponseSchema(
+                message=err.message,
+                status="success",
+                redirect=False
+            )
+            return JsonResponse(response_data.model_dump(mode="json"), status=200)
         
-        payload = json.loads(request.body)
-        print(payload)
+        except EmailSendError as err:
+            logger.warning(
+                "Activation email failed: status=%s response=%s",
+                err.status_code, err.raw_response,
+            )
+            response_data = UserRegistrationResponseSchema(
+                message=err.user_message,
+                status="warning",
+                redirect=True,
+                url=reverse(ACCOUNTS.AUTH.LOGIN),
+            )
+            return JsonResponse(response_data.model_dump(mode="json"), status=201)
         
-        # verifying the payload
-        # try except to create the new record, send the confirmation email
-        # flow completed
-        # send_email(
-        #     to=user.email,
-        #     subject='Reset your SalesIQ password',
-        #     template_name=TEMPLATES.ACCOUNTS.EMAILS.PASSWORD_RESET,
-        #     context={'reset_link': reset_link},
-        # )
-        response_data = UserRegistrationResponseSchema(
-            message="Account registration Action successful",
-            status="success",
-            redirect=True,
-            url=reverse(ACCOUNTS.AUTH.LOGIN),
-        )
-        
-        return JsonResponse(response_data.model_dump(mode="json"), status=201)
-    
+        except Exception:
+            import traceback
+            traceback.print_exc()
+            return JsonResponse({
+                "title": "System Glitch",
+                "message": "We encountered an unexpected hiccup. Please try again shortly!",
+                "status": "error",
+                "redirect": False,
+            }, status=500)
+     

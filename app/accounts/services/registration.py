@@ -5,6 +5,8 @@ from django.template.loader import render_to_string
 
 from core.url_names import ACCOUNTS
 from core.template_names import EMAIL_TEMPLATES
+from mailer.providers.base import Providers
+from mailer.services import AppMailerService
 
 from ..domains.errors import AccountRegistrationErrors
 from ..domains.exceptions import DuplicateEmailError
@@ -29,7 +31,7 @@ class UserRegistrationService:
             self.user_repo.create_user(user=data)
         except IntegrityError:
             raise DuplicateEmailError(
-                message="",
+                message="Your request has been successfully processed.",
                 title=AccountRegistrationErrors.DUPLICATE_EMAIL.title,
                 code=AccountRegistrationErrors.DUPLICATE_EMAIL.code
             )
@@ -48,8 +50,13 @@ class UserRegistrationService:
             request=self.request
         )
         
-    def send_activtivation_link(self, data: UserRegistrationSchema) -> bool:
-        enail_message = self.html_message(data)
-        # try and except block to checkif the emaildelivrered in 5 seconds
-        return False
-        
+    def send_activation_link(self, data: UserRegistrationSchema):
+        return (
+            AppMailerService(Providers.RESEND)
+            .prepare_message(
+                subject="salesiq - Almost there! Activate your new account ✨",
+                html_msg=self.html_message(data),
+                recipients=data.email,
+            )
+            .send_email()
+        )

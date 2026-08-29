@@ -46,7 +46,6 @@ app/
 |-- invoices/                  # Django app (domain-driven design)
 |-- products/                  # Django app (domain-driven design)
 |-- notifications/             # Django app (domain-driven design)
-|-- services/                  # Shared resources used across internal apps
 |
 |-- src/                       # Vite input — source for compiled frontend assets
 |   |-- entries/               # Per-page JS entry points
