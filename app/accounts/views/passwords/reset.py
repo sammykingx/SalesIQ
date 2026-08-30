@@ -4,7 +4,8 @@ from django.shortcuts import render
 from django.http import HttpRequest, JsonResponse
 from core.template_names import APP_TEMPLATES
 from core.url_names import ACCOUNTS
-from accounts.services import UserRegistrationService
+from accounts.services import PasswordResetService, TokenService
+from mailer.exceptions import EmailSendError
 
 import json
 
@@ -15,16 +16,24 @@ class RequestPassowrdResetView(View):
     Args:
         View (_type_): _description_
     """
-    def get(self, request: HttpRequest):
+    def get(self, request: HttpRequest, **kwargs):
         return render(request, template_name=APP_TEMPLATES.ACCOUNTS.AUTH.PASSWORD_RESET)
     
     def post(self, request: HttpRequest):
         try:
             data:dict = json.loads(request.body)
             email = data.get("email", "")
-            service = UserRegistrationService(request=request)
-            service.send_reset_link(user_email=email)
-        except Exception:
-            pass
-        return JsonResponse({ "message": "Password Reset email Action successful", "status": "success" }, status=200)
+            service = PasswordResetService(request=request)
+            service.initiate_password_reset(user_email=email)
+            
+            return JsonResponse({ 
+                "message": "Password Reset email Action successful", 
+                "status": "success" 
+            }, status=200)
+        
+        except EmailSendError as err:
+            return JsonResponse({
+                "status": "error",
+                "message": err.user_message,
+            }, status=400)
         

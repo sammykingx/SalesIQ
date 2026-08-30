@@ -33,3 +33,4 @@ class APP_TEMPLATES:
 _EMAIL_BASE_FOLDER = "email"
 class EMAIL_TEMPLATES:
     ACCOUNT_ACTIVATION = f'{_EMAIL_BASE_FOLDER}/account-activation.html'
+    PASSWORD_RESET = f'{_EMAIL_BASE_FOLDER}/password-reset.html'

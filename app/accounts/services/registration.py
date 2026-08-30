@@ -17,7 +17,7 @@ from ..selectors import UserSelector
 from ..serializers import UserRegistrationSchema
 
 
-class UserRegistrationService:
+class AccountOnboardingService:
     """Orchestrates new user registration, data persistence, and verification communication."""
 
     def __init__(self, request: HttpRequest) -> None:
@@ -26,6 +26,20 @@ class UserRegistrationService:
         self.user_repo = UserRepository()
         self.model_selector = UserSelector()
         self.mail_client = None
+        
+    def _html_message(self, user: UserRegistrationSchema, token: str) -> str:
+        """Renders and returns the HTML activation email string using absolute URIs and template contexts."""
+        template_context = {
+            "host": self.request.build_absolute_uri("/"),
+            "first_name": user.first_name,
+            "url": self.request.build_absolute_uri(reverse(ACCOUNTS.ACTIVATION, kwargs={"token": token}))
+        }
+            
+        return render_to_string(
+            template_name=EMAIL_TEMPLATES.ACCOUNT_ACTIVATION,
+            context=template_context,
+            request=self.request
+        )
         
     def create_account(self, data: UserRegistrationSchema):
         """Persists the user record via the repository and triggers the activation email sequence."""
@@ -37,43 +51,26 @@ class UserRegistrationService:
                 title=AccountRegistrationErrors.DUPLICATE_EMAIL.title,
                 code=AccountRegistrationErrors.DUPLICATE_EMAIL.code
             )
-    
-    def html_message(self, user: UserRegistrationSchema, token: str) -> str:
-        """Renders and returns the HTML activation email string using absolute URIs and template contexts."""
-        template_context = {
-            "host": "https://sales.com.ng/", #self.request.build_absolute_uri("/"),
-            "first_name": user.first_name,
-            "url": self.request.build_absolute_uri(reverse(ACCOUNTS.ACTIVATION, kwargs={"token": token}))
-        }
         
-        return render_to_string(
-            template_name=EMAIL_TEMPLATES.ACCOUNT_ACTIVATION,
-            context=template_context,
-            request=self.request
-        )
-        
-    def send_activation_link(self, data: UserRegistrationSchema):
+    def send_activation_link(self, data: UserRegistrationSchema) -> None:
         result = TokenService().create_token(user_email=data.email, token_type=TokenType.EMAIL_VERIFICATION)
         return (
             AppMailerService(Providers.RESEND)
             .prepare_message(
                 subject="salesiq - Almost there! Activate your new account ✨",
-                html_msg=self.html_message(data, token=result.token),
+                html_msg=self._html_message(data, token=result.token),
                 recipients=data.email,
             )
             .send_email()
         )
         
-    def send_reset_link(self, *, user_email: str):
-        user = self.model_selector.get_by_email(email=user_email)
-        if user:
-            result = TokenService().create_token(user_email=user.email, token_type=TokenType.PASSWORD_RESET) 
-            (
-                AppMailerService(Providers.RESEND)
-                .prepare_message(
-                    subject="salesiq - Almost there! Activate your new account ✨",
-                    html_msg=self.html_message(data, token=result.token),
-                    recipients=user.email,
-                )
-                .send_email()
-            )
+    def activate_account(self, token: str) -> bool:
+        token_manager = TokenService()
+        token_obj = token_manager.get_token_obj(
+            token=token, tkn_type=TokenType.EMAIL_VERIFICATION
+        )
+        if token_obj is None:
+            return False
+        self.user_repo.mark_as_verified(token_obj.email)
+        token_obj.invalidate_token()
+        return True

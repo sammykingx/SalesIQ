@@ -1,5 +1,6 @@
 # manage write operations (creating, updating, and deleting) to db
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import AbstractUser
 from django.db import transaction
 from .serializers import UserRegistrationSchema
 
@@ -25,3 +26,15 @@ class UserRepository:
         self.model.objects.filter(
             email=email, is_verified=False
         ).update(is_verified=True)
+    
+    @transaction.atomic
+    def update_password(self, *, user_email, new_password:str):
+        instance = (
+            self.model.objects
+            .select_for_update()
+            .filter(email=user_email)
+            .first()
+        )
+        if instance:
+            instance.set_password(new_password)
+            instance.save(update_fields=["password"])
