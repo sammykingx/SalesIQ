@@ -2,14 +2,13 @@ from django.contrib.auth import get_user_model
 
 from .domains.entities import UserEntity
 
-from pydantic import EmailStr
 from typing import Union
 
 class UserSelector:
     def __init__(self) -> None:
         self.model = get_user_model()
         
-    def get_user_by_email(self, email:EmailStr) -> Union[UserEntity, None]:
+    def get_by_email(self, *, email:str) -> Union[UserEntity, None]:
         obj = self.model.objects.filter(email=email).first()
         return self._to_entity(instance=obj) if obj else None
     

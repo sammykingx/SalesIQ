@@ -7,11 +7,12 @@ from django.http import HttpRequest, JsonResponse
 from core.template_names import APP_TEMPLATES
 from core.url_names import ACCOUNTS
 from mailer.exceptions import EmailSendError, EmailTimeoutError
-from ..services import UserRegistrationService
+from ..services import UserRegistrationService, TokenService
 from ..domains.exceptions import AccountsDomainException
 from ..serializers import UserRegistrationSchema, UserRegistrationResponseSchema
 
 from pydantic import ValidationError
+from typing import cast
 
 import json, logging
 
@@ -29,6 +30,9 @@ class AccountRegistrationView(View):
             payload = UserRegistrationSchema.model_validate_json(request.body, strict=True)
             user_service = UserRegistrationService(request)
             user_service.create_account(payload)
+            
+            # print(payload.model_dump_json(indent=2))
+            
             user_service.send_activation_link(payload)
             response_data = UserRegistrationResponseSchema(
                 message="Registration successful! Please check your email to activate your account.",
@@ -40,6 +44,7 @@ class AccountRegistrationView(View):
             return JsonResponse(response_data.model_dump(mode="json"), status=201)
             
         except ValidationError as err:
+            print(err)
             response_data = UserRegistrationResponseSchema(
                 message="Invalid data format. Please check your input.",
                 status="warning",
@@ -78,3 +83,22 @@ class AccountRegistrationView(View):
                 "redirect": False,
             }, status=500)
      
+class AccountActivationView(View):
+    def get(self, request:HttpRequest, **kwargs):
+        token = cast(str, kwargs.get("token"))
+        token_manager = TokenService()
+        token_obj = token_manager.get_user_token(token=token)
+        ctx = {}
+        if token_obj is None:
+            ctx.update(
+                verified=False,
+            )
+        else:
+            token_manager.verify_email(token_obj)
+            ctx.update(verified=True)
+
+        return render(
+            request,
+            template_name=APP_TEMPLATES.ACCOUNTS.ACTIVATION,
+            context=ctx,
+        )

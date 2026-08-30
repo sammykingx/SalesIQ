@@ -149,18 +149,28 @@ match ENVIRONMENT:
 
 MAILERS = {
     "default": {
-        "BACKEND": "django.core.mail.backends.console.EmailBackend",
+        "BACKEND": "django.core.mail.backends.smtp.EmailBackend",
+        "OPTIONS": {
+            "host": config("SMTP_HOST", default="salesiq.com.ng"),
+            "port": config("SMTP_PORT", default=465, cast=int),
+            "username": config("SMTP_USER", default=""),
+            "password": config("SMTP_PASSWORD", default=""),
+            "use_ssl": True,
+        },
+    },
+    "anymail": {
+        "BACKEND": "anymail.backends.resend.EmailBackend",
+        "OPTIONS": {
+            "api_key": config("RESEND_API_KEY"),
+        },
     },
 }
-
-EMAIL_BACKEND = "anymail.backends.resend.EmailBackend"
+MAILER_EMS = "anymail"
 ANYMAIL = {
-    "RESEND_API_KEY": config("RESEND_API_KEY"),
     "REQUESTS_TIMEOUT": (5, 10),
 }
 
-DEFAULT_FROM_EMAIL = "SalesIQ <no-reply@salesiq.com.ng>"
-EMAIL_TIMEOUT = 10
+DEFAULT_FROM_EMAIL = "SalesIQ <no-reply@notifications.salesiq.com.ng>"
 
 
 DJANGO_VITE = {

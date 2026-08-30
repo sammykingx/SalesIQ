@@ -71,8 +71,10 @@ export function signUpForm(endpointUrl = '') {
                         body?.status || "success"
                     );
 
-                    if (body?.redirect_url) {
-                        window.location.href = body.redirect_url;
+                    if (body?.redirect && body?.url) {
+                        setTimeout(() => {
+                            window.location.assign(body.url);
+                        }, 1700)
                     }
                 } else {
                     showToast(

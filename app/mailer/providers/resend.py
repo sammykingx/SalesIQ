@@ -1,4 +1,5 @@
-from django.core.mail import get_connection, EmailMultiAlternatives
+from django.conf import settings
+from django.core.mail import EmailMultiAlternatives
 from anymail.exceptions import AnymailError, AnymailRequestsAPIError
 from mailer.exceptions import (
     EmailSendError, EmailTimeoutError, EmailRateLimitedError,
@@ -12,23 +13,21 @@ logger = logging.getLogger(__name__)
 
 
 class ResendProvider(EmailProvider):
-    backend_path = "anymail.backends.resend.EmailBackend"
+    mailer_alias = settings.MAILER_EMS
 
     def send(self, message: EmailMessage) -> None:
-        connection = get_connection(backend=self.backend_path)
         email = EmailMultiAlternatives(
             subject=message.subject,
-            body=message.html_body,
+            body=message.text_body,
             from_email=message.from_email,
             to=message.to,
-            connection=connection,
         )
         email.attach_alternative(message.html_body, "text/html")
         for file_path in (message.attachments or []):
             email.attach_file(file_path)
 
         try:
-            email.send()
+            email.send(using=self.mailer_alias) # type: ignore
         except AnymailRequestsAPIError as e:
             self._handle_api_error(e)
         except AnymailError as e:

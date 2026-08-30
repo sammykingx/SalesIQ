@@ -1,3 +1,3 @@
-from .registration import AccountRegistrationView
+from .registration import AccountRegistrationView, AccountActivationView
 from .passwords import *
 

@@ -27,7 +27,7 @@ TokenResult = namedtuple("TokenResult", ["token", "is_new"])
 
 class UserTokenManager(models.Manager):
 
-    def generate_token(self, user, token_type: TokenType) -> TokenResult:
+    def generate_token(self, user_email, token_type: TokenType) -> TokenResult:
         """
         Returns an existing valid token for the given token_type, or creates a new one.
 
@@ -48,21 +48,24 @@ class UserTokenManager(models.Manager):
             IntegrityError: If a unique constraint is hit during token creation. In this
             case, the method falls back to returning the existing valid token.
         """
-        if user is None:
+        if user_email is None:
             raise ValueError("User Object cannot be None or empty")
             
         now = timezone.now()
         lifetime = _TOKEN_LIFETIMES.get(token_type)
         if token_type == TokenType.PASSWORD_RESET:
+            # ensures that old, dead tokens that have already passed 
+            # their expiration window do not linger in the database 
+            # ith an active is_valid=True status
             self.filter(
-                user=user,
+                email=user_email,
                 token_type=token_type,
                 is_valid=True,
                 expires_at__lt=now,
             ).update(is_valid=False)
             
         queryset = self.filter(
-            user=user, token_type=token_type, is_valid=True
+            email=user_email, token_type=token_type, is_valid=True
         )
 
         if token_type == TokenType.PASSWORD_RESET:
@@ -75,7 +78,7 @@ class UserTokenManager(models.Manager):
 
         try:
             user_token = self.create(
-                user=user,
+                email=user_email,
                 token=get_random_string(124).lower(),
                 token_type=token_type,
                 expires_at=now + lifetime if lifetime else None,
@@ -85,7 +88,7 @@ class UserTokenManager(models.Manager):
         except IntegrityError:
             return TokenResult(
                 self.get(
-                    user=user,
+                    email=user_email,
                     token_type=token_type,
                     is_valid=True,
                 ).token,
@@ -98,12 +101,7 @@ class UserToken(models.Model):
     password reset, email verification, etc.
     """
 
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name="tokens",
-        to_field="email",
-    )
+    email = models.CharField(max_length=50)
     token = models.CharField(max_length=128, unique=True, db_index=True)
     token_type = models.CharField(
         max_length=50, choices=TokenType.choices
@@ -126,7 +124,7 @@ class UserToken(models.Model):
         ]
         constraints = [
             models.UniqueConstraint(
-                fields=["user", "token_type"],
+                fields=["email", "token_type"],
                 condition=Q(is_valid=True),
                 name="unique_active_token_per_user_type",
             )
@@ -146,5 +144,5 @@ class UserToken(models.Model):
         return True
 
     def __str__(self):
-        return f"{self.user.email} - {self.token_type}"
+        return f"{self.email} - {self.token_type}"
     

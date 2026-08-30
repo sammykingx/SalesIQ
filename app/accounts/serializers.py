@@ -12,21 +12,21 @@ class UserRegistrationSchema(BaseModel):
     first_name: str = Field(..., max_length=150)
     last_name: str = Field(..., max_length=150)
     email: EmailStr = Field(..., max_length=254)
-    password1: str = Field(..., min_length=8)
-    password2: str = Field(..., min_length=8)
+    password: str = Field(..., min_length=8)
+    confirm_password: str = Field(..., min_length=8)
 
     @model_validator(mode='after')
     def verify_passwords_match(self) -> 'UserRegistrationSchema':
-        if self.password1 != self.password2:
+        if self.password != self.confirm_password:
             raise ValueError('Passwords do not match.')
         return self
     
     model_validator(mode='after')
     def validate_passwords_complexity(self) -> 'UserRegistrationSchema':
-        if self.password1 != self.password2:
+        if self.password != self.confirm_password:
             raise ValueError('Passwords do not match.')
             
-        password = self.password1
+        password = self.password
         if not re.search(r'[A-Z]', password):
             raise ValueError('Password must contain at least one uppercase letter.')
         if not re.search(r'[a-z]', password):

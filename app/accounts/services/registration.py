@@ -8,6 +8,8 @@ from core.template_names import EMAIL_TEMPLATES
 from mailer.providers.base import Providers
 from mailer.services import AppMailerService
 
+from ..services.token_manager import TokenService
+from ..models.user_token import TokenType
 from ..domains.errors import AccountRegistrationErrors
 from ..domains.exceptions import DuplicateEmailError
 from ..repository import UserRepository
@@ -36,12 +38,12 @@ class UserRegistrationService:
                 code=AccountRegistrationErrors.DUPLICATE_EMAIL.code
             )
     
-    def html_message(self, user: UserRegistrationSchema) -> str:
+    def html_message(self, user: UserRegistrationSchema, token: str) -> str:
         """Renders and returns the HTML activation email string using absolute URIs and template contexts."""
         template_context = {
-            "host": self.request.build_absolute_uri("/"),
+            "host": "https://sales.com.ng/", #self.request.build_absolute_uri("/"),
             "first_name": user.first_name,
-            "activation_url": self.request.build_absolute_uri(reverse(ACCOUNTS.ACTIVATION, kwargs={"token": "xxxxx"}))
+            "url": self.request.build_absolute_uri(reverse(ACCOUNTS.ACTIVATION, kwargs={"token": token}))
         }
         
         return render_to_string(
@@ -51,12 +53,27 @@ class UserRegistrationService:
         )
         
     def send_activation_link(self, data: UserRegistrationSchema):
+        result = TokenService().create_token(user_email=data.email, token_type=TokenType.EMAIL_VERIFICATION)
         return (
             AppMailerService(Providers.RESEND)
             .prepare_message(
                 subject="salesiq - Almost there! Activate your new account ✨",
-                html_msg=self.html_message(data),
+                html_msg=self.html_message(data, token=result.token),
                 recipients=data.email,
             )
             .send_email()
         )
+        
+    def send_reset_link(self, *, user_email: str):
+        user = self.model_selector.get_by_email(email=user_email)
+        if user:
+            result = TokenService().create_token(user_email=user.email, token_type=TokenType.PASSWORD_RESET) 
+            (
+                AppMailerService(Providers.RESEND)
+                .prepare_message(
+                    subject="salesiq - Almost there! Activate your new account ✨",
+                    html_msg=self.html_message(data, token=result.token),
+                    recipients=user.email,
+                )
+                .send_email()
+            )

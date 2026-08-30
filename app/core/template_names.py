@@ -11,6 +11,7 @@ class APP_TEMPLATES:
     class ACCOUNTS:
         PROFILE = f'{_ACCOUNTS_BASE}/profile.html'
         ONBOARDING = f'{_ACCOUNTS_BASE}/onboarding.html'
+        ACTIVATION = f'{_ACCOUNTS_BASE}/activation.html'
 
         class AUTH:
             LOGIN = f'{_AUTH_BASE}/login.html'

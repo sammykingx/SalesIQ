@@ -17,7 +17,11 @@ class UserRepository:
             last_name=user.last_name,
             email=user.email,
         )
-        instance.set_password(user.password1)
+        instance.set_password(user.password)
         instance.save()
         return None
     
+    def mark_as_verified(self, email: str) -> None:
+        self.model.objects.filter(
+            email=email, is_verified=False
+        ).update(is_verified=True)
