@@ -74,7 +74,7 @@ export function signUpForm(endpointUrl = '') {
                     if (body?.redirect && body?.url) {
                         setTimeout(() => {
                             window.location.assign(body.url);
-                        }, 1700)
+                        }, 2000)
                     }
                 } else {
                     showToast(

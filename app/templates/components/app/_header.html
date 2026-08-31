@@ -137,7 +137,7 @@
     </div>
 
     <!-- 8 · CART -->
-    <div class="relative" x-data="axDropdown()" @keydown.escape="close()" @click.outside="close()">
+    {% comment %} <div class="relative" x-data="axDropdown()" @keydown.escape="close()" @click.outside="close()">
         <button type="button" class="relative inline-flex h-9 w-9 items-center justify-center rounded-lg text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white" @click="toggle()" aria-haspopup="menu" :aria-expanded="open" aria-controls="ax-cart-menu" aria-label="Shopping cart, 3 items">
             <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M6.331 8h11.339a2 2 0 0 1 1.977 2.304l-1.255 8.152a3 3 0 0 1 -2.966 2.544h-6.852a3 3 0 0 1 -2.965 -2.544l-1.255 -8.152a2 2 0 0 1 1.977 -2.304" />
@@ -189,10 +189,10 @@
                 <a class="inline-flex items-center justify-center rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-indigo-500" href="#">Checkout</a>
             </div>
         </div>
-    </div>
+    </div> {% endcomment %}
 
     <!-- 9 · NOTIFICATIONS -->
-    <div class="relative" x-data="axDropdown()" @keydown.escape="close()" @click.outside="close()">
+    {% comment %} <div class="relative" x-data="axDropdown()" @keydown.escape="close()" @click.outside="close()">
         <button type="button" class="relative inline-flex h-9 w-9 items-center justify-center rounded-lg text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white" @click="toggle()" aria-haspopup="dialog" :aria-expanded="open" aria-controls="ax-notif-menu" aria-label="Notifications, 2 unread">
             <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" />
@@ -251,19 +251,36 @@
             </ul>
             <a class="mt-1 block rounded-lg px-3 py-2 text-center text-sm font-medium text-indigo-600 hover:bg-neutral-100 dark:text-indigo-400 dark:hover:bg-neutral-800" href="#">View all notifications</a>
         </div>
-    </div>
+    </div> {% endcomment %}
 
     <!-- 10 · PROFILE -->
     <div class="relative" x-data="axDropdown()" @keydown.escape="close()" @click.outside="close()">
+        <form method="post" action="{% url ACCOUNTS.AUTH.LOGOUT %}" x-ref="logoutForm" class="hidden">
+            {% csrf_token %}
+        </form>
+
         <button type="button" class="rounded-full" @click="toggle()" aria-haspopup="menu" :aria-expanded="open" aria-controls="ax-profile-menu" aria-label="Account menu">
-            <img class="h-8 w-8 rounded-full ring-2 ring-transparent hover:ring-neutral-200 dark:hover:ring-neutral-700" src="https://i.pravatar.cc/64?img=12" alt="Jacob Gerrald" width="32" height="32" />
+            {% comment %} <img class="h-8 w-8 rounded-full ring-2 ring-transparent hover:ring-neutral-200 dark:hover:ring-neutral-700" src="https://i.pravatar.cc/64?img=12" alt="{{ user.get_full_name }}" width="32" height="32" /> {% endcomment %}
+            {% if user.avatar %}
+                <img class="h-10 w-10 rounded-full object-cover" src="{{ user.avatar.url }}" alt="{{ user.get_full_name }}" width="40" height="40" />
+            {% else %}
+                <div class="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 font-semibold text-sm dark:bg-emerald-950/60 dark:text-emerald-400 ring-1 ring-emerald-500/20">
+                    {{ user.first_name|slice:":1" }}{{ user.last_name|slice:":1" }}
+                </div>
+            {% endif %}
         </button>
         <div id="ax-profile-menu" class="absolute right-0 z-30 mt-2 w-64 rounded-xl border border-neutral-200 bg-white p-1 text-sm shadow-lg shadow-black/5 dark:border-neutral-800 dark:bg-neutral-900" role="menu" x-show="open" x-transition.opacity.duration.150ms x-cloak>
             <div class="flex items-center gap-3 rounded-lg p-2">
-                <img class="h-10 w-10 rounded-full" src="https://i.pravatar.cc/80?img=12" alt="" width="40" height="40" />
+                {% if user.avatar %}
+                    <img class="h-10 w-10 rounded-full object-cover" src="{{ user.avatar.url }}" alt="{{ user.get_full_name }}" width="40" height="40" />
+                {% else %}
+                    <div class="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 font-semibold text-sm dark:bg-emerald-950/60 dark:text-emerald-400 ring-1 ring-emerald-500/20">
+                        {{ user.first_name|slice:":1" }}{{ user.last_name|slice:":1" }}
+                    </div>
+                {% endif %}
                 <span class="flex min-w-0 flex-col">
-                    <b class="truncate text-sm font-semibold text-neutral-900 dark:text-white">Jacob Gerrald</b>
-                    <small class="truncate text-xs text-neutral-400">jacob@vireo.io</small>
+                    <b class="truncate text-sm font-semibold text-neutral-900 dark:text-white">{{ user.get_full_name }}</b>
+                    <small class="truncate text-xs text-neutral-400">{{ user.email }}</small>
                 </span>
             </div>
             <a class="flex items-center gap-2 rounded-lg px-3 py-2 text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800" role="menuitem" href="#">
@@ -287,7 +304,12 @@
                 Events
             </a>
             <div class="my-1 h-px bg-neutral-200 dark:bg-neutral-800" role="separator"></div>
-            <a class="flex items-center gap-2 rounded-lg px-3 py-2 text-rose-600 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-500/10" role="menuitem" href="#">
+            <a 
+                class="flex items-center gap-2 rounded-lg px-3 py-2 text-rose-600 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-500/10 cursor-pointer" 
+                role="menuitem" 
+                href="#"
+                @click.prevent="$refs.logoutForm.submit()"
+            >
                 <svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2" /><path d="M9 12h12l-3 -3" /><path d="M18 15l3 -3" /></svg>
                 Log Out
             </a>

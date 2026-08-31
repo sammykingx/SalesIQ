@@ -4,41 +4,33 @@
     <!-- │  REGION: primary content. Replace this empty-state block    │ -->
     <!-- │  with your page's cards / table / chart / form.             │ -->
     <!-- └────────────────────────────────────────────────────────────┘ -->
-    <section class="col-span-12 rounded-2xl border border-neutral-200 bg-white lg:col-span-8 dark:border-neutral-800 dark:bg-neutral-900" role="region" aria-label="Get started">
-        <div class="py-16 px-6">
-            <div class="mx-auto flex max-w-[105] flex-col items-center gap-5 text-center">
-                <!-- thin-line two-tone illustration (single accent highlight) -->
-                <span aria-hidden="true" class="relative grid h-32 w-32 place-items-center rounded-full bg-[radial-gradient(circle_at_50%_40%,var(--color-indigo-100),transparent_70%)] dark:bg-[radial-gradient(circle_at_50%_40%,var(--color-indigo-500),transparent_70%)]/10">
-                    <span class="absolute inset-0 rounded-full border border-dashed border-neutral-300 dark:border-neutral-700"></span>
-                    <svg viewBox="0 0 24 24" class="h-14 w-14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-                        <path class="text-neutral-400 dark:text-neutral-500" d="M14 3v4a1 1 0 0 0 1 1h4" />
-                        <path class="text-neutral-400 dark:text-neutral-500" d="M5 21v-16a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />
-                        <path class="text-indigo-500" d="M12 11l0 6" />
-                        <path class="text-indigo-500" d="M9 14l3 -3l3 3" />
-                    </svg>
-                </span>
-                <div>
-                    <h2 class="font-display text-lg font-semibold text-neutral-900 dark:text-white">Nothing here yet</h2>
-                    <p class="mt-2 text-sm leading-relaxed text-neutral-500 dark:text-neutral-400">
-                        This is the canonical empty-state pattern reused across every list, table and feed. Create your first item to get going.
-                    </p>
-                </div>
-                <div class="flex items-center justify-center gap-3">
-                    <button type="button" class="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500">
-                        <svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <path d="M12 5l0 14" />
-                            <path d="M5 12l14 0" />
-                        </svg>
-                        <span>Create item</span>
-                    </button>
-                    <a class="text-sm font-medium text-indigo-600 hover:underline dark:text-indigo-400" href="#">or import from a file</a>
-                </div>
+    <section class="col-span-12 rounded-2xl border border-neutral-200 bg-white p-6 lg:col-span-8 dark:border-neutral-800 dark:bg-neutral-900" role="region" aria-label="Chart loading state">
+        <div class="flex items-center justify-between pb-6">
+            <div class="space-y-1">
+                <div class="h-5 w-32 animate-pulse rounded-md bg-neutral-200 dark:bg-neutral-800"></div>
+                <div class="h-3 w-48 animate-pulse rounded-md bg-neutral-100 dark:bg-neutral-800/60"></div>
             </div>
+            <div class="h-8 w-24 animate-pulse rounded-lg bg-neutral-100 dark:bg-neutral-800"></div>
+        </div>
+        
+        <!-- Shimmer loading placeholder for the chart canvas -->
+        <div class="relative flex h-72 w-full items-end justify-between gap-3 overflow-hidden rounded-xl bg-neutral-50/50 p-4 dark:bg-neutral-900/50">
+            <!-- Subtle background shimmer effect -->
+            <div class="absolute inset-0 -translate-x-full animate-[shimmer_2s_infinite] bg-linear-to-r from-transparent via-neutral-200/30 to-transparent dark:via-neutral-800/30"></div>
+            
+            <!-- Mock loading bars with staggered heights -->
+            <div class="w-full h-2/5 animate-pulse rounded-t bg-neutral-200/70 dark:bg-neutral-800"></div>
+            <div class="w-full h-3/5 animate-pulse rounded-t bg-neutral-200/70 dark:bg-neutral-800"></div>
+            <div class="w-full h-4/5 animate-pulse rounded-t bg-neutral-200/70 dark:bg-neutral-800"></div>
+            <div class="w-full h-1/2 animate-pulse rounded-t bg-neutral-200/70 dark:bg-neutral-800"></div>
+            <div class="w-full h-3/4 animate-pulse rounded-t bg-neutral-200/70 dark:bg-neutral-800"></div>
+            <div class="w-full h-2/3 animate-pulse rounded-t bg-neutral-200/70 dark:bg-neutral-800"></div>
+            <div class="w-full h-5/6 animate-pulse rounded-t bg-neutral-200/70 dark:bg-neutral-800"></div>
         </div>
     </section>
 
-    <!-- ───── Empty-state variant reference ───── -->
-    <section class="col-span-12 rounded-2xl border border-neutral-200 bg-white lg:col-span-4 dark:border-neutral-800 dark:bg-neutral-900" role="region" aria-label="Empty-state variants">
+    <!-- ───── Empty-state top performing products ───── -->
+    {% comment %} <section class="col-span-12 rounded-2xl border border-neutral-200 bg-white lg:col-span-4 dark:border-neutral-800 dark:bg-neutral-900" role="region" aria-label="Empty-state variants">
         <div class="border-b border-neutral-200 px-5 py-4 dark:border-neutral-800">
             <h2 class="text-base font-semibold text-neutral-900 dark:text-white">State Variants</h2>
             <p class="text-sm text-neutral-500 dark:text-neutral-400">One pattern, four contexts</p>
@@ -93,6 +85,63 @@
                         <span class="text-sm font-medium text-neutral-900 dark:text-white">Error-empty</span>
                         <span class="text-xs text-neutral-400">"Retry" action after a failure</span>
                     </span>
+                </li>
+            </ul>
+        </div>
+    </section> {% endcomment %}
+    <section class="col-span-12 rounded-2xl border border-neutral-200 bg-white lg:col-span-4 dark:border-neutral-800 dark:bg-neutral-900" role="region" aria-label="Top performing products">
+        <div class="flex items-center justify-between border-b border-neutral-200 px-5 py-4 dark:border-neutral-800">
+            <div>
+                <h2 class="text-base font-semibold text-neutral-900 dark:text-white">Top Products</h2>
+                <p class="text-xs text-neutral-500 dark:text-neutral-400">Best-selling items by volume</p>
+            </div>
+            <span class="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400">This Month</span>
+        </div>
+        <div class="px-5 py-4">
+            <ul class="space-y-4">
+                <!-- Rank 1 -->
+                <li class="flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-amber-100 text-xs font-bold text-amber-700 dark:bg-amber-500/10 dark:text-amber-400">1</span>
+                        <div class="flex flex-col min-w-0">
+                            <span class="truncate text-sm font-medium text-neutral-900 dark:text-white">Enterprise Subscription</span>
+                            <span class="text-xs text-neutral-400">142 sales</span>
+                        </div>
+                    </div>
+                    <span class="text-sm font-semibold text-neutral-900 dark:text-white">$14,200</span>
+                </li>
+                <!-- Rank 2 -->
+                <li class="flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-neutral-100 text-xs font-bold text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300">2</span>
+                        <div class="flex flex-col min-w-0">
+                            <span class="truncate text-sm font-medium text-neutral-900 dark:text-white">Pro Workspace License</span>
+                            <span class="text-xs text-neutral-400">98 sales</span>
+                        </div>
+                    </div>
+                    <span class="text-sm font-semibold text-neutral-900 dark:text-white">$4,900</span>
+                </li>
+                <!-- Rank 3 -->
+                <li class="flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-amber-50 text-xs font-bold text-amber-800/70 dark:bg-amber-900/20 dark:text-amber-500/80">3</span>
+                        <div class="flex flex-col min-w-0">
+                            <span class="truncate text-sm font-medium text-neutral-900 dark:text-white">Custom Onboarding Add-on</span>
+                            <span class="text-xs text-neutral-400">64 sales</span>
+                        </div>
+                    </div>
+                    <span class="text-sm font-semibold text-neutral-900 dark:text-white">$3,200</span>
+                </li>
+                <!-- Rank 4 -->
+                <li class="flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-neutral-100 text-xs font-bold text-neutral-500 dark:bg-neutral-800 dark:text-neutral-400">4</span>
+                        <div class="flex flex-col min-w-0">
+                            <span class="truncate text-sm font-medium text-neutral-900 dark:text-white">API Security Pack</span>
+                            <span class="text-xs text-neutral-400">41 sales</span>
+                        </div>
+                    </div>
+                    <span class="text-sm font-semibold text-neutral-900 dark:text-white">$1,640</span>
                 </li>
             </ul>
         </div>

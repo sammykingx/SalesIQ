@@ -27,3 +27,7 @@
 /* used in coming soon */
 .animate-float-slow { animation: float-slow 5s ease-in-out infinite; }
 .animate-float-delayed { animation: float-delayed 6s ease-in-out infinite 1s; }
+
+.animate-shake {
+  animation: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}

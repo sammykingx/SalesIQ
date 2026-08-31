@@ -1,0 +1,82 @@
+<!doctype html>
+{% load static %}
+{% load django_vite %}
+<html lang="en">
+    <head>
+        {% vite_hmr_client %}
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+        <meta name="theme-color" content="#F8FAFC" media="(prefers-color-scheme: light)">
+        <meta name="theme-color" content="#0F172A" media="(prefers-color-scheme: dark)">
+
+        <!-- Favicon for Light Mode -->
+        <link rel="icon" type="image/png" href="{% static 'images/logo/light-favicon.png' %}" media="(prefers-color-scheme: light)">
+        <link rel="apple-touch-icon" href="{% static 'images/logo/light-favicon.png' %}" media="(prefers-color-scheme: light)">
+
+        <!-- Favicon for Dark Mode -->
+        <link rel="icon" type="image/png" href="{% static 'images/logo/dark-favicon.png' %}" media="(prefers-color-scheme: dark)">
+        <link rel="apple-touch-icon" href="{% static 'images/logo/dark-favicon.png' %}" media="(prefers-color-scheme: dark)">
+
+        <meta name="msapplication-TileColor" content="#ffffff">
+        <meta name="msapplication-TileImage" content="{% static 'images/favicon/ms-icon-144x144.png' %}">
+        <meta name="theme-color" content="##F8FAFC">
+        <meta name="csrf-token" content="{{ csrf_token }}">
+
+        <title>{% block title %}SalesIQ | Account Dashboard.{% endblock %}</title>
+
+        {% vite_asset 'src/entries/app.js' %}
+    </head>
+    <body class="relative min-h-screen bg-surface/95 text-neutral-900 antialiased dark:bg-neutral-950 dark:text-neutral-100">
+
+        <!-- Ambient background glow (was: ax-ambient) — purely decorative, no JS needed -->
+        <div class="pointer-events-none fixed inset-0 -z-10 overflow-hidden" aria-hidden="true">
+            <div class="absolute -top-40 -left-40 h-96 w-96 rounded-full bg-indigo-400/30 blur-3xl dark:bg-indigo-500/20"></div>
+            <div class="absolute top-1/3 -right-40 h-96 w-96 rounded-full bg-fuchsia-400/20 blur-3xl dark:bg-fuchsia-500/10"></div>
+        </div>
+
+        <!-- App layout -->
+        <div class="flex min-h-screen">
+            <!-- GLOBAL MOBILE BACKDROP OVERLAY -->
+        <div
+            x-show="$store.sidebar.mobileOpen"
+            x-transition:enter="transition-opacity ease-out duration-300"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="transition-opacity ease-in duration-200"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            @click="$store.sidebar.closeMobile()"
+            class="fixed inset-0 z-40 bg-neutral-900/60 backdrop-blur-md lg:hidden"
+            aria-hidden="true"
+            x-cloak
+        ></div>
+
+            <!-- Sidebar -->
+            {% include "components/app/_sidebar.html" %}
+
+            <!-- Shell -->
+            <div class="flex min-w-0 flex-1 flex-col">
+
+                <!-- Dashboard header -->
+                {% include "components/app/_header.html" %}
+
+                <!-- Main page content area -->
+                <main id="app-main" class="flex-1 overflow-y-auto p-4 md:p-6">
+                    {% block page_header %}
+                        {% include "components/app/page-header.html" %}
+                    {% endblock %}
+
+                    {% block page_body %}
+                        {% include "components/app/page-body.html" %}
+                    {% endblock %}
+                </main>
+
+                {% include "components/app/_footer.html" %}
+            </div>
+        </div>
+
+        <!-- Search dialog modal -->
+        {% include "components/app/_search-dialog.html" %}
+    </body>
+</html>

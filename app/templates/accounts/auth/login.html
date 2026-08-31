@@ -1,16 +1,30 @@
 {% extends "layouts/_base_auth.html" %}
 {% load static %}
-
+{% block title %}salesiq | Account Login{% endblock %}
 {% block auth_title %}Welcome Back{% endblock %}
 {% block auth_subtitle %}Sign in to your SalesIQ account{% endblock %}
 
 {% block auth_card %}
-<form method="post" 
-  action=""
-  x-data="{ hasError: {{ form.errors|yesno:'true,false' }} }"
-  :class="hasError && 'animate-shake'"
-  class="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500 fill-mode-both">
+<form method="POST" 
+  action="{% url ACCOUNTS.AUTH.LOGIN %}"
+  
+  class="space-y-4 animate-in fade-in slide-in-from-bottom-4 
+  duration-500 fill-mode-both"
+>
   {% csrf_token %}
+
+  {% if form.non_field_errors %}
+    <div class="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 text-xs font-medium flex items-start gap-2.5 animate-in fade-in zoom-in-95 duration-200">
+      <svg class="w-4 h-4 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <div class="space-y-1">
+        {% for error in form.non_field_errors %}
+          <p>{{ error }}</p>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
 
   <!-- Email Input Group -->
   <div class="animate-in fade-in slide-in-from-bottom-2 duration-500 delay-75 fill-mode-both">
@@ -23,7 +37,7 @@
       </div>
       <input 
         type="email" 
-        name="email" 
+        name={{ form.username.html_name }}
         id="email" 
         required 
         placeholder="name@company.com"
@@ -46,7 +60,7 @@
       </div>
       <input 
         :type="showPassword ? 'text' : 'password'" 
-        name="password" 
+        name={{ form.password.html_name }}
         id="password" 
         required 
         placeholder="••••••••"

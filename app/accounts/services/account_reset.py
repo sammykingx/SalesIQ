@@ -8,6 +8,7 @@ from core.url_names import ACCOUNTS
 from core.template_names import EMAIL_TEMPLATES
 from mailer.providers.base import Providers
 from mailer.services import AppMailerService
+from ..domains.exceptions import InvalidTokenError
 from ..models.user_token import TokenType
 from ..repository import UserRepository
 from ..selectors import UserSelector
@@ -26,7 +27,7 @@ class PasswordResetService:
         self.user_repo = UserRepository()
         
         
-    def _get_reset_token(self, email: str) -> str:
+    def _create_reset_token(self, email: str) -> str:
         """
             Generates and returns a unique, secure password reset token string 
             associated with the given user email.
@@ -42,11 +43,11 @@ class PasswordResetService:
             "host": self.request.build_absolute_uri("/"),
             "first_name": f_name,
             "url": self.request.build_absolute_uri(
-                reverse(ACCOUNTS.AUTH.PASSWORD_RESET, kwargs={"token": self._get_reset_token(email)})
+                reverse(ACCOUNTS.AUTH.PASSWORD_CHANGE, kwargs={"token": self._create_reset_token(email)})
             )
         }
         return render_to_string(
-            template_name=EMAIL_TEMPLATES.PASSWORD_RESET,
+            template_name=EMAIL_TEMPLATES.ACCOUNT_RECOVERY,
             context=template_context,
             request=self.request,
         )
@@ -71,7 +72,7 @@ class PasswordResetService:
         if user:
             self._send_reset_link(first_name=user.first_name, user_email=user.email)
 
-    def update_password(self, token: str, new_password: str) -> None:
+    def update_password(self, *, token: str, new_password: str):
         """
         Orchestrates the final password change flow by first verifying 
         the security token and subsequently updating the user's password.
@@ -80,9 +81,10 @@ class PasswordResetService:
         token_obj = token_manager.get_token_obj(
             token=token, tkn_type=TokenType.PASSWORD_RESET
         )
-        if token_obj and token_manager.is_valid(token_obj):
-            self.user_repo.update_password(
-                user_email=token_obj.email, new_password=new_password
-            )
-            token_manager.invalidate_token(token_obj=token_obj)
-
+        if token_obj is None or not token_obj.is_valid:
+            raise InvalidTokenError("This token has ghosted us! It’s either expired or invalid")
+        
+        self.user_repo.update_password(
+            user_email=token_obj.email, new_password=new_password
+        )
+        token_manager.invalidate_token(token_obj=token_obj)

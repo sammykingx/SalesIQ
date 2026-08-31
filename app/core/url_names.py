@@ -5,7 +5,7 @@ from types import SimpleNamespace
 
 ACCOUNTS = SimpleNamespace(
     PROFILE='accounts_profile',
-    DASHBOARD='accounts_settings',
+    DASHBOARD='accounts_dashboard',
     ONBOARDING='accounts_onboarding',
     ACTIVATION='accounts_activation',
     AUTH=SimpleNamespace(

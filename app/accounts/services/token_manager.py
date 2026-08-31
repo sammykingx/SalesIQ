@@ -20,6 +20,7 @@ class TokenService:
             user_token = UserToken.objects.get(
                 token=token,
                 token_type=tkn_type,
+                is_valid=True,
             )
         except UserToken.DoesNotExist:
             return None

@@ -71,8 +71,8 @@
         </button>
     </div>
 
-    <!-- ===== MENU FILTER ===== -->
-    <div x-show="!$store.sidebar.collapsed || $store.sidebar.mobileOpen" class="relative border-b border-neutral-200 px-3 py-3 dark:border-neutral-800">
+    <!-- ===== SIDEBAR MENU FILTER ===== -->
+    {% comment %} <div x-show="!$store.sidebar.collapsed || $store.sidebar.mobileOpen" class="relative border-b border-neutral-200 px-3 py-3 dark:border-neutral-800">
         <svg
             class="pointer-events-none absolute left-6 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400"
             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"
@@ -101,14 +101,14 @@
                 <path d="M6 6l12 12" />
             </svg>
         </button>
-    </div>
+    </div> {% endcomment %}
 
     <!-- ===== NAV TREE ===== -->
     <nav class="flex-1 space-y-1 overflow-y-auto px-2 py-3" role="tree" aria-label="Main menu" @keydown="onTreeKey($event)" x-ref="tree">
         <!-- MAIN -->
         <p x-show="!$store.sidebar.collapsed || $store.sidebar.mobileOpen" class="px-3 pb-1 pt-1 text-xs font-semibold uppercase tracking-wider text-neutral-400" role="presentation">Main</p>
 
-        <div class="nav_grp" data-group-name="dashboards" x-show="matchesGroup('dashboards')">
+        {% comment %} <div class="nav_grp" data-group-name="dashboards" x-show="matchesGroup('dashboards')">
             <button
                 type="button"
                 class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:hover:text-white"
@@ -144,19 +144,77 @@
                 <a class="flex items-center gap-2 rounded-lg py-1.5 pl-4 pr-3 text-sm text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white" role="treeitem" aria-level="2" href="#" data-nav-label="Sales" tabindex="-1">Sales</a>
                 <a class="flex items-center gap-2 rounded-lg py-1.5 pl-4 pr-3 text-sm text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white" role="treeitem" aria-level="2" href="#" data-nav-label="Analytics" tabindex="-1">Analytics</a>
             </div>
+        </div> {% endcomment %}
+        
+        <div class="nav_grp" data-group-name="dashboards" x-show="matchesGroup('dashboards')">
+            <a
+                href="#"
+                class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:hover:text-white"
+                role="treeitem"
+                aria-level="1"
+                tabindex="0"
+                data-nav-label="Dashboard"
+            >
+                <svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M5 4h4a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1v-6a1 1 0 0 1 1 -1" />
+                    <path d="M5 16h4a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1v-2a1 1 0 0 1 1 -1" />
+                    <path d="M15 12h4a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1v-6a1 1 0 0 1 1 -1" />
+                    <path d="M15 4h4a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1v-2a1 1 0 0 1 1 -1" />
+                </svg>
+                <span x-show="!$store.sidebar.collapsed || $store.sidebar.mobileOpen" class="flex-1 truncate text-left">Dashboard</span>
+            </a>
         </div>
 
         <!-- MODULES -->
         <p x-show="!$store.sidebar.collapsed || $store.sidebar.mobileOpen" class="px-3 pb-1 pt-4 text-xs font-semibold uppercase tracking-wider text-neutral-400" role="presentation">Modules</p>
 
-        <div class="nav_grp" data-group-name="crm" x-show="matchesGroup('crm')">
+        <!-- Oriducts -->
+        <div class="nav_grp" data-group-name="products" x-show="matchesGroup('products')">
             <button
                 type="button"
                 class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:hover:text-white"
                 role="treeitem"
                 aria-level="1"
-                :aria-expanded="groups.crm"
-                @click="toggle('crm')"
+                :aria-expanded="groups.products"
+                @click="toggle('products')"
+                tabindex="-1"
+            >
+                <svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M7 8l-4 4l4 4" />
+                    <path d="M17 8l4 4l-4 4" />
+                    <path d="M14 4l-4 16" />
+                </svg>
+                <span x-show="!$store.sidebar.collapsed || $store.sidebar.mobileOpen" class="flex-1 truncate text-left">Products</span>
+                <svg
+                    x-show="!$store.sidebar.collapsed || $store.sidebar.mobileOpen"
+                    class="h-4 w-4 shrink-0 text-neutral-400 transition-transform duration-200"
+                    :class="{ 'rotate-90': groups.products }"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"
+                >
+                    <path d="M9 6l6 6l-6 6" />
+                </svg>
+            </button>
+            <div
+                class="ml-3 space-y-0.5 border-l border-neutral-200 py-1 pl-3 dark:border-neutral-800"
+                role="group"
+                x-show="(! $store.sidebar.collapsed || $store.sidebar.mobileOpen) && (groups.products || filterOpen.products)"
+                x-collapse
+            >
+                <a class="flex items-center gap-2 rounded-lg py-1.5 pl-4 pr-3 text-sm text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white" role="treeitem" aria-level="2" href="#" data-nav-label="Add New Product" tabindex="-1">Add New</a>
+                <a class="flex items-center gap-2 rounded-lg py-1.5 pl-4 pr-3 text-sm text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white" role="treeitem" aria-level="2" href="#" data-nav-label="All Products" tabindex="-1">All Products</a>
+                {% comment %} <a class="flex items-center gap-2 rounded-lg py-1.5 pl-4 pr-3 text-sm text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white" role="treeitem" aria-level="2" href="#" data-nav-label="Product Categories" tabindex="-1">Categories</a> {% endcomment %}
+            </div>
+        </div>
+
+        <!--Customers-->
+        <div class="nav_grp" data-group-name="customers" x-show="matchesGroup('customers')">
+            <button
+                type="button"
+                class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:hover:text-white"
+                role="treeitem"
+                aria-level="1"
+                :aria-expanded="groups.customers"
+                @click="toggle('customers')"
                 tabindex="-1"
             >
                 <svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
@@ -167,11 +225,11 @@
                     <path d="M5 5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
                     <path d="M3 13v-1a2 2 0 0 1 2 -2h2" />
                 </svg>
-                <span x-show="!$store.sidebar.collapsed || $store.sidebar.mobileOpen" class="flex-1 truncate text-left">CRM</span>
+                <span x-show="!$store.sidebar.collapsed || $store.sidebar.mobileOpen" class="flex-1 truncate text-left">customers</span>
                 <svg
                     x-show="!$store.sidebar.collapsed || $store.sidebar.mobileOpen"
                     class="h-4 w-4 shrink-0 text-neutral-400 transition-transform duration-200"
-                    :class="{ 'rotate-90': groups.crm }"
+                    :class="{ 'rotate-90': groups.customers }"
                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"
                 >
                     <path d="M9 6l6 6l-6 6" />
@@ -180,27 +238,102 @@
             <div
                 class="ml-3 space-y-0.5 border-l border-neutral-200 py-1 pl-3 dark:border-neutral-800"
                 role="group"
-                x-show="(! $store.sidebar.collapsed || $store.sidebar.mobileOpen) && (groups.crm || filterOpen.crm)"
+                x-show="(! $store.sidebar.collapsed || $store.sidebar.mobileOpen) && (groups.customers || filterOpen.customers)"
                 x-collapse
             >
-                <a class="flex items-center gap-2 rounded-lg py-1.5 pl-4 pr-3 text-sm text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white" role="treeitem" aria-level="2" href="#" data-nav-label="CRM Dashboard" tabindex="-1">CRM Dashboard</a>
-                <a class="flex items-center gap-2 rounded-lg py-1.5 pl-4 pr-3 text-sm text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white" role="treeitem" aria-level="2" href="#" data-nav-label="Contacts" tabindex="-1">Contacts</a>
-                <a class="flex items-center gap-2 rounded-lg py-1.5 pl-4 pr-3 text-sm text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white" role="treeitem" aria-level="2" href="#" data-nav-label="Companies" tabindex="-1">Companies</a>
+                <a class="flex items-center gap-2 rounded-lg py-1.5 pl-4 pr-3 text-sm text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white" role="treeitem" aria-level="2" href="#" data-nav-label="customers Dashboard" tabindex="-1">Add New</a>
+                <a class="flex items-center gap-2 rounded-lg py-1.5 pl-4 pr-3 text-sm text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white" role="treeitem" aria-level="2" href="#" data-nav-label="Contacts" tabindex="-1">All Customers</a>
+                <a class="flex items-center gap-2 rounded-lg py-1.5 pl-4 pr-3 text-sm text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white" role="treeitem" aria-level="2" href="#" data-nav-label="Companies" tabindex="-1">Top Customers</a>
             </div>
+        </div>
+
+        <!-- Sales Single Menu Item -->
+        <div class="nav_grp" data-group-name="sales" x-show="matchesGroup('sales')">
+            <a
+                href="#"
+                class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:hover:text-white"
+                role="treeitem"
+                aria-level="1"
+                tabindex="-1"
+                data-nav-label="Sales"
+            >
+                <svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 21l18 0" />
+                    <path d="M3 10l18 0" />
+                    <path d="M5 6l7 -3l7 3" />
+                    <path d="M4 10l0 11" />
+                    <path d="M20 10l0 11" />
+                    <path d="M8 14l0 3" />
+                    <path d="M12 14l0 3" />
+                    <path d="M16 14l0 3" />
+                </svg>
+                <span x-show="!$store.sidebar.collapsed || $store.sidebar.mobileOpen" class="flex-1 truncate text-left">Sales</span>
+            </a>
+        </div>
+
+        <!-- Invoices Single Menu Item -->
+        <div class="nav_grp" data-group-name="invoices" x-show="matchesGroup('invoices')">
+            <a
+                href="#"
+                class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:hover:text-white"
+                role="treeitem"
+                aria-level="1"
+                tabindex="-1"
+                data-nav-label="Invoices"
+            >
+                <svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+                    <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />
+                    <path d="M9 7l1 0" />
+                    <path d="M9 11l6 0" />
+                    <path d="M9 15l6 0" />
+                </svg>
+                <span x-show="!$store.sidebar.collapsed || $store.sidebar.mobileOpen" class="flex-1 truncate text-left">Invoices</span>
+            </a>
+        </div>
+
+        <!-- Reports Single Menu Item -->
+        <div class="nav_grp" data-group-name="reports" x-show="matchesGroup('reports')">
+            <a
+                href="#"
+                class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:hover:text-white"
+                role="treeitem"
+                aria-level="1"
+                tabindex="-1"
+                data-nav-label="Reports"
+            >
+                <svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 3v18h18" />
+                    <path d="M9 15l3 -3l3 2l4 -8" />
+                </svg>
+                <span x-show="!$store.sidebar.collapsed || $store.sidebar.mobileOpen" class="flex-1 truncate text-left">Reports</span>
+            </a>
         </div>
     </nav>
 
     <!-- ===== USER FOOTER ===== -->
     <div class="mt-auto shrink-0 border-t border-neutral-200 p-3 dark:border-neutral-800">
         <div class="flex items-center gap-3">
-            <img class="h-9 w-9 shrink-0 rounded-full object-cover ring-1 ring-neutral-200 dark:ring-neutral-700" src="https://i.pravatar.cc/80?img=12" alt="" width="36" height="36" />
+            {% comment %} <img class="h-9 w-9 shrink-0 rounded-full object-cover ring-1 ring-neutral-200 dark:ring-neutral-700" src="https://i.pravatar.cc/80?img=12" alt="" width="36" height="36" /> {% endcomment %}
+            {% if user.avatar %}
+                <img class="h-10 w-10 rounded-full object-cover" src="{{ user.avatar.url }}" alt="{{ user.get_full_name }}" width="40" height="40" />
+            {% else %}
+                <div class="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 font-semibold text-sm dark:bg-emerald-950/60 dark:text-emerald-400 ring-1 ring-emerald-500/20">
+                    {{ user.first_name|slice:":1" }}{{ user.last_name|slice:":1" }}
+                </div>
+            {% endif %}
             <span x-show="!$store.sidebar.collapsed || $store.sidebar.mobileOpen" class="flex min-w-0 flex-col leading-tight">
-                <b class="truncate text-sm font-semibold text-neutral-900 dark:text-white">Jacob Gerrald</b>
-                <small class="truncate text-xs text-neutral-400">jacob@vireo.io</small>
+                <b class="truncate text-sm font-semibold text-neutral-900 dark:text-white">{{ user.get_full_name|title }}</b>
+                <small class="truncate text-xs text-neutral-400">{{ user.email }}</small>
             </span>
+            <form method="post" action="{% url ACCOUNTS.AUTH.LOGOUT %}" x-ref="logoutForm" class="hidden">
+                {% csrf_token %}
+            </form>
+
             <a
                 x-show="!$store.sidebar.collapsed || $store.sidebar.mobileOpen"
-                class="ml-auto shrink-0 rounded-lg p-2 text-neutral-400 hover:bg-neutral-100 hover:text-neutral-600 dark:hover:bg-neutral-800 dark:hover:text-neutral-200"
+                @click.prevent="$refs.logoutForm.submit()"
+                class="ml-auto shrink-0 rounded-lg p-2 text-neutral-400 hover:bg-neutral-100 hover:text-neutral-600 dark:hover:bg-neutral-800 dark:hover:text-neutral-200 cursor-pointer"
                 href="#"
                 aria-label="Log out"
             >

@@ -4,12 +4,12 @@ from django.urls import reverse
 from django.shortcuts import render
 from django.http import HttpRequest, JsonResponse
 
-from core.template_names import APP_TEMPLATES
+from core.template_names import APP_TEMPLATES, LANDING_PAGES
 from core.url_names import ACCOUNTS
 from mailer.exceptions import EmailSendError
 from ..services import AccountOnboardingService
 from ..domains.exceptions import AccountsDomainException
-from ..serializers import UserRegistrationSchema, UserRegistrationResponseSchema
+from ..serializers import UserRegistrationSchema, AuthActionResponseSchema
 
 from pydantic import ValidationError
 
@@ -31,7 +31,7 @@ class AccountRegistrationView(View):
             user_service = AccountOnboardingService(request)
             user_service.create_account(payload)
             user_service.send_activation_link(payload)
-            response_data = UserRegistrationResponseSchema(
+            response_data = AuthActionResponseSchema(
                 message="Registration successful! Please check your email to activate your account.",
                 status="success",
                 redirect=True,
@@ -41,33 +41,33 @@ class AccountRegistrationView(View):
             return JsonResponse(response_data.model_dump(mode="json"), status=201)
             
         except ValidationError as err:
-            response_data = UserRegistrationResponseSchema(
+            response_data = AuthActionResponseSchema(
                 message="Invalid data format. Please check your input.",
                 status="warning",
                 redirect=False
             )
-            return JsonResponse(response_data.model_dump(mode="json"), status=400)
+            return JsonResponse(response_data.model_dump(mode="json"), status=422)
         
         except AccountsDomainException as err:
-            response_data = UserRegistrationResponseSchema(
+            response_data = AuthActionResponseSchema(
                 message=err.message,
                 status="success",
                 redirect=False
             )
-            return JsonResponse(response_data.model_dump(mode="json"), status=200)
+            return JsonResponse(response_data.model_dump(mode="json"), status=400)
         
         except EmailSendError as err:
             logger.warning(
                 "Activation email failed: status=%s response=%s",
                 err.status_code, err.raw_response,
             )
-            response_data = UserRegistrationResponseSchema(
+            response_data = AuthActionResponseSchema(
                 message=err.user_message,
                 status="warning",
                 redirect=True,
                 url=reverse(ACCOUNTS.AUTH.LOGIN),
             )
-            return JsonResponse(response_data.model_dump(mode="json"), status=201)
+            return JsonResponse(response_data.model_dump(mode="json"), status=400)
         
         except Exception:
             import traceback
@@ -83,10 +83,12 @@ class AccountActivationView(View):
     def get(self, request:HttpRequest, **kwargs):
         token = kwargs.get("token", "")
         was_verified = AccountOnboardingService(request).activate_account(token=token)
-        ctx = { "vefified": was_verified }
+        ctx = { "verified": was_verified }
 
-        return render(
-            request,
-            template_name=APP_TEMPLATES.ACCOUNTS.ACTIVATION,
-            context=ctx,
-        )
+        return render(request, LANDING_PAGES.FEEDBACK, {
+            "status": "success",
+            "title": "Email Verified!",
+            "message": "Your email address has been successfully confirmed. You can now access your SalesIQ dashboard.",
+            "primary_btn_label": "Go to Dashboard",
+            "primary_btn_url": reverse(ACCOUNTS.DASHBOARD),
+        })

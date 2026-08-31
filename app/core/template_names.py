@@ -12,6 +12,7 @@ class APP_TEMPLATES:
         PROFILE = f'{_ACCOUNTS_BASE}/profile.html'
         ONBOARDING = f'{_ACCOUNTS_BASE}/onboarding.html'
         ACTIVATION = f'{_ACCOUNTS_BASE}/activation.html'
+        DASHBOARD = F'{_ACCOUNTS_BASE}/dashboard.html'
 
         class AUTH:
             LOGIN = f'{_AUTH_BASE}/login.html'
@@ -33,4 +34,8 @@ class APP_TEMPLATES:
 _EMAIL_BASE_FOLDER = "email"
 class EMAIL_TEMPLATES:
     ACCOUNT_ACTIVATION = f'{_EMAIL_BASE_FOLDER}/account-activation.html'
-    PASSWORD_RESET = f'{_EMAIL_BASE_FOLDER}/password-reset.html'
+    ACCOUNT_RECOVERY = f'{_EMAIL_BASE_FOLDER}/account-recovery.html'
+    
+    
+class LANDING_PAGES:
+    FEEDBACK = 'public/feedback.html'

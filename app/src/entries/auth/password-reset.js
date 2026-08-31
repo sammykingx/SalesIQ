@@ -24,7 +24,7 @@ export function passwordResetForm(endpointUrl = '') {
 
                 if (response.ok || (body && body.status === 'success')) {
                     showToast(
-                        body?.msg || body?.message || 'Password reset link has been sent to your email address.',
+                        body?.message || 'Password reset link has been sent to your email address.',
                         body?.status || 'info'
                     );
                     this.email = '';
@@ -35,7 +35,6 @@ export function passwordResetForm(endpointUrl = '') {
                     );
                 }
             } catch (err) {
-                console.error('Password reset error:', err);
                 showToast('Network error — please check your connection and try again.', 'warning');
             } finally {
                 this.submitting = false;

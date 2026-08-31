@@ -10,9 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.1/ref/settings/
 """
 
+from core.url_names import ACCOUNTS
 from pathlib import Path
 from decouple import config
 from typing import cast
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,6 +29,10 @@ DEBUG = config("DEBUG", default=False, cast=bool)
 
 ALLOWED_DOMAINS = cast(str, config("ALLOWED_DOMAINS", default="")).split(", ")
 ALLOWED_HOSTS = ALLOWED_DOMAINS or []
+
+LOGIN_URL = ACCOUNTS.AUTH.LOGIN
+LOGOUT_REDIRECT_URL = ACCOUNTS.AUTH.LOGIN
+LOGIN_REDIRECT_URL = ACCOUNTS.DASHBOARD
 
 
 # Application definition

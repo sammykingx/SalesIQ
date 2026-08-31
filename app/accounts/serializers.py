@@ -4,25 +4,14 @@ from typing import Union, Literal
 import re
 
 
-class UserRegistrationSchema(BaseModel):
-    """Schema for validating user registration data, ensuring proper name lengths,
-
-    valid email formatting, minimum password requirements, and matching passwords.
-    """
-    first_name: str = Field(..., max_length=150)
-    last_name: str = Field(..., max_length=150)
-    email: EmailStr = Field(..., max_length=254)
+class BasePasswordSchema(BaseModel):
+    """Base schema containing password fields and shared validation rules."""
+    
     password: str = Field(..., min_length=8)
     confirm_password: str = Field(..., min_length=8)
-
-    @model_validator(mode='after')
-    def verify_passwords_match(self) -> 'UserRegistrationSchema':
-        if self.password != self.confirm_password:
-            raise ValueError('Passwords do not match.')
-        return self
     
-    model_validator(mode='after')
-    def validate_passwords_complexity(self) -> 'UserRegistrationSchema':
+    @model_validator(mode='after')
+    def validate_passwords(self) -> 'BasePasswordSchema':
         if self.password != self.confirm_password:
             raise ValueError('Passwords do not match.')
             
@@ -35,13 +24,28 @@ class UserRegistrationSchema(BaseModel):
             raise ValueError('Password must contain at least one number.')
         if not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
             raise ValueError('Password must contain at least one special character.')
-        
+            
         return self
 
 
-class UserRegistrationResponseSchema(BaseModel):
+class PasswordChangeSchema(BasePasswordSchema):
+    """Schema for validating password changes."""
+    pass
+
+
+class UserRegistrationSchema(BasePasswordSchema):
+    """Schema for validating user registration data, ensuring proper name lengths,
+    valid email formatting, minimum password requirements, and matching passwords.
+    """
+    first_name: str = Field(..., max_length=150)
+    last_name: str = Field(..., max_length=150)
+    email: EmailStr = Field(..., max_length=254)
+
+
+class AuthActionResponseSchema(BaseModel):
     message: str
     status: Literal["success", "warning", "error", "info"] = "success"
     redirect: bool
     url: Union[str, None] = None
+    
     

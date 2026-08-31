@@ -33,26 +33,6 @@ class AccountRegistrationErrors:
         message="The entered passwords do not match."
     )
 
-
-class AccountActivationErrors:
-    """Centralized error definitions for the account activation process."""
-    INVALID_TOKEN = FailureDetail(
-        code="INVALID_TOKEN",
-        title="Invalid User Token",
-        message="The activation link is invalid or malformed."
-    )
-    EXPIRED_TOKEN = FailureDetail(
-        code="EXPIRED_TOKEN",
-        title="Expired User Token",
-        message="The activation link has expired. Please request a new one."
-    )
-    ALREADY_ACTIVATED = FailureDetail(
-        code="ALREADY_ACTIVATED",
-        title="No Action Required",
-        message="This account has already been activated."
-    )
-
-
 class PasswordResetErrors:
     """Centralized error definitions for password reset and update workflows."""
     USER_NOT_FOUND = FailureDetail(
