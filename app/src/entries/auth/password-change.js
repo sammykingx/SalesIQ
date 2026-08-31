@@ -1,4 +1,4 @@
-import { createPasswordValidationState, isEmailValid } from '../../lib/auth/alpine-helpers.js';
+import { createPasswordValidationState } from '../../lib/auth/alpine-helpers.js';
 import { apiRequest } from '../../lib/http/api.js';
 import { showToast } from '../../lib/toast.js';
 
@@ -40,6 +40,7 @@ export function passwordChangeForm(endpointUrl = '') {
             try {
                 const response = await apiRequest(this.endpoint, 'POST', this.form);
                 const body = await response.json().catch(() => null);
+                console.log(JSON.stringify(response, null, 2));
 
                 if (response.ok || (body && body.status === 'success')) {
                     showToast(
@@ -49,8 +50,10 @@ export function passwordChangeForm(endpointUrl = '') {
                     this.form.password = '';
                     this.form.confirm_password = '';
 
-                    if (body?.redirect_url) {
-                        window.location.href = body.redirect_url;
+                    if (body?.redirect && body?.url) {
+                        setTimeout(() => {
+                            window.location.assign(body.url);
+                        }, 2300);
                     }
                 } else {
                     showToast(
@@ -59,7 +62,6 @@ export function passwordChangeForm(endpointUrl = '') {
                     );
                 }
             } catch (err) {
-                console.error('Password change error:', err);
                 showToast('Network error — please check your connection and try again.', 'warning');
             } finally {
                 this.submitting = false;

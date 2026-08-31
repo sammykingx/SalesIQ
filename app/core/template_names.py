@@ -39,3 +39,8 @@ class EMAIL_TEMPLATES:
     
 class LANDING_PAGES:
     FEEDBACK = 'public/feedback.html'
+    
+class ERROR_PAGES:
+    NOT_FOUND = "errors/404.html"
+    INETERNAL_ERROR = "errors/500.html"
+    

@@ -83,12 +83,24 @@ class AccountActivationView(View):
     def get(self, request:HttpRequest, **kwargs):
         token = kwargs.get("token", "")
         was_verified = AccountOnboardingService(request).activate_account(token=token)
-        ctx = { "verified": was_verified }
+        if was_verified:
+            title = "Email Verified!"
+            message = "Your email address has been successfully confirmed. You can now access your SalesIQ dashboard."
+            status = "success"
+            btn_label = "Go to dashboard"
+            btn_url = reverse(ACCOUNTS.DASHBOARD)
+        else:
+            title = "Verification Failed"
+            message = "The activation link is invalid or has expired. Please request a new verification email."
+            status = "error"
+            btn_label = "Login to request one"
+            btn_url = reverse(ACCOUNTS.AUTH.LOGIN) 
 
         return render(request, LANDING_PAGES.FEEDBACK, {
-            "status": "success",
-            "title": "Email Verified!",
-            "message": "Your email address has been successfully confirmed. You can now access your SalesIQ dashboard.",
-            "primary_btn_label": "Go to Dashboard",
-            "primary_btn_url": reverse(ACCOUNTS.DASHBOARD),
+            "status": status,
+            "title": title,
+            "message": message,
+            "primary_btn_label": btn_label,
+            "primary_btn_url": btn_url,
+            "verified": was_verified,
         })

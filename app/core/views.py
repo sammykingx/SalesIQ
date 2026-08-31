@@ -2,6 +2,7 @@ from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.utils import timezone
 from django.views.generic import View
 from django.shortcuts import render
+from .template_names import ERROR_PAGES
 
 
 from public.adapters import WaitlistStorage
@@ -36,9 +37,9 @@ class ComingSoonView(View):
     
     
 def custom_404(request, exception):
-    return render(request, "errors/error-404.html", status=404)
+    return render(request, ERROR_PAGES.NOT_FOUND, status=404)
 
 
-# def custom_500(request):
-#     return render(request, Errors.ERROR_500, status=500)
+def custom_500(request):
+    return render(request, ERROR_PAGES.INETERNAL_ERROR, status=500)
     

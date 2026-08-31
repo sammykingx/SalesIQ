@@ -14,5 +14,6 @@ urlpatterns = [
     path("onboarding/", TemplateView.as_view(template_name=APP_TEMPLATES.ACCOUNTS.ONBOARDING), name=ACCOUNTS.ONBOARDING),
     path("dashboard/", DashboardView.as_view(), name=ACCOUNTS.DASHBOARD),
     path("profile/", UserProfileView.as_view(), name=ACCOUNTS.PROFILE),
+    
     # settings namespace
 ]

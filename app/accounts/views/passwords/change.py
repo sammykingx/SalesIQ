@@ -36,11 +36,11 @@ class GuestPasswordChangeView(View):
             reset_service = PasswordResetService(request=request)
             reset_service.update_password(token=token, new_password=data.password)
             return JsonResponse({
-                "message": "Guest password Change Action successful",
+                "message": "Woohoo! Your password has been successfully updated. You are all set!",
                 "satus": "success",
                 "redirect": True, 
                 "url": reverse(ACCOUNTS.AUTH.LOGIN)
-            }, status=204)
+            }, status=200)
         
         except ValidationError:
             response_data = AuthActionResponseSchema(
@@ -53,7 +53,7 @@ class GuestPasswordChangeView(View):
         except AccountsDomainException as err:
             response_data = AuthActionResponseSchema(
                 message=err.message,
-                status="success",
+                status="warning",
                 redirect=False
             )
             return JsonResponse(response_data.model_dump(mode="json"), status=400)
