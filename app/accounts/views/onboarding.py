@@ -16,11 +16,12 @@ class BizAccountOnboardingView(LoginRequiredMixin, View):
     def post(self, request: HttpRequest):
         try:
             data = BusinessOnboardingSchema.model_validate_json(request.body, strict=True)
+            # print(data.model_dump_json(indent=2))
             BusinessService(self.request.user).register_business(data) # type: ignore
             return JsonResponse({
                 "message": "Your business has been successfully registered.",
                 "status": "success",
-            }, stauts=201)
+            }, status=201)
             
         except ValidationError:
             return JsonResponse({
@@ -32,7 +33,7 @@ class BizAccountOnboardingView(LoginRequiredMixin, View):
             return JsonResponse({
                 "status": "error",
                 "message": err.message
-            })
+            }, status=400)
             
         except Exception:
             import traceback

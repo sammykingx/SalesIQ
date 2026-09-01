@@ -23,11 +23,11 @@ class Business(models.Model):
     phone_number = models.CharField(max_length=20)
     business_type = business_type = models.CharField(max_length=15, choices=BusinessType.choices, blank=True)
     
-    address = models.TextField(blank=True)
+    address = models.TextField(blank=True, null=True)
 
-    instagram_url = models.URLField(blank=True)
-    tiktok_url = models.URLField(blank=True)
-    website_url = models.URLField(blank=True)
+    instagram_url = models.URLField(blank=True, null=True)
+    tiktok_url = models.URLField(blank=True, null=True)
+    website_url = models.URLField(blank=True, null=True)
     
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

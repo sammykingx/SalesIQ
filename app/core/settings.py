@@ -64,6 +64,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     
     "middlewares.enforce_onboarding.OnboardingEnforcementMiddleware",
+    "middlewares.guest_restriction.GuestRestrictionMiddleware",
 ]
 
 ROOT_URLCONF = "core.urls"

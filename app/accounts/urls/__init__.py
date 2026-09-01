@@ -12,7 +12,6 @@ urlpatterns = [
     path("leave/", LogoutView.as_view(), name=ACCOUNTS.AUTH.LOGOUT),
     path("activation/<token>/", AccountActivationView.as_view(), name=ACCOUNTS.ACTIVATION),
     path("onboarding/", BizAccountOnboardingView.as_view(), name=ACCOUNTS.ONBOARDING),
-    path("test-ob/", TemplateView.as_view(template_name="accounts/test-ob.html"), name="test-ob"),
     path("dashboard/", DashboardView.as_view(), name=ACCOUNTS.DASHBOARD),
     path("profile/", UserProfileView.as_view(), name=ACCOUNTS.PROFILE),
     

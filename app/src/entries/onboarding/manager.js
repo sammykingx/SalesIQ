@@ -1,47 +1,139 @@
 import { apiRequest } from '../../lib/http/api.js';
-import { payload } from './payload.js';
-import { step1 } from './step-one.js';
-import { step2 } from './step-two.js';
-import { step3 } from './step-three.js';
 
-export class OnboardingManager {
-    constructor(endpoint) {
-        this.endpoint = endpoint || '/api/v1/onboarding/business/';
-        this.payload = payload;
-        this.steps = {
-            1: step1,
-            2: step2,
-            3: step3
-        };
-    }
+export function onboardingForm(endpointUrl = '') {
+    return {
+        // State
+        currentStep: 0,
+        submitting: false,
+        completed: false,
+        sameAsPersonalPhone: false,
+        personalPhone: '',
 
-    isStepValid(stepNumber, formData) {
-        const step = this.steps[stepNumber];
-        return step ? step.validate(formData) : true;
-    }
+        // Form Model
+        formData: {
+            businessName: '',
+            officialNumber: '',
+            businessType: '', // 'online' | 'physical' | 'both'
+            address: '',
+            instagram: '',
+            tiktok: '',
+            websiteUrl: ''
+        },
 
-    processStep(stepNumber, formData) {
-        const step = this.steps[stepNumber];
-        if (step) {
-            step.mutate(this.payload, formData);
-        }
-    }
-
-    async complete(toastCallback) {
-        try {
-            const response = await apiRequest(this.endpoint, {
-                method: 'POST',
-                body: JSON.stringify(this.payload)
-            });
-            if (typeof toastCallback === 'function') {
-                toastCallback('Business profile successfully setup!', 'success');
+        // Format phone input
+        sanitizePhoneNumber(event) {
+            let value = event.target.value;
+            value = value.replace(/(?!^\+)[^\d]/g, '');
+            if (value.startsWith('+')) {
+                value = '+' + value.slice(1).replace(/\D/g, '');
+            } else {
+                value = value.replace(/\D/g, '');
             }
-            return response;
-        } catch (error) {
-            if (typeof toastCallback === 'function') {
-                toastCallback(error.message || 'Failed to complete setup.', 'error');
+            this.formData.officialNumber = value;
+        },
+
+        // Toggle "same as personal phone number" option
+        toggleSamePhone() {
+            if (this.sameAsPersonalPhone) {
+                this.formData.officialNumber = this.personalPhone;
             }
-            throw error;
+        },
+
+        // Step 1 Validation
+        get isStep1Valid() {
+            return this.formData.businessName.trim().length >= 2 &&
+                this.formData.officialNumber.trim().length >= 7;
+        },
+
+        // Step 2 Validation
+        get isStep2Valid() {
+            if (!this.formData.businessType) return false;
+            if (this.formData.businessType === 'online') return true;
+            return this.formData.address.trim().length >= 5;
+        },
+
+        // Step 3 Validation
+        get isStep3Valid() {
+            if (!this.formData.websiteUrl.trim()) return true;
+            try {
+                const url = this.formData.websiteUrl.startsWith('http')
+                    ? this.formData.websiteUrl
+                    : 'https://' + this.formData.websiteUrl;
+                new URL(url);
+                return true;
+            } catch (_) {
+                return false;
+            }
+        },
+
+        nextStep() {
+            if (this.currentStep === 1 && !this.isStep1Valid) return;
+            if (this.currentStep === 2 && !this.isStep2Valid) return;
+            if (this.currentStep === 3 && !this.isStep3Valid) return;
+            if (this.currentStep < 4) {
+                this.currentStep++;
+            }
+        },
+
+        prevStep() {
+            if (this.currentStep > 0 && !this.submitting) {
+                this.currentStep--;
+            }
+        },
+
+        async completeOnboarding() {
+            if (this.submitting || !endpointUrl) return;
+            this.submitting = true;
+
+            // Clean up website URL format
+            let website = this.formData.websiteUrl.trim();
+            if (website && !/^https?:\/\//i.test(website)) {
+                website = `https://${website}`;
+            }
+
+            // Format social handles safely
+            const cleanHandle = (val) => val ? `@${val.trim().replace(/^@/, '')}` : null;
+
+            const payload = {
+                business_name: this.formData.businessName.trim(),
+                phone_number: this.formData.officialNumber.trim(),
+                business_type: this.formData.businessType,
+                address: this.formData.businessType === 'online' ? null : this.formData.address.trim(),
+                socials: {
+                    instagram_url: cleanHandle(this.formData.instagram),
+                    tiktok_url: cleanHandle(this.formData.tiktok),
+                    website_url: website || null
+                }
+            };
+
+            try {
+                const response = await apiRequest(endpointUrl, 'POST', payload);
+
+                // If request is successful, bypass parsing and complete right away
+                if (response?.ok || response?.status === 'success') {
+                    this.completed = true;
+                    return;
+                }
+
+                // Otherwise, extract error body only when it fails
+                const errorBody = (typeof response?.json === 'function')
+                    ? await response.json().catch(() => null)
+                    : response;
+
+                this.completed = false;
+                this.triggerToast(
+                    errorBody?.message || 'An error occurred during onboarding.',
+                    errorBody?.status || 'warning'
+                );
+
+            } catch (err) {
+                this.completed = false;
+                if (typeof this.triggerToast === 'function') {
+                    this.triggerToast('Network error — please check your connection and try again.', 'warning');
+                }
+            } finally {
+                this.submitting = false;
+            }
         }
-    }
+    };
 }

@@ -24,4 +24,6 @@ class BusinessRepo:
             )
             
         except IntegrityError:
+            import traceback
+            traceback.print_exc()
             return None

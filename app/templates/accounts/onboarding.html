@@ -4,102 +4,7 @@
 
 {% block page_content %}
 <div 
-  x-data="{
-    // Onboarding State
-    currentStep: 0, // 0: Welcome, 1: Identity, 2: Structure & Location, 3: Social & Online, 4: Review & Complete
-    submitting: false,
-    completed: false,
-
-    // Form Data Model
-    formData: {
-      businessName: '',
-      officialNumber: '',
-      businessType: '', // 'online' | 'physical' | 'both'
-      address: '',
-      instagram: '',
-      tiktok: '',
-      websiteUrl: ''
-    },
-
-    // Step 1 Validation: Business Name & Official Phone/Reg Number
-    get isStep1Valid() {
-      return this.formData.businessName.trim().length >= 2 && 
-             this.formData.officialNumber.trim().length >= 7;
-    },
-
-    // Step 2 Validation: Business Type & Address (if physical or both)
-    get isStep2Valid() {
-      if (!this.formData.businessType) return false;
-      if (this.formData.businessType === 'online') return true;
-      return this.formData.address.trim().length >= 5;
-    },
-
-    // Step 3 Validation: Optional socials, but Web URL must be a valid format if provided
-    get isStep3Valid() {
-      if (!this.formData.websiteUrl.trim()) return true;
-      try {
-        const url = this.formData.websiteUrl.startsWith('http') 
-          ? this.formData.websiteUrl 
-          : 'https://' + this.formData.websiteUrl;
-        new URL(url);
-        return true;
-      } catch (_) {
-        return false;
-      }
-    },
-
-    // Navigation Methods
-    nextStep() {
-      if (this.currentStep === 1 && !this.isStep1Valid) return;
-      if (this.currentStep === 2 && !this.isStep2Valid) return;
-      if (this.currentStep === 3 && !this.isStep3Valid) return;
-      if (this.currentStep < 4) {
-        this.currentStep++;
-      }
-    },
-
-    prevStep() {
-      if (this.currentStep > 0 && !this.submitting) {
-        this.currentStep--;
-      }
-    },
-
-    // Final Step Mock Payload Submission
-    async completeOnboarding() {
-      this.submitting = true;
-
-      // Clean up Web URL before sending payload
-      let formattedUrl = this.formData.websiteUrl.trim();
-      if (formattedUrl && !formattedUrl.startsWith('http://') && !formattedUrl.startsWith('https://')) {
-        formattedUrl = 'https://' + formattedUrl;
-      }
-
-      const payload = {
-        business_name: this.formData.businessName.trim(),
-        phone_number: this.formData.officialNumber.trim(),
-        business_type: this.formData.businessType,
-        address: this.formData.businessType === 'online' ? null : this.formData.address.trim(),
-        socials: {
-          instagram_url: this.formData.instagram.trim() ? `@${this.formData.instagram.replace(/^@/, '')}` : null,
-          tiktok_url: this.formData.tiktok.trim() ? `@${this.formData.tiktok.replace(/^@/, '')}` : null,
-          website_url: formattedUrl || null
-        }
-      };
-
-      console.log('Sending Onboarding Payload:', payload);
-
-      // Simulate API response delay
-      await new Promise(resolve => setTimeout(resolve, 1500));
-
-      this.submitting = false;
-      this.completed = true;
-      
-      // Trigger notification toast from root layout
-      if (typeof this.triggerToast === 'function') {
-        this.triggerToast('Business profile successfully setup!', 'success');
-      }
-    }
-  }"
+  x-data="onboardingForm('{% url ACCOUNTS.ONBOARDING %}')"
   class="w-full max-w-2xl mx-auto"
 >
 
@@ -121,7 +26,7 @@
       Welcome to SalesIQ
     </h1>
     
-    <p class="mt-3 text-sm text-ink-600 dark:text-ink-400 max-w-md mx-auto leading-relaxed">
+    <p class="mt-3 text-sm text-slate-600 dark:text-ink-400 max-w-md mx-auto leading-relaxed">
       Configure your store, operational channels, and online business presence in 45 seconds.
     </p>
 
@@ -134,8 +39,8 @@
           </svg>
         </div>
         <div>
-          <h4 class="text-xs font-bold text-ink-900 dark:text-white tracking-wide">4 Quick Steps</h4>
-          <p class="text-[11px] text-ink-600 dark:text-ink-400 mt-0.5 leading-normal">Fast, guided store setup designed to get you selling instantly.</p>
+          <h4 class="text-xs font-semibold text-ink-600 dark:text-white tracking-wide">4 Quick Steps</h4>
+          <p class="text-[11px] text-slate-500 dark:text-ink-400 mt-0.5 leading-normal">Fast, guided store setup designed to get you selling instantly.</p>
         </div>
       </div>
 
@@ -147,8 +52,8 @@
           </svg>
         </div>
         <div>
-          <h4 class="text-xs font-bold text-ink-900 dark:text-white tracking-wide">Zero Card Required</h4>
-          <p class="text-[11px] text-ink-600 dark:text-ink-400 mt-0.5 leading-normal">Full access to core tools without entering payment information.</p>
+          <h4 class="text-xs font-semibold text-ink-600 dark:text-white tracking-wide">Zero Card Required</h4>
+          <p class="text-[11px] text-slate-500 dark:text-ink-400 mt-0.5 leading-normal">Full access to core tools without entering payment information.</p>
         </div>
       </div>
     </div>
@@ -191,10 +96,9 @@
 
     <!-- FORM STEP 1: Business Identity -->
     <div x-show="currentStep === 1" class="space-y-6">
-      <!-- Warm & Exciting Header Accent -->
       <div class="relative overflow-hidden p-4 rounded-2xl bg-linear-to-r from-emerald-500/10 via-teal-500/5 to-transparent border border-emerald-500/20 dark:border-emerald-500/10">
         <div class="flex items-center space-x-3">
-          <span class="w-9 h-9 rounded-xl bg-emerald-500 text-slate-950 font-bold flex items-center justify-center shrink-0 shadow-sm shadow-emerald-500/30">
+          <span class="w-9 h-9 rounded-xl bg-emerald-500 text-slate-950 font-semibold flex items-center justify-center shrink-0 shadow-sm shadow-emerald-500/30">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
             </svg>
@@ -206,9 +110,7 @@
         </div>
       </div>
 
-      <!-- Responsive Bento Layout: Side-by-Side on SM/MD, Stacked on Mobile -->
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        
         <!-- Field 1: Business Name Card -->
         <div class="p-4 rounded-2xl bg-white/60 dark:bg-slate-900/40 border border-slate-200/80 dark:border-white/10 transition-all duration-200 hover:border-slate-300 dark:hover:border-white/20 flex flex-col justify-between">
           <div class="mb-3">
@@ -246,13 +148,13 @@
             </span>
             <input 
               type="tel" 
-              x-model="formData.officialNumber" 
-              placeholder="e.g. +234 800 000 0000"
+              x-model="formData.officialNumber"
+              @input="sanitizePhoneNumber"
+              placeholder="e.g. +2348000000000"
               class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 text-xs font-light transition-all focus:outline-none focus:border-emerald-500 focus:ring-0 shadow-none"
             />
           </div>
         </div>
-
       </div>
     </div>
 
@@ -266,11 +168,8 @@
       <div class="space-y-5">
         <div>
           <label class="block text-xs font-semibold text-slate-900 dark:text-gray-300 mb-3">Business Operational Model *</label>
-          
-          <!-- Bento Grid Layout -->
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
-            
-            <!-- Option 1: Online Only (Lime Accent) -->
+            <!-- Option 1: Online Only -->
             <button 
               @click="formData.businessType = 'online'" 
               type="button"
@@ -279,7 +178,6 @@
                 ? 'border-lime-500 bg-lime-50/50 dark:bg-lime-500/6' 
                 : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:border-lime-400 dark:hover:border-lime-500/50 hover:bg-lime-50/30 dark:hover:bg-lime-500/3'"
             >
-              <!-- Active Indicator Badge -->
               <div class="flex items-center justify-between w-full mb-3">
                 <div 
                   class="w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-200"
@@ -289,24 +187,22 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
                   </svg>
                 </div>
-                
                 <span 
                   class="w-5 h-5 rounded-full flex items-center justify-center transition-all duration-200"
-                  :class="formData.businessType === 'online' ? 'bg-lime-500 text-slate-950 font-bold' : 'border border-slate-300 dark:border-slate-700 opacity-40'"
+                  :class="formData.businessType === 'online' ? 'bg-lime-500 text-slate-950 font-semibold' : 'border border-slate-300 dark:border-slate-700 opacity-40'"
                 >
                   <svg x-show="formData.businessType === 'online'" class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
                   </svg>
                 </span>
               </div>
-
               <div>
-                <div class="text-xs font-bold text-slate-900 dark:text-white tracking-wide">Online Only</div>
+                <div class="text-xs font-semibold text-slate-900 dark:text-white tracking-wide">Online Only</div>
                 <p class="text-[11px] text-slate-500 dark:text-gray-400 font-light mt-1 leading-snug">E-commerce, social selling, or digital services.</p>
               </div>
             </button>
 
-            <!-- Option 2: Physical Store (Fuchsia Accent) -->
+            <!-- Option 2: Physical Store -->
             <button 
               @click="formData.businessType = 'physical'" 
               type="button"
@@ -315,7 +211,6 @@
                 ? 'border-fuchsia-500 bg-fuchsia-50/50 dark:bg-fuchsia-500/6' 
                 : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:border-fuchsia-400 dark:hover:border-fuchsia-500/50 hover:bg-fuchsia-50/30 dark:hover:bg-fuchsia-500/3'"
             >
-              <!-- Active Indicator Badge -->
               <div class="flex items-center justify-between w-full mb-3">
                 <div 
                   class="w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-200"
@@ -325,24 +220,22 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m0 0h4m-4 0V11m0 0h4" />
                   </svg>
                 </div>
-
                 <span 
                   class="w-5 h-5 rounded-full flex items-center justify-center transition-all duration-200"
-                  :class="formData.businessType === 'physical' ? 'bg-fuchsia-500 text-white font-bold' : 'border border-slate-300 dark:border-slate-700 opacity-40'"
+                  :class="formData.businessType === 'physical' ? 'bg-fuchsia-500 text-white font-semibold' : 'border border-slate-300 dark:border-slate-700 opacity-40'"
                 >
                   <svg x-show="formData.businessType === 'physical'" class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
                   </svg>
                 </span>
               </div>
-
               <div>
-                <div class="text-xs font-bold text-slate-900 dark:text-white tracking-wide">Physical Store</div>
+                <div class="text-xs font-semibold text-slate-900 dark:text-white tracking-wide">Physical Store</div>
                 <p class="text-[11px] text-slate-500 dark:text-gray-400 font-light mt-1 leading-snug">Walk-in retail outlet, shopfront, or office location.</p>
               </div>
             </button>
 
-            <!-- Option 3: Both / Hybrid (sky Accent) -->
+            <!-- Option 3: Both / Hybrid -->
             <button 
               @click="formData.businessType = 'both'" 
               type="button"
@@ -351,7 +244,6 @@
                 ? 'border-sky-500 bg-sky-50/50 dark:bg-sky-500/6' 
                 : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:border-sky-400 dark:hover:border-sky-500/50 hover:bg-sky-50/30 dark:hover:bg-sky-500/3'"
             >
-              <!-- Active Indicator Badge -->
               <div class="flex items-center justify-between w-full mb-3">
                 <div 
                   class="w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-200"
@@ -361,23 +253,20 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
                   </svg>
                 </div>
-
                 <span 
                   class="w-5 h-5 rounded-full flex items-center justify-center transition-all duration-200"
-                  :class="formData.businessType === 'both' ? 'bg-sky-500 text-white font-bold' : 'border border-slate-300 dark:border-slate-700 opacity-40'"
+                  :class="formData.businessType === 'both' ? 'bg-sky-500 text-white font-semibold' : 'border border-slate-300 dark:border-slate-700 opacity-40'"
                 >
                   <svg x-show="formData.businessType === 'both'" class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
                   </svg>
                 </span>
               </div>
-
               <div>
-                <div class="text-xs font-bold text-slate-900 dark:text-white tracking-wide">Hybrid (Both)</div>
+                <div class="text-xs font-semibold text-slate-900 dark:text-white tracking-wide">Hybrid (Both)</div>
                 <p class="text-[11px] text-slate-500 dark:text-gray-400 font-light mt-1 leading-snug">Physical storefront with an online store channel.</p>
               </div>
             </button>
-
           </div>
         </div>
 
@@ -399,13 +288,13 @@
       <div>
         <div class="flex items-center justify-between">
           <h2 class="text-xl font-semibold text-ink-900 dark:text-white">Online Presence</h2>
-          <span class="text-[11px]  px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-700">Optional</span>
+          <span class="text-[11px] px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-700">Optional</span>
         </div>
         <p class="text-xs text-ink-600 dark:text-ink-400 mt-1 font-light">Add your social channels and store web address to help us personalize your hub.</p>
       </div>
 
       <div class="space-y-4">
-        <!-- Instagram URL -->
+        <!-- Instagram Handle -->
         <div>
           <label class="block text-xs font-semibold text-slate-700 dark:text-gray-300 mb-1.5">Instagram Profile</label>
           <div class="relative flex items-center">
@@ -417,15 +306,15 @@
               </svg>
             </span>
             <input 
-              type="url" 
-              x-model="formData.instagramUrl" 
-              placeholder="https://instagram.com/yourbusiness"
+              type="text" 
+              x-model="formData.instagram" 
+              placeholder="@yourbusiness"
               class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700/80 bg-white/80 dark:bg-slate-900/80 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 text-xs font-light transition-all focus:outline-none focus:border-emerald-500 focus:ring-0 shadow-none"
             />
           </div>
         </div>
 
-        <!-- TikTok URL -->
+        <!-- TikTok Handle -->
         <div>
           <label class="block text-xs font-semibold text-slate-700 dark:text-gray-300 mb-1.5">TikTok Profile</label>
           <div class="relative flex items-center">
@@ -435,9 +324,9 @@
               </svg>
             </span>
             <input 
-              type="url" 
-              x-model="formData.tiktokUrl" 
-              placeholder="https://tiktok.com/@yourbusiness"
+              type="text" 
+              x-model="formData.tiktok" 
+              placeholder="@yourbusiness"
               class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700/80 bg-white/80 dark:bg-slate-900/80 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 text-xs font-light transition-all focus:outline-none focus:border-emerald-500 focus:ring-0 shadow-none"
             />
           </div>
@@ -466,7 +355,6 @@
     </div>
 
     <!-- FORM STEP 4: Review & Finalize -->
-    <!-- FORM STEP 4: Command Center Overview / Final Review -->
     <div x-show="currentStep === 4" class="space-y-6" style="display: none;">
       <div>
         <h2 class="text-xl font-semibold text-slate-900 dark:text-white">Command Center Overview</h2>
@@ -485,17 +373,17 @@
               </span>
               <span class="text-xs font-semibold text-slate-900 dark:text-white">Business Identity</span>
             </div>
-            <button @click="currentStep = 1" type="button" class="text-[11px]  text-emerald-600 dark:text-emerald-400 hover:underline cursor-pointer">Edit</button>
+            <button @click="currentStep = 1" type="button" class="text-[11px] text-emerald-600 dark:text-emerald-400 hover:underline cursor-pointer">Edit</button>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs pt-1">
             <div>
               <span class="block text-[11px] font-light text-slate-500 dark:text-slate-400">Legal / Trade Name</span>
-              <span class=" text-slate-900 dark:text-white mt-0.5 block" x-text="formData.businessName || '—'"></span>
+              <span class="text-slate-900 dark:text-white mt-0.5 block" x-text="formData.businessName || '—'"></span>
             </div>
             <div>
               <span class="block text-[11px] font-light text-slate-500 dark:text-slate-400">Official Phone Number</span>
-              <span class=" text-slate-900 dark:text-white mt-0.5 block" x-text="formData.officialNumber || '—'"></span>
+              <span class="text-slate-900 dark:text-white mt-0.5 block" x-text="formData.officialNumber || '—'"></span>
             </div>
           </div>
         </div>
@@ -512,24 +400,24 @@
               </span>
               <span class="text-xs font-semibold text-slate-900 dark:text-white">Model & Location</span>
             </div>
-            <button @click="currentStep = 2" type="button" class="text-[11px]  text-emerald-600 dark:text-emerald-400 hover:underline cursor-pointer">Edit</button>
+            <button @click="currentStep = 2" type="button" class="text-[11px] text-emerald-600 dark:text-emerald-400 hover:underline cursor-pointer">Edit</button>
           </div>
 
           <div class="space-y-3 text-xs pt-1">
             <div>
               <span class="block text-[11px] font-light text-slate-500 dark:text-slate-400 mb-1">Operational Model</span>
               <template x-if="formData.businessType === 'online'">
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px]  bg-lime-500/10 text-lime-700 dark:text-lime-400 border border-lime-500/30">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] bg-lime-500/10 text-lime-700 dark:text-lime-400 border border-lime-500/30">
                   Online Only
                 </span>
               </template>
               <template x-if="formData.businessType === 'physical'">
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px]  bg-fuchsia-500/10 text-fuchsia-700 dark:text-fuchsia-400 border border-fuchsia-500/30">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] bg-fuchsia-500/10 text-fuchsia-700 dark:text-fuchsia-400 border border-fuchsia-500/30">
                   Physical Store
                 </span>
               </template>
               <template x-if="formData.businessType === 'both'">
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px]  bg-sky-500/10 text-sky-700 dark:text-sky-400 border border-sky-500/30">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] bg-sky-500/10 text-sky-700 dark:text-sky-400 border border-sky-500/30">
                   Hybrid Model
                 </span>
               </template>
@@ -540,7 +428,7 @@
 
             <div x-show="formData.address" class="pt-2 border-t border-slate-100 dark:border-white/5">
               <span class="block text-[11px] font-light text-slate-500 dark:text-slate-400">Physical Address</span>
-              <p class=" text-slate-900 dark:text-white mt-0.5 leading-relaxed font-light" x-text="formData.address"></p>
+              <p class="text-slate-900 dark:text-white mt-0.5 leading-relaxed font-light" x-text="formData.address"></p>
             </div>
           </div>
         </div>
@@ -558,27 +446,27 @@
               </span>
               <span class="text-xs font-semibold text-slate-900 dark:text-white">Online Channels</span>
             </div>
-            <button @click="currentStep = 3" type="button" class="text-[11px]  text-emerald-600 dark:text-emerald-400 hover:underline cursor-pointer">Edit</button>
+            <button @click="currentStep = 3" type="button" class="text-[11px] text-emerald-600 dark:text-emerald-400 hover:underline cursor-pointer">Edit</button>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs pt-1">
             <div>
               <span class="block text-[11px] font-light text-slate-500 dark:text-slate-400">Instagram</span>
-              <span class=" text-slate-900 dark:text-white mt-0.5 block truncate font-light" x-text="formData.instagramUrl || 'Not provided'"></span>
+              <span class="text-slate-900 dark:text-white mt-0.5 block truncate font-light" x-text="formData.instagram || 'Not provided'"></span>
             </div>
             <div>
               <span class="block text-[11px] font-light text-slate-500 dark:text-slate-400">TikTok</span>
-              <span class=" text-slate-900 dark:text-white mt-0.5 block truncate font-light" x-text="formData.tiktokUrl || 'Not provided'"></span>
+              <span class="text-slate-900 dark:text-white mt-0.5 block truncate font-light" x-text="formData.tiktok || 'Not provided'"></span>
             </div>
             <div>
               <span class="block text-[11px] font-light text-slate-500 dark:text-slate-400">Website</span>
-              <span class=" text-slate-900 dark:text-white mt-0.5 block truncate font-light" x-text="formData.websiteUrl || 'Not provided'"></span>
+              <span class="text-slate-900 dark:text-white mt-0.5 block truncate font-light" x-text="formData.websiteUrl || 'Not provided'"></span>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Quiet Confirmation Banner -->
+      <!-- Confirmation Banner -->
       <div class="p-3.5 rounded-xl bg-slate-100/70 dark:bg-slate-800/40 border border-slate-200/60 dark:border-white/5 flex items-start space-x-3 text-xs">
         <svg class="w-4 h-4 text-emerald-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -651,7 +539,7 @@
 
     <div class="mt-8">
       <a 
-        href="/dashboard/" 
+        href="{% url ACCOUNTS.DASHBOARD %}" 
         class="inline-block px-8 py-3.5 rounded-2xl bg-primary text-white font-semibold text-sm hover:bg-primary/90 transition-all shadow-lg shadow-primary/20"
       >
         Go to Dashboard
