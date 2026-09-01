@@ -24,3 +24,13 @@ class UserNotFoundError(AccountsDomainException):
     def __init__(self, message: str = "No account was found matching the provided details.", code: str = "USER_NOT_FOUND", title: str = "User Not Found", err_type: str = "warning"):
         super().__init__(message, code=code, title=title, err_type=err_type)
         
+class MultipleBusinessNotAllowedError(AccountsDomainException):
+    """Raised when a user attempts to register more than one business account."""
+    def __init__(
+        self, 
+        message: str = "You can only register one business account at a time.", 
+        code: str = "MULTIPLE_BUSINESS_NOT_ALLOWED", 
+        title: str = "Business Already Exists", 
+        err_type: str = "warning"
+    ):
+        super().__init__(message, code=code, title=title, err_type=err_type)

@@ -14,6 +14,7 @@ class CustomUserModel(AbstractUser):
     email = models.EmailField(unique=True)
     mobile_number =  models.CharField(max_length=20, blank=True)
     is_verified = models.BooleanField(default=False)
+    onboarded = models.BooleanField(default=False)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []

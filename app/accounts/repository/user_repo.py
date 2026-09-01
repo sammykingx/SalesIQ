@@ -2,7 +2,7 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser
 from django.db import transaction
-from .serializers import UserRegistrationSchema
+from accounts.serializers import UserRegistrationSchema
 
 
 class UserRepository:
@@ -38,3 +38,8 @@ class UserRepository:
         if instance:
             instance.set_password(new_password)
             instance.save(update_fields=["password"])
+            
+    def complete_onboarding(self, *, user_email: str):
+        self.model.objects.filter(
+            email=user_email, onboarded=False
+        ).update(onboarded=True)

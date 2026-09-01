@@ -18,7 +18,7 @@ class Business(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid7, editable=False, help_text="Django table id")
     code = models.CharField(max_length=20, unique=True, default=generate_business_id, editable=False, help_text="Business id")
     
-    owner = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="my_business")
+    owner = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="my_business", to_field="email")
     name = models.CharField(max_length=50, help_text="Name of the buisness e.g ANNA EMPORIUM")
     phone_number = models.CharField(max_length=20)
     business_type = business_type = models.CharField(max_length=15, choices=BusinessType.choices, blank=True)

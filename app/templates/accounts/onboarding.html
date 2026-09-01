@@ -1,3 +1,7 @@
+{% extends "layouts/_base_landing.html" %}
+
+{% block title %}SalesIQ - Account Onboarding{% endblock %}
+
 {% block page_content %}
 <div 
   x-data="{
@@ -72,13 +76,13 @@
 
       const payload = {
         business_name: this.formData.businessName.trim(),
-        official_number: this.formData.officialNumber.trim(),
+        phone_number: this.formData.officialNumber.trim(),
         business_type: this.formData.businessType,
         address: this.formData.businessType === 'online' ? null : this.formData.address.trim(),
         socials: {
-          instagram: this.formData.instagram.trim() ? `@${this.formData.instagram.replace(/^@/, '')}` : null,
-          tiktok: this.formData.tiktok.trim() ? `@${this.formData.tiktok.replace(/^@/, '')}` : null,
-          website: formattedUrl || null
+          instagram_url: this.formData.instagram.trim() ? `@${this.formData.instagram.replace(/^@/, '')}` : null,
+          tiktok_url: this.formData.tiktok.trim() ? `@${this.formData.tiktok.replace(/^@/, '')}` : null,
+          website_url: formattedUrl || null
         }
       };
 
@@ -101,11 +105,11 @@
 
   <!-- WELCOME STEP (Step 0) -->
   <div 
-    x-show="currentStep === 0" 
+    x-show="currentStep === 0 && !completed" 
     x-transition:enter="transition ease-out duration-300"
     x-transition:enter-start="opacity-0 translate-y-4"
     x-transition:enter-end="opacity-100 translate-y-0"
-    class="bg-surface dark:bg-ink-900/70 backdrop-blur-xl border border-white/40 dark:border-white/10 rounded-3xl p-8 sm:p-12 shadow-2xl shadow-ink-900/10 dark:shadow-black/40 text-center"
+    class="bg-white dark:bg-slate-900/90 backdrop-blur-xl border border-white/40 dark:border-white/10 rounded-3xl p-8 sm:p-12 shadow-2xl shadow-ink-900/10 dark:shadow-black/40 text-center"
   >
     <div class="w-16 h-16 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mx-auto mb-6">
       <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -113,26 +117,39 @@
       </svg>
     </div>
 
-    <h1 class="text-3xl font-extrabold text-ink-900 dark:text-white tracking-tight">
+    <h1 class="text-3xl font-semibold text-ink-900 dark:text-white tracking-tight">
       Welcome to SalesIQ
     </h1>
     
     <p class="mt-3 text-sm text-ink-600 dark:text-ink-400 max-w-md mx-auto leading-relaxed">
-      Let's get your store configured. Set up your business profile, operational channels, and online presence in under 1 minute.
+      Configure your store, operational channels, and online business presence in 45 seconds.
     </p>
 
-    <div class="mt-8 flex items-center justify-center gap-6 text-xs font-semibold text-ink-600 dark:text-ink-400">
-      <div class="flex items-center gap-2">
-        <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-        </svg>
-        <span>4 Quick Steps</span>
+    <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-3.5 text-left">
+      <!-- Card 1: 4 Simple Steps -->
+      <div class="p-4 rounded-2xl bg-ink-50/60 dark:bg-white/5 border border-ink-100/80 dark:border-white/10 flex items-start gap-3.5 hover:border-primary/40 transition-colors">
+        <div class="w-9 h-9 rounded-xl bg-primary/10 dark:bg-primary/20 text-primary flex items-center justify-center shrink-0 mt-0.5">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <div>
+          <h4 class="text-xs font-bold text-ink-900 dark:text-white tracking-wide">4 Quick Steps</h4>
+          <p class="text-[11px] text-ink-600 dark:text-ink-400 mt-0.5 leading-normal">Fast, guided store setup designed to get you selling instantly.</p>
+        </div>
       </div>
-      <div class="flex items-center gap-2">
-        <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-        </svg>
-        <span>No Credit Card</span>
+
+      <!-- Card 2: Instant Setup & Free Access -->
+      <div class="p-4 rounded-2xl bg-ink-50/60 dark:bg-white/5 border border-ink-100/80 dark:border-white/10 flex items-start gap-3.5 hover:border-primary/40 transition-colors">
+        <div class="w-9 h-9 rounded-xl bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-500 flex items-center justify-center shrink-0 mt-0.5">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <div>
+          <h4 class="text-xs font-bold text-ink-900 dark:text-white tracking-wide">Zero Card Required</h4>
+          <p class="text-[11px] text-ink-600 dark:text-ink-400 mt-0.5 leading-normal">Full access to core tools without entering payment information.</p>
+        </div>
       </div>
     </div>
 
@@ -173,166 +190,402 @@
     </div>
 
     <!-- FORM STEP 1: Business Identity -->
-    <div x-show="currentStep === 1" class="space-y-5">
-      <div>
-        <h2 class="text-xl font-bold text-ink-900 dark:text-white">Business Identity</h2>
-        <p class="text-xs text-ink-600 dark:text-ink-400 mt-1">Provide your registered business name and contact number.</p>
+    <div x-show="currentStep === 1" class="space-y-6">
+      <!-- Warm & Exciting Header Accent -->
+      <div class="relative overflow-hidden p-4 rounded-2xl bg-linear-to-r from-emerald-500/10 via-teal-500/5 to-transparent border border-emerald-500/20 dark:border-emerald-500/10">
+        <div class="flex items-center space-x-3">
+          <span class="w-9 h-9 rounded-xl bg-emerald-500 text-slate-950 font-bold flex items-center justify-center shrink-0 shadow-sm shadow-emerald-500/30">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+          </span>
+          <div>
+            <h2 class="text-lg font-semibold text-slate-900 dark:text-white leading-tight">Welcome! Let's set up your business identity</h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5 font-light">Enter your official trading details to launch your custom hub.</p>
+          </div>
+        </div>
       </div>
 
-      <div class="space-y-4">
-        <div>
-          <label class="block text-xs font-semibold text-ink-900 dark:text-ink-300 mb-1.5">Business Name *</label>
-          <input 
-            type="text" 
-            x-model="formData.businessName" 
-            placeholder="e.g. Apex Retail Store"
-            class="w-full px-4 py-3 rounded-xl border border-ink-100 dark:border-white/10 bg-white/80 dark:bg-ink-900/80 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-colors"
-          />
+      <!-- Responsive Bento Layout: Side-by-Side on SM/MD, Stacked on Mobile -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        
+        <!-- Field 1: Business Name Card -->
+        <div class="p-4 rounded-2xl bg-white/60 dark:bg-slate-900/40 border border-slate-200/80 dark:border-white/10 transition-all duration-200 hover:border-slate-300 dark:hover:border-white/20 flex flex-col justify-between">
+          <div class="mb-3">
+            <label class="block text-xs font-semibold text-slate-800 dark:text-slate-200 mb-1">Business Name *</label>
+            <p class="text-[11px] text-slate-400 dark:text-slate-500 font-light">Your registered trade or brand name.</p>
+          </div>
+          
+          <div class="relative flex items-center">
+            <span class="absolute left-3.5 text-slate-400 dark:text-slate-500 pointer-events-none">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m0 0h4m-4 0V11m0 0h4" />
+              </svg>
+            </span>
+            <input 
+              type="text" 
+              x-model="formData.businessName" 
+              placeholder="e.g. Apex Retail Store"
+              class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 text-xs font-light transition-all focus:outline-none focus:border-emerald-500 focus:ring-0 shadow-none"
+            />
+          </div>
         </div>
 
-        <div>
-          <label class="block text-xs font-semibold text-ink-900 dark:text-ink-300 mb-1.5">Official Phone Number *</label>
-          <input 
-            type="tel" 
-            x-model="formData.officialNumber" 
-            placeholder="e.g. +234 800 000 0000"
-            class="w-full px-4 py-3 rounded-xl border border-ink-100 dark:border-white/10 bg-white/80 dark:bg-ink-900/80 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-colors"
-          />
+        <!-- Field 2: Official Phone Number Card -->
+        <div class="p-4 rounded-2xl bg-white/60 dark:bg-slate-900/40 border border-slate-200/80 dark:border-white/10 transition-all duration-200 hover:border-slate-300 dark:hover:border-white/20 flex flex-col justify-between">
+          <div class="mb-3">
+            <label class="block text-xs font-semibold text-slate-800 dark:text-slate-200 mb-1">Official Phone Number *</label>
+            <p class="text-[11px] text-slate-400 dark:text-slate-500 font-light">Primary line for customer contact.</p>
+          </div>
+
+          <div class="relative flex items-center">
+            <span class="absolute left-3.5 text-slate-400 dark:text-slate-500 pointer-events-none">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+              </svg>
+            </span>
+            <input 
+              type="tel" 
+              x-model="formData.officialNumber" 
+              placeholder="e.g. +234 800 000 0000"
+              class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 text-xs font-light transition-all focus:outline-none focus:border-emerald-500 focus:ring-0 shadow-none"
+            />
+          </div>
         </div>
+
       </div>
     </div>
 
     <!-- FORM STEP 2: Business Type & Address -->
-    <div x-show="currentStep === 2" class="space-y-5" style="display: none;">
+    <div x-show="currentStep === 2" class="space-y-6" style="display: none;">
       <div>
-        <h2 class="text-xl font-bold text-ink-900 dark:text-white">Operations & Location</h2>
-        <p class="text-xs text-ink-600 dark:text-ink-400 mt-1">Select how you conduct business transactions.</p>
+        <h2 class="text-xl font-semibold text-slate-900 dark:text-white">Operations & Location</h2>
+        <p class="text-xs text-slate-500 dark:text-gray-400 mt-1 font-light">Select how you conduct business transactions.</p>
       </div>
 
-      <div class="space-y-4">
+      <div class="space-y-5">
         <div>
-          <label class="block text-xs font-semibold text-ink-900 dark:text-ink-300 mb-2">Business Type *</label>
-          <div class="grid grid-cols-3 gap-3">
+          <label class="block text-xs font-semibold text-slate-900 dark:text-gray-300 mb-3">Business Operational Model *</label>
+          
+          <!-- Bento Grid Layout -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+            
+            <!-- Option 1: Online Only (Lime Accent) -->
             <button 
               @click="formData.businessType = 'online'" 
               type="button"
-              class="p-3.5 rounded-xl border text-center transition-all cursor-pointer"
-              :class="formData.businessType === 'online' ? 'border-primary bg-primary/10 text-primary font-semibold' : 'border-ink-100 dark:border-white/10 text-ink-600 dark:text-ink-400 hover:border-primary/50'"
+              class="group relative text-left p-4 rounded-2xl border transition-all duration-200 cursor-pointer overflow-hidden flex flex-col justify-between"
+              :class="formData.businessType === 'online' 
+                ? 'border-lime-500 bg-lime-50/50 dark:bg-lime-500/6' 
+                : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:border-lime-400 dark:hover:border-lime-500/50 hover:bg-lime-50/30 dark:hover:bg-lime-500/3'"
             >
-              <div class="text-xs font-bold">Online Only</div>
+              <!-- Active Indicator Badge -->
+              <div class="flex items-center justify-between w-full mb-3">
+                <div 
+                  class="w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-200"
+                  :class="formData.businessType === 'online' ? 'bg-lime-500 text-slate-950' : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-gray-400 group-hover:text-lime-600 dark:group-hover:text-lime-400 group-hover:bg-lime-50 dark:group-hover:bg-lime-500/10'"
+                >
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                  </svg>
+                </div>
+                
+                <span 
+                  class="w-5 h-5 rounded-full flex items-center justify-center transition-all duration-200"
+                  :class="formData.businessType === 'online' ? 'bg-lime-500 text-slate-950 font-bold' : 'border border-slate-300 dark:border-slate-700 opacity-40'"
+                >
+                  <svg x-show="formData.businessType === 'online'" class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                </span>
+              </div>
+
+              <div>
+                <div class="text-xs font-bold text-slate-900 dark:text-white tracking-wide">Online Only</div>
+                <p class="text-[11px] text-slate-500 dark:text-gray-400 font-light mt-1 leading-snug">E-commerce, social selling, or digital services.</p>
+              </div>
             </button>
 
+            <!-- Option 2: Physical Store (Fuchsia Accent) -->
             <button 
               @click="formData.businessType = 'physical'" 
               type="button"
-              class="p-3.5 rounded-xl border text-center transition-all cursor-pointer"
-              :class="formData.businessType === 'physical' ? 'border-primary bg-primary/10 text-primary font-semibold' : 'border-ink-100 dark:border-white/10 text-ink-600 dark:text-ink-400 hover:border-primary/50'"
+              class="group relative text-left p-4 rounded-2xl border transition-all duration-200 cursor-pointer overflow-hidden flex flex-col justify-between"
+              :class="formData.businessType === 'physical' 
+                ? 'border-fuchsia-500 bg-fuchsia-50/50 dark:bg-fuchsia-500/6' 
+                : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:border-fuchsia-400 dark:hover:border-fuchsia-500/50 hover:bg-fuchsia-50/30 dark:hover:bg-fuchsia-500/3'"
             >
-              <div class="text-xs font-bold">Physical Store</div>
+              <!-- Active Indicator Badge -->
+              <div class="flex items-center justify-between w-full mb-3">
+                <div 
+                  class="w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-200"
+                  :class="formData.businessType === 'physical' ? 'bg-fuchsia-500 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-gray-400 group-hover:text-fuchsia-600 dark:group-hover:text-fuchsia-400 group-hover:bg-fuchsia-50 dark:group-hover:bg-fuchsia-500/10'"
+                >
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m0 0h4m-4 0V11m0 0h4" />
+                  </svg>
+                </div>
+
+                <span 
+                  class="w-5 h-5 rounded-full flex items-center justify-center transition-all duration-200"
+                  :class="formData.businessType === 'physical' ? 'bg-fuchsia-500 text-white font-bold' : 'border border-slate-300 dark:border-slate-700 opacity-40'"
+                >
+                  <svg x-show="formData.businessType === 'physical'" class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                </span>
+              </div>
+
+              <div>
+                <div class="text-xs font-bold text-slate-900 dark:text-white tracking-wide">Physical Store</div>
+                <p class="text-[11px] text-slate-500 dark:text-gray-400 font-light mt-1 leading-snug">Walk-in retail outlet, shopfront, or office location.</p>
+              </div>
             </button>
 
+            <!-- Option 3: Both / Hybrid (sky Accent) -->
             <button 
               @click="formData.businessType = 'both'" 
               type="button"
-              class="p-3.5 rounded-xl border text-center transition-all cursor-pointer"
-              :class="formData.businessType === 'both' ? 'border-primary bg-primary/10 text-primary font-semibold' : 'border-ink-100 dark:border-white/10 text-ink-600 dark:text-ink-400 hover:border-primary/50'"
+              class="group relative text-left p-4 rounded-2xl border transition-all duration-200 cursor-pointer overflow-hidden flex flex-col justify-between"
+              :class="formData.businessType === 'both' 
+                ? 'border-sky-500 bg-sky-50/50 dark:bg-sky-500/6' 
+                : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:border-sky-400 dark:hover:border-sky-500/50 hover:bg-sky-50/30 dark:hover:bg-sky-500/3'"
             >
-              <div class="text-xs font-bold">Both</div>
+              <!-- Active Indicator Badge -->
+              <div class="flex items-center justify-between w-full mb-3">
+                <div 
+                  class="w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-200"
+                  :class="formData.businessType === 'both' ? 'bg-sky-500 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-gray-400 group-hover:text-sky-600 dark:group-hover:text-sky-400 group-hover:bg-sky-50 dark:group-hover:bg-sky-500/10'"
+                >
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                </div>
+
+                <span 
+                  class="w-5 h-5 rounded-full flex items-center justify-center transition-all duration-200"
+                  :class="formData.businessType === 'both' ? 'bg-sky-500 text-white font-bold' : 'border border-slate-300 dark:border-slate-700 opacity-40'"
+                >
+                  <svg x-show="formData.businessType === 'both'" class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                </span>
+              </div>
+
+              <div>
+                <div class="text-xs font-bold text-slate-900 dark:text-white tracking-wide">Hybrid (Both)</div>
+                <p class="text-[11px] text-slate-500 dark:text-gray-400 font-light mt-1 leading-snug">Physical storefront with an online store channel.</p>
+              </div>
             </button>
+
           </div>
         </div>
 
+        <!-- Conditional Address Input -->
         <div x-show="formData.businessType === 'physical' || formData.businessType === 'both'" x-collapse>
-          <label class="block text-xs font-semibold text-ink-900 dark:text-ink-300 mb-1.5">Physical Address *</label>
+          <label class="block text-xs font-semibold text-slate-900 dark:text-gray-300 mb-1.5">Physical Address *</label>
           <textarea 
             x-model="formData.address" 
             rows="3"
             placeholder="Suite 12, Commercial Block, Lagos, Nigeria"
-            class="w-full px-4 py-3 rounded-xl border border-ink-100 dark:border-white/10 bg-white/80 dark:bg-ink-900/80 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-colors"
+            class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20 transition-all"
           ></textarea>
         </div>
       </div>
     </div>
 
-    <!-- FORM STEP 3: Social Handles & Website -->
-    <div x-show="currentStep === 3" class="space-y-5" style="display: none;">
+    <!-- FORM STEP 3: Online Presence (Optional) -->
+    <div x-show="currentStep === 3" class="space-y-6" style="display: none;">
       <div>
-        <h2 class="text-xl font-bold text-ink-900 dark:text-white">Socials & Online Channels</h2>
-        <p class="text-xs text-ink-600 dark:text-ink-400 mt-1">Connect your brand presence (optional).</p>
+        <div class="flex items-center justify-between">
+          <h2 class="text-xl font-semibold text-ink-900 dark:text-white">Online Presence</h2>
+          <span class="text-[11px]  px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-700">Optional</span>
+        </div>
+        <p class="text-xs text-ink-600 dark:text-ink-400 mt-1 font-light">Add your social channels and store web address to help us personalize your hub.</p>
       </div>
 
       <div class="space-y-4">
+        <!-- Instagram URL -->
         <div>
-          <label class="block text-xs font-semibold text-ink-900 dark:text-ink-300 mb-1.5">Instagram Handle</label>
+          <label class="block text-xs font-semibold text-slate-700 dark:text-gray-300 mb-1.5">Instagram Profile</label>
           <div class="relative flex items-center">
-            <span class="absolute left-4 text-xs font-semibold text-ink-400">@</span>
+            <span class="absolute left-3.5 text-slate-400 dark:text-slate-500 pointer-events-none">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+              </svg>
+            </span>
             <input 
-              type="text" 
-              x-model="formData.instagram" 
-              placeholder="yourbrand"
-              class="w-full pl-8 pr-4 py-3 rounded-xl border border-ink-100 dark:border-white/10 bg-white/80 dark:bg-ink-900/80 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-colors"
+              type="url" 
+              x-model="formData.instagramUrl" 
+              placeholder="https://instagram.com/yourbusiness"
+              class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700/80 bg-white/80 dark:bg-slate-900/80 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 text-xs font-light transition-all focus:outline-none focus:border-emerald-500 focus:ring-0 shadow-none"
             />
           </div>
         </div>
 
+        <!-- TikTok URL -->
         <div>
-          <label class="block text-xs font-semibold text-ink-900 dark:text-ink-300 mb-1.5">TikTok Handle</label>
+          <label class="block text-xs font-semibold text-slate-700 dark:text-gray-300 mb-1.5">TikTok Profile</label>
           <div class="relative flex items-center">
-            <span class="absolute left-4 text-xs font-semibold text-ink-400">@</span>
+            <span class="absolute left-3.5 text-slate-400 dark:text-slate-500 pointer-events-none">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
+              </svg>
+            </span>
             <input 
-              type="text" 
-              x-model="formData.tiktok" 
-              placeholder="yourbrand"
-              class="w-full pl-8 pr-4 py-3 rounded-xl border border-ink-100 dark:border-white/10 bg-white/80 dark:bg-ink-900/80 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-colors"
+              type="url" 
+              x-model="formData.tiktokUrl" 
+              placeholder="https://tiktok.com/@yourbusiness"
+              class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700/80 bg-white/80 dark:bg-slate-900/80 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 text-xs font-light transition-all focus:outline-none focus:border-emerald-500 focus:ring-0 shadow-none"
             />
           </div>
         </div>
 
+        <!-- Website URL -->
         <div>
-          <label class="block text-xs font-semibold text-ink-900 dark:text-ink-300 mb-1.5">Website URL</label>
-          <input 
-            type="text" 
-            x-model="formData.websiteUrl" 
-            placeholder="www.yourbrand.com"
-            class="w-full px-4 py-3 rounded-xl border border-ink-100 dark:border-white/10 bg-white/80 dark:bg-ink-900/80 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-colors"
-            :class="!isStep3Valid ? 'border-rose-500 text-rose-500' : ''"
-          />
-          <p x-show="!isStep3Valid" class="text-[11px] text-rose-500 mt-1">Please enter a valid website domain.</p>
+          <label class="block text-xs font-semibold text-slate-700 dark:text-gray-300 mb-1.5">Business Website</label>
+          <div class="relative flex items-center">
+            <span class="absolute left-3.5 text-slate-400 dark:text-slate-500 pointer-events-none">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+              </svg>
+            </span>
+            <input 
+              type="url" 
+              x-model="formData.websiteUrl" 
+              placeholder="https://yourbusiness.com"
+              class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700/80 bg-white/80 dark:bg-slate-900/80 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 text-xs font-light transition-all focus:outline-none focus:border-emerald-500 focus:ring-0 shadow-none"
+            />
+          </div>
         </div>
       </div>
     </div>
 
     <!-- FORM STEP 4: Review & Finalize -->
-    <div x-show="currentStep === 4" class="space-y-5" style="display: none;">
+    <!-- FORM STEP 4: Command Center Overview / Final Review -->
+    <div x-show="currentStep === 4" class="space-y-6" style="display: none;">
       <div>
-        <h2 class="text-xl font-bold text-ink-900 dark:text-white">Review Business Details</h2>
-        <p class="text-xs text-ink-600 dark:text-ink-400 mt-1">Confirm your profile settings before finishing setup.</p>
+        <h2 class="text-xl font-semibold text-slate-900 dark:text-white">Command Center Overview</h2>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 font-light">Here is the data we've gathered so far. Take a quick moment to verify everything looks right.</p>
       </div>
 
-      <div class="bg-slate-50 dark:bg-ink-900/90 rounded-2xl p-5 border border-ink-100 dark:border-white/10 space-y-3 text-xs">
-        <div class="flex justify-between py-1 border-b border-ink-100/60 dark:border-white/5">
-          <span class="text-ink-600 dark:text-ink-400">Business Name</span>
-          <span class="font-bold text-ink-900 dark:text-white" x-text="formData.businessName"></span>
+      <div class="space-y-3.5">
+        <!-- Card 1: Core Identity -->
+        <div class="p-4 rounded-2xl bg-white/60 dark:bg-slate-900/40 border border-slate-200/80 dark:border-white/10 transition-all duration-200 hover:border-slate-300 dark:hover:border-white/20">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center space-x-2">
+              <span class="w-7 h-7 rounded-lg bg-emerald-500/15 dark:bg-emerald-400/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m0 0h4m-4 0V11m0 0h4" />
+                </svg>
+              </span>
+              <span class="text-xs font-semibold text-slate-900 dark:text-white">Business Identity</span>
+            </div>
+            <button @click="currentStep = 1" type="button" class="text-[11px]  text-emerald-600 dark:text-emerald-400 hover:underline cursor-pointer">Edit</button>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs pt-1">
+            <div>
+              <span class="block text-[11px] font-light text-slate-500 dark:text-slate-400">Legal / Trade Name</span>
+              <span class=" text-slate-900 dark:text-white mt-0.5 block" x-text="formData.businessName || '—'"></span>
+            </div>
+            <div>
+              <span class="block text-[11px] font-light text-slate-500 dark:text-slate-400">Official Phone Number</span>
+              <span class=" text-slate-900 dark:text-white mt-0.5 block" x-text="formData.officialNumber || '—'"></span>
+            </div>
+          </div>
         </div>
-        <div class="flex justify-between py-1 border-b border-ink-100/60 dark:border-white/5">
-          <span class="text-ink-600 dark:text-ink-400">Official Phone</span>
-          <span class="font-bold text-ink-900 dark:text-white" x-text="formData.officialNumber"></span>
+
+        <!-- Card 2: Operational Model & Location -->
+        <div class="p-4 rounded-2xl bg-white/60 dark:bg-slate-900/40 border border-slate-200/80 dark:border-white/10 transition-all duration-200 hover:border-slate-300 dark:hover:border-white/20">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center space-x-2">
+              <span class="w-7 h-7 rounded-lg bg-lime-500/15 dark:bg-lime-400/10 text-lime-600 dark:text-lime-400 flex items-center justify-center">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              </span>
+              <span class="text-xs font-semibold text-slate-900 dark:text-white">Model & Location</span>
+            </div>
+            <button @click="currentStep = 2" type="button" class="text-[11px]  text-emerald-600 dark:text-emerald-400 hover:underline cursor-pointer">Edit</button>
+          </div>
+
+          <div class="space-y-3 text-xs pt-1">
+            <div>
+              <span class="block text-[11px] font-light text-slate-500 dark:text-slate-400 mb-1">Operational Model</span>
+              <template x-if="formData.businessType === 'online'">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px]  bg-lime-500/10 text-lime-700 dark:text-lime-400 border border-lime-500/30">
+                  Online Only
+                </span>
+              </template>
+              <template x-if="formData.businessType === 'physical'">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px]  bg-fuchsia-500/10 text-fuchsia-700 dark:text-fuchsia-400 border border-fuchsia-500/30">
+                  Physical Store
+                </span>
+              </template>
+              <template x-if="formData.businessType === 'both'">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px]  bg-sky-500/10 text-sky-700 dark:text-sky-400 border border-sky-500/30">
+                  Hybrid Model
+                </span>
+              </template>
+              <template x-if="!formData.businessType">
+                <span class="text-slate-400 font-light">—</span>
+              </template>
+            </div>
+
+            <div x-show="formData.address" class="pt-2 border-t border-slate-100 dark:border-white/5">
+              <span class="block text-[11px] font-light text-slate-500 dark:text-slate-400">Physical Address</span>
+              <p class=" text-slate-900 dark:text-white mt-0.5 leading-relaxed font-light" x-text="formData.address"></p>
+            </div>
+          </div>
         </div>
-        <div class="flex justify-between py-1 border-b border-ink-100/60 dark:border-white/5">
-          <span class="text-ink-600 dark:text-ink-400">Type</span>
-          <span class="font-bold text-ink-900 dark:text-white uppercase" x-text="formData.businessType"></span>
+
+        <!-- Card 3: Online Presence & Reach -->
+        <div class="p-4 rounded-2xl bg-white/60 dark:bg-slate-900/40 border border-slate-200/80 dark:border-white/10 transition-all duration-200 hover:border-slate-300 dark:hover:border-white/20">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center space-x-2">
+              <span class="w-7 h-7 rounded-lg bg-sky-500/15 dark:bg-sky-400/10 text-sky-600 dark:text-sky-400 flex items-center justify-center">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="2" y1="12" x2="22" y2="12"></line>
+                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                </svg>
+              </span>
+              <span class="text-xs font-semibold text-slate-900 dark:text-white">Online Channels</span>
+            </div>
+            <button @click="currentStep = 3" type="button" class="text-[11px]  text-emerald-600 dark:text-emerald-400 hover:underline cursor-pointer">Edit</button>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs pt-1">
+            <div>
+              <span class="block text-[11px] font-light text-slate-500 dark:text-slate-400">Instagram</span>
+              <span class=" text-slate-900 dark:text-white mt-0.5 block truncate font-light" x-text="formData.instagramUrl || 'Not provided'"></span>
+            </div>
+            <div>
+              <span class="block text-[11px] font-light text-slate-500 dark:text-slate-400">TikTok</span>
+              <span class=" text-slate-900 dark:text-white mt-0.5 block truncate font-light" x-text="formData.tiktokUrl || 'Not provided'"></span>
+            </div>
+            <div>
+              <span class="block text-[11px] font-light text-slate-500 dark:text-slate-400">Website</span>
+              <span class=" text-slate-900 dark:text-white mt-0.5 block truncate font-light" x-text="formData.websiteUrl || 'Not provided'"></span>
+            </div>
+          </div>
         </div>
-        <div x-show="formData.address" class="flex justify-between py-1 border-b border-ink-100/60 dark:border-white/5">
-          <span class="text-ink-600 dark:text-ink-400">Address</span>
-          <span class="font-bold text-ink-900 dark:text-white text-right max-w-[200px]" x-text="formData.address"></span>
-        </div>
-        <div class="flex justify-between py-1">
-          <span class="text-ink-600 dark:text-ink-400">Online Channels</span>
-          <span class="font-bold text-ink-900 dark:text-white text-right">
-            <span x-text="formData.instagram ? '@' + formData.instagram.replace(/^@/, '') : '—'"></span> | 
-            <span x-text="formData.tiktok ? '@' + formData.tiktok.replace(/^@/, '') : '—'"></span>
-          </span>
-        </div>
+      </div>
+
+      <!-- Quiet Confirmation Banner -->
+      <div class="p-3.5 rounded-xl bg-slate-100/70 dark:bg-slate-800/40 border border-slate-200/60 dark:border-white/5 flex items-start space-x-3 text-xs">
+        <svg class="w-4 h-4 text-emerald-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <p class="text-slate-600 dark:text-slate-400 font-light leading-relaxed">
+          Everything look ready? Click submit to generate your customized business hub profile.
+        </p>
       </div>
     </div>
 
@@ -342,7 +595,7 @@
         @click="prevStep()" 
         type="button"
         :disabled="submitting"
-        class="px-5 py-2.5 rounded-xl border border-ink-100 dark:border-white/10 text-xs font-semibold text-ink-600 dark:text-ink-300 hover:text-ink-900 dark:hover:text-white transition-colors cursor-pointer disabled:opacity-50"
+        class="px-6 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-transparent text-slate-700 dark:text-gray-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer disabled:opacity-50"
       >
         Back
       </button>
@@ -353,7 +606,7 @@
         @click="nextStep()" 
         type="button"
         :disabled="(currentStep === 1 && !isStep1Valid) || (currentStep === 2 && !isStep2Valid) || (currentStep === 3 && !isStep3Valid)"
-        class="px-6 py-2.5 rounded-xl bg-primary text-white text-xs font-semibold hover:bg-primary/90 transition-all shadow-md shadow-primary/20 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+        class="px-6 py-2.5 rounded-xl bg-primary text-white text-xs font-semibold hover:bg-primary/90 transition-all shadow-sm shadow-primary/20 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
       >
         Continue
       </button>
@@ -364,7 +617,7 @@
         @click="completeOnboarding()" 
         type="button"
         :disabled="submitting"
-        class="px-7 py-2.5 rounded-xl bg-primary text-white text-xs font-semibold hover:bg-primary/90 transition-all shadow-md shadow-primary/20 cursor-pointer disabled:opacity-50 flex items-center gap-2"
+        class="px-7 py-2.5 rounded-xl bg-primary text-white text-xs font-semibold hover:bg-primary/90 transition-all shadow-sm shadow-primary/20 cursor-pointer disabled:opacity-50 flex items-center gap-2"
         style="display: none;"
       >
         <svg x-show="submitting" class="animate-spin w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24">
@@ -391,7 +644,7 @@
       </svg>
     </div>
 
-    <h2 class="text-2xl font-bold text-ink-900 dark:text-white">You're All Set!</h2>
+    <h2 class="text-2xl font-semibold text-ink-900 dark:text-white">You're All Set!</h2>
     <p class="mt-2 text-xs text-ink-600 dark:text-ink-400 max-w-sm mx-auto">
       Your business profile has been configured. You can now access your dashboard and start processing sales.
     </p>
