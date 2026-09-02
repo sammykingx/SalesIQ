@@ -4,7 +4,7 @@
         <div>
             <nav class="mb-1 flex items-center gap-1.5 text-xs text-neutral-400" aria-label="Breadcrumb">
                 {% block breadcrumbs %}
-                    <a href="#" class="hover:text-neutral-600 dark:hover:text-neutral-300">Home</a>
+                    <a href="{% url ACCOUNTS.DASHBOARD %}" class="hover:text-neutral-600 dark:hover:text-neutral-300">Home</a>
                 {% endblock %}
             </nav>
             <h1 class="font-display text-2xl font-semibold tracking-tight text-neutral-900 dark:text-white">

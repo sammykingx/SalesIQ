@@ -15,9 +15,11 @@ h11==0.16.0
 httpcore==1.0.9
 httpx==0.28.1
 idna==3.19
+mysqlclient==2.2.8
 nanoid==2.0.0
 pydantic==2.13.4
 pydantic-core==2.46.4
+pymysql==1.2.0
 python-dateutil==2.9.0.post0
 python-decouple==3.8
 requests==2.34.2

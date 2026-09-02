@@ -1,7 +1,7 @@
 from pydantic import BaseModel, EmailStr, Field, model_validator
 from pydantic import HttpUrl
 from typing import Union, Literal, Optional
-import re
+import re, string
 
 
 class BasePasswordSchema(BaseModel):
@@ -22,7 +22,7 @@ class BasePasswordSchema(BaseModel):
             raise ValueError('Password must contain at least one lowercase letter.')
         if not re.search(r'\d', password):
             raise ValueError('Password must contain at least one number.')
-        if not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
+        if not any(char in string.punctuation for char in password):
             raise ValueError('Password must contain at least one special character.')
             
         return self

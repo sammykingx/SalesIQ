@@ -5,7 +5,7 @@
     <head>
         {% vite_hmr_client %}
         <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
         <meta name="theme-color" content="#F8FAFC" media="(prefers-color-scheme: light)">
         <meta name="theme-color" content="#0F172A" media="(prefers-color-scheme: dark)">
@@ -23,11 +23,17 @@
         <meta name="theme-color" content="##F8FAFC">
         <meta name="csrf-token" content="{{ csrf_token }}">
 
-        <title>{% block title %}SalesIQ | Account Dashboard{% endblock %}</title>
+        <title>{% block title %}SalesIQ | Account Dashboard.{% endblock %}</title>
 
         {% vite_asset 'src/entries/app.js' %}
     </head>
-    <body class="relative min-h-screen bg-surface/95 text-neutral-900 antialiased dark:bg-neutral-950 dark:text-neutral-100">
+    <body x-data="{
+            darkMode: document.documentElement.classList.contains('dark'),
+            toggleTheme() {
+                this.darkMode = !this.darkMode;
+            },
+        }"
+        class="relative min-h-screen bg-surface/95 text-neutral-900 antialiased dark:bg-neutral-950 dark:text-neutral-100">
 
         <!-- Ambient background glow -->
         <div class="pointer-events-none fixed inset-0 -z-10 overflow-hidden" aria-hidden="true">

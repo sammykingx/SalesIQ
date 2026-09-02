@@ -22,15 +22,15 @@ export function initHeaderModule(Alpine) {
         theme: 'light',
 
         init() {
-            const stored = localStorage.getItem('vireo-theme');
+            const stored = localStorage.getItem('theme');
             this.theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
             document.documentElement.classList.toggle('dark', this.theme === 'dark');
         },
-
         toggleTheme() {
-            this.theme = this.theme === 'dark' ? 'light' : 'dark';
+            const darkMode = document.documentElement.classList.contains('dark');
+            this.theme = darkMode ? 'light' : 'dark';
             document.documentElement.classList.toggle('dark', this.theme === 'dark');
-            localStorage.setItem('vireo-theme', this.theme);
+            localStorage.setItem('theme', this.theme);
         },
     }));
 }
