@@ -1,4 +1,11 @@
+{# layouts/_base_app.html #}
 {% extends "layouts/_base.html" %}
+
+{% comment %}
+    Base layout for the app pages. This layout includes the sidebar, header, and footer. 
+    It also provides a main content area where page-specific content can be injected. 
+{% endcomment %}
+
 {% block body %}
 <div
     class="relative min-h-screen bg-surface/95 text-neutral-900 

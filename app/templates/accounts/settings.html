@@ -1,0 +1,264 @@
+{# accounts/settings.html #}
+{% extends "layouts/_base_app.html" %}
+{% load static %}
+
+{% block title %}salesiq | account settings{% endblock %}
+
+{% block page_body %}
+<div class="space-y-6" x-data="{ 
+    activeTab: 'profile',
+    cooldownActive: true,
+    cooldownSeconds: 42,
+    startCooldownTimer() {
+        let interval = setInterval(() => {
+            if (this.cooldownSeconds > 0) {
+                this.cooldownSeconds--;
+            } else {
+                this.cooldownActive = false;
+                clearInterval(interval);
+            }
+        }, 1000);
+    }
+}" x-init="startCooldownTimer()">
+
+    <!-- PAGE HEADER -->
+    <div class="flex flex-col gap-1 md:flex-row md:items-center md:justify-between">
+        <div>
+            <h1 class="text-xl font-semibold tracking-tight text-neutral-900 dark:text-white sm:text-2xl">Account Settings</h1>
+            <p class="text-xs text-neutral-500 dark:text-neutral-400">Manage your personal preferences, security options, and business links.</p>
+        </div>
+    </div>
+
+    <!-- MAIN SETTINGS LAYOUT -->
+    <div class="grid grid-cols-1 gap-6 lg:grid-cols-12">
+        
+        <!-- SIDE NAVIGATION MENU (4 cols) -->
+        <aside class="lg:col-span-3">
+            <nav class="flex space-x-2 overflow-x-auto rounded-2xl border border-neutral-200/80 bg-white p-2 shadow-xs dark:border-neutral-800 dark:bg-neutral-900 lg:flex-col lg:space-x-0 lg:space-y-1">
+                
+                <!-- Profile Link -->
+                <button 
+                    @click="activeTab = 'profile'"
+                    :class="activeTab === 'profile' ? 'bg-indigo-50 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-400 font-semibold' : 'text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800/60'"
+                    class="flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-xs font-medium transition-colors whitespace-nowrap text-left"
+                >
+                    <i data-lucide="user" class="h-4 w-4 shrink-0"></i>
+                    <span>Personal Profile</span>
+                </button>
+
+                <!-- Password & Security Link -->
+                <button 
+                    @click="activeTab = 'security'"
+                    :class="activeTab === 'security' ? 'bg-indigo-50 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-400 font-semibold' : 'text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800/60'"
+                    class="flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-xs font-medium transition-colors whitespace-nowrap text-left"
+                >
+                    <i data-lucide="lock" class="h-4 w-4 shrink-0"></i>
+                    <span>Password & Security</span>
+                </button>
+
+                <!-- Business & Social Links -->
+                <button 
+                    @click="activeTab = 'socials'"
+                    :class="activeTab === 'socials' ? 'bg-indigo-50 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-400 font-semibold' : 'text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800/60'"
+                    class="flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-xs font-medium transition-colors whitespace-nowrap text-left"
+                >
+                    <i data-lucide="link" class="h-4 w-4 shrink-0"></i>
+                    <span>Business Socials & Web</span>
+                </button>
+
+            </nav>
+        </aside>
+
+        <!-- MAIN SETTINGS FORM CANVAS (9 cols) -->
+        <main class="lg:col-span-9">
+
+            <!-- TAB 1: PERSONAL PROFILE FORM -->
+            <div x-show="activeTab === 'profile'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" class="space-y-6">
+                <form @submit.prevent="" class="rounded-2xl border border-neutral-200/80 bg-white p-6 shadow-xs dark:border-neutral-800 dark:bg-neutral-900">
+                    <div class="border-b border-neutral-100 pb-5 dark:border-neutral-800">
+                        <h2 class="text-base font-semibold text-neutral-900 dark:text-white">Personal Information</h2>
+                        <p class="text-xs text-neutral-500 dark:text-neutral-400">Update your account details and contact preferences.</p>
+                    </div>
+
+                    <!-- Avatar Change Row -->
+                    <div class="mt-6 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+                        <img 
+                            src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80" 
+                            alt="Alex Morgan" 
+                            class="h-20 w-20 rounded-full object-cover ring-2 ring-neutral-200 dark:ring-neutral-800"
+                        />
+                        <div class="flex items-center gap-3">
+                            <button type="button" class="rounded-xl border border-neutral-200 bg-white px-3.5 py-2 text-xs font-semibold text-neutral-700 shadow-2xs hover:bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-700">Change Photo</button>
+                            <button type="button" class="text-xs font-semibold text-rose-600 hover:underline dark:text-rose-400">Remove</button>
+                        </div>
+                    </div>
+
+                    <!-- Input Fields Grid -->
+                    <div class="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2">
+                        <div>
+                            <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">First Name</label>
+                            <input type="text" value="Alex" class="mt-1.5 w-full rounded-xl border border-neutral-200 bg-white px-3.5 py-2.5 text-xs text-neutral-800 shadow-2xs focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-200" />
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">Last Name</label>
+                            <input type="text" value="Morgan" class="mt-1.5 w-full rounded-xl border border-neutral-200 bg-white px-3.5 py-2.5 text-xs text-neutral-800 shadow-2xs focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-200" />
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">Email Address</label>
+                            <input type="email" value="alex.morgan@salesiq.io" class="mt-1.5 w-full rounded-xl border border-neutral-200 bg-white px-3.5 py-2.5 text-xs text-neutral-800 shadow-2xs focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-200" />
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">Phone Number</label>
+                            <input type="tel" value="+1 (555) 019-2834" class="mt-1.5 w-full rounded-xl border border-neutral-200 bg-white px-3.5 py-2.5 text-xs text-neutral-800 shadow-2xs focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-200" />
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">Timezone</label>
+                            <select class="mt-1.5 w-full rounded-xl border border-neutral-200 bg-white px-3.5 py-2.5 text-xs text-neutral-800 shadow-2xs focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-200">
+                                <option>Pacific Time (GMT-8)</option>
+                                <option>West Africa Time (GMT+1)</option>
+                                <option>Eastern Time (GMT-5)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">Preferred Language</label>
+                            <select class="mt-1.5 w-full rounded-xl border border-neutral-200 bg-white px-3.5 py-2.5 text-xs text-neutral-800 shadow-2xs focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-200">
+                                <option>English (US)</option>
+                                <option>French</option>
+                                <option>Spanish</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Save Action Row -->
+                    <div class="mt-8 flex justify-end border-t border-neutral-100 pt-5 dark:border-neutral-800">
+                        <button type="submit" class="rounded-xl bg-indigo-600 px-5 py-2.5 text-xs font-semibold text-white shadow-sm hover:bg-indigo-700">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- TAB 2: PASSWORD CHANGE WITH COOL-DOWN WINDOW -->
+            <div x-show="activeTab === 'security'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" class="space-y-6">
+                <form @submit.prevent="" class="rounded-2xl border border-neutral-200/80 bg-white p-6 shadow-xs dark:border-neutral-800 dark:bg-neutral-900">
+                    <div class="border-b border-neutral-100 pb-5 dark:border-neutral-800">
+                        <h2 class="text-base font-semibold text-neutral-900 dark:text-white">Change Password</h2>
+                        <p class="text-xs text-neutral-500 dark:text-neutral-400">Ensure your account uses a strong, unique password.</p>
+                    </div>
+
+                    <!-- Cool-down Notice Alert -->
+                    <div x-show="cooldownActive" class="mt-6 flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50/80 p-4 dark:border-amber-900/60 dark:bg-amber-950/30">
+                        <svg class="h-5 w-5 shrink-0 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <div class="text-xs text-amber-800 dark:text-amber-300">
+                            <span class="font-semibold">Security Cool-down Active:</span> Password resets are temporarily throttled for security. You can submit another password change in <span class="font-mono font-semibold underline" x-text="cooldownSeconds + 's'"></span>.
+                        </div>
+                    </div>
+
+                    <div class="mt-6 space-y-4 max-w-lg">
+                        <div>
+                            <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">Current Password</label>
+                            <input type="password" placeholder="••••••••••••" class="mt-1.5 w-full rounded-xl border border-neutral-200 bg-white px-3.5 py-2.5 text-xs text-neutral-800 shadow-2xs focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-200" />
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">New Password</label>
+                            <input type="password" placeholder="••••••••••••" class="mt-1.5 w-full rounded-xl border border-neutral-200 bg-white px-3.5 py-2.5 text-xs text-neutral-800 shadow-2xs focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-200" />
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">Confirm New Password</label>
+                            <input type="password" placeholder="••••••••••••" class="mt-1.5 w-full rounded-xl border border-neutral-200 bg-white px-3.5 py-2.5 text-xs text-neutral-800 shadow-2xs focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-200" />
+                        </div>
+                    </div>
+
+                    <!-- Password Requirement Checklist -->
+                    <div class="mt-6 rounded-xl bg-neutral-50 p-4 dark:bg-neutral-950/60">
+                        <p class="text-xs font-semibold text-neutral-700 dark:text-neutral-300">Password Requirements:</p>
+                        <ul class="mt-2 space-y-1 text-xs text-neutral-500 dark:text-neutral-400">
+                            <li class="flex items-center gap-2 text-emerald-600 dark:text-emerald-400">
+                                <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                Minimum 8 characters long
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="h-3.5 w-3.5 text-neutral-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                At least one special character (&, $, @)
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Update Password Button -->
+                    <div class="mt-8 flex justify-end border-t border-neutral-100 pt-5 dark:border-neutral-800">
+                        <button 
+                            type="submit" 
+                            :disabled="cooldownActive" 
+                            :class="cooldownActive ? 'opacity-50 cursor-not-allowed bg-neutral-400' : 'bg-indigo-600 hover:bg-indigo-700'"
+                            class="rounded-xl px-5 py-2.5 text-xs font-semibold text-white shadow-sm transition-all"
+                        >
+                            Update Password
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- TAB 3: BUSINESS SOCIALS & WEBSITE -->
+            <div x-show="activeTab === 'socials'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" class="space-y-6">
+                <form @submit.prevent="" class="rounded-2xl border border-neutral-200/80 bg-white p-6 shadow-xs dark:border-neutral-800 dark:bg-neutral-900">
+                    <div class="border-b border-neutral-100 pb-5 dark:border-neutral-800">
+                        <h2 class="text-base font-semibold text-neutral-900 dark:text-white">Business Socials & Web Presence</h2>
+                        <p class="text-xs text-neutral-500 dark:text-neutral-400">Configure your official website and platform-allowed social channels.</p>
+                    </div>
+
+                    <div class="mt-6 space-y-5">
+                        
+                        <!-- Official Website URL -->
+                        <div>
+                            <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">Official Website URL</label>
+                            <div class="mt-1.5 flex rounded-xl shadow-2xs">
+                                <span class="inline-flex items-center rounded-l-xl border border-r-0 border-neutral-200 bg-neutral-50 px-3 text-xs text-neutral-500 dark:border-neutral-800 dark:bg-neutral-800 dark:text-neutral-400">https://</span>
+                                <input type="text" value="apexretail.io" class="w-full rounded-r-xl border border-neutral-200 bg-white px-3.5 py-2.5 text-xs text-neutral-800 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-200" />
+                            </div>
+                        </div>
+
+                        <!-- Instagram Channel -->
+                        <div>
+                            <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">Instagram Handle</label>
+                            <div class="mt-1.5 flex rounded-xl shadow-2xs">
+                                <span class="inline-flex items-center gap-1.5 rounded-l-xl border border-r-0 border-neutral-200 bg-pink-50/50 px-3 text-xs font-medium text-pink-600 dark:border-neutral-800 dark:bg-pink-950/30 dark:text-pink-400">
+                                    <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                                    @
+                                </span>
+                                <input type="text" value="apex_retail" class="w-full rounded-r-xl border border-neutral-200 bg-white px-3.5 py-2.5 text-xs text-neutral-800 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-200" />
+                            </div>
+                        </div>
+
+                        <!-- TikTok Channel -->
+                        <div>
+                            <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">TikTok Handle</label>
+                            <div class="mt-1.5 flex rounded-xl shadow-2xs">
+                                <span class="inline-flex items-center gap-1.5 rounded-l-xl border border-r-0 border-neutral-200 bg-neutral-100/80 px-3 text-xs font-medium text-neutral-800 dark:border-neutral-800 dark:bg-neutral-800 dark:text-neutral-200">
+                                    <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12.525.001c1.31 0 2.57.24 3.73.67 1.16.43 2.19 1.07 3.06 1.9.87.83 1.53 1.83 1.98 2.97.45 1.14.68 2.37.68 3.65v.08c0 .28-.01.56-.04.84-.1 1.05-.41 2.05-.92 2.96-.51.91-1.2 1.68-2.03 2.29-.83.61-1.78 1.04-2.82 1.28-1.04.24-2.12.28-3.19.12v-3.41c.64.12 1.28.1 1.9-.06.62-.16 1.18-.44 1.66-.83.48-.39.87-.89 1.15-1.47.28-.58.43-1.22.45-1.88v-9.15h-3.46v-.08c0-1.28-.23-2.51-.68-3.65-.45-1.14-1.11-2.14-1.98-2.97-.87-.83-1.9-1.47-3.06-1.9-1.16-.43-2.42-.67-3.73-.67v.08z"/></svg>
+                                    @
+                                </span>
+                                <input type="text" value="apexretail_official" class="w-full rounded-r-xl border border-neutral-200 bg-white px-3.5 py-2.5 text-xs text-neutral-800 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-200" />
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Save Action Row -->
+                    <div class="mt-8 flex justify-end border-t border-neutral-100 pt-5 dark:border-neutral-800">
+                        <button type="submit" class="rounded-xl bg-indigo-600 px-5 py-2.5 text-xs font-semibold text-white shadow-sm hover:bg-indigo-700">Save Social Links</button>
+                    </div>
+                </form>
+            </div>
+
+        </main>
+    </div>
+
+</div>
+{% endblock %}

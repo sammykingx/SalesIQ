@@ -1,0 +1,8 @@
+<div class="nav_grp" data-group-name="{{ item.group_name }}" x-show="matchesGroup('{{ item.group_name }}')">
+    <a href="{{ item.group_url }}"
+       class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:hover:text-white"
+       role="treeitem" aria-level="1" tabindex="0" data-nav-label="{{ item.group_label }}">
+        <i data-lucide="{{ item.group_icon }}" class="h-4 w-4 shrink-0"></i>
+        <span x-show="!$store.sidebar.collapsed || $store.sidebar.mobileOpen" class="flex-1 truncate text-left">{{ item.group_label }}</span>
+    </a>
+</div>

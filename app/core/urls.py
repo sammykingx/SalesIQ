@@ -29,6 +29,7 @@ urlpatterns = [
     
     path("", ComingSoonView.as_view(), name="coming-soon"),
     path("accounts/", include("accounts.urls")),
+    path("customers/", include("customers.urls")),    
     path("dashboard/", TemplateView.as_view(template_name="layouts/new_app_layout.html"), name="new-app-db"),
     # products
     # sales

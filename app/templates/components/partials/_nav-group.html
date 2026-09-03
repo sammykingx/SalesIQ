@@ -1,0 +1,23 @@
+<div class="nav_grp" data-group-name="{{ item.group_name }}" x-show="matchesGroup('{{ item.group_name }}')">
+    <button type="button"
+        class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:hover:text-white"
+        role="treeitem" aria-level="1"
+        :aria-expanded="groups['{{ item.group_name }}']"
+        @click="toggle('{{ item.group_name }}')" tabindex="-1">
+        <i data-lucide="{{ item.group_icon }}" class="h-4 w-4 shrink-0"></i>
+        <span x-show="!$store.sidebar.collapsed || $store.sidebar.mobileOpen" class="flex-1 truncate text-left">{{ item.group_label }}</span>
+        <i data-lucide="chevron-right"
+           x-show="!$store.sidebar.collapsed || $store.sidebar.mobileOpen"
+           class="h-4 w-4 shrink-0 text-neutral-400 transition-transform duration-200"
+           :class="{ 'rotate-90': groups['{{ item.group_name }}'] }"></i>
+    </button>
+    <div class="ml-3 space-y-0.5 border-l border-neutral-200 py-1 pl-3 dark:border-neutral-800"
+        role="group"
+        x-show="(!$store.sidebar.collapsed || $store.sidebar.mobileOpen) && (groups['{{ item.group_name }}'] || filterOpen['{{ item.group_name }}'])"
+        x-collapse>
+        {% for child in item.group_children %}
+        <a class="flex items-center gap-2 rounded-lg py-1.5 pl-4 pr-3 text-sm text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white"
+           role="treeitem" aria-level="2" href="{{ child.child_url }}" data-nav-label="{{ child.child_label }}" tabindex="-1">{{ child.child_label }}</a>
+        {% endfor %}
+    </div>
+</div>
