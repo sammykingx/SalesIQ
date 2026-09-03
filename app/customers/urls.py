@@ -7,6 +7,6 @@ from core.url_names import CUSTOMERS
 
 urlpatterns = [
     path("", RedirectView.as_view(url=reverse_lazy(CUSTOMERS.LIST))),
-    path("b/all/", TemplateView.as_view(template_name=APP_TEMPLATES.ACCOUNTS.CUSTOMERS.LIST), name=CUSTOMERS.LIST),
+    path("b/all/", TemplateView.as_view(template_name=APP_TEMPLATES.CUSTOMERS.LIST), name=CUSTOMERS.LIST),
     # settings namespace
 ]

@@ -15,6 +15,4 @@ urlpatterns = [
     path("dashboard/", DashboardView.as_view(), name=ACCOUNTS.DASHBOARD),
     path("profile/", UserProfileView.as_view(), name=ACCOUNTS.PROFILE),
     path("settings/", TemplateView.as_view(template_name=APP_TEMPLATES.ACCOUNTS.SETTINGS), name=ACCOUNTS.SETTINGS),
-
-    # settings namespace
 ]

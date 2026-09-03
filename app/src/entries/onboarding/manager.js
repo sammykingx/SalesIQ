@@ -20,7 +20,6 @@ export function onboardingForm(endpointUrl = '') {
             websiteUrl: ''
         },
 
-        // Format phone input
         sanitizePhoneNumber(event) {
             let value = event.target.value;
             value = value.replace(/(?!^\+)[^\d]/g, '');
@@ -32,27 +31,23 @@ export function onboardingForm(endpointUrl = '') {
             this.formData.officialNumber = value;
         },
 
-        // Toggle "same as personal phone number" option
         toggleSamePhone() {
             if (this.sameAsPersonalPhone) {
                 this.formData.officialNumber = this.personalPhone;
             }
         },
 
-        // Step 1 Validation
         get isStep1Valid() {
             return this.formData.businessName.trim().length >= 2 &&
                 this.formData.officialNumber.trim().length >= 7;
         },
 
-        // Step 2 Validation
         get isStep2Valid() {
             if (!this.formData.businessType) return false;
             if (this.formData.businessType === 'online') return true;
             return this.formData.address.trim().length >= 5;
         },
 
-        // Step 3 Validation
         get isStep3Valid() {
             if (!this.formData.websiteUrl.trim()) return true;
             try {

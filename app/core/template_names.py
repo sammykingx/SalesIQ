@@ -4,6 +4,8 @@ _ACCOUNTS_BASE = 'accounts'
 _AUTH_BASE = f'{_ACCOUNTS_BASE}/auth'
 
 _CUSTOMERS_BASE = 'customers'
+_PRODUCTS_BASE = 'products'
+_SALES_BASE = 'sales'
 
 
 class APP_TEMPLATES:
@@ -20,11 +22,23 @@ class APP_TEMPLATES:
             PASSWORD_RESET = f'{_AUTH_BASE}/password_reset.html'
             PASSWORD_CHANGE = f'{_AUTH_BASE}/password_change.html'
 
-        class CUSTOMERS:
-            LIST = f'{_CUSTOMERS_BASE}/list-all.html'
-            DETAIL = f'{_CUSTOMERS_BASE}/detail.html'
-            ADD = f'{_CUSTOMERS_BASE}/add.html'
-            EDIT = f'{_CUSTOMERS_BASE}/edit.html'
+    class CUSTOMERS:
+        LIST = f'{_CUSTOMERS_BASE}/list-all.html'
+        DETAIL = f'{_CUSTOMERS_BASE}/detail.html'
+        ADD = f'{_CUSTOMERS_BASE}/add.html'
+        EDIT = f'{_CUSTOMERS_BASE}/edit.html'
+            
+    class PRODUCTS:
+        LIST = f'{_PRODUCTS_BASE}/store-products.html'
+        DETAIL = f'{_PRODUCTS_BASE}/detail.html'
+        ADD = f'{_PRODUCTS_BASE}/add.html'
+        EDIT = f'{_PRODUCTS_BASE}/edit.html'
+        
+    class SALES:
+        LIST = f'{_SALES_BASE}/list.html'
+        DETAIL = f'{_SALES_BASE}/detail.html'
+        ADD = f'{_SALES_BASE}/add.html'
+        EDIT = f'{_SALES_BASE}/edit.html'
             
                 
 # 1. padlock animation https://lottiefiles.com/free-animation/password-set-LjQJxPwnaB

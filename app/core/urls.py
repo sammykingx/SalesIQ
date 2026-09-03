@@ -19,19 +19,21 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import TemplateView
 
-
 from core.views import ComingSoonView
+from core.template_names import APP_TEMPLATES
+from core.url_names import PRODUCTS, SALES
 
 handler404 = "core.views.custom_404"
+handler500 = "core.views.custom_500"
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     
     path("", ComingSoonView.as_view(), name="coming-soon"),
     path("accounts/", include("accounts.urls")),
-    path("customers/", include("customers.urls")),    
-    path("dashboard/", TemplateView.as_view(template_name="layouts/new_app_layout.html"), name="new-app-db"),
-    # products
-    # sales
+    path("customers/", include("customers.urls")),
+    path("products/", TemplateView.as_view(template_name=APP_TEMPLATES.PRODUCTS.LIST), name=PRODUCTS.LIST),
+    path("sales/", TemplateView.as_view(template_name=APP_TEMPLATES.SALES.LIST), name=SALES.LIST),
+
     # invoices
 ]

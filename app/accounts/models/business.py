@@ -6,7 +6,7 @@ from nanoid import generate
 
 
 def generate_business_id():
-    seed = "23456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+    seed = "123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
     return "BIZ-" + generate(seed, 12)
 
 class BusinessType(models.TextChoices):

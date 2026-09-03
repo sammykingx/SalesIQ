@@ -9,7 +9,7 @@ SIDEBAR_NAV_TREE = [
         "group_icon": "store",
         "group_url": PRODUCTS.LIST,
         "group_children": [
-            {"child_name": "products_list", "child_label": "All Products", "child_url": PRODUCTS.LIST},
+            {"child_name": "products_list", "child_label": "All Products", "child_url": reverse_lazy(PRODUCTS.LIST)},
             {"child_name": "products_add", "child_label": "Add Product", "child_url": PRODUCTS.ADD},
         ],
     },
@@ -29,7 +29,7 @@ SIDEBAR_NAV_TREE = [
         "group_icon": "shopping-cart",
         "group_url": SALES.LIST,
         "group_children": [
-            {"child_name": "sales_list", "child_label": "All Sales", "child_url": SALES.LIST},
+            {"child_name": "sales_list", "child_label": "All Sales", "child_url": reverse_lazy(SALES.LIST)},
             {"child_name": "sales_add", "child_label": "Record Sale", "child_url": SALES.ADD},
         ],
     },

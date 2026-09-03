@@ -40,10 +40,10 @@
     <!-- PAGE HEADER -->
     <div class="flex flex-col gap-1 md:flex-row md:items-center md:justify-between">
         <div>
-            <h1 class="text-xl font-bold tracking-tight text-neutral-900 dark:text-white sm:text-2xl">Customer Directory</h1>
+            <h1 class="text-xl font-semibold tracking-tight text-neutral-900 dark:text-white sm:text-2xl">Customer Directory</h1>
             <p class="text-xs text-neutral-500 dark:text-neutral-400">View client details, metrics, purchase history, and overall lifetime value.</p>
         </div>
-        <button type="button" class="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-xs font-bold text-white shadow-sm hover:bg-indigo-700 transition-colors">
+        <button type="button" class="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-xs font-semibold text-white shadow-sm hover:bg-indigo-700 transition-colors">
             <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
             </svg>
@@ -177,14 +177,14 @@
                         <div class="flex items-center gap-3">
                             <img :src="customer.avatar" :alt="customer.firstName" class="h-12 w-12 rounded-full object-cover ring-2 ring-neutral-100 dark:ring-neutral-800" />
                             <div>
-                                <h3 class="text-sm font-bold text-neutral-900 dark:text-white" x-text="customer.firstName + ' ' + customer.lastName"></h3>
+                                <h3 class="text-sm font-semibold text-neutral-900 dark:text-white" x-text="customer.firstName + ' ' + customer.lastName"></h3>
                                 <span 
                                     :class="{
                                         'bg-amber-50 text-amber-700 dark:bg-amber-950/60 dark:text-amber-400': customer.status === 'VIP',
                                         'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-400': customer.status === 'Active',
                                         'bg-indigo-50 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-400': customer.status === 'New'
                                     }" 
-                                    class="inline-flex rounded-md px-2 py-0.5 text-[10px] font-bold" 
+                                    class="inline-flex rounded-md px-2 py-0.5 text-[10px] font-semibold" 
                                     x-text="customer.status"
                                 ></span>
                             </div>
@@ -219,7 +219,7 @@
                 <div class="mt-5 flex items-center justify-between border-t border-neutral-100 pt-4 dark:border-neutral-800">
                     <div>
                         <span class="text-[10px] font-semibold tracking-wider text-neutral-400 uppercase">Total Orders</span>
-                        <p class="text-xs font-bold text-neutral-800 dark:text-neutral-200" x-text="customer.totalOrders + ' Orders'"></p>
+                        <p class="text-xs font-semibold text-neutral-800 dark:text-neutral-200" x-text="customer.totalOrders + ' Orders'"></p>
                     </div>
                     <div class="text-right">
                         <span class="text-[10px] font-semibold tracking-wider text-neutral-400 uppercase">Total Spend</span>
@@ -236,7 +236,7 @@
         <svg class="mx-auto h-12 w-12 text-neutral-300 dark:text-neutral-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
         </svg>
-        <h3 class="mt-2 text-sm font-bold text-neutral-800 dark:text-neutral-200">No Customers Found</h3>
+        <h3 class="mt-2 text-sm font-semibold text-neutral-800 dark:text-neutral-200">No Customers Found</h3>
         <p class="mt-1 text-xs text-neutral-500">Try adjusting your search criteria or sorting order.</p>
     </div>
 
