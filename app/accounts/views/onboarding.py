@@ -16,7 +16,7 @@ class BizAccountOnboardingView(LoginRequiredMixin, View):
     def post(self, request: HttpRequest):
         try:
             data = BusinessOnboardingSchema.model_validate_json(request.body, strict=True)
-            # print(data.model_dump_json(indent=2))
+            print(data.model_dump_json(indent=2))
             BusinessService(self.request.user).register_business(data) # type: ignore
             return JsonResponse({
                 "message": "Your business has been successfully registered.",

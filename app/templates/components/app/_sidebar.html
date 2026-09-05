@@ -120,7 +120,7 @@
                 </div>
             {% endif %}
             <span x-show="!$store.sidebar.collapsed || $store.sidebar.mobileOpen" class="flex min-w-0 flex-col leading-tight">
-                <b class="truncate text-sm font-semibold text-ink-600 dark:text-white">{{ user.get_full_name|title }}</b>
+                <b class="truncate text-sm font-semibold text-ink-600 dark:text-white">{{ user.first_name|title }} {{ user.last_name|title }}</b>
                 <small class="truncate text-xs text-neutral-400">{{ user.email }}</small>
             </span>
             <form method="post" action="{% url ACCOUNTS.AUTH.LOGOUT %}" x-ref="logoutForm" class="hidden">

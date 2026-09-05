@@ -1,6 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
-from accounts.domains.entities import BusinessEntity
 from accounts.selectors import UserSelector, BusinessSelector
 from core.template_names import APP_TEMPLATES
 
@@ -24,7 +23,7 @@ class UserProfileView(LoginRequiredMixin, TemplateView):
         return context
     
     def template_context(self):
-        user_entity = self.user_selector.get_user(email=self.request.user.email) #type: ignore
+        user_entity = self.user_selector.get_by_email(email=self.request.user.email) #type: ignore
         biz_entity = self.business_selector.get_user_business(user_email=self.request.user.email) #type: ignore
         return {
             "user": user_entity,

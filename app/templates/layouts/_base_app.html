@@ -1,24 +1,14 @@
 {# layouts/_base_app.html #}
 {% extends "layouts/_base.html" %}
 
-{% comment %}
-    Base layout for the app pages. This layout includes the sidebar, header, and footer. 
-    It also provides a main content area where page-specific content can be injected. 
-{% endcomment %}
-
 {% block body %}
-<div
-    class="relative min-h-screen bg-surface/95 text-neutral-900 
-        antialiased dark:bg-neutral-950 dark:text-neutral-100"
->
+<!-- Clean root div without inline JS comments -->
+<div class="relative min-h-screen bg-surface/95 text-neutral-900 antialiased dark:bg-neutral-950 dark:text-neutral-100">
+    
     <!-- Ambient background glow -->
     <div class="pointer-events-none fixed inset-0 -z-10 overflow-hidden" aria-hidden="true">
-        <div
-            class="absolute -top-40 -left-40 h-96 w-96 rounded-full bg-indigo-400/30 blur-3xl dark:bg-indigo-500/20"
-        ></div>
-        <div
-            class="absolute top-1/3 -right-40 h-96 w-96 rounded-full bg-fuchsia-400/20 blur-3xl dark:bg-fuchsia-500/10"
-        ></div>
+        <div class="absolute -top-40 -left-40 h-96 w-96 rounded-full bg-indigo-400/30 blur-3xl dark:bg-indigo-500/20"></div>
+        <div class="absolute top-1/3 -right-40 h-96 w-96 rounded-full bg-fuchsia-400/20 blur-3xl dark:bg-fuchsia-500/10"></div>
     </div>
 
     <!-- App layout -->
@@ -55,6 +45,13 @@
             {% include "components/app/_footer.html" %}
         </div>
     </div>
+
+    <!-- GLOBAL RESPONSIVE TOAST NOTIFICATION CONTAINER -->
+    <div 
+        id="toast-container"
+        aria-live="assertive" 
+        class="pointer-events-none fixed top-4 inset-x-4 z-50 flex flex-col gap-3 sm:top-5 sm:right-5 sm:left-auto sm:w-full sm:max-w-sm"
+    ></div>
 
     <!-- Search dialog modal -->
     {% include "components/app/_search-dialog.html" %}

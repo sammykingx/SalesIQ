@@ -65,7 +65,7 @@
                 <span class="w-6 font-medium">EN</span><span class="flex-1 text-neutral-600 dark:text-neutral-300">English</span>
                 <svg x-show="$store.ax.lang === 'EN'" class="h-4 w-4 text-indigo-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5l10 -10" /></svg>
             </button>
-            <button type="button" class="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left hover:bg-neutral-100 dark:hover:bg-neutral-800" role="menuitemradio" :aria-checked="$store.ax.lang === 'ES'" @click="$store.ax.setLang('ES'); close()">
+            {% comment %} <button type="button" class="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left hover:bg-neutral-100 dark:hover:bg-neutral-800" role="menuitemradio" :aria-checked="$store.ax.lang === 'ES'" @click="$store.ax.setLang('ES'); close()">
                 <span class="w-6 font-medium">ES</span><span class="text-neutral-600 dark:text-neutral-300">Español</span>
             </button>
             <button type="button" class="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left hover:bg-neutral-100 dark:hover:bg-neutral-800" role="menuitemradio" :aria-checked="$store.ax.lang === 'FR'" @click="$store.ax.setLang('FR'); close()">
@@ -73,7 +73,7 @@
             </button>
             <button type="button" class="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left hover:bg-neutral-100 dark:hover:bg-neutral-800" role="menuitemradio" :aria-checked="$store.ax.lang === 'AR'" @click="$store.ax.setLang('AR'); close()">
                 <span class="w-6 font-medium">AR</span><span class="text-neutral-600 dark:text-neutral-300">العربية</span>
-            </button>
+            </button> {% endcomment %}
         </div>
     </div>
 
@@ -260,7 +260,7 @@
         </form>
 
         <button type="button" class="rounded-full" @click="toggle()" aria-haspopup="menu" :aria-expanded="open" aria-controls="ax-profile-menu" aria-label="Account menu">
-            {% comment %} <img class="h-8 w-8 rounded-full ring-2 ring-transparent hover:ring-neutral-200 dark:hover:ring-neutral-700" src="https://i.pravatar.cc/64?img=12" alt="{{ user.get_full_name }}" width="32" height="32" /> {% endcomment %}
+            {% comment %} <img class="h-8 w-8 rounded-full ring-2 ring-transparent hover:ring-neutral-200 dark:hover:ring-neutral-700" src="https://i.pravatar.cc/64?img=12" alt="{{ user.first_name }} {{ user.last_name }}" width="32" height="32" /> {% endcomment %}
             {% if user.avatar %}
                 <img class="h-10 w-10 rounded-full object-cover" src="{{ user.avatar.url }}" alt="{{ user.get_full_name }}" width="40" height="40" />
             {% else %}
@@ -284,11 +284,11 @@
                 </span>
             </div>
             <a class="flex items-center gap-2 rounded-lg px-3 py-2 text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800" role="menuitem" href="{% url ACCOUNTS.PROFILE %}">
-                <svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /><path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /></svg>
+                <i data-lucide="user" class="h-4 w-4 shrink-0"></i>
                 View Profile
             </a>
             <a class="flex items-center gap-2 rounded-lg px-3 py-2 text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800" role="menuitem" href="{% url ACCOUNTS.SETTINGS %}">
-                <svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065" /><path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /></svg>
+                <i data-lucide="settings" class="h-4 w-4 shrink-0"></i>
                 Account Settings
             </a>
             {% comment %} <a class="flex items-center gap-2 rounded-lg px-3 py-2 text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800" role="menuitem" href="#">
@@ -310,7 +310,7 @@
                 href="#"
                 @click.prevent="$refs.logoutForm.submit()"
             >
-                <svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2" /><path d="M9 12h12l-3 -3" /><path d="M18 15l3 -3" /></svg>
+                <i data-lucide="log-out" class="h-4 w-4 shrink-0"></i>
                 Log Out
             </a>
         </div>

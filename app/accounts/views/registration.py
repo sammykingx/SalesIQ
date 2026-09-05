@@ -30,7 +30,7 @@ class AccountRegistrationView(View):
             payload = UserRegistrationSchema.model_validate_json(request.body, strict=True)
             user_service = AccountOnboardingService(request)
             user_service.create_account(payload)
-            user_service.send_activation_link(payload)
+            user_service.send_activation_link(email=payload.email, first_name=payload.first_name)
             response_data = AuthActionResponseSchema(
                 message="Registration successful! Please check your email to activate your account.",
                 status="success",

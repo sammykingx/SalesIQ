@@ -20,7 +20,7 @@
             <div class="absolute inset-0 bg-linear-to-t from-black/60 via-black/10 to-transparent"></div>
             
             <!-- Change Banner Button -->
-            <button 
+            {% comment %} <button 
                 type="button" 
                 class="absolute right-4 top-4 flex items-center gap-2 rounded-lg bg-neutral-900/60 px-3 py-1.5 text-xs font-medium text-white backdrop-blur-md  hover:bg-neutral-900/80"
             >
@@ -29,7 +29,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
                 <span>Edit Cover</span>
-            </button>
+            </button> {% endcomment %}
         </div>
 
         <!-- Profile Details Header Area -->
@@ -38,13 +38,20 @@
                 
                 <!-- Avatar and Name Stack -->
                 <div class="flex flex-col items-center gap-4 sm:flex-row sm:items-end">
-                    <!-- Overlapping Profile Avatar -->
                     <div class="relative -mt-16 sm:-mt-20">
-                        <img 
-                            src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80" 
-                            alt="Alex Morgan" 
-                            class="h-28 w-28 rounded-full border-4 border-white object-cover shadow-md dark:border-neutral-900 sm:h-36 sm:w-36"
-                        />
+                        {% if user.profile.avatar %}
+                            <img 
+                                src="{{ user.profile.avatar.url }}" 
+                                alt="Profile Avatar" 
+                                class="h-28 w-28 rounded-full border-4 border-white object-cover shadow-md ring-1 ring-neutral-200/80 dark:border-neutral-900 dark:ring-neutral-800 sm:h-36 sm:w-36"
+                            />
+                        {% else %}
+                            <div class="flex h-28 w-28 sm:h-36 sm:w-36 shrink-0 items-center justify-center rounded-full border-4 border-white bg-neutral-100 text-neutral-700 ring-1 ring-neutral-200/80 dark:border-neutral-800 dark:bg-neutral-800 dark:text-neutral-200 dark:ring-neutral-700 font-medium">
+                                <span class="text-2xl sm:text-3xl font-bold tracking-wider uppercase">
+                                    {{ user.first_name|first|default:"" }}{{ user.last_name|first|default:"" }}
+                                </span>
+                            </div>
+                        {% endif %}
                         {% if user.is_verified %}
                             <div 
                                 class="absolute bottom-1 right-1 flex h-7 w-7 items-center justify-center rounded-full bg-emerald-500 text-white shadow-md ring-2 ring-white dark:ring-neutral-900 sm:h-8 sm:w-8"
@@ -56,7 +63,7 @@
                             </div>
                         {% else %}
                             <div 
-                                class="absolute bottom-1 right-1 flex h-7 w-7 items-center justify-center rounded-full bg-amber-500 text-neutral-950 shadow-md ring-2 ring-white dark:ring-neutral-900 sm:h-8 sm:w-8"
+                                class="absolute bottom-1 right-1 flex h-7 w-7 items-center justify-center rounded-full bg-amber-500 text-white dark:text-neutral-900 shadow-md ring-2 ring-white dark:ring-neutral-900 sm:h-8 sm:w-8"
                                 title="Unverified Account"
                             >
                                 <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
@@ -69,7 +76,7 @@
                     <!-- User Name & Meta -->
                     <div class="mb-1 text-center sm:text-left">
                         <div class="flex items-center justify-center gap-2 sm:justify-start">
-                            <h1 class="text-xl font-semibold text-neutral-900 dark:text-white sm:text-2xl">{{ user.get_full_name|title }}</h1>
+                            <h1 class="text-xl font-semibold text-neutral-900 dark:text-white sm:text-2xl">{{ user.first_name|title }} {{ user.last_name|title }}</h1>
                             <span class="inline-flex items-center rounded-md bg-indigo-50 px-2 py-0.5 text-xs font-semibold text-indigo-700 dark:bg-indigo-950/50 dark:text-indigo-400">Free Account</span>
                         </div>
                         <p class="text-sm font-medium text-neutral-500 dark:text-neutral-400">Director @ {{ business.name|title }}</p>
@@ -78,8 +85,9 @@
 
                 <!-- Quick Action Buttons -->
                 <div class="flex items-center gap-3">
-                    <button 
-                        type="button" 
+                    <button
+                        type="button"
+                        @click="window.location.href='{% url ACCOUNTS.SETTINGS %}'"
                         class="inline-flex items-center gap-2 rounded-xl border border-neutral-200 bg-white px-4 py-2 text-sm font-semibold text-neutral-700 shadow-2xs hover:bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-200 dark:hover:bg-neutral-800"
                     >
                         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -159,7 +167,7 @@
                     </div>
                     <div>
                         <span class="text-xs font-medium text-neutral-400">Phone Number</span>
-                        <p class="mt-1 text-sm font-semibold text-neutral-800 dark:text-neutral-200">+1 (555) 019-2834</p>
+                        <p class="mt-1 text-sm font-semibold text-neutral-800 dark:text-neutral-200">{{ user.profile.phone_number|default:"Not provided" }}</p>
                     </div>
                 </div>
 
@@ -191,7 +199,7 @@
                         <div class="rounded-lg border border-neutral-200/60 bg-white p-3.5 shadow-2xs dark:border-neutral-700/50 dark:bg-neutral-900/80">
                             <span class="text-[11px] font-medium tracking-wide text-neutral-400 uppercase dark:text-neutral-500">Account Tier</span>
                             <p class="mt-1 truncate text-sm font-semibold text-neutral-800 dark:text-neutral-200">
-                                {{ user.tier|default:"Free Account" }}
+                                {{ user.profile.tier|default:"Free Account" }}
                             </p>
                         </div>
                     </div>
@@ -199,7 +207,7 @@
             </div>
 
             <!-- Security & Preferences Card -->
-            <div class="rounded-2xl border border-neutral-200/80 bg-white p-6 shadow-xs dark:border-neutral-800 dark:bg-neutral-900">
+            {% comment %} <div class="rounded-2xl border border-neutral-200/80 bg-white p-6 shadow-xs dark:border-neutral-800 dark:bg-neutral-900">
                 <h2 class="text-base font-semibold text-neutral-900 dark:text-white">Account Security</h2>
                 <div class="mt-4 divide-y divide-neutral-100 dark:divide-neutral-800">
                     <div class="flex items-center justify-between py-3">
@@ -217,11 +225,11 @@
                         <button class="text-xs font-semibold text-indigo-600 hover:text-indigo-500 dark:text-indigo-400">Update</button>
                     </div>
                 </div>
-            </div>
+            </div> {% endcomment %}
         </div>
 
         <!-- Sidebar Summary Box -->
-        <div class="space-y-6">
+        {% comment %} <div class="space-y-6">
             <div class="rounded-2xl border border-neutral-200/80 bg-white p-6 shadow-xs dark:border-neutral-800 dark:bg-neutral-900">
                 <h3 class="text-sm font-semibold text-neutral-900 dark:text-white">Profile Strength</h3>
                 <div class="mt-4 flex items-center gap-3">
@@ -232,7 +240,53 @@
                 </div>
                 <p class="mt-2 text-xs text-neutral-500">Complete your tax identity details to hit 100%.</p>
             </div>
-        </div>
+        </div> {% endcomment %}
+        {% with f1=user.first_name|yesno:"20,0" f2=user.last_name|yesno:"20,0" f3=user.email|yesno:"20,0" f4=user.phone_number|yesno:"20,0" f5=user.is_verified|yesno:"20,0" %}
+            {% with score1=f1|add:f2 %}
+                {% with score2=score1|add:f3 %}
+                    {% with score3=score2|add:f4 %}
+                        {% with total=score3|add:f5 %}
+                            <div class="space-y-6">
+                                <div class="rounded-2xl border border-neutral-200/80 bg-white p-6 shadow-xs dark:border-neutral-800 dark:bg-neutral-900">
+                                    <div class="flex items-center justify-between">
+                                        <h3 class="text-sm font-semibold text-neutral-900 dark:text-white">Profile Strength</h3>
+                                        {% if total == 100 %}
+                                            <span class="inline-flex items-center gap-1 text-xs font-medium text-emerald-600 dark:text-emerald-400">
+                                                <i data-lucide="check-circle-2" class="h-4 w-4"></i>
+                                                Complete
+                                            </span>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <div class="mt-4 flex items-center gap-3">
+                                        <div class="h-2 flex-1 rounded-full bg-neutral-100 dark:bg-neutral-800">
+                                            <div class="h-2 rounded-full {% if total == 100 %}bg-emerald-600 dark:bg-emerald-500{% else %}bg-indigo-600{% endif %} transition-all duration-500" style="width: {{ total }}%"></div>
+                                        </div>
+                                        <span class="text-xs font-semibold text-neutral-700 dark:text-neutral-300">{{ total }}%</span>
+                                    </div>
+
+                                    <p class="mt-2 text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed">
+                                        {% if total == 100 %}
+                                            Your profile is fully optimized and verified.
+                                        {% else %}
+                                            {% if not user.phone_number and not user.is_verified %}
+                                                Add your phone number in <span class="font-medium text-neutral-700 dark:text-neutral-300">Account Settings > Personal Profile</span> and check your primary or promotions inbox for the verification link.
+                                            {% elif not user.phone_number %}
+                                                Add your phone number in <span class="font-medium text-neutral-700 dark:text-neutral-300">Account Settings > Personal Profile</span> to continue.
+                                            {% elif not user.is_verified %}
+                                                Check your primary or promotions inbox for the verification link to verify your account.
+                                            {% else %}
+                                                Complete your remaining profile details to hit 100%.
+                                            {% endif %}
+                                        {% endif %}
+                                    </p>
+                                </div>
+                            </div>
+                        {% endwith %}
+                    {% endwith %}
+                {% endwith %}
+            {% endwith %}
+        {% endwith %}
     </div>
 
     <!-- TAB 2: BUSINESS PROFILE CONTENT -->
@@ -305,7 +359,7 @@
                     </div>
                     <div class="sm:col-span-2">
                         <span class="text-xs font-medium text-neutral-400">Headquarters / Physical Address</span>
-                        <p class="mt-1 text-sm font-semibold text-neutral-800 dark:text-neutral-200">{{ business.address|default:"N/A" }}</p>
+                        <p class="mt-1 text-sm font-semibold text-neutral-800 dark:text-neutral-200">{{ business.address|default:"Not provided" }}</p>
                     </div>
                 </div>
             </div>
@@ -326,10 +380,12 @@
                             </div>
                             <div>
                                 <p class="text-xs font-semibold text-neutral-800 dark:text-neutral-200">Instagram</p>
-                                <p class="text-xs text-neutral-500">@apex_retail</p>
+                                <p class="text-xs text-neutral-500">{{ business.instagram_url|default:"Not connected" }}</p>
                             </div>
                         </div>
-                        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="text-xs font-semibold text-indigo-600 hover:underline dark:text-indigo-400">View</a>
+                        {% if business.instagram_url %}
+                            <a href="https://instagram.com/{{ business.instagram_url|slice:'1:'|default:"#" }}" target="_blank" rel="noopener noreferrer" class="text-xs font-semibold text-indigo-600 hover:underline dark:text-indigo-400">View</a>
+                        {% endif %}
                     </div>
 
                     <!-- TikTok -->
@@ -340,16 +396,18 @@
                             </div>
                             <div>
                                 <p class="text-xs font-semibold text-neutral-800 dark:text-neutral-200">TikTok</p>
-                                <p class="text-xs text-neutral-500">@apexretail_official</p>
+                                <p class="text-xs text-neutral-500">{{ business.tiktok_url|default:"Not connected" }}</p>
                             </div>
                         </div>
-                        <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" class="text-xs font-semibold text-indigo-600 hover:underline dark:text-indigo-400">View</a>
+                        {% if business.tiktok_url %}
+                            <a href="https://tiktok.com/{{ business.tiktok_url|slice:'1:'|default:"#" }}" target="_blank" rel="noopener noreferrer" class="text-xs font-semibold text-indigo-600 hover:underline dark:text-indigo-400">View</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
 
             <!-- Invoice & Billing Configuration -->
-            <div class="rounded-2xl border border-neutral-200/80 bg-white p-6 shadow-xs dark:border-neutral-800 dark:bg-neutral-900">
+            {% comment %} <div class="rounded-2xl border border-neutral-200/80 bg-white p-6 shadow-xs dark:border-neutral-800 dark:bg-neutral-900">
                 <h2 class="text-base font-semibold text-neutral-900 dark:text-white">Invoice Settings</h2>
                 <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div>
@@ -361,13 +419,13 @@
                         <p class="mt-1 text-sm font-semibold text-neutral-800 dark:text-neutral-200">Net 30 Days</p>
                     </div>
                 </div>
-            </div>
+            </div> {% endcomment %}
         </div>
 
         <!-- Business Stats Summary Card -->
         <div class="space-y-6">
             <div class="rounded-2xl border border-neutral-200/80 bg-white p-6 shadow-xs dark:border-neutral-800 dark:bg-neutral-900">
-                <h3 class="text-sm font-semibold text-neutral-900 dark:text-white">Store Verification</h3>
+                <h3 class="text-sm font-semibold text-neutral-900 dark:text-white">Business State</h3>
                 <div class="mt-4 flex items-center gap-3">
                     <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 dark:bg-emerald-950/50 dark:text-emerald-400">
                         <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -375,7 +433,7 @@
                         </svg>
                     </div>
                     <div>
-                        <p class="text-xs font-semibold text-neutral-900 dark:text-white">KYC Verified</p>
+                        <p class="text-xs font-semibold text-neutral-900 dark:text-white">Business Activated</p>
                         <p class="text-xs text-neutral-500">Ready for high-volume transactions</p>
                     </div>
                 </div>

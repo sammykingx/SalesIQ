@@ -27,11 +27,11 @@ class AccountOnboardingService:
         self.model_selector = UserSelector()
         self.mail_client = None
         
-    def _html_message(self, user: UserRegistrationSchema, token: str) -> str:
+    def _html_message(self, *, first_name: str, token: str) -> str:
         """Renders and returns the HTML activation email string using absolute URIs and template contexts."""
         template_context = {
             "host": self.request.build_absolute_uri("/"),
-            "first_name": user.first_name,
+            "first_name": first_name,
             "url": self.request.build_absolute_uri(reverse(ACCOUNTS.ACTIVATION, kwargs={"token": token}))
         }
             
@@ -52,14 +52,14 @@ class AccountOnboardingService:
                 code=AccountRegistrationErrors.DUPLICATE_EMAIL.code
             )
         
-    def send_activation_link(self, data: UserRegistrationSchema) -> None:
-        result = TokenService().create_token(user_email=data.email, token_type=TokenType.EMAIL_VERIFICATION)
+    def send_activation_link(self, *, email: str, first_name: str) -> None:
+        result = TokenService().create_token(user_email=email, token_type=TokenType.EMAIL_VERIFICATION)
         return (
             AppMailerService(Providers.RESEND)
             .prepare_message(
                 subject="salesiq - Almost there! Activate your new account ✨",
-                html_msg=self._html_message(data, token=result.token),
-                recipients=data.email,
+                html_msg=self._html_message(first_name=first_name, token=result.token),
+                recipients=email,
             )
             .send_email()
         )

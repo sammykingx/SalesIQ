@@ -13,4 +13,5 @@ urlpatterns = [
     path("join/", AccountRegistrationView.as_view(), name=ACCOUNTS.AUTH.REGISTER),
     path("password/reset", RequestPassowrdResetView.as_view(), name=ACCOUNTS.AUTH.PASSWORD_RESET),
     path("password/change/<token>/", GuestPasswordChangeView.as_view(), name=ACCOUNTS.AUTH.PASSWORD_CHANGE),
+    path("password/update/", UserPasswordUpdateView.as_view(), name=ACCOUNTS.AUTH.PASSWORD_UPDATE),
 ]

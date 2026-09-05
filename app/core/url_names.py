@@ -15,7 +15,12 @@ ACCOUNTS = SimpleNamespace(
         REGISTER='accounts_auth_register',
         PASSWORD_RESET='accounts_auth_password_reset',
         PASSWORD_CHANGE='accounts_auth_password_change',
+        PASSWORD_UPDATE='accounts_auth_password_update',
     ),
+    UPDATES=SimpleNamespace(
+        PROFILE='accounts_updates_profile',
+        BUSINESS='accounts_updates_business',
+    )
 )
 
 PRODUCTS = SimpleNamespace(

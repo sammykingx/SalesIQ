@@ -3,7 +3,10 @@ from django.urls import path, include, reverse_lazy
 from django.views.generic import TemplateView, RedirectView
 from core.template_names import APP_TEMPLATES
 from core.url_names import ACCOUNTS
-from ..views import AccountActivationView, DashboardView, UserProfileView, BizAccountOnboardingView
+from ..views import (
+    AccountActivationView, DashboardView, UserProfileView, BizAccountOnboardingView, 
+    AccountSettingsView, UpdateAccountProfileDataView, UpdateBusinessDataView
+)
 
 
 urlpatterns = [
@@ -14,5 +17,7 @@ urlpatterns = [
     path("onboarding/", BizAccountOnboardingView.as_view(), name=ACCOUNTS.ONBOARDING),
     path("dashboard/", DashboardView.as_view(), name=ACCOUNTS.DASHBOARD),
     path("profile/", UserProfileView.as_view(), name=ACCOUNTS.PROFILE),
-    path("settings/", TemplateView.as_view(template_name=APP_TEMPLATES.ACCOUNTS.SETTINGS), name=ACCOUNTS.SETTINGS),
+    path("settings/", AccountSettingsView.as_view(), name=ACCOUNTS.SETTINGS),
+    path("settings/update-profile/", UpdateAccountProfileDataView.as_view(), name=ACCOUNTS.UPDATES.PROFILE),
+    # path("settings/update-business/", UpdateBusinessDataView.as_view(), name=ACCOUNTS.UPDATES.BUSINESS),
 ]
