@@ -1,3 +1,4 @@
+// app/src/lib/auth/validators.js
 /**
  * Shared authentication validation utilities
  */

@@ -1,11 +1,13 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import TemplateView, View
 from django.http import HttpRequest, JsonResponse
+from django.utils import timezone
+from django.views.generic import TemplateView, View
 from accounts.domains.entities import UserEntity, BusinessEntity
 from accounts.repository.user_repo import UserRepository
 from accounts.selectors import UserSelector, BusinessSelector
 from accounts.serializers import SocialLinksSchema
 from core.template_names import APP_TEMPLATES
+from datetime import timedelta
 import json
 
 
@@ -31,9 +33,11 @@ class AccountSettingsView(LoginRequiredMixin, TemplateView):
     def template_context(self):
         user_entity = self.user_selector.get_by_email(email=self.request.user.email) #type: ignore
         biz_entity = self.business_selector.get_user_business(user_email=self.request.user.email) #type: ignore
+        cool_down_date = timezone.now() + timedelta(days=10)
         return {
             "user": user_entity,
             "business": biz_entity,
+            "cool_down": None, #cool_down_date,
         }
         
 class UpdateAccountProfileDataView(LoginRequiredMixin, View):
@@ -68,6 +72,7 @@ class UpdateAccountProfileDataView(LoginRequiredMixin, View):
         """
         try:
             data = json.loads(request.body)
+            print(data)
             # self.user_repo.update_multiple_fields(user_id=request.user.id, **data)  # type: ignore
             return JsonResponse({"message": "Account data updated successfully."}, status=204)
             

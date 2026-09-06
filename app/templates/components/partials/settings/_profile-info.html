@@ -1,0 +1,123 @@
+<div x-show="activeTab === 'profile'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" class="space-y-6" x-data="profileSettings">
+    <form action="{% url ACCOUNTS.UPDATES.PROFILE %}" @submit.prevent="submitProfile" class="rounded-2xl border border-neutral-200/80 bg-white p-6 shadow-xs dark:border-neutral-800 dark:bg-neutral-900 sm:p-8">
+        {% csrf_token %}
+
+        <!-- Header Section -->
+        <div class="flex flex-col gap-1 border-b border-neutral-100 pb-5 dark:border-neutral-800 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+                <h2 class="text-base font-semibold tracking-tight text-neutral-900 dark:text-white">Personal Profile</h2>
+                <p class="text-xs text-neutral-500 dark:text-neutral-400">View your verified account details and update your active contact phone number.</p>
+            </div>
+            {% if user.is_verified %}
+            <span class="inline-flex w-fit items-center gap-1.5 rounded-full border border-emerald-500/25 bg-emerald-50 px-3 py-1 mt-2 md:m-0 text-xs font-semibold text-emerald-700 dark:border-emerald-500/30 dark:bg-emerald-950/60 dark:text-emerald-300">
+                <i data-lucide="shield-check" class="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400"></i>
+                Verified Account
+            </span>
+            {% endif %}
+        </div>
+
+        <!-- Avatar Section (Coming Soon) -->
+        <div class="mt-6 flex flex-col items-start gap-4 rounded-xl border border-dashed border-neutral-200 bg-neutral-50/50 p-4 dark:border-neutral-800 dark:bg-neutral-950/40 sm:flex-row sm:items-center sm:justify-between">
+            <div class="flex items-center gap-4">
+                <div class="relative flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-emerald-100 text-sm font-semibold text-emerald-700 ring-1 ring-white dark:bg-emerald-950/60 dark:text-emerald-400 dark:ring-emerald-900">
+                    {{ user.first_name|first }}{{ user.last_name|first }}
+                    <span class="absolute -top-1 -right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-amber-500 ring-2 ring-white dark:ring-neutral-900">
+                        <span class="h-1.5 w-1.5 rounded-full bg-white"></span>
+                    </span>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h3 class="text-xs font-semibold text-neutral-800 dark:text-neutral-200">Profile Photo Customization</h3>
+                        <span class="hidden md:block rounded-md bg-amber-100 px-2 py-0.5 text-[10px] font-medium text-amber-700 dark:bg-amber-950/80 dark:text-amber-400">Coming Soon</span>
+                    </div>
+                    <p class="mt-0.5 text-[11px] text-neutral-500 dark:text-neutral-400">Avatar uploads and brand assets management will be enabled in an upcoming release.</p>
+                </div>
+            </div>
+            <button type="button" disabled class="cursor-not-allowed rounded-xl border border-neutral-200 bg-white px-3.5 py-2 text-xs font-medium text-neutral-400 shadow-2xs opacity-60 dark:border-neutral-800 dark:bg-neutral-800 dark:text-neutral-500">
+                Upload Photo
+            </button>
+        </div>
+
+        <!-- Details Grid -->
+        <div class="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2">
+            <div>
+                <div class="flex items-center justify-between">
+                    <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">First Name</label>
+                    <i data-lucide="lock" class="h-3 w-3 text-neutral-400"></i>
+                </div>
+                <div class="relative mt-1.5">
+                    <input type="text" value="{{ user.first_name }}" readonly tabindex="-1" class="w-full cursor-not-allowed rounded-xl border border-neutral-200/80 bg-neutral-50/80 px-3.5 py-2.5 text-xs text-neutral-600 shadow-2xs focus:outline-none dark:border-neutral-800 dark:bg-neutral-950/60 dark:text-neutral-400" />
+                </div>
+            </div>
+
+            <div>
+                <div class="flex items-center justify-between">
+                    <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">Last Name</label>
+                    <i data-lucide="lock" class="h-3 w-3 text-neutral-400"></i>
+                </div>
+                <div class="relative mt-1.5">
+                    <input type="text" value="{{ user.last_name }}" readonly tabindex="-1" class="w-full cursor-not-allowed rounded-xl border border-neutral-200/80 bg-neutral-50/80 px-3.5 py-2.5 text-xs text-neutral-600 shadow-2xs focus:outline-none dark:border-neutral-800 dark:bg-neutral-950/60 dark:text-neutral-400" />
+                </div>
+            </div>
+
+            <div>
+                <div class="flex items-center justify-between">
+                    <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">Email Address</label>
+                    <i data-lucide="lock" class="h-3 w-3 text-neutral-400"></i>
+                </div>
+                <div class="relative mt-1.5">
+                    <input type="text" value="{{ user.email }}" readonly tabindex="-1" class="w-full cursor-not-allowed rounded-xl border border-neutral-200/80 bg-neutral-50/80 px-3.5 py-2.5 text-neutral-600 focus:outline-none dark:border-neutral-800 dark:bg-neutral-950/60 dark:text-neutral-400" />
+                </div>
+            </div>
+
+            <!-- Phone Number Field -->
+            <div>
+                <div class="flex items-center justify-between">
+                    <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">Phone Number</label>
+                    <i data-lucide="lock-open" class="h-3 w-3 text-neutral-400"></i>
+                </div>
+                <div class="relative mt-1.5">
+                    <input type="text" name="phone_number" x-model="phoneNumber" @input="handlePhoneInput" value="{{ user.phone_number|default:"" }}" placeholder="+12345678901" class="w-full rounded-xl border border-indigo-200/80 bg-white px-3.5 py-2.5 text-ink-600 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-indigo-500/20 dark:border-indigo-900/50 dark:bg-neutral-950 dark:text-neutral-100" />
+                </div>
+                <p x-show="phoneNumber.length > 0 && !isValidPhone" x-transition class="mt-1 text-[11px] text-amber-600 dark:text-amber-400">
+                    Must contain only numbers or '+' and be at least 11 characters long.
+                </p>
+            </div>
+
+
+
+            <!-- Timezone -->
+            <div>
+                <div class="flex items-center justify-between">
+                    <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">Detected Timezone</label>
+                    <span class="text-[10px] font-medium text-neutral-400">Auto</span>
+                </div>
+                <div class="relative mt-1.5 flex items-center">
+                    <input type="text" name="timezone" :value="userTimezone" readonly tabindex="-1" class="w-full cursor-not-allowed rounded-xl border border-neutral-200/80 bg-neutral-50/80 px-3.5 py-2.5 text-xs text-neutral-600 shadow-2xs focus:outline-none dark:border-neutral-800 dark:bg-neutral-950/60 dark:text-neutral-400" />
+                    <i data-lucide="globe" class="absolute right-3.5 h-3.5 w-3.5 text-neutral-400"></i>
+                </div>
+            </div>
+
+            <div>
+                <div class="flex items-center justify-between">
+                    <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">Preferred Language</label>
+                    <span class="text-[10px] font-medium text-neutral-400">Auto</span>
+                </div>
+                <div class="relative mt-1.5 flex items-center">
+                    <input type="text" name="language" :value="userLanguage" readonly tabindex="-1" class="w-full cursor-not-allowed rounded-xl border border-neutral-200/80 bg-neutral-50/80 px-3.5 py-2.5 text-xs text-neutral-600 shadow-2xs focus:outline-none dark:border-neutral-800 dark:bg-neutral-950/60 dark:text-neutral-400" />
+                    <i data-lucide="languages" class="absolute right-3.5 h-3.5 w-3.5 text-neutral-400"></i>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Save Action Row -->
+        <div class="mt-8 flex items-center justify-between border-t border-neutral-100 pt-5 dark:border-neutral-800">
+            <span class="text-[11px] text-neutral-400">Updates take effect immediately.</span>
+            <button type="submit" :disabled="!isValidForm" class="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2 text-xs font-semibold text-white shadow-xs hover:bg-indigo-700 hover:cursor-pointer active:bg-indigo-800 disabled:cursor-not-allowed disabled:opacity-50">
+                <i data-lucide="check" class="h-3.5 w-3.5"></i>
+                <span x-text="isSubmitting ? 'Updating...' : 'Update Profile'"></span>
+            </button>
+        </div>
+    </form>
+</div>

@@ -63,7 +63,11 @@
             </div>
 
             <div class="flex items-center gap-3 shrink-0">
-                <button type="button" class="inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-xs font-semibold text-neutral-900 hover:bg-neutral-100  shadow-sm">
+                <button 
+                    type="button" 
+                    onclick="openAppModal()"
+                    class="inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-xs font-semibold text-neutral-900 shadow-xs hover:bg-neutral-100 active:scale-95 hover:cursor-pointer"
+                >
                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                     </svg>
@@ -86,7 +90,7 @@
                 x-model="searchQuery" 
                 @input="currentPage = 1"
                 placeholder="Search products by name..." 
-                class="w-full rounded-xl border border-neutral-200 bg-neutral-50/50 pl-10 pr-4 py-2 text-xs text-neutral-800 placeholder-neutral-400 focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-200 dark:focus:bg-neutral-900"
+                class="w-full rounded-xl border border-neutral-200 bg-neutral-50/50 pl-10 pr-4 py-2  text-neutral-800 placeholder-neutral-400 focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-200 dark:focus:bg-neutral-900"
             />
         </div>
 
@@ -240,5 +244,194 @@
 
     </div>
 
+</div>
+{% comment %} <div class="my-7 rounded-2xl border border-neutral-200/80 bg-white p-6 dark:border-neutral-800 dark:bg-neutral-900">
+    <h3 class="text-sm font-semibold text-neutral-900 dark:text-white">Danger Zone</h3>
+    <p class="mt-1 text-xs text-neutral-500 dark:text-neutral-400">Permanently delete your account and remove access to all services.</p>
+    
+    <button 
+        type="button" 
+        onclick="openAppModal()"
+        class="mt-4 inline-flex items-center gap-2 rounded-xl bg-rose-600 px-4 py-2 text-xs font-semibold text-white shadow-xs hover:bg-rose-700 active:bg-rose-800"
+    >
+        <i data-lucide="trash-2" class="h-3.5 w-3.5"></i>
+        <span>Delete Account</span>
+    </button>
+</div> {% endcomment %}
+{% endblock %}
+{% block app_modal_content %}
+    {% comment %} <div class="flex flex-col gap-4">
+        <!-- Icon & Header -->
+        <div class="flex items-center gap-3">
+            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-rose-100 text-rose-600 dark:bg-rose-950/60 dark:text-rose-400">
+                <i data-lucide="triangle-alert" class="h-5 w-5"></i>
+            </div>
+            <div>
+                <h3 class="text-base font-semibold text-neutral-900 dark:text-white">Confirm Account Deletion</h3>
+                <p class="text-xs text-neutral-500 dark:text-neutral-400">This action is permanent and cannot be undone.</p>
+            </div>
+        </div>
+
+        <!-- Warning Body -->
+        <p class="text-xs text-neutral-600 dark:text-neutral-300">
+            Are you sure you want to delete your account? All active sessions, associated workspace data, and configurations will be permanently purged.
+        </p>
+
+        <!-- Form Actions -->
+        <form action="#" method="POST" class="mt-2 flex items-center justify-end gap-3 border-t border-neutral-100 pt-4 dark:border-neutral-800">
+            {% csrf_token %}
+            
+            <button 
+                type="button" 
+                data-modal-close
+                class="rounded-xl border border-neutral-200/80 bg-white px-4 py-2 text-xs font-medium text-neutral-700 hover:bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-300 dark:hover:bg-neutral-800"
+            >
+                Cancel
+            </button>
+
+            <button 
+                type="submit" 
+                class="inline-flex items-center gap-1.5 rounded-xl bg-rose-600 px-4 py-2 text-xs font-semibold text-white hover:bg-rose-700 active:bg-rose-800"
+            >
+                <i data-lucide="trash-2" class="h-3.5 w-3.5"></i>
+                <span>Yes, Delete</span>
+            </button>
+        </form>
+    </div> {% endcomment %}
+<div class="space-y-6" x-data="{
+    productType: 'physical',
+    description: '',
+    execCmd(command, value = null) {
+        document.execCommand(command, false, value);
+    }
+}">
+    <!-- Header -->
+    <div class="flex items-center gap-3">
+        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-emerald-500/10 text-emerald-600 dark:bg-emerald-950/60 dark:text-emerald-400">
+            <i data-lucide="package-plus" class="h-5 w-5"></i>
+        </div>
+        <div>
+            <h3 class="text-base font-semibold text-neutral-900 dark:text-white">Create New Product</h3>
+            <p class="text-xs text-neutral-500 dark:text-neutral-400">Add a physical item, digital download, or service to your store.</p>
+        </div>
+    </div>
+
+    <form action="#" method="POST" class="space-y-4">
+        {% csrf_token %}
+
+        <!-- Product Name -->
+        <div class="space-y-1">
+            <label for="product_name" class="text-xs font-medium text-neutral-700 dark:text-neutral-300">Product Title</label>
+            <input 
+                type="text" 
+                id="product_name" 
+                name="name" 
+                required
+                placeholder="e.g. Ergonomic Desk Lamp"
+                class="w-full rounded-xl border border-neutral-200/80 bg-neutral-50/50 px-3.5 py-2.5 text-xs text-neutral-900 placeholder-neutral-400 focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-100 dark:focus:bg-neutral-900"
+            />
+        </div>
+
+        <!-- Product Type Pill Selector -->
+        <div class="space-y-1.5">
+            <label class="text-xs font-medium text-neutral-700 dark:text-neutral-300">Fulfillment Type</label>
+            <div class="grid grid-cols-3 gap-2 rounded-xl bg-neutral-100/70 p-1 dark:bg-neutral-950">
+                <button 
+                    type="button" 
+                    @click="productType = 'physical'"
+                    :class="productType === 'physical' ? 'bg-white text-neutral-900 shadow-2xs dark:bg-neutral-900 dark:text-white' : 'text-neutral-500 hover:text-neutral-700 dark:text-neutral-400'"
+                    class="flex items-center justify-center gap-1.5 rounded-lg py-1.5 text-xs font-medium "
+                >
+                    <i data-lucide="box" class="h-3.5 w-3.5"></i>
+                    <span>Physical</span>
+                </button>
+                <button 
+                    type="button" 
+                    @click="productType = 'virtual'"
+                    :class="productType === 'virtual' ? 'bg-white text-neutral-900 shadow-2xs dark:bg-neutral-900 dark:text-white' : 'text-neutral-500 hover:text-neutral-700 dark:text-neutral-400'"
+                    class="flex items-center justify-center gap-1.5 rounded-lg py-1.5 text-xs font-medium "
+                >
+                    <i data-lucide="download" class="h-3.5 w-3.5"></i>
+                    <span>Digital</span>
+                </button>
+                <button 
+                    type="button" 
+                    @click="productType = 'service'"
+                    :class="productType === 'service' ? 'bg-white text-neutral-900 shadow-2xs dark:bg-neutral-900 dark:text-white' : 'text-neutral-500 hover:text-neutral-700 dark:text-neutral-400'"
+                    class="flex items-center justify-center gap-1.5 rounded-lg py-1.5 text-xs font-medium "
+                >
+                    <i data-lucide="briefcase" class="h-3.5 w-3.5"></i>
+                    <span>Service</span>
+                </button>
+            </div>
+            <input type="hidden" name="type" :value="productType" />
+        </div>
+
+        <!-- Price Input -->
+        <div class="space-y-1">
+            <label for="product_price" class="text-xs font-medium text-neutral-700 dark:text-neutral-300">Pricing (USD)</label>
+            <div class="relative">
+                <span class="pointer-events-none absolute left-3.5 top-2.5 text-xs font-semibold text-neutral-400">$</span>
+                <input 
+                    type="number" 
+                    step="0.01" 
+                    id="product_price" 
+                    name="price" 
+                    required
+                    placeholder="0.00"
+                    class="w-full rounded-xl border border-neutral-200/80 bg-neutral-50/50 pl-8 pr-3.5 py-2.5 text-xs text-neutral-900 placeholder-neutral-400 focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-100 dark:focus:bg-neutral-900"
+                />
+            </div>
+        </div>
+
+        <!-- Short Description (Rich Text Style Editor) -->
+        <div class="space-y-1">
+            <label class="text-xs font-medium text-neutral-700 dark:text-neutral-300">Description</label>
+            <div class="overflow-hidden rounded-xl border border-neutral-200/80 bg-neutral-50/50 dark:border-neutral-800 dark:bg-neutral-950">
+                <!-- Formatting Bar -->
+                <div class="flex items-center gap-0.5 border-b border-neutral-200/80 bg-neutral-100/50 p-1.5 dark:border-neutral-800 dark:bg-neutral-900">
+                    <button type="button" @click="execCmd('bold')" class="rounded-lg p-1.5 text-neutral-600 hover:bg-white hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white" title="Bold">
+                        <i data-lucide="bold" class="h-3.5 w-3.5"></i>
+                    </button>
+                    <button type="button" @click="execCmd('italic')" class="rounded-lg p-1.5 text-neutral-600 hover:bg-white hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white" title="Italic">
+                        <i data-lucide="italic" class="h-3.5 w-3.5"></i>
+                    </button>
+                    <div class="mx-1 h-3.5 w-px bg-neutral-200 dark:bg-neutral-800"></div>
+                    <button type="button" @click="execCmd('insertUnorderedList')" class="rounded-lg p-1.5 text-neutral-600 hover:bg-white hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white" title="Bullet List">
+                        <i data-lucide="list" class="h-3.5 w-3.5"></i>
+                    </button>
+                    <button type="button" @click="execCmd('insertOrderedList')" class="rounded-lg p-1.5 text-neutral-600 hover:bg-white hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white" title="Numbered List">
+                        <i data-lucide="list-ordered" class="h-3.5 w-3.5"></i>
+                    </button>
+                </div>
+
+                <!-- Content Area -->
+                <div 
+                    contenteditable="true"
+                    @input="description = $el.innerHTML"
+                    class="min-h-22 p-3  text-neutral-900 outline-hidden dark:text-neutral-100"
+                ></div>
+            </div>
+            <textarea name="description" class="hidden" x-model="description"></textarea>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-neutral-100 dark:border-neutral-800">
+            <button 
+                type="button" 
+                data-modal-close
+                class="rounded-xl border border-neutral-200/80 bg-white px-4 py-2 text-xs font-medium text-neutral-700 hover:bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-300 dark:hover:bg-neutral-800"
+            >
+                Cancel
+            </button>
+            <button 
+                type="submit" 
+                class="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 px-4 py-2 text-xs font-semibold text-white shadow-xs hover:bg-emerald-700 active:bg-emerald-800 "
+            >
+                <i data-lucide="plus" class="h-3.5 w-3.5"></i>
+                <span>Save Product</span>
+            </button>
+        </div>
+    </form>
 </div>
 {% endblock %}
