@@ -5,9 +5,10 @@ from django.db import models
 class Customers(models.Model):
     """Canonical identity, used only for dedup matching across businesses."""
     
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=30)
     phone_number = models.CharField(max_length=20, unique=True)
     email = models.EmailField(unique=True)
-    full_name = models.CharField(max_length=50)
     created_at = models.DateTimeField(auto_now_add=True)
     
     businesses = models.ManyToManyField(
@@ -25,7 +26,7 @@ class BusinessCustomers(models.Model):
     """The only thing a business actually sees/queries"""
     
     business = models.ForeignKey("accounts.Business", on_delete=models.CASCADE, related_name="clients")
-    client = models.ForeignKey(Customers, on_delete=models.PROTECT, related_name="business_links")
+    client = models.ForeignKey(Customers, on_delete=models.PROTECT, related_name="business_links", to_field="email")
 
     display_name = models.CharField(max_length=50, blank=True, help_text="Optinal Per business overide")
     notes = models.TextField(blank=True)

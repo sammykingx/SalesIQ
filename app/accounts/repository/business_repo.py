@@ -1,6 +1,7 @@
 from accounts.models import Business
 from django.db import transaction, IntegrityError
 from django.contrib.auth.models import AbstractUser
+from django.utils import timezone
 from accounts.serializers import BusinessOnboardingSchema
 from typing import Union
 
@@ -27,3 +28,16 @@ class BusinessRepo:
             import traceback
             traceback.print_exc()
             return None
+        
+    def update_multiple_fields(self, *, owner, **kwargs):
+        """
+            Safely updates fields, ignoring any keys that do not 
+            match actual model fields to prevent FieldErrors.
+        """
+        valid_fields = {f.name for f in self.model._meta.get_fields()}
+        filtered_kwargs = {key: val for key, val in kwargs.items() if key in valid_fields}
+            
+        if not filtered_kwargs:
+            return 0
+
+        return self.model.objects.filter(owner=owner).update(**filtered_kwargs, updated_at=timezone.now())

@@ -77,7 +77,7 @@
                     <i data-lucide="lock-open" class="h-3 w-3 text-neutral-400"></i>
                 </div>
                 <div class="relative mt-1.5">
-                    <input type="text" name="phone_number" x-model="phoneNumber" @input="handlePhoneInput" value="{{ user.phone_number|default:"" }}" placeholder="+12345678901" class="w-full rounded-xl border border-indigo-200/80 bg-white px-3.5 py-2.5 text-ink-600 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-indigo-500/20 dark:border-indigo-900/50 dark:bg-neutral-950 dark:text-neutral-100" />
+                    <input type="text" name="phone_number" x-model="phoneNumber" @input="handlePhoneInput" value="{{ user.mobile_number|default:"" }}" placeholder="070XXXXXXXX" class="w-full rounded-xl border border-indigo-200/80 bg-white px-3.5 py-2.5 text-ink-600 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-indigo-500/20 dark:border-indigo-900/50 dark:bg-neutral-950 dark:text-neutral-100" />
                 </div>
                 <p x-show="phoneNumber.length > 0 && !isValidPhone" x-transition class="mt-1 text-[11px] text-amber-600 dark:text-amber-400">
                     Must contain only numbers or '+' and be at least 11 characters long.

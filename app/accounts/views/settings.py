@@ -3,11 +3,13 @@ from django.http import HttpRequest, JsonResponse
 from django.utils import timezone
 from django.views.generic import TemplateView, View
 from accounts.domains.entities import UserEntity, BusinessEntity
-from accounts.repository.user_repo import UserRepository
+from accounts.repository import UserRepository, BusinessRepo
 from accounts.selectors import UserSelector, BusinessSelector
-from accounts.serializers import SocialLinksSchema
+from accounts.serializers import AccountUpdateSchema
 from core.template_names import APP_TEMPLATES
+from utils.pydantic_formatter import format_pydantic_errors
 from datetime import timedelta
+from pydantic import BaseModel, ValidationError
 import json
 
 
@@ -56,6 +58,7 @@ class UpdateAccountProfileDataView(LoginRequiredMixin, View):
     
     user_selector = UserSelector()
     user_repo = UserRepository()
+    biz_repo = BusinessRepo()
         
 
     def patch(self, request: HttpRequest) -> JsonResponse:
@@ -71,46 +74,29 @@ class UpdateAccountProfileDataView(LoginRequiredMixin, View):
             JsonResponse: A JSON response indicating success or failure.
         """
         try:
-            data = json.loads(request.body)
-            print(data)
-            # self.user_repo.update_multiple_fields(user_id=request.user.id, **data)  # type: ignore
+            payload = AccountUpdateSchema.model_validate_json(request.body, strict=True)
+            update_type = payload.update_type
+            print(payload.model_dump_json(indent=2))
+            
+            if  update_type == 'profile':
+                self.user_repo.update_multiple_fields(user_id=request.user.id, **payload.data.model_dump())  # type: ignore
+            
+            elif update_type == 'socials':
+                self.biz_repo.update_multiple_fields(owner=self.request.user.email, **payload.data.model_dump()) # type: ignore
+                
             return JsonResponse({"message": "Account data updated successfully."}, status=204)
             
-        except json.JSONDecodeError:
-            return JsonResponse({"message": "Invalid JSON payload."}, status=400)
-        except Exception as e:
-            return JsonResponse({"message": "An error occurred while updating the account data.", "status": "error"}, status=500)
-
-    
-    # def put(self, request: HttpRequest) -> JsonResponse:
-    #     """
-    #     Handles full replacements of the user's profile data.
-
-    #     Expects a JSON payload containing all mandatory fields required to 
-    #     completely replace or update the user model record.
-
-    #     Args:
-    #         request (HttpRequest): The HTTP request object containing the full payload.
-
-    #     Returns:
-    #         JsonResponse: A JSON response indicating success or failure.
-    #     """
-    #     return JsonResponse({"message": "Account data updated successfully."})
-    
-    
-class UpdateBusinessDataView(LoginRequiredMixin, View):
-    """Updates the users business data"""
-
-    def put(self, request: HttpRequest) -> JsonResponse:
-        try:
-            # data = BusinessDataSchema.model_validate_json(request.body, strict=True)
-            # UserRepository().update_business_data(
-            #     user_email=self.request.user.email, # type: ignore
-            #     instagram_url=data.instagram_url,
-            #     tiktok_url=data.tiktok_url,
-            #     website_url=data.website_url
-            # )
-            return JsonResponse({"message": "Business data updated successfully."})
+        except ValidationError as e:
+            error_message = format_pydantic_errors(e)
+            print(error_message)
             
+            return JsonResponse({
+                "message": "Your data is looking a bit confused, double-check your fields and formats before we try this again!", 
+                "status": "error", 
+                "errors": error_message
+            }, status=422)
+        
         except Exception as e:
-            return JsonResponse({"message": "Invalid data provided", "error": str(e)}, status=422)
+            import traceback
+            traceback.print_exc()
+            return JsonResponse({"message": "An error occurred while updating the account data.", "status": "error"}, status=500)

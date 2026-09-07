@@ -82,8 +82,18 @@ export function onboardingForm(endpointUrl = '') {
 
             // Clean up website URL format
             let website = this.formData.websiteUrl.trim();
-            if (website && !/^https?:\/\//i.test(website)) {
-                website = `https://${website}`;
+            try {
+                const fullUrl = /^https?:\/\//i.test(website) ? website : `https://${website}`;
+                const parsedUrl = new URL(fullUrl);
+                let hostname = parsedUrl.hostname;
+
+                if (hostname.startsWith('www.')) {
+                    hostname = hostname.slice(4);
+                }
+
+                website = hostname;
+            } catch (_) {
+                website = null;
             }
 
             // Format social handles safely
@@ -97,7 +107,7 @@ export function onboardingForm(endpointUrl = '') {
                 socials: {
                     instagram_url: cleanHandle(this.formData.instagram),
                     tiktok_url: cleanHandle(this.formData.tiktok),
-                    website_url: website || null
+                    website_url: website
                 }
             };
 

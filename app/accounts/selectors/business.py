@@ -22,6 +22,7 @@ class BusinessSelector:
             address=instance.address,
             instagram_url=instance.instagram_url,
             tiktok_url=instance.tiktok_url,
+            whatsapp_number=instance.whatsapp_number,
             website_url=instance.website_url,
             created_at=instance.created_at,
             updated_at=instance.updated_at

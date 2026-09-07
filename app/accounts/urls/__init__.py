@@ -5,7 +5,7 @@ from core.template_names import APP_TEMPLATES
 from core.url_names import ACCOUNTS
 from ..views import (
     AccountActivationView, DashboardView, UserProfileView, BizAccountOnboardingView, 
-    AccountSettingsView, UpdateAccountProfileDataView, UpdateBusinessDataView
+    AccountSettingsView, UpdateAccountProfileDataView
 )
 
 
@@ -19,5 +19,4 @@ urlpatterns = [
     path("profile/", UserProfileView.as_view(), name=ACCOUNTS.PROFILE),
     path("settings/", AccountSettingsView.as_view(), name=ACCOUNTS.SETTINGS),
     path("settings/update-profile/", UpdateAccountProfileDataView.as_view(), name=ACCOUNTS.UPDATES.PROFILE),
-    # path("settings/update-business/", UpdateBusinessDataView.as_view(), name=ACCOUNTS.UPDATES.BUSINESS),
 ]

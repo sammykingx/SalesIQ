@@ -62,5 +62,5 @@ class UserRepository:
         
         if not filtered_kwargs:
             return 0
-            
+
         return self.model.objects.filter(pk=user_id).update(**filtered_kwargs)

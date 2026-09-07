@@ -1,6 +1,8 @@
 import { apiRequest } from '../../lib/http/api.js';
 import { evaluatePassword, doPasswordsMatch } from '../../lib/auth/validators.js';
 import { inAppToast } from "../../lib/in-app-toast.js";
+
+
 /**
  * Personal Profile Form Component
  */
@@ -42,7 +44,8 @@ export function profileSettings() {
             const endpoint = form.getAttribute('action') || window.location.pathname;
 
             const payload = {
-                phone_number: this.phoneNumber,
+                update_type: 'profile',
+                data: { mobile_number: this.phoneNumber },
             };
 
             this.isSubmitting = true;
@@ -169,11 +172,14 @@ export function socialsSettings(initialData = {}) {
             const form = event.target;
             const endpoint = form.getAttribute('action') || window.location.pathname;
             const payload = {
-                website_url: this.websiteUrl,
-                instagram_url: this.instagramHandle,
-                tiktok_url: this.tiktokHandle,
-                whatsapp_number: this.whatsappNumber,
-                twitter_url: this.twitterHandle
+                update_type: 'socials',
+                data: {
+                    website_url: this.websiteUrl,
+                    instagram_url: `@${this.instagramHandle}`,
+                    tiktok_url: `@${this.tiktokHandle}`,
+                    whatsapp_number: this.whatsappNumber,
+                    twitter_url: this.twitterHandle
+                }
             };
 
             this.isSubmitting = true;

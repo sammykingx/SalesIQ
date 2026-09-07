@@ -1,5 +1,4 @@
 from pydantic import BaseModel, EmailStr, Field, model_validator
-from pydantic import HttpUrl
 from typing import Union, Literal, Optional
 import re, string
 
@@ -40,6 +39,11 @@ class UserRegistrationSchema(BasePasswordSchema):
     first_name: str = Field(..., max_length=50)
     last_name: str = Field(..., max_length=50)
     email: EmailStr = Field(..., max_length=70)
+    
+
+class UpdateUserProfileSchema(BaseModel):
+    """Schema for validating basic user profile updates (e.g., phone number)."""
+    mobile_number: str = Field(..., description="Primary phone number.")
 
 
 class AuthActionResponseSchema(BaseModel):
@@ -51,6 +55,7 @@ class AuthActionResponseSchema(BaseModel):
 class SocialLinksSchema(BaseModel):
     """Represents the digital and social media presence channels for a business."""
     
+    whatsapp_number: str = Field(..., description="Whatsapp phone number.")
     instagram_url: Optional[str] = Field(None, description="Official Instagram profile URL.")
     tiktok_url: Optional[str] = Field(None, description="Official TikTok profile URL.")
     website_url: Optional[str] = Field(None, description="Primary business website or online storefront URL.")
@@ -87,3 +92,15 @@ class BusinessOnboardingSchema(BaseModel):
         default_factory=SocialLinksSchema, # type: ignore
         description="Optional collection of online and social media links."
     )
+    
+
+class AccountUpdateSchema(BaseModel):
+    """Validating the account updates"""
+    
+    update_type: Literal["profile", "password_change", "socials"]
+    data: Union[
+        UpdateUserProfileSchema,
+        PasswordChangeSchema,
+        SocialLinksSchema,
+    ]
+

@@ -25,6 +25,7 @@ class Business(models.Model):
     
     address = models.TextField(blank=True, null=True)
 
+    whatsapp_number = models.CharField(max_length=20, blank=True, null=True)
     instagram_url = models.URLField(blank=True, null=True)
     tiktok_url = models.URLField(blank=True, null=True)
     website_url = models.URLField(blank=True, null=True)
