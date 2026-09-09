@@ -1,15 +1,23 @@
 from django.db import models
+from django.conf import settings
 
 # Create your models here.
 
 class Customers(models.Model):
     """Canonical identity, used only for dedup matching across businesses."""
     
-    first_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=30)
+    first_name = models.CharField(max_length=30, default=None)
+    last_name = models.CharField(max_length=30, default=None)
     phone_number = models.CharField(max_length=20, unique=True)
     email = models.EmailField(unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    created_by_business = models.ForeignKey(
+            "accounts.Business",
+            on_delete=models.SET_NULL,
+            null=True,
+            blank=True,
+            related_name="originally_created_customers"
+        ) 
     
     businesses = models.ManyToManyField(
         "accounts.Business",

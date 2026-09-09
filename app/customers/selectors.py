@@ -39,3 +39,26 @@ class CustomerSelector:
             .first()
         )
         return self._to_entity(link) if link else None
+    
+    def get_all_business_customers_frontend_json(self, biz_id: UUID) -> list[dict]:
+        """Retrieves and flattens business clients into a JSON-ready format for Alpine.js."""
+        
+        links = self.model.objects.filter(business=biz_id).select_related("client")
+        
+        payload = []
+        for link in links:
+            client = link.client
+            payload.append({
+                "id": client.id, # type:ignore
+                "firstName": client.first_name,
+                "lastName": client.last_name,
+                "displayName": link.display_name.title(),
+                "email": client.email,
+                "phone": client.phone_number,
+                "spend": 200.00,
+                "totalOrders": 10,
+                "status": "Active",  # status or tags like vip, etc
+                "dateCreated": link.added_at.isoformat() if link.added_at else None,
+                "avatar": None, #f"https://api.dicebear.com/7.x/initials/svg?seed={client.first_name}+{client.last_name}"
+            })
+        return payload

@@ -1,0 +1,124 @@
+<div class="space-y-6" x-data="addCustomerModal('{% url CUSTOMERS.ADD %}')">
+    <!-- Header -->
+    <div class="flex items-center gap-3">
+        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-emerald-500/10 text-emerald-600 dark:bg-emerald-950/60 dark:text-emerald-400">
+            <i data-lucide="user-plus" class="h-5 w-5"></i>
+        </div>
+        <div>
+            <h3 class="text-base font-semibold text-neutral-900 dark:text-white">Create New Customer</h3>
+            <p class="text-xs text-neutral-500 dark:text-neutral-400">Add client contact details to your directory.</p>
+        </div>
+    </div>
+
+    <!-- Error Alert -->
+    <template x-if="errorMessage">
+        <div class="rounded-xl border border-rose-500/20 bg-rose-500/10 p-3 text-xs font-medium text-rose-500" x-text="errorMessage"></div>
+    </template>
+
+    <form @submit.prevent="handleSubmit" class="space-y-4">
+        {% csrf_token %}
+
+        <!-- First & Last Name Grid -->
+        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <!-- First Name -->
+            <div class="space-y-1">
+                <label for="first_name" class="text-xs font-medium text-neutral-700 dark:text-neutral-300">
+                    First Name <span class="text-rose-500">*</span>
+                </label>
+                <input 
+                    type="text" 
+                    id="first_name" 
+                    x-model="firstName" 
+                    placeholder="John"
+                    class="w-full rounded-xl border border-neutral-200/80 bg-neutral-50/50 px-3.5 py-2.5 text-neutral-900 placeholder-neutral-400 focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-100 dark:focus:bg-neutral-900"
+                />
+                <p x-show="firstName && !isFirstNameValid" class="text-[10px] font-medium text-rose-500">Min 3 letters. Only spaces & '!' allowed.</p>
+            </div>
+
+            <!-- Last Name -->
+            <div class="space-y-1">
+                <label for="last_name" class="text-xs font-medium text-neutral-700 dark:text-neutral-300">
+                    Last Name <span class="text-rose-500">*</span>
+                </label>
+                <input 
+                    type="text" 
+                    id="last_name" 
+                    x-model="lastName" 
+                    placeholder="Doe"
+                    class="w-full rounded-xl border border-neutral-200/80 bg-neutral-50/50 px-3.5 py-2.5 text-neutral-900 placeholder-neutral-400 focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-100 dark:focus:bg-neutral-900"
+                />
+                <p x-show="lastName && !isLastNameValid" class="text-[10px] font-medium text-rose-500">Min 3 letters. Only spaces & '!' allowed.</p>
+            </div>
+        </div>
+
+        <!-- Display Name Card -->
+        <div class="space-y-1">
+            <div class="flex items-center justify-between">
+                <label for="display_name" class="text-xs font-medium text-neutral-700 dark:text-neutral-300">
+                    Display Name <span class="text-[11px] font-normal text-neutral-400">(Optional)</span>
+                </label>
+                <span class="text-[11px] font-medium text-emerald-600 dark:text-emerald-400">
+                    Preview: <span x-text="computedDisplayName"></span>
+                </span>
+            </div>
+            <input 
+                type="text" 
+                id="display_name" 
+                x-model="customDisplayName" 
+                :placeholder="computedDisplayName"
+                class="w-full rounded-xl border border-neutral-200/80 bg-neutral-50/50 px-3.5 py-2.5 text-neutral-900 placeholder-neutral-400 focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-100 dark:focus:bg-neutral-900"
+            />
+        </div>
+
+        <!-- Email Address -->
+        <div class="space-y-1">
+            <label for="customer_email" class="text-xs font-medium text-neutral-700 dark:text-neutral-300">
+                Email Address <span class="text-rose-500">*</span>
+            </label>
+            <input 
+                type="email" 
+                id="customer_email" 
+                x-model="email" 
+                placeholder="john@example.com"
+                class="w-full rounded-xl border border-neutral-200/80 bg-neutral-50/50 px-3.5 py-2.5 text-neutral-900 placeholder-neutral-400 focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-100 dark:focus:bg-neutral-900"
+            />
+            <p x-show="email && !isEmailValid" class="text-[10px] font-medium text-rose-500">Please enter a valid email address.</p>
+        </div>
+
+        <!-- Phone Number Input -->
+        <div class="space-y-1">
+            <label for="customer_phone" class="text-xs font-medium text-neutral-700 dark:text-neutral-300">
+                Phone Number <span class="text-rose-500">*</span>
+            </label>
+            <input 
+                type="text" 
+                id="customer_phone" 
+                x-model="phone" 
+                @input="handlePhoneInput"
+                placeholder="+12345678901"
+                class="w-full rounded-xl border border-neutral-200/80 bg-neutral-50/50 px-3.5 py-2.5 text-neutral-900 placeholder-neutral-400 focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-100 dark:focus:bg-neutral-900"
+            />
+            <p x-show="phone && !isPhoneValid" class="text-[10px] font-medium text-rose-500">Must begin with optional '+' and contain at least 11 digits.</p>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-neutral-100 dark:border-neutral-800">
+            <button 
+                type="button" 
+                data-modal-close
+                class="rounded-xl border border-neutral-200/80 bg-white px-4 py-2 text-xs font-medium text-neutral-700 hover:bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-300 dark:hover:bg-neutral-800"
+            >
+                Cancel
+            </button>
+            <button 
+                type="submit" 
+                :disabled="!isFormValid || loading"
+                :class="isFormValid && !loading ? 'bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white cursor-pointer' : 'bg-neutral-100 text-neutral-400 cursor-not-allowed dark:bg-neutral-800 dark:text-neutral-600'"
+                class="inline-flex items-center gap-1.5 rounded-xl px-4 py-2 text-xs font-semibold shadow-xs transition-all"
+            >
+                <i data-lucide="user-check" class="h-3.5 w-3.5"></i>
+                <span x-text="loading ? 'Saving...' : 'Save Customer'"></span>
+            </button>
+        </div>
+    </form>
+</div>

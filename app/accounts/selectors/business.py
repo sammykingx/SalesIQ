@@ -7,8 +7,10 @@ class BusinessSelector:
     def __init__(self) -> None:
         self.model = Business
     
-    def get_user_business(self, *, user_email:str) -> Union[BusinessEntity, None]:
+    def get_user_business(self, *, user_email:str, as_instance=False) -> Union[BusinessEntity, Business, None]:
             obj = self.model.objects.filter(owner=user_email).first()
+            if as_instance:
+                return obj
             return self._to_business_entity(instance=obj) if obj else None
         
     def _to_business_entity(self, instance): 

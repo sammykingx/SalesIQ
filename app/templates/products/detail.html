@@ -1,0 +1,258 @@
+{# products/product_detail.html #}
+{% extends "layouts/_base_app.html" %}
+{% load static %}
+
+{% block title %}salesiq | edit product{% endblock %}
+
+{% block extra_head %}
+<!-- Quill Rich Text Editor CDN -->
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+<style>
+  /* Custom Quill Theme Styling for Light & Dark Mode */
+  .ql-toolbar.ql-snow {
+    border-top-left-radius: 0.75rem;
+    border-top-right-radius: 0.75rem;
+    border-color: rgba(226, 232, 240, 0.8);
+    background-color: rgba(248, 250, 252, 0.5);
+  }
+  .dark .ql-toolbar.ql-snow {
+    border-color: rgba(255, 255, 255, 0.08);
+    background-color: #080C14;
+  }
+  .ql-container.ql-snow {
+    border-bottom-left-radius: 0.75rem;
+    border-bottom-right-radius: 0.75rem;
+    border-color: rgba(226, 232, 240, 0.8);
+    font-family: inherit;
+    min-height: 140px;
+  }
+  .dark .ql-container.ql-snow {
+    border-color: rgba(255, 255, 255, 0.08);
+    color: #F8FAFC;
+  }
+  .dark .ql-stroke { stroke: #94A3B8 !important; }
+  .dark .ql-fill { fill: #94A3B8 !important; }
+  .dark .ql-picker { color: #94A3B8 !important; }
+</style>
+{% endblock %}
+
+{% block page_body %}
+<div class="max-w-7xl mx-auto space-y-4" x-data="productEditor()">
+
+  <!-- Top Header / Navigation Bar -->
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-white dark:bg-neutral-900 border border-neutral-200/80 dark:border-white/10 p-4 rounded-2xl shadow-xs">
+    <div class="flex items-center gap-3">
+      <a href="{% url PRODUCTS.LIST %}" class="inline-flex items-center justify-center h-9 w-9 rounded-xl border border-neutral-200 dark:border-white/10 bg-neutral-50 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+      </a>
+      <div>
+        <div class="flex items-center gap-2">
+          <h1 class="text-lg font-bold tracking-tight text-neutral-900 dark:text-white" x-text="form.name || 'Untitled Product'"></h1>
+          <span class="text-[10px] uppercase font-mono bg-neutral-100 dark:bg-neutral-800 text-neutral-500 px-2 py-0.5 rounded-md border border-neutral-200 dark:border-neutral-700" x-text="`ID: ${productData.id.substring(0,8)}...`"></span>
+        </div>
+        <p class="text-xs text-neutral-500 dark:text-neutral-400">Created on {{ product.created_at|date:"M d, Y" }} • Last updated {{ product.updated_at|timesince }} ago</p>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="flex items-center gap-2 shrink-0">
+      <button type="button" @click="resetForm()" class="px-3.5 py-2 rounded-xl border border-neutral-200 dark:border-white/10 text-xs font-semibold text-neutral-600 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800 active:scale-95 transition-all">
+        Discard Changes
+      </button>
+      <button type="submit" form="product-form" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-sm active:scale-95 transition-all">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+        <span>Save Changes</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Edit Dashboard (Single Viewport Screen Grid) -->
+  <form id="product-form" @submit.prevent="saveProduct" class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
+    {% csrf_token %}
+    
+    <!-- Left Column: Core Fields & Rich Text Description -->
+    <div class="lg:col-span-8 space-y-4">
+      <div class="bg-white dark:bg-neutral-900 border border-neutral-200/80 dark:border-white/10 p-5 rounded-2xl shadow-xs space-y-4">
+        
+        <!-- Name Field -->
+        <div>
+          <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1.5">Product Name</label>
+          <input 
+            type="text" 
+            x-model="form.name" 
+            required 
+            maxlength="100"
+            placeholder="e.g. Ergonomic Desk Chair" 
+            class="w-full rounded-xl border border-neutral-200 dark:border-white/10 bg-neutral-50/50 dark:bg-neutral-950 px-3.5 py-2 font-medium text-neutral-900 dark:text-white placeholder-neutral-400 focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-emerald-500/20"
+          />
+        </div>
+
+        <!-- Description Field with Quill.js -->
+        <div>
+          <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1.5">Description</label>
+          <div id="quill-editor" class="bg-neutral-50/30 dark:bg-neutral-950"></div>
+          <!-- Hidden input bound to form for submission -->
+          <input type="hidden" name="description" x-model="form.description">
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Meta Settings, Type & Price Controls -->
+    <div class="lg:col-span-4 space-y-4">
+      <div class="bg-white dark:bg-neutral-900 border border-neutral-200/80 dark:border-white/10 p-5 rounded-2xl shadow-xs space-y-4">
+        <h2 class="text-xs font-bold uppercase tracking-wider text-neutral-400 dark:text-neutral-500">Pricing & Attributes</h2>
+
+        <!-- Price Input (Naira Validation) -->
+        <div>
+          <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1.5">Price (NGN)</label>
+          <div class="relative rounded-xl shadow-2xs">
+            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5">
+              <span class="text-xs font-semibold text-neutral-500">₦</span>
+            </div>
+            <input 
+              type="text" 
+              x-model="form.price" 
+              @input="validatePrice($event)"
+              placeholder="0.00" 
+              required
+              class="w-full rounded-xl border border-neutral-200 dark:border-white/10 bg-neutral-50/50 dark:bg-neutral-950 pl-8 pr-3.5 py-2 font-mono font-medium text-ink-600 dark:text-ink-900 placeholder-neutral-400 focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-emerald-500/20"
+            />
+          </div>
+          <p class="mt-1 text-[10px] text-neutral-400 dark:text-neutral-600">Allows numbers and up to 2 decimal places.</p>
+        </div>
+
+        <!-- Product Type Field -->
+        <div>
+            <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1.5">Product Type</label>
+            <div class="grid grid-cols-3 gap-2">
+                <!-- Physical Option -->
+                <button 
+                    type="button" 
+                    @click="form.product_type = 'physical'" 
+                    :class="form.product_type === 'physical' ? 'border-emerald-500 bg-emerald-50/50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 ring-1 ring-emerald-500/20' : 'border-neutral-200 dark:border-white/10 bg-neutral-50/50 dark:bg-neutral-950 text-neutral-600 dark:text-neutral-400'"
+                    class="flex items-center justify-center gap-1.5 rounded-xl border py-2.5 px-2 text-xs font-semibold transition-all"
+                >
+                    <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                    <span>Physical</span>
+                </button>
+
+                <!-- Digital / Virtual Option -->
+                <button 
+                    type="button" 
+                    @click="form.product_type = 'virtual'" 
+                    :class="form.product_type === 'virtual' ? 'border-indigo-500 bg-indigo-50/50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-400 ring-1 ring-indigo-500/20' : 'border-neutral-200 dark:border-white/10 bg-neutral-50/50 dark:bg-neutral-950 text-neutral-600 dark:text-neutral-400'"
+                    class="flex items-center justify-center gap-1.5 rounded-xl border py-2.5 px-2 text-xs font-semibold transition-all"
+                >
+                    <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"/></svg>
+                    <span>Digital</span>
+                </button>
+
+                <!-- Service Option -->
+                <button 
+                    type="button" 
+                    @click="form.product_type = 'service'" 
+                    :class="form.product_type === 'service' ? 'border-amber-500 bg-amber-50/50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 ring-1 ring-amber-500/20' : 'border-neutral-200 dark:border-white/10 bg-neutral-50/50 dark:bg-neutral-950 text-neutral-600 dark:text-neutral-400'"
+                    class="flex items-center justify-center gap-1.5 rounded-xl border py-2.5 px-2 text-xs font-semibold transition-all"
+                >
+                    <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                    <span>Service</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Business Context -->
+        <div class="pt-2 border-t border-neutral-100 dark:border-white/5">
+          <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Business Account</label>
+          <div class="flex items-center justify-between text-xs text-neutral-500 dark:text-neutral-400 bg-neutral-50 dark:bg-neutral-950 p-2.5 rounded-xl border border-neutral-200/60 dark:border-white/5">
+            <span class="font-medium text-neutral-800 dark:text-neutral-200">
+                {% if product.business.name %}
+                    {{ product.business.name }}
+                {% else %}
+                    {{ user.first_name|title }} {{ user.last_name|title }}
+                {% endif %}
+            </span>
+            <span class="text-[10px] text-neutral-400">Catalog Owner</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </form>
+</div>
+
+<script>
+  function productEditor() {
+    return {
+      productData: {
+        id: "{{ product.id }}",
+        name: "{{ product.name|escapejs }}",
+        price: "{{ product.price }}",
+        product_type: "{{ product.product_type }}",
+        description: `{{ product.description|safe }}`
+      },
+      form: {
+        name: '',
+        price: '',
+        product_type: '',
+        description: ''
+      },
+      quill: null,
+
+      init() {
+        this.resetForm();
+
+        // Initialize Quill Editor
+        this.quill = new Quill('#quill-editor', {
+          theme: 'snow',
+          placeholder: 'Write a detailed description for this item...',
+          modules: {
+            toolbar: [
+              ['bold', 'italic', 'underline'],
+              [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+              ['clean']
+            ]
+          }
+        });
+
+        // Set Initial Quill Content
+        this.quill.root.innerHTML = this.form.description;
+
+        // Keep Alpine state updated with Quill HTML output
+        this.quill.on('text-change', () => {
+          this.form.description = this.quill.root.innerHTML;
+        });
+      },
+
+      resetForm() {
+        this.form = { ...this.productData };
+        if (this.quill) {
+          this.quill.root.innerHTML = this.form.description;
+        }
+      },
+
+      validatePrice(e) {
+        // Enforce digits and a single decimal point up to 2 decimal places
+        let value = e.target.value;
+        value = value.replace(/[^0-9.]/g, ''); // Remove non-numeric/non-decimal chars
+        
+        const parts = value.split('.');
+        if (parts.length > 2) {
+          value = parts[0] + '.' + parts.slice(1).join(''); // Keep only first decimal point
+        }
+        if (parts[1] && parts[1].length > 2) {
+          value = parts[0] + '.' + parts[1].substring(0, 2); // Limit to 2 decimal places
+        }
+        
+        this.form.price = value;
+      },
+
+      saveProduct() {
+        // Form submission payload can be posted directly via standard form or AJAX
+        console.log("Saving payload:", this.form);
+        // e.g. document.getElementById('product-form').submit();
+      }
+    };
+  }
+</script>
+{% endblock %}

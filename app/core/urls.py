@@ -32,7 +32,7 @@ urlpatterns = [
     path("", ComingSoonView.as_view(), name="coming-soon"),
     path("accounts/", include("accounts.urls")),
     path("customers/", include("customers.urls")),
-    path("products/", TemplateView.as_view(template_name=APP_TEMPLATES.PRODUCTS.LIST), name=PRODUCTS.LIST),
+    path("products/", include("products.urls")),
     path("sales/", TemplateView.as_view(template_name=APP_TEMPLATES.SALES.LIST), name=SALES.LIST),
 
     # invoices

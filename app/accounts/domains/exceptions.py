@@ -34,3 +34,14 @@ class MultipleBusinessNotAllowedError(AccountsDomainException):
         err_type: str = "warning"
     ):
         super().__init__(message, code=code, title=title, err_type=err_type)
+        
+class BusinessNotFoundError(AccountsDomainException):
+    """Raised when a requested business account cannot be found for a user."""
+    def __init__(
+        self, 
+        message: str = "No business account was found matching the provided details.", 
+        code: str = "BUSINESS_NOT_FOUND", 
+        title: str = "Business Not Found", 
+        err_type: str = "warning"
+    ):
+        super().__init__(message, code=code, title=title, err_type=err_type)

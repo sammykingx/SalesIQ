@@ -9,7 +9,7 @@ import {
     Check, LockOpen, ShieldCheck, Eye, EyeOff, CheckCircle2, XCircle, Timer, Save,
     AlertTriangle, AlertCircle, Info, X, KeyRound, ShieldAlert, Share2, MessageSquare,
     Phone, Trash2, TriangleAlert, PackagePlus, Box, Download, Briefcase, Bold, Italic,
-    List, ListOrdered, Plus
+    List, ListOrdered, Plus, UserCheck, UserPlus
 } from "lucide";
 
 import { initAuthModule } from "./auth/index.js";
@@ -18,12 +18,15 @@ import { initOnboarding } from "./onboarding/index.js";
 import { inAppToast } from "../lib/in-app-toast.js";
 
 import { initAccountsModule } from "./accounts";
+import { initCustomerModule } from "./customers";
+
 
 /* register alpine components before start */
 initAuthModule(Alpine);
 initComponentsModule(Alpine);
 initOnboarding(Alpine);
 initAccountsModule(Alpine);
+initCustomerModule(Alpine);
 
 
 createIcons({
@@ -34,7 +37,8 @@ createIcons({
         CheckCircle2, XCircle, AlertTriangle, AlertCircle, Info, X,
         KeyRound, ShieldAlert, Timer, Share2, MessageSquare, Save,
         Phone, Trash2, TriangleAlert, PackagePlus, Box, Download,
-        Briefcase, Bold, Italic, List, ListOrdered, Plus
+        Briefcase, Bold, Italic, List, ListOrdered, Plus, UserCheck,
+        UserPlus,
     },
     attrs: { 'stroke-width': 1.75 },
 });
