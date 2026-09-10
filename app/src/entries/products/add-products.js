@@ -138,8 +138,6 @@ export function addProductForm(endpointUrl = '') {
                             }).join(' | ')
                             : (data?.error || '');
 
-                        console.log(errorDetails);
-
                         inAppToast(
                             'Product Identity Rejected 🚫',
                             data?.message || "Fix the typos and let's give it another shot.",

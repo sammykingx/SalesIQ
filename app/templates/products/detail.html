@@ -4,43 +4,11 @@
 
 {% block title %}salesiq | edit product{% endblock %}
 
-{% block extra_head %}
-<!-- Quill Rich Text Editor CDN -->
-<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
-<style>
-  /* Custom Quill Theme Styling for Light & Dark Mode */
-  .ql-toolbar.ql-snow {
-    border-top-left-radius: 0.75rem;
-    border-top-right-radius: 0.75rem;
-    border-color: rgba(226, 232, 240, 0.8);
-    background-color: rgba(248, 250, 252, 0.5);
-  }
-  .dark .ql-toolbar.ql-snow {
-    border-color: rgba(255, 255, 255, 0.08);
-    background-color: #080C14;
-  }
-  .ql-container.ql-snow {
-    border-bottom-left-radius: 0.75rem;
-    border-bottom-right-radius: 0.75rem;
-    border-color: rgba(226, 232, 240, 0.8);
-    font-family: inherit;
-    min-height: 140px;
-  }
-  .dark .ql-container.ql-snow {
-    border-color: rgba(255, 255, 255, 0.08);
-    color: #F8FAFC;
-  }
-  .dark .ql-stroke { stroke: #94A3B8 !important; }
-  .dark .ql-fill { fill: #94A3B8 !important; }
-  .dark .ql-picker { color: #94A3B8 !important; }
-</style>
-{% endblock %}
-
 {% block page_body %}
-<div class="max-w-7xl mx-auto space-y-4" x-data="productEditor()">
 
-  <!-- Top Header / Navigation Bar -->
+{{ product|json_script:"product-data" }}
+
+<div class="max-w-7xl mx-auto space-y-4" x-data="modifyProductComponent('{% url PRODUCTS.UPDATE %}')">
   <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-white dark:bg-neutral-900 border border-neutral-200/80 dark:border-white/10 p-4 rounded-2xl shadow-xs">
     <div class="flex items-center gap-3">
       <a href="{% url PRODUCTS.LIST %}" class="inline-flex items-center justify-center h-9 w-9 rounded-xl border border-neutral-200 dark:border-white/10 bg-neutral-50 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors">
@@ -49,32 +17,50 @@
       <div>
         <h1 class="my-2 text-lg font-bold tracking-tight text-neutral-900 dark:text-white" x-text="form.name || 'Untitled Product'"></h1>
         <div class="flex items-center gap-2">
-          <span class="text-[10px] uppercase font-mono bg-neutral-100 dark:bg-neutral-800 text-neutral-500 px-2 py-0.5 rounded-md border border-neutral-200 dark:border-neutral-700" x-text="`ID: ${productData.id.substring(0,8)}...`"></span>
+          <span class="text-[10px] uppercase font-mono bg-neutral-100 dark:bg-neutral-800 text-neutral-500 px-2 py-0.5 rounded-md border border-neutral-200 dark:border-neutral-700" x-text="`ID: ${form.product_id.substring(0,8)}...`"></span>
           <p class="text-xs text-neutral-500 dark:text-neutral-400">Created on {{ product.created_at|date:"M d, Y" }}</p>
-          <!--• Last updated {{ product.updated_at|timesince }} ago-->
-          
         </div>
-        
       </div>
     </div>
 
     <!-- Action Buttons -->
     <div class="flex items-center gap-2 shrink-0">
-      <button type="button" @click="resetForm()" class="px-3.5 py-2 rounded-xl border border-neutral-200 dark:border-white/10 text-xs font-semibold text-neutral-600 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800 active:scale-95 transition-all">
+      <button 
+        type="button" 
+        @click="resetForm()" 
+        :disabled="isLoading"
+        class="px-3.5 py-2 rounded-xl border border-neutral-200 dark:border-white/10 text-xs font-semibold text-neutral-600 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800 active:scale-95 transition-all disabled:opacity-50 disabled:pointer-events-none"
+      >
         Discard Changes
       </button>
-      <button type="submit" form="product-form" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-sm active:scale-95 transition-all">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-        <span>Save Changes</span>
+      
+      <button 
+        type="submit" 
+        form="product-form" 
+        :disabled="isLoading"
+        class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-sm active:scale-95 transition-all disabled:opacity-75 disabled:pointer-events-none"
+      >
+        <!-- Save Checkmark Icon -->
+        <svg x-show="!isLoading" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+        </svg>
+
+        <!-- Loading Spinner Icon -->
+        <svg x-show="isLoading" x-cloak class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+
+        <!-- Dynamic Button Text -->
+        <span x-text="isLoading ? 'Updating...' : 'Save Changes'"></span>
       </button>
     </div>
   </div>
 
-  <!-- Main Edit Dashboard (Single Viewport Screen Grid) -->
-  <form id="product-form" @submit.prevent="saveProduct" class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
+  <form id="product-form" @submit.prevent="saveProduct" action="{% url PRODUCTS.UPDATE %}" method="PUT" class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
     {% csrf_token %}
     
-    <!-- Left Column: Core Fields & Rich Text Description -->
+    <!-- Left Column -->
     <div class="lg:col-span-8 space-y-4">
       <div class="bg-white dark:bg-neutral-900 border border-neutral-200/80 dark:border-white/10 p-5 rounded-2xl shadow-xs space-y-4">
         
@@ -83,6 +69,7 @@
           <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1.5">Product Name</label>
           <input 
             type="text" 
+            name="name"
             x-model="form.name" 
             required 
             maxlength="100"
@@ -91,22 +78,35 @@
           />
         </div>
 
-        <!-- Description Field with Quill.js -->
+        <!-- Description Textarea -->
         <div>
           <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1.5">Description</label>
-          <div id="quill-editor" class="bg-neutral-50/30 dark:bg-neutral-950"></div>
-          <!-- Hidden input bound to form for submission -->
-          <input type="hidden" name="description" x-model="form.description">
+          <textarea 
+            name="description" 
+            rows="6"
+            x-model="form.description"
+            placeholder="Write or paste a detailed description for this item..." 
+            class="w-full rounded-xl border border-neutral-200 dark:border-white/10 bg-neutral-50/50 dark:bg-neutral-950 p-3.5 font-normal text-neutral-900 dark:text-white placeholder-neutral-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/20 leading-relaxed resize-y"
+          ></textarea>
+        </div>
+
+        <!-- Formatted Output Preview -->
+        <div x-show="form.description" class="pt-3 border-t border-neutral-100 dark:border-white/5 space-y-2">
+          <span class="block text-[10px] font-bold uppercase tracking-wider text-neutral-400">Description Preview</span>
+          <div 
+            class="prose prose-sm dark:prose-invert max-w-none rounded-xl border border-neutral-100 dark:border-neutral-800 bg-neutral-50/30 dark:bg-neutral-950/50 p-4 text-neutral-800 dark:text-neutral-200 leading-relaxed overflow-x-auto" 
+            x-html="form.description"
+          ></div>
         </div>
       </div>
     </div>
 
-    <!-- Right Column: Meta Settings, Type & Price Controls -->
+    <!-- Right Column -->
     <div class="lg:col-span-4 space-y-4">
       <div class="bg-white dark:bg-neutral-900 border border-neutral-200/80 dark:border-white/10 p-5 rounded-2xl shadow-xs space-y-4">
         <h2 class="text-xs font-bold uppercase tracking-wider text-neutral-400 dark:text-neutral-500">Pricing & Attributes</h2>
 
-        <!-- Price Input (Naira Validation) -->
+        <!-- Price Input -->
         <div>
           <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1.5">Price (NGN)</label>
           <div class="relative rounded-xl shadow-2xs">
@@ -114,12 +114,15 @@
               <span class="text-xs font-semibold text-neutral-500">₦</span>
             </div>
             <input 
+              x-ref="priceInput"
               type="text" 
+              name="price"
               x-model="form.price" 
               @input="validatePrice($event)"
+              x-effect="if ($refs.priceInput) $refs.priceInput.value = formatWithCommas(form.price)"
               placeholder="0.00" 
               required
-              class="w-full rounded-xl border border-neutral-200 dark:border-white/10 bg-neutral-50/50 dark:bg-neutral-950 pl-8 pr-3.5 py-2 font-mono font-medium text-ink-600 dark:text-white placeholder-neutral-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/20"
+              class="w-full rounded-xl border border-neutral-200 dark:border-white/10 bg-neutral-50/50 dark:bg-neutral-950 pl-8 pr-3.5 py-2 font-mono font-medium text-neutral-900 dark:text-white placeholder-neutral-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/20"
             />
           </div>
           <p class="mt-1 text-[10px] text-neutral-400 dark:text-neutral-600">Allows numbers and up to 2 decimal places.</p>
@@ -128,6 +131,7 @@
         <!-- Product Type Field -->
         <div>
             <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1.5">Product Type</label>
+            <input type="hidden" name="product_type" :value="form.product_type">
             <div class="grid grid-cols-3 gap-2">
                 <!-- Physical Option -->
                 <button 
@@ -140,11 +144,11 @@
                     <span>Physical</span>
                 </button>
 
-                <!-- Digital / Virtual Option -->
+                <!-- Digital Option -->
                 <button 
                     type="button" 
-                    @click="form.product_type = 'virtual'" 
-                    :class="form.product_type === 'virtual' ? 'border-indigo-500 bg-indigo-50/50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-400 ring-1 ring-indigo-500/20' : 'border-neutral-200 dark:border-white/10 bg-neutral-50/50 dark:bg-neutral-950 text-neutral-600 dark:text-neutral-400'"
+                    @click="form.product_type = 'digital'" 
+                    :class="form.product_type === 'digital' ? 'border-indigo-500 bg-indigo-50/50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-400 ring-1 ring-indigo-500/20' : 'border-neutral-200 dark:border-white/10 bg-neutral-50/50 dark:bg-neutral-950 text-neutral-600 dark:text-neutral-400'"
                     class="flex items-center justify-center gap-1.5 rounded-xl border py-2.5 px-2 text-xs font-semibold transition-all"
                 >
                     <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"/></svg>
@@ -183,79 +187,4 @@
     </div>
   </form>
 </div>
-
-<script>
-  function productEditor() {
-    return {
-      productData: {
-        id: "{{ product.id }}",
-        name: "{{ product.name|escapejs }}",
-        price: "{{ product.price }}",
-        product_type: "{{ product.product_type }}",
-        description: `{{ product.description|safe }}`
-      },
-      form: {
-        name: '',
-        price: '',
-        product_type: '',
-        description: ''
-      },
-      quill: null,
-
-      init() {
-        this.resetForm();
-
-        // Initialize Quill Editor
-        this.quill = new Quill('#quill-editor', {
-          theme: 'snow',
-          placeholder: 'Write a detailed description for this item...',
-          modules: {
-            toolbar: [
-              ['bold', 'italic', 'underline'],
-              [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-              ['clean']
-            ]
-          }
-        });
-
-        // Set Initial Quill Content
-        this.quill.root.innerHTML = this.form.description;
-
-        // Keep Alpine state updated with Quill HTML output
-        this.quill.on('text-change', () => {
-          this.form.description = this.quill.root.innerHTML;
-        });
-      },
-
-      resetForm() {
-        this.form = { ...this.productData };
-        if (this.quill) {
-          this.quill.root.innerHTML = this.form.description;
-        }
-      },
-
-      validatePrice(e) {
-        // Enforce digits and a single decimal point up to 2 decimal places
-        let value = e.target.value;
-        value = value.replace(/[^0-9.]/g, ''); // Remove non-numeric/non-decimal chars
-        
-        const parts = value.split('.');
-        if (parts.length > 2) {
-          value = parts[0] + '.' + parts.slice(1).join(''); // Keep only first decimal point
-        }
-        if (parts[1] && parts[1].length > 2) {
-          value = parts[0] + '.' + parts[1].substring(0, 2); // Limit to 2 decimal places
-        }
-        
-        this.form.price = value;
-      },
-
-      saveProduct() {
-        // Form submission payload can be posted directly via standard form or AJAX
-        console.log("Saving payload:", this.form);
-        // e.g. document.getElementById('product-form').submit();
-      }
-    };
-  }
-</script>
 {% endblock %}

@@ -1,6 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpRequest, JsonResponse
-from django.shortcuts import render
 from django.views.generic import TemplateView, View
 
 from accounts.selectors import BusinessSelector
@@ -68,4 +67,4 @@ class BusinessCustomersListView(LoginRequiredMixin, TemplateView):
         return {
             "customers_json": customers_data,
         }
-     
+    

@@ -15,7 +15,7 @@ class CreateProductsSchema(BaseModel):
     description: str
     
     
-class ModifyProducts(CreateProductsSchema):
+class ModifyProductSchema(CreateProductsSchema):
     """
         Schema used for validating input data when updating or 
         modifying an existing single product. Inherits base product 
