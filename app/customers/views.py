@@ -12,7 +12,6 @@ from utils.pydantic_formatter import format_pydantic_errors
 
 from pydantic import ValidationError
 from typing import Any
-import json
 
 
 class CreateCustomersView(LoginRequiredMixin, View):
@@ -67,6 +66,6 @@ class BusinessCustomersListView(LoginRequiredMixin, TemplateView):
         customers_data = self.buisness_clients_selector.get_all_business_customers_frontend_json(biz_id=biz.id) #type: ignore
         
         return {
-            "customers_json": json.dumps(customers_data, default=str)
+            "customers_json": customers_data,
         }
      

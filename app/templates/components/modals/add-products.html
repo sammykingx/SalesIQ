@@ -1,10 +1,4 @@
-<div class="space-y-6" x-data="{
-    productType: 'physical',
-    description: '',
-    execCmd(command, value = null) {
-        document.execCommand(command, false, value);
-    }
-}">
+<div class="space-y-6" x-data="addProductForm('{% url PRODUCTS.ADD %}')">
     <!-- Header -->
     <div class="flex items-center gap-3">
         <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-emerald-500/10 text-emerald-600 dark:bg-emerald-950/60 dark:text-emerald-400">
@@ -16,11 +10,11 @@
         </div>
     </div>
 
-    <form action="#" method="POST" class="space-y-4">
+    <form @submit.prevent="handleSubmit" action="{% url PRODUCTS.ADD %}" method="POST" class="space-y-4">
         {% csrf_token %}
 
         <!-- Product Name -->
-        <div class="space-y-1">
+        <div class="space-y-2">
             <label for="product_name" class="text-xs font-medium text-neutral-700 dark:text-neutral-300">Product Title</label>
             <input 
                 type="text" 
@@ -28,28 +22,28 @@
                 name="name" 
                 required
                 placeholder="e.g. Ergonomic Desk Lamp"
-                class="w-full rounded-xl border border-neutral-200/80 bg-neutral-50/50 px-3.5 py-2.5 text-neutral-900 placeholder-neutral-400 focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-100 dark:focus:bg-neutral-900"
+                class="w-full rounded-xl border border-neutral-200/80 bg-neutral-50/50 px-3.5 py-2.5 mt-1.5 text-neutral-900 placeholder-neutral-400 focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-emerald-500/20 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-100 dark:focus:bg-neutral-900"
             />
         </div>
 
         <!-- Product Type Pill Selector -->
-        <div class="space-y-1.5">
+        <div class="space-y-2">
             <label class="text-xs font-medium text-neutral-700 dark:text-neutral-300">Fulfillment Type</label>
-            <div class="grid grid-cols-3 gap-2 rounded-xl bg-neutral-100/70 p-1 dark:bg-neutral-950">
+            <div class="grid grid-cols-3 gap-2 rounded-xl bg-neutral-100/70 p-1 mt-1.5 dark:bg-neutral-950">
                 <button 
                     type="button" 
                     @click="productType = 'physical'"
                     :class="productType === 'physical' ? 'bg-white text-neutral-900 shadow-2xs dark:bg-neutral-900 dark:text-white' : 'text-neutral-500 hover:text-neutral-700 dark:text-neutral-400'"
-                    class="flex items-center justify-center gap-1.5 rounded-lg py-1.5 text-xs font-medium "
+                    class="flex items-center justify-center gap-1.5 rounded-lg py-1.5 text-xs font-medium transition-all"
                 >
                     <i data-lucide="box" class="h-3.5 w-3.5"></i>
                     <span>Physical</span>
                 </button>
                 <button 
                     type="button" 
-                    @click="productType = 'virtual'"
-                    :class="productType === 'virtual' ? 'bg-white text-neutral-900 shadow-2xs dark:bg-neutral-900 dark:text-white' : 'text-neutral-500 hover:text-neutral-700 dark:text-neutral-400'"
-                    class="flex items-center justify-center gap-1.5 rounded-lg py-1.5 text-xs font-medium "
+                    @click="productType = 'digital'"
+                    :class="productType === 'digital' ? 'bg-white text-neutral-900 shadow-2xs dark:bg-neutral-900 dark:text-white' : 'text-neutral-500 hover:text-neutral-700 dark:text-neutral-400'"
+                    class="flex items-center justify-center gap-1.5 rounded-lg py-1.5 text-xs font-medium transition-all"
                 >
                     <i data-lucide="download" class="h-3.5 w-3.5"></i>
                     <span>Digital</span>
@@ -58,58 +52,76 @@
                     type="button" 
                     @click="productType = 'service'"
                     :class="productType === 'service' ? 'bg-white text-neutral-900 shadow-2xs dark:bg-neutral-900 dark:text-white' : 'text-neutral-500 hover:text-neutral-700 dark:text-neutral-400'"
-                    class="flex items-center justify-center gap-1.5 rounded-lg py-1.5 text-xs font-medium "
+                    class="flex items-center justify-center gap-1.5 rounded-lg py-1.5 text-xs font-medium transition-all"
                 >
                     <i data-lucide="briefcase" class="h-3.5 w-3.5"></i>
                     <span>Service</span>
                 </button>
             </div>
-            <input type="hidden" name="type" :value="productType" />
+            <input type="hidden" name="product_type" :value="productType" />
         </div>
 
         <!-- Price Input -->
-        <div class="space-y-1">
-            <label for="product_price" class="text-xs font-medium text-neutral-700 dark:text-neutral-300">Pricing (USD)</label>
-            <div class="relative">
-                <span class="pointer-events-none absolute left-3.5 top-2.5 text-xs font-semibold text-neutral-400">$</span>
+        <div class="space-y-2">
+            <label for="product_price" class="text-xs font-medium text-neutral-700 dark:text-neutral-300">Pricing (NGN)</label>
+            <div class="relative flex items-center mt-1.5">
+                <span class="pointer-events-none absolute left-3.5 text-xs font-semibold text-neutral-400 select-none">₦</span>
                 <input 
-                    type="number" 
-                    step="0.01" 
+                    type="text" 
                     id="product_price" 
-                    name="price" 
+                    :value="formattedPrice"
+                    @keydown="allowOnlyNumbers($event)"
+                    @paste="handlePaste($event)"
+                    @input="formatNairaInput($event)"
                     required
                     placeholder="0.00"
-                    class="w-full rounded-xl border border-neutral-200/80 bg-neutral-50/50 pl-8 pr-3.5 py-2.5 text-neutral-900 placeholder-neutral-400 focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-100 dark:focus:bg-neutral-900"
+                    class="w-full rounded-xl border border-neutral-200/80 bg-neutral-50/50 pl-8 pr-3.5 py-2.5 font-mono text-neutral-900 placeholder-neutral-400 focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-emerald-500/20 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-100 dark:focus:bg-neutral-900"
                 />
             </div>
+            <input type="hidden" name="price" :value="rawPrice" />
         </div>
 
-        <!-- Short Description (Rich Text Style Editor) -->
-        <div class="space-y-1">
+        <!-- Description Field -->
+        <div class="space-y-2">
             <label class="text-xs font-medium text-neutral-700 dark:text-neutral-300">Description</label>
-            <div class="overflow-hidden rounded-xl border border-neutral-200/80 bg-neutral-50/50 dark:border-neutral-800 dark:bg-neutral-950">
-                <!-- Formatting Bar -->
-                <div class="flex items-center gap-0.5 border-b border-neutral-200/80 bg-neutral-100/50 p-1.5 dark:border-neutral-800 dark:bg-neutral-900">
-                    <button type="button" @click="execCmd('bold')" class="rounded-lg p-1.5 text-neutral-600 hover:bg-white hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white" title="Bold">
+            <div class="overflow-hidden rounded-xl border border-neutral-200/80 bg-neutral-50/50 dark:border-neutral-800 dark:bg-neutral-950 mt-1.5">
+                <div class="flex items-center gap-1 border-b border-neutral-200/80 bg-neutral-100/50 p-1.5 dark:border-neutral-800 dark:bg-neutral-900">
+                    <!-- Bold Button -->
+                    <button 
+                        type="button" 
+                        @click="execCmd('bold')"
+                        :class="isBold 
+                            ? 'bg-neutral-900 text-white dark:bg-white dark:text-neutral-900' 
+                            : 'text-neutral-600 hover:bg-neutral-200/60 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white'"
+                        class="rounded-lg p-1.5 transition-colors" 
+                        title="Bold"
+                    >
                         <i data-lucide="bold" class="h-3.5 w-3.5"></i>
                     </button>
-                    <button type="button" @click="execCmd('italic')" class="rounded-lg p-1.5 text-neutral-600 hover:bg-white hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white" title="Italic">
+
+                    <!-- Italic Button -->
+                    <button 
+                        type="button" 
+                        @click="execCmd('italic')"
+                        :class="isItalic 
+                            ? 'bg-neutral-900 text-white dark:bg-white dark:text-neutral-900' 
+                            : 'text-neutral-600 hover:bg-neutral-200/60 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white'"
+                        class="rounded-lg p-1.5 transition-colors" 
+                        title="Italic"
+                    >
                         <i data-lucide="italic" class="h-3.5 w-3.5"></i>
-                    </button>
-                    <div class="mx-1 h-3.5 w-px bg-neutral-200 dark:bg-neutral-800"></div>
-                    <button type="button" @click="execCmd('insertUnorderedList')" class="rounded-lg p-1.5 text-neutral-600 hover:bg-white hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white" title="Bullet List">
-                        <i data-lucide="list" class="h-3.5 w-3.5"></i>
-                    </button>
-                    <button type="button" @click="execCmd('insertOrderedList')" class="rounded-lg p-1.5 text-neutral-600 hover:bg-white hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white" title="Numbered List">
-                        <i data-lucide="list-ordered" class="h-3.5 w-3.5"></i>
                     </button>
                 </div>
 
-                <!-- Content Area -->
+                <!-- Editable Area -->
                 <div 
-                    contenteditable="true"
-                    @input="description = $el.innerHTML"
-                    class="min-h-22 p-3  text-neutral-900 outline-hidden dark:text-neutral-100"
+                    x-ref="editorContainer"
+                    contenteditable="true" 
+                    @input="description = $el.innerHTML; updateState()"
+                    @keyup="updateState()"
+                    @click="updateState()"
+                    @selectchange.window="updateState()"
+                    class="min-h-22 p-3 text-neutral-900 outline-none dark:text-neutral-100"
                 ></div>
             </div>
             <textarea name="description" class="hidden" x-model="description"></textarea>
@@ -126,10 +138,11 @@
             </button>
             <button 
                 type="submit" 
-                class="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 px-4 py-2 text-xs font-semibold text-white shadow-xs hover:bg-emerald-700 active:bg-emerald-800 "
+                :disabled="submitting"
+                class="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 px-4 py-2 text-xs font-semibold text-white shadow-xs hover:bg-emerald-700 active:bg-emerald-800 disabled:opacity-50"
             >
-                <i data-lucide="plus" class="h-3.5 w-3.5"></i>
-                <span>Save Product</span>
+                <i x-show="!submitting" data-lucide="plus" class="h-3.5 w-3.5"></i>
+                <span x-text="submitting ? 'Saving...' : 'Save Product'"></span>
             </button>
         </div>
     </form>

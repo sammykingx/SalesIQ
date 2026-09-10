@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count
 from products.models import Products
 from products.domain.entities import ProductEntity
@@ -36,6 +37,13 @@ class ProductsSelector:
             return product
             
         return self._to_entity(product)
+    
+    def get_product_with_business(self, *, p_ref) -> Optional[Products]:
+        """Fetches the product and optimizes the query by joining the business relation."""
+        try:
+            return self.model.objects.select_related("business").get(pk=p_ref)
+        except (ObjectDoesNotExist, ValueError, TypeError):
+            return None
 
     def get_business_products(self, *, business_id: UUID, as_instance: bool = False) -> Union[List[Products], List[Dict[str, Any]]]:
         """

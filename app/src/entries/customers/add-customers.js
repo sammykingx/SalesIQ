@@ -96,8 +96,11 @@ export function addCustomerModal(endpointUrl = '') {
                     return;
                 }
                 this.resetForm();
-                inAppToast('Added to the fold ✨', data.message || 'Customer successfully added!', 'success', 4700);
+                inAppToast('Added to the fold ✨', data.message || 'Customer successfully added!', 'success');
                 closeAppModal();
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500);
             } catch (err) {
                 inAppToast('Connection Void 🌪️', err.message || 'Failed to reach the server. Check your network connection.', 'error');
             } finally {

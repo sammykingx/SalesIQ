@@ -47,11 +47,14 @@
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
       </a>
       <div>
+        <h1 class="my-2 text-lg font-bold tracking-tight text-neutral-900 dark:text-white" x-text="form.name || 'Untitled Product'"></h1>
         <div class="flex items-center gap-2">
-          <h1 class="text-lg font-bold tracking-tight text-neutral-900 dark:text-white" x-text="form.name || 'Untitled Product'"></h1>
           <span class="text-[10px] uppercase font-mono bg-neutral-100 dark:bg-neutral-800 text-neutral-500 px-2 py-0.5 rounded-md border border-neutral-200 dark:border-neutral-700" x-text="`ID: ${productData.id.substring(0,8)}...`"></span>
+          <p class="text-xs text-neutral-500 dark:text-neutral-400">Created on {{ product.created_at|date:"M d, Y" }}</p>
+          <!--• Last updated {{ product.updated_at|timesince }} ago-->
+          
         </div>
-        <p class="text-xs text-neutral-500 dark:text-neutral-400">Created on {{ product.created_at|date:"M d, Y" }} • Last updated {{ product.updated_at|timesince }} ago</p>
+        
       </div>
     </div>
 
@@ -84,7 +87,7 @@
             required 
             maxlength="100"
             placeholder="e.g. Ergonomic Desk Chair" 
-            class="w-full rounded-xl border border-neutral-200 dark:border-white/10 bg-neutral-50/50 dark:bg-neutral-950 px-3.5 py-2 font-medium text-neutral-900 dark:text-white placeholder-neutral-400 focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-emerald-500/20"
+            class="w-full rounded-xl border border-neutral-200 dark:border-white/10 bg-neutral-50/50 dark:bg-neutral-950 px-3.5 py-2 font-medium text-neutral-900 dark:text-white placeholder-neutral-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/20"
           />
         </div>
 
@@ -116,7 +119,7 @@
               @input="validatePrice($event)"
               placeholder="0.00" 
               required
-              class="w-full rounded-xl border border-neutral-200 dark:border-white/10 bg-neutral-50/50 dark:bg-neutral-950 pl-8 pr-3.5 py-2 font-mono font-medium text-ink-600 dark:text-ink-900 placeholder-neutral-400 focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-emerald-500/20"
+              class="w-full rounded-xl border border-neutral-200 dark:border-white/10 bg-neutral-50/50 dark:bg-neutral-950 pl-8 pr-3.5 py-2 font-mono font-medium text-ink-600 dark:text-white placeholder-neutral-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/20"
             />
           </div>
           <p class="mt-1 text-[10px] text-neutral-400 dark:text-neutral-600">Allows numbers and up to 2 decimal places.</p>
