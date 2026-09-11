@@ -1,7 +1,7 @@
 // app/src/entries/customers/all-customers.js
 import { demoCustomers } from './demo-data.js';
 
-export function allCustomersComponent(useDemo = false) {
+export function allCustomersComponent(useDemo = true) {
     return {
         sortBy: 'spend',
         sortOrder: 'desc',

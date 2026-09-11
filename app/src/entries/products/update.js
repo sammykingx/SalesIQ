@@ -122,7 +122,11 @@ export function modifyProductComponent(endpointUrl = '') {
                             4500
                         );
                     } else {
-                        inAppToast('Ecosystem Glitch ⚠️', data?.message || 'An unexpected error occurred.', 'error');
+                        inAppToast(
+                            data?.title || 'Ecosystem Glitch ⚠️',
+                            data?.message || 'An unexpected error occurred.',
+                            data?.status || 'error'
+                        );
                     }
                     return;
                 }
@@ -133,12 +137,12 @@ export function modifyProductComponent(endpointUrl = '') {
                     price: String(payload.price)
                 };
 
-                if (data?.redirect_url) {
-                    console.log("Will be reditrecting soon");
-                    // setTimeout(() => {
-                    //     window.location.href = data.redirect_url
-                    // }, 1500);
+                if (data.redirect && data.redirect_url) {
+                    setTimeout(() => {
+                        window.location.href = data.redirect_url
+                    }, 1500);
                 }
+
             } catch (error) {
                 inAppToast('Connection Void 🌪️', err.message || 'Failed to reach the server. Check your network connection.', 'error');
             } finally {

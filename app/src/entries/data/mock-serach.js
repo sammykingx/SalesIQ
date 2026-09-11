@@ -3,6 +3,9 @@
 // remote-search.js (fetch-based) when the backend endpoint exists — nothing
 // in search-dialog.js needs to change beyond the import.
 
+import { demoCustomers } from "../customers/demo-data";
+import { demoProductsData } from "../products/demo-data";
+
 const invoices = [
     { id: 'INV-1042', customer: 'Acme Ltd', amount: '482.00' },
     { id: 'INV-1043', customer: 'Northwind Traders', amount: '129.50' },
@@ -10,11 +13,8 @@ const invoices = [
     { id: 'INV-2049', customer: 'Bright Retail Co', amount: '1,280.00' },
 ];
 
-const customers = [
-    { id: 'CUST-104', name: 'Jane Doe', email: 'jane@acme.com' },
-    { id: 'CUST-118', name: 'Kwame Mensah', email: 'kwame@northwind.co' },
-    { id: 'CUST-201', name: 'Priya Nair', email: 'priya@brightretail.com' },
-];
+const customers = demoCustomers;
+const products = demoProductsData;
 
 function wait(ms, signal) {
     return new Promise((resolve, reject) => {
@@ -41,15 +41,43 @@ export async function mockSearch(query, signal) {
         }));
 
     const customerHits = customers
-        .filter((c) => c.id.toLowerCase().includes(q) || c.name.toLowerCase().includes(q) || c.email.toLowerCase().includes(q))
+        .filter((c) => {
+            const firstName = c.firstName.toLowerCase();
+            const lastName = c.lastName.toLowerCase();
+            const email = c.email.toLowerCase();
+            const phone = c.phone.toLowerCase();
+
+            return (
+                firstName.includes(q) ||
+                lastName.includes(q) ||
+                email.includes(q) ||
+                phone.includes(q)
+            );
+        })
         .map((c) => ({
             group: 'Customers',
-            label: c.name,
-            meta: c.email,
-            href: `/customers/${c.id}/`,
+            label: `${c.firstName} ${c.lastName}`,
+            meta: `Spent: $${c.spend.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} | Orders: ${c.totalOrders}`,
+            href: `/customers/`,
         }));
 
-    return [...invoiceHits, ...customerHits];
+    const productHits = products
+        .filter((p) => {
+            const name = p.name.toLowerCase();
+            const productType = p.product_type.toLowerCase();
+            return name.includes(q) || productType.includes(q);
+        })
+        .map((p) => {
+            const totalRevenue = p.salesCount * p.price;
+            return {
+                group: 'Products',
+                label: p.name,
+                meta: `Revenue: ₦${totalRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} | Sales: ${p.salesCount}`,
+                href: '/products/', //p.url,
+            };
+        });
+
+    return [...invoiceHits, ...customerHits, ...productHits];
 }
 
 // When the real endpoint exists, the swap is exactly one file:

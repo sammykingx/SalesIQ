@@ -1,0 +1,413 @@
+{% extends "layouts/_base_app.html" %}
+{% load static %}
+
+{% block title %}salesiq | Record New Sale{% endblock %}
+
+{% block page_body %}
+<!-- Django JSON Data Injections -->
+{{ customers_json|json_script:"customers_data" }}
+{{ products_json|json_script:"products_data" }}
+
+<div class="space-y-6" x-data="recordSaleComponent()">
+
+    <!-- HERO HEADER BANNER -->
+    <div class="relative overflow-hidden rounded-3xl bg-neutral-900 p-6 text-white shadow-xl sm:p-8 dark:bg-neutral-950 dark:border dark:border-neutral-800">
+        <div class="pointer-events-none absolute -right-10 -top-20 h-64 w-64 rounded-full bg-emerald-500/20 blur-3xl"></div>
+        <div class="pointer-events-none absolute -bottom-20 left-1/3 h-64 w-64 rounded-full bg-indigo-500/20 blur-3xl"></div>
+
+        <div class="relative z-10 flex flex-col justify-between gap-6 md:flex-row md:items-center">
+            <div class="max-w-xl space-y-2">
+                <div class="inline-flex items-center gap-2 rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-400 border border-emerald-500/20">
+                    <span class="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span>Digital Sales Ledger</span>
+                </div>
+                <h1 class="text-2xl font-semibold tracking-tight text-white sm:text-3xl">Record Daily Transaction</h1>
+                <p class="text-xs text-neutral-300 sm:text-sm">Log daily sales entries, feed SalesIQ smart analytics, and issue instant receipts for physical, digital, or service offerings.</p>
+            </div>
+            
+            <div class="flex items-center gap-3 shrink-0">
+                <a href="{% url SALES.LIST %}" class="inline-flex items-center gap-2 rounded-xl bg-white border border-neutral-700 px-4 py-2.5 text-xs font-semibold text-neutral-900 shadow-xs hover:bg-neutral-100 active:scale-95 hover:cursor-pointer">
+                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                    <span>View All Sales</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN FORM CONTAINER -->
+    <form @submit.prevent="submitSaleForm" class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+
+        <!-- LEFT/CENTER COLUMN: CUSTOMER & PRODUCT DETAILS -->
+        <div class="space-y-6 lg:col-span-2">
+            
+            <!-- SECTION 1: CUSTOMER INFORMATION -->
+            <!-- SECTION 1: CUSTOMER INFORMATION -->
+            <div class="rounded-3xl border border-neutral-200/80 bg-white p-6 shadow-xs dark:border-neutral-800 dark:bg-neutral-900">
+                <div class="flex items-center justify-between border-b border-neutral-100 pb-4 dark:border-neutral-800">
+                    <div>
+                        <h2 class="text-base font-semibold text-neutral-900 dark:text-white">1. Customer Details</h2>
+                        <p class="text-xs text-neutral-500">Search existing client directory or record a new customer profile.</p>
+                    </div>
+                    <!-- Customer Badge Status & Unlock Action -->
+                    <div class="flex items-center gap-2">
+                        <span 
+                            :class="selectedCustomer.id ? 'bg-indigo-50 text-indigo-700 border-indigo-200 dark:bg-indigo-950/60 dark:text-indigo-400 dark:border-indigo-800' : 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/60 dark:text-amber-400 dark:border-amber-800'"
+                            class="inline-flex items-center gap-1 rounded-full border px-3 py-1 text-[11px] font-semibold capitalize"
+                            x-text="selectedCustomer.id ? 'Existing Customer (' + selectedCustomer.id + ')' : 'New Customer'"
+                        ></span>
+                        <button 
+                            type="button" 
+                            x-show="isCustomerLocked" 
+                            @click="unlockCustomer()" 
+                            class="text-xs text-red-500 hover:text-red-700 font-medium underline dark:text-red-400"
+                        >
+                            Change / Clear
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mt-5 space-y-4">
+                    <!-- Customer Lookup Search Input -->
+                    <div class="relative">
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-neutral-500 mb-1">Search Customer Registry</label>
+                        <div class="relative">
+                            <input 
+                                type="text" 
+                                x-model="customerSearch" 
+                                :disabled="isCustomerLocked"
+                                @input="showCustomerDropdown = true"
+                                @focus="showCustomerDropdown = true"
+                                @click.away="showCustomerDropdown = false"
+                                placeholder="Type customer name, email, or phone number..." 
+                                :class="isCustomerLocked ? 'bg-neutral-100 text-neutral-500 cursor-not-allowed dark:bg-neutral-800 dark:text-neutral-400' : 'bg-neutral-50/50 text-neutral-800 focus:border-emerald-500 dark:bg-neutral-950 dark:text-neutral-200'"
+                                class="w-full rounded-xl border border-neutral-200 px-4 py-2.5 placeholder-neutral-400 focus:outline-none focus:ring-1 focus:ring-emerald-500/20 dark:border-neutral-800"
+                            />
+                            <svg class="absolute right-3.5 top-3 h-4 w-4 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                        </div>
+
+                        <!-- Autocomplete Suggestions Dropdown -->
+                        <div x-show="showCustomerDropdown && filteredCustomers.length > 0 && !isCustomerLocked" class="absolute z-30 mt-1 max-h-56 w-full overflow-y-auto rounded-2xl border border-neutral-200 bg-white shadow-xl dark:border-neutral-800 dark:bg-neutral-900">
+                            <template x-for="cust in filteredCustomers" :key="cust.id">
+                                <div 
+                                    @click="selectCustomer(cust)" 
+                                    class="flex cursor-pointer items-center justify-between px-4 py-3 border-b border-neutral-100/80 hover:bg-emerald-50/50 dark:border-neutral-800 dark:hover:bg-neutral-800/60"
+                                >
+                                    <div>
+                                        <p class="text-xs font-semibold text-neutral-900 dark:text-white" x-text="(cust.first_name || cust.firstName || '') + ' ' + (cust.last_name || cust.lastName || '')"></p>
+                                        <p class="text-[11px] text-neutral-500" x-text="(cust.email || '') + ' • ' + (cust.phone_number || cust.phone || '')"></p>
+                                    </div>
+                                    <span class="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400">Select</span>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Customer Profile Fields (Readonly when locked) -->
+                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        <div>
+                            <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1">First Name</label>
+                            <input 
+                                type="text" 
+                                required
+                                :readonly="isCustomerLocked"
+                                x-model="selectedCustomer.first_name" 
+                                @input="resetCustomerIfEdited()"
+                                placeholder="John" 
+                                :class="isCustomerLocked ? 'bg-neutral-100 text-neutral-500 cursor-not-allowed dark:bg-neutral-800 dark:text-neutral-400' : 'bg-white text-neutral-800 focus:border-emerald-500 dark:bg-neutral-950 dark:text-neutral-200'"
+                                class="w-full rounded-xl border border-neutral-200 px-3.5 py-2 focus:outline-none focus:ring-1 focus:ring-emerald-500/20 dark:border-neutral-800"
+                            />
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Last Name</label>
+                            <input 
+                                type="text" 
+                                required
+                                :readonly="isCustomerLocked"
+                                x-model="selectedCustomer.last_name" 
+                                @input="resetCustomerIfEdited()"
+                                placeholder="Doe" 
+                                :class="isCustomerLocked ? 'bg-neutral-100 text-neutral-500 cursor-not-allowed dark:bg-neutral-800 dark:text-neutral-400' : 'bg-white text-neutral-800 focus:border-emerald-500 dark:bg-neutral-950 dark:text-neutral-200'"
+                                class="w-full rounded-xl border border-neutral-200 px-3.5 py-2 focus:outline-none focus:ring-1 focus:ring-emerald-500/20 dark:border-neutral-800"
+                            />
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Email Address</label>
+                            <input 
+                                type="email" 
+                                required
+                                :readonly="isCustomerLocked"
+                                x-model="selectedCustomer.email" 
+                                @input="resetCustomerIfEdited()"
+                                placeholder="john.doe@example.com" 
+                                :class="isCustomerLocked ? 'bg-neutral-100 text-neutral-500 cursor-not-allowed dark:bg-neutral-800 dark:text-neutral-400' : 'bg-white text-neutral-800 focus:border-emerald-500 dark:bg-neutral-950 dark:text-neutral-200'"
+                                class="w-full rounded-xl border border-neutral-200 px-3.5 py-2 focus:outline-none focus:ring-1 focus:ring-emerald-500/20 dark:border-neutral-800"
+                            />
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Phone Number</label>
+                            <input 
+                                type="tel" 
+                                required
+                                :readonly="isCustomerLocked"
+                                x-model="selectedCustomer.phone_number" 
+                                @input="resetCustomerIfEdited()"
+                                placeholder="08012345678" 
+                                :class="isCustomerLocked ? 'bg-neutral-100 text-neutral-500 cursor-not-allowed dark:bg-neutral-800 dark:text-neutral-400' : 'bg-white text-neutral-800 focus:border-emerald-500 dark:bg-neutral-950 dark:text-neutral-200'"
+                                class="w-full rounded-xl border border-neutral-200 px-3.5 py-2 focus:outline-none focus:ring-1 focus:ring-emerald-500/20 dark:border-neutral-800"
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 2: PRODUCTS SOLD (DYNAMIC INFINITE LINE ITEMS) -->
+            <div class="rounded-3xl border border-neutral-200/80 bg-white p-6 shadow-xs dark:border-neutral-800 dark:bg-neutral-900">
+                <div class="flex items-center justify-between border-b border-neutral-100 pb-4 dark:border-neutral-800">
+                    <div>
+                        <h2 class="text-base font-semibold text-neutral-900 dark:text-white">2. Products & Services Sold</h2>
+                        <p class="text-xs text-neutral-500">Add sales items. Existing catalog items auto-fill default rates.</p>
+                    </div>
+                    <button 
+                        type="button" 
+                        @click="addItem()" 
+                        class="inline-flex items-center gap-1.5 rounded-xl bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700 hover:bg-emerald-100 dark:bg-emerald-950/60 dark:text-emerald-400"
+                    >
+                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                        <span>Add Item</span>
+                    </button>
+                </div>
+
+                <div class="mt-5 space-y-6">
+                    <template x-for="(item, index) in items" :key="index">
+                        <div class="space-y-3">
+                            <div class="relative rounded-2xl border border-neutral-200/80 bg-neutral-50/50 p-4 dark:border-neutral-800 dark:bg-neutral-950/50 space-y-4">
+                                
+                                <!-- Item Header Row -->
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs font-semibold text-neutral-400 uppercase tracking-wider" x-text="'Line Item #' + (index + 1)"></span>
+                                    <div class="flex items-center gap-2">
+                                        <span 
+                                            :class="item.is_new ? 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300' : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'"
+                                            class="rounded-md px-2 py-0.5 text-[10px] font-semibold uppercase"
+                                            x-text="item.is_new ? 'New Product' : 'Catalog Match'"
+                                        ></span>
+                                        <button 
+                                            type="button" 
+                                            x-show="items.length > 1"
+                                            @click="removeItem(index)" 
+                                            class="text-neutral-400 hover:text-red-500 p-1"
+                                        >
+                                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 gap-4 sm:grid-cols-12">
+                                    <!-- Product Name Autocomplete Search -->
+                                    <div class="relative sm:col-span-5">
+                                        <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Product Title</label>
+                                        <input 
+                                            type="text" 
+                                            required
+                                            x-model="item.searchQuery"
+                                            @input="handleProductInput(index)"
+                                            @focus="item.showDropdown = true"
+                                            @click.away="item.showDropdown = false"
+                                            placeholder="Type item title..." 
+                                            class="w-full rounded-xl border border-neutral-200 bg-white px-3.5 py-2 text-xs text-neutral-800 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/20 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-200"
+                                        />
+
+                                        <!-- Product Suggestions Dropdown -->
+                                        <div x-show="item.showDropdown && getFilteredProducts(item.searchQuery).length > 0" class="absolute z-30 mt-1 max-h-48 w-full overflow-y-auto rounded-2xl border border-neutral-200 bg-white shadow-xl dark:border-neutral-800 dark:bg-neutral-900">
+                                            <template x-for="prod in getFilteredProducts(item.searchQuery)" :key="prod.id">
+                                                <div 
+                                                    @click="selectProduct(index, prod)" 
+                                                    class="flex cursor-pointer items-center justify-between px-3.5 py-2.5 border-b border-neutral-100 hover:bg-emerald-50/50 dark:border-neutral-800 dark:hover:bg-neutral-800/60"
+                                                >
+                                                    <div>
+                                                        <p class="text-xs font-semibold text-neutral-900 dark:text-white" x-text="prod.product_name || prod.name"></p>
+                                                        <p class="text-[10px] text-neutral-500 uppercase" x-text="(prod.product_type || 'physical') + ' • ₦' + (prod.price || prod.spend || 0).toLocaleString('en-NG')"></p>
+                                                    </div>
+                                                    <span class="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400">Select</span>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </div>
+
+                                    <!-- Product Type -->
+                                    <div class="sm:col-span-3">
+                                        <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Product Type</label>
+                                        <select 
+                                            x-model="item.product_type"
+                                            :disabled="!item.is_new"
+                                            :class="!item.is_new ? 'bg-neutral-100 text-neutral-500 cursor-not-allowed dark:bg-neutral-800 dark:text-neutral-400' : 'bg-white text-neutral-800 dark:bg-neutral-900 dark:text-neutral-200'"
+                                            class="w-full rounded-xl border border-neutral-200 px-3 py-2 text-xs font-medium focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/20 dark:border-neutral-800"
+                                        >
+                                            <option value="physical">Physical</option>
+                                            <option value="digital">Digital</option>
+                                            <option value="service">Service</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Quantity (Spinners Disabled) -->
+                                    <div class="sm:col-span-2">
+                                        <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Qty</label>
+                                        <input 
+                                            type="number" 
+                                            min="1"
+                                            :disabled="item.product_type === 'service'"
+                                            x-model="item.quantity"
+                                            :class="item.product_type === 'service' ? 'bg-neutral-100 text-neutral-400 cursor-not-allowed dark:bg-neutral-800 dark:text-neutral-500' : 'bg-white text-neutral-800 dark:bg-neutral-900 dark:text-neutral-200'"
+                                            class="w-full rounded-xl border border-neutral-200 px-3 py-2 text-xs focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/20 dark:border-neutral-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                        />
+                                    </div>
+
+                                    <!-- Sale Price Input -->
+                                    <div class="sm:col-span-2">
+                                        <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Price (₦)</label>
+                                        <input 
+                                            type="text" 
+                                            required
+                                            x-model="item.formatted_price"
+                                            @input="formatPriceInput(index, $event.target.value)"
+                                            class="w-full rounded-xl border border-neutral-200 bg-white px-3 py-2 text-xs text-neutral-800 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/20 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-200"
+                                        />
+                                    </div>
+                                </div>
+
+                                <!-- Contextual Price Override Notice -->
+                                <div x-show="!item.is_new" class="text-[11px] text-neutral-500 flex items-center gap-1">
+                                    <svg class="h-3.5 w-3.5 text-amber-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                    <span>You can update the sale price if different from the base catalog rate without modifying catalog settings.</span>
+                                </div>
+
+                            </div>
+
+                            <!-- Add Item Action Directly Under Each Card -->
+                            <div class="flex justify-end pr-1">
+                                <button 
+                                    type="button" 
+                                    @click="addItem()" 
+                                    class="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 dark:hover:text-emerald-300"
+                                >
+                                    
+                                    <span>+ Add another item below</span>
+                                </button>
+                            </div>
+                        </div>
+                    </template>
+
+                    {% comment %} <!-- Bottom Add Item Button Area -->
+                    <button 
+                        type="button" 
+                        @click="addItem()" 
+                        class="w-full flex items-center justify-center gap-2 rounded-2xl border border-dashed border-neutral-300 dark:border-neutral-700 hover:border-emerald-500 hover:bg-emerald-50/30 py-3 text-xs font-semibold text-neutral-600 hover:text-emerald-700 dark:hover:border-emerald-500/50 dark:hover:bg-emerald-950/20 dark:text-neutral-400 dark:hover:text-emerald-400"
+                    >
+                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                        <span>Add New Sale Item</span>
+                    </button> {% endcomment %}
+                </div>
+            </div>
+
+        </div>
+
+        <!-- RIGHT COLUMN: FINANCIAL BREAKDOWN & PAYLOAD SUBMISSION -->
+        <div class="space-y-6 lg:col-span-1">
+            <div class="sticky top-6 rounded-3xl border border-neutral-200/80 bg-white p-6 shadow-xs dark:border-neutral-800 dark:bg-neutral-900 space-y-6">
+                <div>
+                    <h2 class="text-base font-semibold text-neutral-900 dark:text-white">3. Transaction Summary</h2>
+                    <p class="text-xs text-neutral-500">Calculated financial totals and taxes.</p>
+                </div>
+
+                <!-- Financial Calculation Inputs -->
+                <div class="space-y-4 border-t border-neutral-100 pt-4 dark:border-neutral-800 text-xs">
+                    
+                    <!-- Subtotal (Read-only) -->
+                    <div class="flex items-center justify-between">
+                        <span class="font-semibold text-neutral-600 dark:text-neutral-400">Subtotal</span>
+                        <span class="font-mono text-neutral-900 dark:text-white text-sm" x-text="'₦' + formatCurrency(subTotal)"></span>
+                    </div>
+
+                    <!-- Discount Percentage Input -->
+                    <div class="space-y-1">
+                        <div class="flex items-center justify-between">
+                            <label class="font-semibold text-neutral-700 dark:text-neutral-300">Discount (%)</label>
+                            <span class="text-neutral-500 font-semibold" x-text="'- ₦' + formatCurrency(discountAmount)"></span>
+                        </div>
+                        <input 
+                            type="number" 
+                            min="0" 
+                            max="100" 
+                            step="0.1"
+                            x-model="discountPercentage"
+                            placeholder="0" 
+                            class="w-full rounded-xl border border-neutral-200 bg-white px-3 py-2 text-neutral-800 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/20 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-200 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                        />
+                    </div>
+
+                    <!-- Tax Fields -->
+                    <div class="space-y-2">
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Tax Name</label>
+                                <input 
+                                    type="text" 
+                                    x-model="taxName"
+                                    placeholder="VAT" 
+                                    class="w-full rounded-xl border border-neutral-200 bg-white px-3 py-1.5 text-neutral-800 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/20 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-200"
+                                />
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Tax Rate (%)</label>
+                                <input 
+                                    type="number" 
+                                    min="0" 
+                                    max="100" 
+                                    step="0.1"
+                                    x-model="taxPercentage"
+                                    placeholder="7.5" 
+                                    class="w-full rounded-xl border border-neutral-200 bg-white px-3 py-1.5 text-neutral-800 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/20 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-200 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                />
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between text-[11px] text-neutral-500">
+                            <span>Calculated Tax</span>
+                            <span class="font-semibold text-emerald-600 dark:text-emerald-400" x-text="'+ ₦' + formatCurrency(taxAmount)"></span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Grand Total Display -->
+                <div class="rounded-2xl bg-neutral-900 p-4 text-white dark:bg-neutral-950 dark:border dark:border-neutral-800 space-y-1">
+                    <span class="text-[10px] font-semibold uppercase tracking-wider text-neutral-400">Total Amount Due</span>
+                    <p class="text-2xl font-black text-emerald-400" x-text="'₦' + formatCurrency(grandTotal)"></p>
+                </div>
+
+                <!-- Submit Button -->
+                <button 
+                    type="submit" 
+                    :disabled="isSubmitting"
+                    class="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-xs font-semibold text-white shadow-lg shadow-emerald-600/20 hover:bg-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/20 disabled:opacity-50"
+                >
+                    <svg x-show="isSubmitting" class="h-4 w-4 animate-spin text-white" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <span x-text="isSubmitting ? 'Recording Sale...' : 'Commit & Post Sale Record'"></span>
+                </button>
+
+                <!-- Mock Success Modal / Alert -->
+                <div x-show="submitSuccess" x-transition class="rounded-2xl border border-emerald-500/20 bg-emerald-500/10 p-4 text-xs text-emerald-600 dark:text-emerald-400 space-y-2">
+                    <p class="font-semibold">Transaction Successfully Recorded!</p>
+                    <p class="text-[11px] text-neutral-600 dark:text-neutral-400">Payload generated and posted to backend mock endpoint. Check browser console logs for JSON object breakdown.</p>
+                    <button type="button" @click="submitSuccess = false" class="text-[10px] font-semibold uppercase tracking-wider text-emerald-700 dark:text-emerald-300 underline">Dismiss</button>
+                </div>
+
+            </div>
+        </div>
+
+    </form>
+
+</div>
+{% endblock %}

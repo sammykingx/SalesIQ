@@ -42,7 +42,7 @@
     <div class="space-y-3 mb-7 animate-in fade-in slide-in-from-bottom-3 duration-400 delay-150 fill-mode-both">
       {% if ACCOUNTS.DASHBOARD %}
         <a 
-          href="{% url ACCOUNTS.DASHBOARD %}" 
+          href="{% url ACCOUNTS.AUTH.LOGIN %}" 
           class="w-full inline-flex justify-center items-center gap-2 py-3 px-5 rounded-xl text-white font-semibold text-sm bg-primary hover:bg-emerald-600 shadow-lg shadow-primary/25 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/50 active:scale-[0.99]"
         >
           Go to Dashboard
@@ -82,7 +82,7 @@
 
         <!-- Dashboard -->
         <a 
-          href="{% url ACCOUNTS.DASHBOARD %}" 
+          href="{% url ACCOUNTS.AUTH.LOGIN %}" 
           class="flex-1 py-2 px-3 rounded-xl bg-slate-100/80 dark:bg-white/5 border border-slate-200/60 dark:border-white/10 hover:border-primary/40 dark:hover:border-primary/40 hover:bg-primary/5 dark:hover:bg-primary/10 text-ink-700 dark:text-slate-300 hover:text-primary transition-all font-medium flex items-center justify-center gap-1.5"
         >
           Dashboard

@@ -37,7 +37,7 @@ class APP_TEMPLATES:
     class SALES:
         LIST = f'{_SALES_BASE}/list.html'
         DETAIL = f'{_SALES_BASE}/detail.html'
-        ADD = f'{_SALES_BASE}/add.html'
+        ADD = f'{_SALES_BASE}/record-sale.html'
         EDIT = f'{_SALES_BASE}/edit.html'
             
                 

@@ -22,7 +22,8 @@ import { inAppToast } from "../lib/in-app-toast.js";
 
 import { initAccountsModule } from "./accounts";
 import { initCustomerModule } from "./customers";
-import { initProductsModule } from "./products/index.js";
+import { initProductsModule } from "./products";
+import { initSalesModule } from "./sales";
 
 
 initAuthModule(Alpine);
@@ -31,6 +32,7 @@ initOnboarding(Alpine);
 initAccountsModule(Alpine);
 initCustomerModule(Alpine);
 initProductsModule(Alpine);
+initSalesModule(Alpine);
 
 
 createIcons({

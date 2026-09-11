@@ -16,20 +16,21 @@
 
 export const navManifest = [
     { group: 'Main', label: 'Dashboard', href: '/dashboard/' },
+
     { group: 'Business', label: 'Sales', href: '/sales/' },
+    { group: 'Business', label: 'Record a sale', href: '/record-sale/' },
     { group: 'Business', label: 'Invoices', href: '/invoices/' },
     { group: 'Business', label: 'Reports', href: '/reports/' },
-    { group: 'Management', label: 'Add New Customer', href: '/customers/new/' },
-    { group: 'Management', label: 'All Customers', href: '/customers/' },
-    { group: 'Management', label: 'Top Customers', href: '/customers/top/' },
-    { group: 'Management', label: 'Add New Product', href: '/products/new/' },
-    { group: 'Management', label: 'All Products', href: '/products/' },
-    { group: 'Management', label: 'Product Categories', href: '/products/categories/' },
-    { group: 'Pages', label: 'View Profile', href: '/account/profile/' },
-    { group: 'Pages', label: 'Account Settings', href: '/account/settings/' },
-    { group: 'Pages', label: 'Support', href: '/account/support/' },
-    { group: 'Pages', label: 'Activity Log', href: '/account/activity/' },
-    { group: 'Pages', label: 'Events', href: '/account/events/' },
+    { group: 'Business', label: 'Update Business Socials', href: '/accounts/settings/#socials' },
+
+    { group: 'Management', label: 'All customers', href: '/customers/' },
+    { group: 'Management', label: 'All products', href: '/products/' },
+
+
+    { group: 'Personal', label: 'Your profile', href: '/accounts/profile/' },
+    { group: 'Personal', label: 'Update profile info', href: '/accounts/settings/#profile' },
+    { group: 'Personal', label: 'Update password', href: '/accounts/settings/#update-password' },
+
     { group: 'Actions', label: 'Toggle dark mode', action: 'toggleTheme' },
     { group: 'Actions', label: 'Log Out', action: 'logout' },
 ];

@@ -26,3 +26,13 @@ class ProductNotFoundError(ProductDomainException):
             err_type="info"
         )
         
+        
+class ProductAccessDeniedError(ProductDomainException):
+    """Raised when a business owner tries to access or modify a product belonging to another business."""
+    def __init__(self, message: str = "You do not have permission to access or modify this product."):
+        super().__init__(
+            message=message,
+            title="Access Denied",
+            err_type="info"
+        )
+        

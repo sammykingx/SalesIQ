@@ -30,15 +30,15 @@ SIDEBAR_NAV_TREE = [
         "group_url": SALES.LIST,
         "group_children": [
             {"child_name": "sales_list", "child_label": "All Sales", "child_url": reverse_lazy(SALES.LIST)},
-            {"child_name": "sales_add", "child_label": "Record Sale", "child_url": SALES.ADD},
+            {"child_name": "sales_add", "child_label": "Record Sale", "child_url": reverse_lazy(SALES.ADD)},
         ],
     },
-    {
-        "group_name": "invoices",
-        "group_label": "Invoices",
-        "group_icon": "file-text",
-        "group_url":  "#" #INVOICES.LIST,
-    },
+    # {
+    #     "group_name": "invoices",
+    #     "group_label": "Invoices",
+    #     "group_icon": "file-text",
+    #     "group_url":  "#" #INVOICES.LIST,
+    # },
     {
         "group_name": "reports",
         "group_label": "Reports",

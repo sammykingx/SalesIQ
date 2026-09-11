@@ -1,5 +1,5 @@
 export function initHeaderModule(Alpine) {
-    // Shared UI state used by the language switcher (both the lg+ dropdown and the mobile "More" menu)
+    // Shared UI state used by the language switcher
     Alpine.store('ax', {
         lang: 'EN',
         setLang(code) {
@@ -7,7 +7,7 @@ export function initHeaderModule(Alpine) {
         },
     });
 
-    // Generic dropdown behavior — reused by language, apps, cart, notifications, profile, and "More"
+    // General dropdown menu behavior
     Alpine.data('axDropdown', () => ({
         open: false,
         toggle() {

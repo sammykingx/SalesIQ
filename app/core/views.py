@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.utils import timezone
 from django.views.generic import View
@@ -34,12 +35,23 @@ class ComingSoonView(View):
         
         return JsonResponse({"message": msg}, status=200)
     
+
+class BusinessSearchDataView(LoginRequiredMixin, View):
+    """
+    Returns a unified payload of customers, products, and sales records 
+    for client-side live search and autocomplete.
+    """
+    def get(self, request: HttpRequest) -> JsonResponse:
+        from products.domain.demo_data import PRODUCTS_DATA
+        return JsonResponse({
+            "products": PRODUCTS_DATA,
+        }, status=200)
     
     
-def custom_404(request, exception):
+def custom_404(request: HttpRequest, exception):
     return render(request, ERROR_PAGES.NOT_FOUND, status=404)
 
 
-def custom_500(request):
+def custom_500(request: HttpRequest):
     return render(request, ERROR_PAGES.INETERNAL_ERROR, status=500)
     
