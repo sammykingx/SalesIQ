@@ -24,14 +24,14 @@ class ProductsSelector:
             updated_at=product.updated_at,
         )
 
-    def get_product(self, *, product_id: UUID, as_instance: bool = False) -> Union[Products, ProductEntity]:
+    def get_product(self, *, product_id: UUID, as_instance: bool = False) -> Union[Products, ProductEntity, None]:
         """
             Retrieves a single product by its UUID. 
             Returns a Django model instance if as_instance=True, otherwise returns a ProductEntity.
         """
         product = self.model.objects.filter(pk=product_id).first()
         if not product:
-            raise ProductNotFoundError()
+            return None
 
         if as_instance:
             return product
@@ -57,7 +57,7 @@ class ProductsSelector:
         
         queryset = self.model.objects.filter(business_id=business_id)
         if not queryset:
-            raise ProductNotFoundError()
+            return []
 
         if as_instance:
             return list(queryset)

@@ -20,7 +20,7 @@
         <div class="mt-6 flex flex-col items-start gap-4 rounded-xl border border-dashed border-neutral-200 bg-neutral-50/50 p-4 dark:border-neutral-800 dark:bg-neutral-950/40 sm:flex-row sm:items-center sm:justify-between">
             <div class="flex items-center gap-4">
                 <div class="relative flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-emerald-100 text-sm font-semibold text-emerald-700 ring-1 ring-white dark:bg-emerald-950/60 dark:text-emerald-400 dark:ring-emerald-900">
-                    {{ user.first_name|first }}{{ user.last_name|first }}
+                    {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
                     <span class="absolute -top-1 -right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-amber-500 ring-2 ring-white dark:ring-neutral-900">
                         <span class="h-1.5 w-1.5 rounded-full bg-white"></span>
                     </span>

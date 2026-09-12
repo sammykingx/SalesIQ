@@ -116,7 +116,7 @@
                 <img class="h-10 w-10 rounded-full object-cover" src="{{ user.avatar.url }}" alt="{{ user.get_full_name }}" width="40" height="40" />
             {% else %}
                 <div class="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 font-semibold text-sm dark:bg-emerald-950/60 dark:text-emerald-400 ring-1 ring-emerald-500/20">
-                    {{ user.first_name|slice:":1" }}{{ user.last_name|slice:":1" }}
+                    {{ user.first_name|slice:":1"|upper }}{{ user.last_name|slice:":1"|upper }}
                 </div>
             {% endif %}
             <span x-show="!$store.sidebar.collapsed || $store.sidebar.mobileOpen" class="flex min-w-0 flex-col leading-tight">
