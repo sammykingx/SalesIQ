@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Invoice #INV-2026-9042</title>
+    <style>
+        /* --- Page & Base Setup --- */
+        @page {
+            size: A4 portrait;
+            margin: 0;
+            @bottom-right {
+                content: "SalesIQ Verified Receipt • Page " counter(page);
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+                font-size: 7.5pt;
+                color: #94A3B8;
+                padding-right: 18mm;
+                padding-bottom: 12mm;
+            }
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-size: 9pt;
+            color: #0F172A;
+            line-height: 1.5;
+            margin: 0;
+            padding: 0;
+            background-color: #FFFFFF;
+        }
+
+        /* --- Background Brand Watermark --- */
+        .watermark-container {
+            position: fixed;
+            bottom: -50px;
+            right: -50px;
+            width: 350px;
+            height: 350px;
+            z-index: -1000;
+            opacity: 0.03;
+        }
+
+        .watermark-logo {
+            width: 100%;
+            height: auto;
+        }
+
+        .wrapper {
+            padding: 14mm 16mm;
+        }
+
+        /* --- Hero Header Bar --- */
+        .hero-banner {
+            background-color: #090D16;
+            color: #FFFFFF;
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin-bottom: 24px;
+        }
+
+        .hero-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .brand-title {
+            font-size: 16pt;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: #FFFFFF;
+            margin: 0 0 2px 0;
+        }
+
+        .brand-subtext {
+            font-size: 8pt;
+            color: #94A3B8;
+        }
+
+        .status-pill {
+            display: inline-block;
+            background-color: rgba(16, 185, 129, 0.15);
+            color: #34D399;
+            border: 1px solid rgba(52, 211, 153, 0.3);
+            border-radius: 20px;
+            padding: 4px 12px;
+            font-size: 8pt;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .inv-number {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 13pt;
+            font-weight: 700;
+            color: #38BDF8;
+            margin-top: 6px;
+        }
+
+        /* --- Merchant Handles Bar --- */
+        .handles-bar {
+            background-color: #F8FAFC;
+            border-radius: 8px;
+            padding: 8px 14px;
+            margin-bottom: 24px;
+            border: 1px solid #E2E8F0;
+        }
+
+        .handle-item {
+            display: inline-flex;
+            align-items: center;
+            font-size: 8pt;
+            font-weight: 600;
+            color: #475569;
+            margin-right: 18px;
+        }
+
+        .handle-icon {
+            width: 12px;
+            height: 12px;
+            fill: #0F172A;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+
+        /* --- Information Grid --- */
+        .grid-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 24px;
+        }
+
+        .grid-cell {
+            width: 48%;
+            vertical-align: top;
+        }
+
+        .section-label {
+            font-size: 7.5pt;
+            text-transform: uppercase;
+            font-weight: 800;
+            color: #64748B;
+            letter-spacing: 0.8px;
+            margin-bottom: 6px;
+        }
+
+        .entity-name {
+            font-size: 11pt;
+            font-weight: 700;
+            color: #0F172A;
+            margin-bottom: 4px;
+        }
+
+        .meta-line {
+            font-size: 8.5pt;
+            color: #475569;
+            line-height: 1.5;
+        }
+
+        /* --- Items Table --- */
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .items-table th {
+            font-size: 7.5pt;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #64748B;
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 2px solid #E2E8F0;
+        }
+
+        .items-table td {
+            padding: 12px;
+            border-bottom: 1px solid #F1F5F9;
+            font-size: 8.5pt;
+        }
+
+        .item-name {
+            font-weight: 700;
+            color: #0F172A;
+            display: block;
+        }
+
+        .badge-tag {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 6.5pt;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-top: 3px;
+        }
+
+        .badge-physical { background-color: #E0F2FE; color: #0284C7; }
+        .badge-digital { background-color: #F3E8FF; color: #7E22CE; }
+        .badge-service { background-color: #FEF3C7; color: #D97706; }
+
+        /* --- Summary Section --- */
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .totals-card {
+            background-color: #090D16;
+            color: #FFFFFF;
+            border-radius: 10px;
+            padding: 16px;
+        }
+
+        .total-item-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .total-item-table td {
+            padding: 3px 0;
+            font-size: 8.5pt;
+            color: #94A3B8;
+        }
+
+        .total-item-table .val {
+            text-align: right;
+            font-weight: 600;
+            color: #F1F5F9;
+        }
+
+        .grand-total-td {
+            padding-top: 10px !important;
+            border-top: 1px solid #334155;
+            font-size: 11pt !important;
+            font-weight: 800 !important;
+            color: #FFFFFF !important;
+        }
+
+        .grand-total-val {
+            text-align: right;
+            font-size: 12pt !important;
+            font-weight: 800 !important;
+            color: #34D399 !important;
+        }
+
+        /* --- Footer --- */
+        .footer {
+            margin-top: 40px;
+            padding-top: 16px;
+            border-top: 1px solid #E2E8F0;
+            text-align: center;
+            font-size: 8pt;
+            color: #94A3B8;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Watermark Accent -->
+    <div class="watermark-container">
+        <img src="{% static 'images/logo/icon-light.png' %}" class="watermark-logo" alt="SalesIQ Logo">
+    </div>
+
+    <div class="wrapper">
+
+        <!-- Modern Dark Hero Header -->
+        <div class="hero-banner">
+            <table class="hero-table">
+                <tr>
+                    <td style="width: 55%;">
+                        <h1 class="brand-title">{{ invoice.business.name|default:"Apex Digital Studio" }}</h1>
+                        <div class="brand-subtext">Verified Social Merchant • SalesIQ ID: #{{ invoice.business.id|default:"BIZ-8820" }}</div>
+                    </td>
+                    <td style="width: 45%; text-align: right; vertical-align: middle;">
+                        <span class="status-pill">Payment Received</span>
+                        <div class="inv-number">{{ invoice.ref|default:"INV-2026-9042" }}</div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Social Handles & Direct Reach -->
+        <div class="handles-bar">
+            <span class="handle-item">
+                <svg class="handle-icon" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                @{{ invoice.business.instagram|default:"apexdigital.ng" }}
+            </span>
+            <span class="handle-item">
+                <svg class="handle-icon" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.98-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+                @{{ invoice.business.tiktok|default:"apexdigital.hq" }}
+            </span>
+            <span class="handle-item" style="margin-right: 0;">
+                🌐 {{ invoice.business.website|default:"www.apexdigital.ng" }}
+            </span>
+        </div>
+
+        <!-- Details Two-Column Grid -->
+        <table class="grid-table">
+            <tr>
+                <td class="grid-cell">
+                    <div class="section-label">Billed To</div>
+                    <div class="entity-name">{{ invoice.customer.first_name|default:"Sarah" }} {{ invoice.customer.last_name|default:"Jenkins" }}</div>
+                    <div class="meta-line">
+                        {{ invoice.customer.email|default:"sarah.j@workspace.com" }}<br>
+                        {{ invoice.customer.phone|default:"+234 803 456 7890" }}
+                    </div>
+                </td>
+                <td style="width: 4%;"></td>
+                <td class="grid-cell">
+                    <div class="section-label">Transaction Meta</div>
+                    <div class="meta-line">
+                        <strong>Issued Date:</strong> {{ invoice.created_at|date:"d M, Y • h:i A"|default:"12 Sep, 2026 • 06:15 PM" }}<br>
+                        <strong>Payment Method:</strong> {{ invoice.payment_method|default:"Card Transfer" }}<br>
+                        <strong>Channel:</strong> {{ invoice.channel|default:"Instagram Direct" }}
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+        <!-- Modern Line-Item Breakdown -->
+        <table class="items-table">
+            <thead>
+                <tr>
+                    <th style="width: 50%;">Description</th>
+                    <th style="width: 15%; text-align: center;">Qty</th>
+                    <th style="width: 17.5%; text-align: right;">Unit Price</th>
+                    <th style="width: 17.5%; text-align: right;">Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if invoice.items.all %}
+                    {% for item in invoice.items.all %}
+                    <tr>
+                        <td>
+                            <span class="item-name">{{ item.name }}</span>
+                            <span class="badge-tag badge-{{ item.product_type }}">{{ item.product_type }}</span>
+                        </td>
+                        <td style="text-align: center; font-weight: 600;">
+                            {% if item.product_type == 'service' %}
+                                <span style="color: #94A3B8;">N/A</span>
+                            {% else %}
+                                {{ item.quantity }}
+                            {% endif %}
+                        </td>
+                        <td style="text-align: right; color: #475569;">&#8358;{{ item.unit_price|floatformat:2 }}</td>
+                        <td style="text-align: right; font-weight: 700; color: #0F172A;">&#8358;{{ item.total_price|floatformat:2 }}</td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <!-- Demo Data Loop for Visual Testing -->
+                    <tr>
+                        <td>
+                            <span class="item-name">Ergonomic Desk Setup & Monitor Arm</span>
+                            <span class="badge-tag badge-physical">Physical</span>
+                        </td>
+                        <td style="text-align: center; font-weight: 600;">2</td>
+                        <td style="text-align: right; color: #475569;">&#8358;140,000.00</td>
+                        <td style="text-align: right; font-weight: 700; color: #0F172A;">&#8358;280,000.00</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="item-name">Design Systems & UI Kit (Commercial License)</span>
+                            <span class="badge-tag badge-digital">Digital</span>
+                        </td>
+                        <td style="text-align: center; font-weight: 600;">1</td>
+                        <td style="text-align: right; color: #475569;">&#8358;45,000.00</td>
+                        <td style="text-align: right; font-weight: 700; color: #0F172A;">&#8358;45,000.00</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="item-name">Brand Identity & Onboarding Strategy Consultation</span>
+                            <span class="badge-tag badge-service">Service</span>
+                        </td>
+                        <td style="text-align: center; font-weight: 600;">
+                            <span style="color: #94A3B8;">N/A</span>
+                        </td>
+                        <td style="text-align: right; color: #475569;">&#8358;75,000.00</td>
+                        <td style="text-align: right; font-weight: 700; color: #0F172A;">&#8358;75,000.00</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+
+        <!-- Summary & Totals -->
+        <table class="summary-table">
+            <tr>
+                <td style="width: 50%; vertical-align: top; padding-right: 20px;">
+                    <div style="font-size: 8pt; color: #64748B; background-color: #F8FAFC; border: 1px dashed #CBD5E1; padding: 12px; border-radius: 8px; line-height: 1.5;">
+                        <strong style="color: #0F172A;">Notes & Terms:</strong><br>
+                        Thank you for your business! All digital assets and service deliverables are granted under full commercial authorization.
+                    </div>
+                </td>
+                <td style="width: 50%; vertical-align: top;">
+                    <div class="totals-card">
+                        <table class="total-item-table">
+                            <tr>
+                                <td>Subtotal</td>
+                                <td class="val">&#8358;{{ invoice.subtotal|floatformat:2|default:"400,000.00" }}</td>
+                            </tr>
+                            <tr>
+                                <td>Discount ({{ invoice.discount_percentage|default:"5" }}%)</td>
+                                <td class="val" style="color: #F87171;">-&#8358;{{ invoice.discount_amount|floatformat:2|default:"20,000.00" }}</td>
+                            </tr>
+                            <tr>
+                                <td>VAT ({{ invoice.tax_percentage|default:"7.5" }}%)</td>
+                                <td class="val">+&#8358;{{ invoice.tax_amount|floatformat:2|default:"28,500.00" }}</td>
+                            </tr>
+                            <tr>
+                                <td class="grand-total-td">Total Paid</td>
+                                <td class="grand-total-td grand-total-val">&#8358;{{ invoice.total_amount_paid|floatformat:2|default:"408,500.00" }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+        <!-- Footer -->
+        <div class="footer">
+            Generated via <strong style="color: #0F172A;">SalesIQ</strong> — Automated Business Records & Commerce OS
+        </div>
+
+    </div>
+
+</body>
+</html>

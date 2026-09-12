@@ -33,6 +33,7 @@ urlpatterns = [
     path("accounts/", include("accounts.urls")),
     path("customers/", include("customers.urls")),
     path("products/", include("products.urls")),
+    path("invoices/", include("invoices.urls")),
     path("sales/", TemplateView.as_view(template_name=APP_TEMPLATES.SALES.LIST), name=SALES.LIST),
     path("record-sale/", TemplateView.as_view(template_name=APP_TEMPLATES.SALES.ADD), name=SALES.ADD),
 ]

@@ -6,6 +6,7 @@ _AUTH_BASE = f'{_ACCOUNTS_BASE}/auth'
 _CUSTOMERS_BASE = 'customers'
 _PRODUCTS_BASE = 'products'
 _SALES_BASE = 'sales'
+_INVOICES_BASE = 'invoices'
 
 
 class APP_TEMPLATES:
@@ -39,6 +40,10 @@ class APP_TEMPLATES:
         DETAIL = f'{_SALES_BASE}/detail.html'
         ADD = f'{_SALES_BASE}/record-sale.html'
         EDIT = f'{_SALES_BASE}/edit.html'
+        
+    class INVOICE:
+        VIEW=f'{_INVOICES_BASE}/view-v2.html'
+        
             
                 
 # 1. padlock animation https://lottiefiles.com/free-animation/password-set-LjQJxPwnaB
