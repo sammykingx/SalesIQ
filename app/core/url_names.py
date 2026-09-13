@@ -45,8 +45,6 @@ SALES = SimpleNamespace(
 )
 
 INVOICES = SimpleNamespace(
-    LIST='invoices_list',
-    ADD='invoices_add',
-    DETAIL='invoices_detail',
-    EDIT='invoices_edit',
+    VIEW='view_invoices',
+    DOWNLOAD='download_invoices',
 )

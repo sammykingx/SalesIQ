@@ -42,7 +42,8 @@ class APP_TEMPLATES:
         EDIT = f'{_SALES_BASE}/edit.html'
         
     class INVOICE:
-        VIEW=f'{_INVOICES_BASE}/view-v2.html'
+        VIEW=f'{_INVOICES_BASE}/inv-view.html'
+        INVOICE_PDF=f'{_INVOICES_BASE}/inv-pdf.html'
         
             
                 
