@@ -68,6 +68,6 @@ def get_demo_invoice_context() -> Dict[str, Any]:
         tax_name="VAT",
         tax_percentage=7.5,
         tax_amount=28500.00,
-        total_amount_paid=408500.00
+        total_amount_paid=408500.00,
     )
     return {"invoice": asdict(invoice)}

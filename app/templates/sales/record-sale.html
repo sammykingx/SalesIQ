@@ -51,7 +51,7 @@
                     <div class="flex items-center gap-2">
                         <span 
                             :class="selectedCustomer.id ? 'bg-indigo-50 text-indigo-700 border-indigo-200 dark:bg-indigo-950/60 dark:text-indigo-400 dark:border-indigo-800' : 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/60 dark:text-amber-400 dark:border-amber-800'"
-                            class="inline-flex items-center gap-1 rounded-full border px-3 py-1 text-[10px] font-semibold capitalize"
+                            class="inline-flex items-center gap-1 rounded-full border px-3 py-1 text-[10px] font-medium capitalize"
                             x-text="selectedCustomer.id ? 'Existing Customer (' + selectedCustomer.id + ')' : 'New'"
                         ></span>
                         <button 
@@ -169,7 +169,7 @@
                     <button 
                         type="button" 
                         @click="addItem()" 
-                        class="inline-flex items-center gap-1.5 rounded-xl bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700 hover:bg-emerald-100 dark:bg-emerald-950/60 dark:text-emerald-400"
+                        class="inline-flex items-center gap-1.5 rounded-xl bg-emerald-50 px-3 py-1.5 text-xs font-medium text-emerald-700 hover:bg-emerald-100 dark:bg-emerald-950/60 dark:text-emerald-400"
                     >
                         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                         <span>Add</span>
@@ -187,7 +187,7 @@
                                     <div class="flex items-center gap-2">
                                         <span 
                                             :class="item.is_new ? 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300' : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'"
-                                            class="rounded-md px-2 py-0.5 text-[10px] font-semibold uppercase"
+                                            class="rounded-md px-2 py-0.5 text-[10px] font-medium uppercase"
                                             x-text="item.is_new ? 'New Product' : 'Catalog Match'"
                                         ></span>
                                         <button 
@@ -287,7 +287,7 @@
                                 <button 
                                     type="button" 
                                     @click="addItem()" 
-                                    class="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 dark:hover:text-emerald-300"
+                                    class="inline-flex items-center gap-1 text-[11px] font-medium text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 dark:hover:text-emerald-300"
                                 >
                                     
                                     <span>+ Add another item below</span>
