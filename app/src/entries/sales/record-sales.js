@@ -218,8 +218,8 @@ export function recordSaleComponent(endpoint) {
                 },
                 products: this.items.map(item => ({
                     id: item.id,
-                    product_name: item.product_name,
-                    sale_price: parseFloat(item.price),
+                    name: item.product_name,
+                    price: parseFloat(item.price),
                     product_type: item.product_type,
                     quantity: item.product_type === 'service' ? 1 : parseInt(item.quantity, 10)
                 })),

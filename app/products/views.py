@@ -32,7 +32,7 @@ class CreateProductsView(LoginRequiredMixin, View):
     def post(self, request: HttpRequest):
         try:
             data = CreateProductsSchema.model_validate_json(request.body, strict=True)
-            # ProductsService(request=request).add_product(product_data=data)
+            ProductsService(request=request).add_product(product_data=data)
             return JsonResponse({
                 "message": "Product locked, loaded, and ready to sell. Our analytics engine are ready to start tracking data.",
                 "status": "success"

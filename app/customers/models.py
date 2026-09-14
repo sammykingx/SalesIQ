@@ -36,7 +36,7 @@ class BusinessCustomers(models.Model):
     business = models.ForeignKey("accounts.Business", on_delete=models.CASCADE, related_name="clients")
     client = models.ForeignKey(Customers, on_delete=models.PROTECT, related_name="business_links", to_field="email")
 
-    display_name = models.CharField(max_length=50, blank=True, help_text="Optinal Per business overide")
+    display_name = models.CharField(max_length=50, blank=True, help_text="Optional Per business overide")
     notes = models.TextField(blank=True)
     added_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

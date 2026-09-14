@@ -1,20 +1,21 @@
 from pydantic import BaseModel, Field
 from decimal import Decimal
-from typing import Literal
+from typing import Literal, Optional
 from uuid import UUID
 
 
-class CreateProductsSchema(BaseModel):
+class BaseProductSchema(BaseModel):
+    name: str = Field(..., max_length=100)
+    product_type: Literal["digital", "physical", "service"]
+    price: Decimal = Field(..., max_digits=10, decimal_places=2)
+
+class CreateProductsSchema(BaseProductSchema):
     """
         Schema used for validating input data when a user 
         is creating a new product for their business.
     """
-    name: str = Field(..., max_length=100)
-    price: Decimal = Field(..., max_digits=10, decimal_places=2)
-    product_type: Literal["digital", "physical", "service"]
-    description: str
-    
-    
+    description: Optional[str] = None
+
 class ModifyProductSchema(CreateProductsSchema):
     """
         Schema used for validating input data when updating or 

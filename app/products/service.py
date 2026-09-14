@@ -17,7 +17,7 @@ class ProductsService:
         biz_obj = self.biz_selector.get_user_business(user_email=self.request.user.email, as_instance=True) # type: ignore
         if not biz_obj:
             raise BusinessNotFoundError()
-        ProductsRepo(business_instance=biz_obj).create_product(data=product_data) # type:ignore
+        ProductsRepo(business_instance=biz_obj).get_or_create_product(data=product_data) # type:ignore
         
     def update_product(self, *, product_data:ModifyProductSchema):
         biz_obj = self.biz_selector.get_user_business(user_email=self.request.user.email, as_instance=True) # type: ignore

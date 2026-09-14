@@ -5,8 +5,10 @@ from django.urls import reverse
 from django.views.generic import View, TemplateView
 from django_weasyprint import WeasyTemplateView
 
+from accounts.domains.exceptions import AccountsDomainException
 from core.template_names import APP_TEMPLATES
 from core.url_names import INVOICES
+from invoices.domains.exceptions import InvoiceDomainException
 from invoices.serializers import CreateSalesInvoiceSchema
 from utils.pydantic_formatter import format_pydantic_errors
 
@@ -36,6 +38,9 @@ class RecordSalesInvoiceView(LoginRequiredMixin, View):
                 "error": format_pydantic_errors(err), 
                 "status": "warning"
             }, status=422)
+            
+        except (AccountsDomainException, InvoiceDomainException) as err:
+            pass
             
         except Exception as err:
             import traceback

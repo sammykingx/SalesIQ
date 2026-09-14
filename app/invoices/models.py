@@ -16,7 +16,7 @@ class InvoiceStatus(models.TextChoices):
 class Invoice(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid7, editable=False)
     display_id = models.CharField(max_length=20, unique=True, editable=False, help_text="public facing invoice id")
-    slug = models.SlugField(max_length=32, unique=True, editable=False, help_text="public receipt URL, separate from display_id")
+    slug = models.SlugField(max_length=72, unique=True, editable=False, help_text="public receipt URL, separate from display_id")
     business = models.ForeignKey("accounts.Business", on_delete=models.CASCADE, related_name="invoices")
     customer = models.ForeignKey("clients.BusinessCustomers", on_delete=models.PROTECT, related_name="invoices")
     subtotal = models.DecimalField(max_digits=12, decimal_places=2)
@@ -67,7 +67,7 @@ class InvoiceLineItem(models.Model):
     unit_price = models.DecimalField(max_digits=10, decimal_places=2, help_text="Sale price the business decides to sell which is differnet from the product catalog price")
 
     quantity = models.PositiveIntegerField(default=1)
-    line_subtotal = models.DecimalField(max_digits=12, decimal_places=2, help_text="unit_price * quantity, stored")  # unit_price * quantity, stored (cheap aggregation later)
+    line_subtotal = models.DecimalField(max_digits=12, decimal_places=2, help_text="(unit_price * quantity)")
 
     created_at = models.DateTimeField(auto_now_add=True)
 

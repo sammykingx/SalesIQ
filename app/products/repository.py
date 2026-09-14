@@ -29,6 +29,22 @@ class ProductsRepo:
             raise ProductAlreadyExistsError(
                 message=f"A product named '{data.name}' already exists for this business."
             )
+
+    def get_or_create_product(self, *, data: CreateProductsSchema) -> Products:
+        """
+        Retrieves an existing product by name for the business, 
+        or automatically creates it if it does not yet exist.
+        """
+        product, created = self.model.objects.get_or_create(
+            business=self.biz_obj,
+            name=data.name,
+            defaults={
+                "price": data.price,
+                "product_type": data.product_type,
+                "description": data.description,
+            },
+        )
+        return product
             
     def update_product_data(self, *, merchant:Business, data: ModifyProductSchema):
         return (

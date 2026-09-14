@@ -1,34 +1,34 @@
-from accounts.domains.entities import BusinessEntity
-from customers.domains.entities import CustomerEntity
 from dataclasses import dataclass
 from datetime import datetime
-from typing import List, Literal
+from decimal import Decimal
+from typing import List, Union
 
 
 @dataclass
 class InvoiceItemEntity:
     id: str
     name: str
-    product_type: Literal['physical', 'digital', 'service']
+    product_type: str
     quantity: int
-    unit_price: float
-    total_price: float
+    unit_price: Decimal
+    line_subtotal: Decimal
 
 
 @dataclass
 class InvoiceEntity:
-    ref: str
+    display_id: str
+    slug: str
     status: str
     created_at: datetime
-    payment_method: str
-    channel: str
-    business: BusinessEntity
-    customer: CustomerEntity
+    currency: str
+    business_id: str
+    customer_id: str
+    sub_total: Decimal
+    discount_type: str
+    discount_percentage: Decimal
+    discount_amount: Decimal
+    tax_name: Union[str, None]
+    tax_percentage: Decimal
+    tax_amount: Decimal
+    total_amount: Decimal
     items: List[InvoiceItemEntity]
-    sub_total: float
-    discount_percentage: float
-    discount_amount: float
-    tax_name: str
-    tax_percentage: float
-    tax_amount: float
-    total_amount_paid: float

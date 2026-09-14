@@ -34,6 +34,7 @@ class CustomersRepo:
                 
             }
         )
+        print("is new customer: {_}")
         return customer
 
     def link_to_business(self, business: Business, customer: Customers, display_name: str, notes: str = "") -> BusinessCustomers:

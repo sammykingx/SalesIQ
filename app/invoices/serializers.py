@@ -1,6 +1,7 @@
 from pydantic import BaseModel, Field, model_validator
 from decimal import Decimal
 from customers.serializers import CreateCustomerSchema
+from products.serializers import BaseProductSchema
 from typing import Dict, Literal, List, Optional, Union
 from uuid import UUID
 
@@ -37,15 +38,17 @@ class InvoiceSchema(BaseModel):
         discount_amt = self.discount_amount if self.discount_amount is not None else Decimal("0")
 
         if self.discount_percentage is not None:
-            expected_discount = (self.sub_total * self.discount_percentage).quantize(Decimal("0.01"))
+            discount_rate = self.discount_percentage / Decimal("100")
+            expected_discount = (self.sub_total * discount_rate).quantize(Decimal("0.01"))
             if discount_amt != expected_discount:
                 raise ValueError(
                     f"Invalid discount_amount. Expected {expected_discount} "
-                    f", but got {discount_amt}."
+                    f", but got {discount_amt}"
                 )
 
         if self.tax_percentage is not None:
-            expected_tax = (self.sub_total * self.tax_percentage).quantize(Decimal("0.01"))
+            tax_rate = self.tax_percentage / Decimal("100")
+            expected_tax = (self.sub_total * tax_rate).quantize(Decimal("0.01"))
             if tax_amt != expected_tax:
                 raise ValueError(
                     f"Invalid tax_amount. Expected {expected_tax} "
@@ -62,11 +65,8 @@ class InvoiceSchema(BaseModel):
         return self
 
     
-class InvoiceLineItemSchema(BaseModel):
+class InvoiceLineItemSchema(BaseProductSchema):
     id: Union[UUID, int, None] = None
-    product_name: str = Field(..., max_length=70)
-    sale_price: Decimal = Field(..., max_digits=12, decimal_places=2)
-    product_type: Literal["physical", "digital", "service"] = "physical"
     quantity: int
 
 
@@ -80,9 +80,9 @@ class CreateSalesInvoiceSchema(InvoiceSchema):
 
     Attributes:
         customer (CustomerSchema): The existing customer (including their ID and details) 
-                                   associated with this invoice.
+            associated with this invoice.
         products (List[InvoiceLineItemSchema]): A list of products or services purchased, 
-                                                including their prices, quantities, and types.
+            including their prices, quantities, and types.
 
     Inherited Validation Rules (from `InvoiceSchema`):
         - **Discount Validation:** If `discount_value` is present, `discount_amount` 
@@ -93,3 +93,21 @@ class CreateSalesInvoiceSchema(InvoiceSchema):
     """
     customer: CustomerSchema
     products: List[InvoiceLineItemSchema]
+    
+    @model_validator(mode="after")
+    def validate_sub_total_from_products(self) -> "CreateSalesInvoiceSchema":
+        """
+        Ensures that the invoice sub_total matches the exact sum 
+        of all line item costs (quantity * price).
+        """
+        calculated_sub_total = sum(
+            (Decimal(str(item.quantity)) * item.price for item in self.products),
+            Decimal("0")
+        ).quantize(Decimal("0.01"))
+
+        if self.sub_total != calculated_sub_total:
+            raise ValueError(
+                f"Invalid sub total. Expected {calculated_sub_total} "
+                f"based on line items, but got {self.sub_total}."
+            )
+        return self
