@@ -16,18 +16,26 @@ class InvoiceStatus(models.TextChoices):
 class Invoice(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid7, editable=False)
     display_id = models.CharField(max_length=20, unique=True, editable=False, help_text="public facing invoice id")
-    slug = models.CharField(max_length=32, unique=True, editable=False, help_text="public receipt URL, separate from display_id")
-
+    slug = models.SlugField(max_length=32, unique=True, editable=False, help_text="public receipt URL, separate from display_id")
     business = models.ForeignKey("accounts.Business", on_delete=models.CASCADE, related_name="invoices")
     customer = models.ForeignKey("clients.BusinessCustomers", on_delete=models.PROTECT, related_name="invoices")
-
     subtotal = models.DecimalField(max_digits=12, decimal_places=2)
-
     discount_type = models.CharField(max_length=10, choices=DiscountType.choices, default=DiscountType.NONE)
-    discount_value = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal("0"))
-    discount_amount = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal("0"))
+    discount_value = models.DecimalField(
+        max_digits=12, 
+        decimal_places=2, 
+        default=Decimal("0"), 
+        help_text="Enter as a decimal percentage (e.g., use 0.05 for 5%)."
+    )
 
-    tax_enabled = models.BooleanField(default=False)
+    discount_amount = models.DecimalField(
+        max_digits=12, 
+        decimal_places=2, 
+        default=Decimal("0"), 
+        help_text="The calculated discount amount (Subtotal × Discount Value)."
+    )
+    
+    tax_name = models.CharField(max_length=50, blank=True, null=True)
     tax_percentage = models.DecimalField(max_digits=5, decimal_places=2, default=Decimal("0"))
     tax_amount = models.DecimalField(max_digits=12, decimal_places=2, null=True, default=Decimal("0"))
 

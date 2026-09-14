@@ -1,6 +1,7 @@
 import { demoCustomers } from "../customers/demo-data.js";
 import { demoProductsData } from "../products/demo-data.js";
 import { inAppToast } from "../../lib/in-app-toast.js";
+import { apiRequest } from "../../lib/http/api.js";
 
 /**
  * Parses JSON script tags rendered by Django templates, falling back to demo data if absent.
@@ -25,7 +26,7 @@ function loadInitialData(scriptId, fallbackData) {
     return fallbackData;
 }
 
-export function recordSaleComponent() {
+export function recordSaleComponent(endpoint) {
     return {
         // Data registries loaded from Django JSON script tags or fallback demo modules
         customersJson: [],
@@ -204,7 +205,7 @@ export function recordSaleComponent() {
         },
 
         // Payload Submission Handler
-        submitSaleForm() {
+        async submitSaleForm() {
             this.isSubmitting = true;
 
             const payload = {
@@ -218,7 +219,7 @@ export function recordSaleComponent() {
                 products: this.items.map(item => ({
                     id: item.id,
                     product_name: item.product_name,
-                    price: parseFloat(item.price),
+                    sale_price: parseFloat(item.price),
                     product_type: item.product_type,
                     quantity: item.product_type === 'service' ? 1 : parseInt(item.quantity, 10)
                 })),
@@ -232,12 +233,53 @@ export function recordSaleComponent() {
             };
 
             console.log('SalesIQ Transaction Payload Generated:', JSON.stringify(payload, null, 2));
+            try {
+                const response = await apiRequest(endpoint, "POST", payload);
+                const data = await response.json().catch(() => { })
 
-            // Mock API Post Request Delay
-            setTimeout(() => {
-                this.isSubmitting = false;
+                if (!response.ok) {
+                    if (response.status === 422) {
+                        const errorDetails = Array.isArray(data?.error)
+                            ? data.error.map(err => {
+                                const formattedField = err.field
+                                    ? err.field.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+                                    : 'Field';
+                                return `${formattedField}: ${err.message}`;
+                            }).join(' | ')
+                            : (data?.error || '');
+
+                        inAppToast(
+                            'Sale Identity Rejected 🚫',
+                            data?.message || "Fix the typos and let's give it another shot.",
+                            'warning',
+                            4500
+                        );
+                    } else {
+                        inAppToast('Ecosystem Glitch ⚠️', data?.message || 'An unexpected error occurred.', 'error');
+                    }
+                    return;
+                }
+
+                inAppToast(
+                    data?.title || "Sales Recorded",
+                    data?.message || "The sale has been successfully recorded in your books and ready for insights.",
+                    data?.status || "success"
+                );
                 this.submitSuccess = true;
-            }, 1200);
+
+                if (data?.redirect && data?.redirect_url) {
+
+                    setTimeout(() => {
+                        window.location.assign(redirect_url);
+                    }, 1200);
+                }
+
+            } catch (err) {
+                inAppToast('Connection Void 🌪️', err.message || 'Failed to reach the server. Check your network connection.', 'error');
+            } finally {
+                this.isSubmitting = false;
+            }
+
         }
     };
 }

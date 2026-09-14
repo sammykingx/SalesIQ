@@ -17,11 +17,9 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
-from django.views.generic import TemplateView
 
 from core.views import ComingSoonView
-from core.template_names import APP_TEMPLATES
-from core.url_names import PRODUCTS, SALES
+
 
 handler404 = "core.views.custom_404"
 handler500 = "core.views.custom_500"
@@ -34,6 +32,4 @@ urlpatterns = [
     path("customers/", include("customers.urls")),
     path("products/", include("products.urls")),
     path("invoices/", include("invoices.urls")),
-    path("sales/", TemplateView.as_view(template_name=APP_TEMPLATES.SALES.LIST), name=SALES.LIST),
-    path("record-sale/", TemplateView.as_view(template_name=APP_TEMPLATES.SALES.ADD), name=SALES.ADD),
 ]

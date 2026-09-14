@@ -37,14 +37,9 @@ CUSTOMERS = SimpleNamespace(
     EDIT='customers_edit',
 )
 
-SALES = SimpleNamespace(
-    LIST='sales_list',
-    ADD='sales_add',
-    DETAIL='sales_detail',
-    EDIT='sales_edit',
-)
-
 INVOICES = SimpleNamespace(
+    CREATE='create_invoices',
     VIEW='view_invoices',
     DOWNLOAD='download_invoices',
+    LIST_SALES='list_sales_invoices'
 )
