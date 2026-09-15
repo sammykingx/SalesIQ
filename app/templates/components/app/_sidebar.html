@@ -115,12 +115,12 @@
             {% if user.avatar %}
                 <img class="h-10 w-10 rounded-full object-cover" src="{{ user.avatar.url }}" alt="{{ user.get_full_name }}" width="40" height="40" />
             {% else %}
-                <div class="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 font-semibold text-sm dark:bg-emerald-950/60 dark:text-emerald-400 ring-1 ring-emerald-500/20">
+                <div class="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 font-medium text-sm dark:bg-emerald-950/60 dark:text-emerald-400 ring-1 ring-emerald-500/20">
                     {{ user.first_name|slice:":1"|upper }}{{ user.last_name|slice:":1"|upper }}
                 </div>
             {% endif %}
             <span x-show="!$store.sidebar.collapsed || $store.sidebar.mobileOpen" class="flex min-w-0 flex-col leading-tight">
-                <b class="truncate text-sm font-semibold text-ink-600 dark:text-white">{{ user.first_name|title }} {{ user.last_name|title }}</b>
+                <b class="truncate text-sm font-medium text-ink-600 dark:text-white">{{ user.first_name|title }} {{ user.last_name|title }}</b>
                 <small class="truncate text-xs text-neutral-400">{{ user.email }}</small>
             </span>
             <form method="post" action="{% url ACCOUNTS.AUTH.LOGOUT %}" x-ref="logoutForm" class="hidden">

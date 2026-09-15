@@ -6,17 +6,50 @@ from django.views.generic import View, TemplateView
 from django_weasyprint import WeasyTemplateView
 
 from accounts.domains.exceptions import AccountsDomainException
+from accounts.selectors import BusinessSelector
 from core.template_names import APP_TEMPLATES
 from core.url_names import INVOICES
 from invoices.domains.exceptions import InvoiceDomainException
-from invoices.serializers import CreateSalesInvoiceSchema, InvoiceDetailResponseSchema
+from invoices.serializers import CreateSalesInvoiceSchema, InvoiceDetailResponseSchema, InvoiceListResponseSchema
 from invoices.selectors import InvoiceSelectors
 from invoices.services import InvoiceService
 from utils.pydantic_formatter import format_pydantic_errors
 
+from decimal import Decimal
 from pydantic import ValidationError
 from typing import Any, Dict
 
+
+class InvoiceListView(LoginRequiredMixin, TemplateView):
+    template_name = APP_TEMPLATES.SALES.LIST
+    
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context.update(self.template_context())
+        return context
+    
+    def template_context(self) -> Dict[str, Any]:
+        from .domains.demo_data import demo_invoice_data
+        
+        business = BusinessSelector().get_user_business(user_email=self.request.user.email, as_instance=True) # type: ignore
+        invoices = InvoiceSelectors().list_business_invoices(biz_id=business) # type: ignore
+        data = [InvoiceListResponseSchema.model_validate(invoice).model_dump() for invoice in invoices ]
+
+        return {
+            "invoices_json": data,
+            "metrics": self._invoice_metrics(invoices),
+        }
+        
+    def _invoice_metrics(self, invoices) -> Dict[str, Any]:
+        total_sales = len(invoices)
+        total_volume = sum((invoice.total for invoice in invoices), Decimal("0"))
+        average_sale = (total_volume / total_sales) if total_sales else Decimal("0")
+            
+        return {
+            "total_sales": total_sales,
+            "total_volume": total_volume,
+            "average_sale": average_sale,
+        }
 
 class RecordSalesInvoiceView(LoginRequiredMixin, View):
     def get(self, request: HttpRequest) -> HttpResponse:
@@ -25,7 +58,6 @@ class RecordSalesInvoiceView(LoginRequiredMixin, View):
     def post(self, request:HttpRequest):
         try:
             data = CreateSalesInvoiceSchema.model_validate_json(request.body, strict=True)
-            print(data.model_dump_json(indent=2))
             invoice = InvoiceService(request=request).record_sale(sale_data=data)
             return JsonResponse({
                 "title": "Sale Logged! 📈",

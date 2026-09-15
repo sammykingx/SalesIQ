@@ -5,7 +5,9 @@ from django.views.generic import View
 from django.shortcuts import render
 from .template_names import ERROR_PAGES
 
-
+from accounts.selectors import BusinessSelector
+from invoices.selectors import InvoiceSelectors
+from invoices.serializers import InvoiceListResponseSchema
 from public.adapters import WaitlistStorage
 from datetime import datetime
 
@@ -36,15 +38,22 @@ class ComingSoonView(View):
         return JsonResponse({"message": msg}, status=200)
     
 
-class BusinessSearchDataView(LoginRequiredMixin, View):
+class BusinessJSONDataView(LoginRequiredMixin, View):
     """
-    Returns a unified payload of customers, products, and sales records 
-    for client-side live search and autocomplete.
+        Returns a unified payload of customers, products, and sales records 
+        for client-side live search and autocomplete.
     """
     def get(self, request: HttpRequest) -> JsonResponse:
         from products.domain.demo_data import PRODUCTS_DATA
+        
+        business = BusinessSelector().get_user_business(user_email=self.request.user.email, as_instance=True) # type: ignore
+        invoices = InvoiceSelectors().list_business_invoices(biz_id=business) # type: ignore
+        invoices_data = [InvoiceListResponseSchema.model_validate(invoice).model_dump() for invoice in invoices ]
+        
         return JsonResponse({
-            "products": PRODUCTS_DATA,
+            "customers_json": [],
+            "products_data": PRODUCTS_DATA,
+            "invoice_json": invoices_data,
         }, status=200)
     
     

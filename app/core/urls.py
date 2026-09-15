@@ -18,7 +18,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from core.views import ComingSoonView
+from core.views import ComingSoonView, BusinessJSONDataView
 
 
 handler404 = "core.views.custom_404"
@@ -28,6 +28,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     
     path("", ComingSoonView.as_view(), name="coming-soon"),
+    path("business-json/", BusinessJSONDataView.as_view(), name="business-data"),
     path("accounts/", include("accounts.urls")),
     path("customers/", include("customers.urls")),
     path("products/", include("products.urls")),

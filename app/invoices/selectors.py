@@ -1,11 +1,21 @@
 from invoices.models import Invoice, InvoiceLineItem
-from django.db.models import Prefetch
+from django.db.models import Prefetch, QuerySet
+from typing import List
+from uuid import UUID
+
 
 
 class InvoiceSelectors:
     def __init__(self) -> None:
         self.inv_model = Invoice
         self.inv_line_item_model = InvoiceLineItem
+        
+    def list_business_invoices(self, *, biz_id:UUID) -> QuerySet[Invoice]:
+        return (
+            self.inv_model.objects
+            .select_related("customer", "customer__client")
+            .filter(business=biz_id)
+        )
     
     def get_invoice_by_slug(self, *, slug: str) -> Invoice | None:
         return self._base_detail_queryset().filter(slug=slug).first()

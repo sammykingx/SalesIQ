@@ -8,7 +8,32 @@
     {% vite_hmr_client %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <title>Invoice {{ invoice.display_id }} — SalesIQ</title>
+    
+    <link rel="icon" type="image/png" href="{% static 'images/logo/light-favicon.png' %}" media="(prefers-color-scheme: light)">
+    <link rel="apple-touch-icon" href="{% static 'images/logo/light-favicon.png' %}" media="(prefers-color-scheme: light)">
+
+    <meta name="description" content="View and download your invoice #{{ invoice.display_id }} from {{ invoice.business.name }}. Total: ₦{{ invoice.total|floatformat:2|intcomma }}.">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="canonical" href="{{ request.build_absolute_uri }}">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Invoice #{{ invoice.display_id }} — {{ invoice.business.name }}">
+    <meta property="og:description" content="View your invoice details and download a copy. Total amount: ₦{{ invoice.total|floatformat:2|intcomma }}.">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    {% comment %} <meta property="og:image" content="{% static 'images/og/invoice-share.png' %}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630"> {% endcomment %}
+    <meta property="og:site_name" content="SalesIQ">
+    <meta property="og:locale" content="en_NG">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Invoice #{{ invoice.display_id }} — {{ invoice.business.name }}">
+    <meta name="twitter:description" content="View your invoice details and download a copy. Total amount: ₦{{ invoice.total|floatformat:2|intcomma }}.">
+    {% comment %} <meta name="twitter:image" content="{% static 'images/og/invoice-share.png' %}"> {% endcomment %}
+
     {% vite_asset 'src/entries/invoices.js' %}
 </head>
 <body class="font-sans min-h-screen text-slate-100 pb-16 antialiased selection:bg-emerald-500 selection:text-slate-950">

@@ -5,5 +5,6 @@ from .requests import (
 
 from .responses import (
     BusinessSummarySchema, CustomerSummarySchema, 
-    InvoiceDetailResponseSchema, InvoiceLineItemResponseSchema
+    InvoiceDetailResponseSchema, InvoiceLineItemResponseSchema,
+    InvoiceListResponseSchema
 )

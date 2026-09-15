@@ -1,4 +1,3 @@
-<!-- Dashboard header -->
 <header
     x-data="axHeader()"
     class="sticky top-0 z-20 flex h-16 shrink-0 items-center gap-2 border-b border-neutral-200 bg-white/70 px-4 backdrop-blur-xl dark:border-neutral-800 dark:bg-neutral-900/60"
@@ -264,7 +263,7 @@
             {% if user.avatar %}
                 <img class="h-10 w-10 rounded-full object-cover" src="{{ user.avatar.url }}" alt="{{ user.get_full_name }}" width="40" height="40" />
             {% else %}
-                <div class="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 font-semibold text-sm dark:bg-emerald-950/60 dark:text-emerald-400 ring-1 ring-emerald-500/20">
+                <div class="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 font-medium text-sm dark:bg-emerald-950/60 dark:text-emerald-400 ring-1 ring-emerald-500/20">
                     {{ user.first_name|slice:":1"|upper }}{{ user.last_name|slice:":1"|upper }}
                 </div>
             {% endif %}
@@ -274,7 +273,7 @@
                 {% if user.avatar %}
                     <img class="h-10 w-10 rounded-full object-cover" src="{{ user.avatar.url }}" alt="{{ user.get_full_name }}" width="40" height="40" />
                 {% else %}
-                    <div class="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 font-semibold text-sm dark:bg-emerald-950/60 dark:text-emerald-400 ring-1 ring-emerald-500/20">
+                    <div class="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 font-medium text-sm dark:bg-emerald-950/60 dark:text-emerald-400 ring-1 ring-emerald-500/20">
                         {{ user.first_name|slice:":1"|upper }}{{ user.last_name|slice:":1"|upper }}
                     </div>
                 {% endif %}
