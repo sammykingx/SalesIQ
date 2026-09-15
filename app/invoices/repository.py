@@ -1,7 +1,9 @@
+from django.db import IntegrityError
 from django.db.models import Model
 from accounts.domains.entities import BusinessEntity
 from accounts.models import Business
 from invoices.models import Invoice, InvoiceLineItem
+from invoices.domains.exceptions import InvoiceIdentifierCollisionError
 from invoices.serializers import InvoiceLineItemSchema, CreateSalesInvoiceSchema
 from decimal import Decimal
 from nanoid import generate
@@ -70,16 +72,23 @@ class InvoiceRepository:
         )
         
     def create_invoice(self, *, business_instance: Business, customer_instance: Model, data: CreateSalesInvoiceSchema):
-        return self.inv_model.objects.create(
-            display_id=self.generate_invoice_display_id(business=business_instance),
-            slug=self.generate_invoice_slug(),
-            business=business_instance,
-            customer=customer_instance,
-            subtotal=data.sub_total,
-            discount_value=data.discount_percentage,
-            discount_amount=data.discount_amount,
-            tax_name=data.tax_name,
-            tax_percentage=data.tax_percentage,
-            tax_amount=data.tax_amount,
-            total=data.total_amount,
-        )
+        for attempt in range(3):
+            try:
+                return self.inv_model.objects.create(
+                    display_id=self.generate_invoice_display_id(business=business_instance),
+                    slug=self.generate_invoice_slug(),
+                    business=business_instance,
+                    customer=customer_instance,
+                    subtotal=data.sub_total,
+                    discount_value=data.discount_percentage,
+                    discount_amount=data.discount_amount,
+                    tax_name=data.tax_name,
+                    tax_percentage=data.tax_percentage,
+                    tax_amount=data.tax_amount,
+                    total=data.total_amount,
+                )
+                
+            except IntegrityError as e:
+                if attempt == 2:
+                    raise InvoiceIdentifierCollisionError() from e
+        raise InvoiceIdentifierCollisionError()

@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 {% load static %}
+{% load humanize %}
+{% load mathfilters %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Invoice - {{ invoice.ref }}</title>
+    <title>Invoice - {{ invoice.display_id }}</title>
     <style>
         /* Page setup for standard A4 PDF */
         @page {
@@ -89,7 +91,7 @@
             padding: 4px 10px;
             border-radius: 20px;
             font-size: 10px;
-            font-weight: bold;
+            font-weight: medium;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin-bottom: 8px;
@@ -103,7 +105,7 @@
             font-family: 'Courier New', Courier, monospace;
             color: #34d399;
             font-size: 12px;
-            font-weight: bold;
+            font-weight: medium;
             display: inline-block;
         }
 
@@ -142,7 +144,7 @@
         .card-title {
             font-size: 9px;
             text-transform: uppercase;
-            font-weight: bold;
+            font-weight: medium;
             color: #94a3b8;
             letter-spacing: 0.5px;
             margin-bottom: 6px;
@@ -151,7 +153,7 @@
 
         .customer-name {
             font-size: 13px;
-            font-weight: bold;
+            font-weight: 500;
             color: #0f172a;
         }
 
@@ -164,6 +166,7 @@
             color: #94a3b8;
             display: inline-block;
             width: 80px;
+            font-weight: 400;
         }
 
         /* Items Data Table */
@@ -178,7 +181,7 @@
             color: #94a3b8;
             text-transform: uppercase;
             font-size: 9px;
-            font-weight: 800;
+            font-weight: 700;
             letter-spacing: 0.5px;
             padding: 8px 6px;
             text-align: left;
@@ -191,7 +194,7 @@
         }
 
         .item-name {
-            font-weight: 600;
+            font-weight: 500;
             color: #0f172a;
             font-size: 12px;
             display: block;
@@ -202,7 +205,7 @@
             padding: 2px 6px;
             border-radius: 4px;
             font-size: 8px;
-            font-weight: bold;
+            font-weight: medium;
             text-transform: uppercase;
             margin-top: 3px;
         }
@@ -244,7 +247,7 @@
             padding-top: 10px;
             margin-top: 10px;
             font-size: 12px;
-            font-weight: bold;
+            font-weight: medium;
             color: #ffffff;
         }
 
@@ -276,6 +279,8 @@
                         <h1 class="business-title">{{ invoice.business.name }}</h1>
                         {% if invoice.business.address %}
                             <p class="business-info">{{ invoice.business.address }}</p>
+                        {% else %}
+                            <p>Operating digitally | Proudly a merchant on SalesIQ.</p>
                         {% endif %}
                         {% if invoice.business.phone_number %}
                             <p class="business-info">{{ invoice.business.phone_number }}</p>
@@ -286,7 +291,7 @@
                             <span class="status-badge">{{ invoice.status }}</span>
                         </div>
                         <div class="ref-badge">
-                            <span class="ref-label">REF:</span>{{ invoice.ref }}
+                            <span class="ref-label">REF:</span>{{ invoice.display_id }}
                         </div>
                     </td>
                 </tr>
@@ -297,10 +302,10 @@
         {% if invoice.business.instagram_url or invoice.business.tiktok_url or invoice.business.website_url %}
         <div class="social-strip">
             {% if invoice.business.instagram_url %}
-                <span class="social-item"><strong>IG:</strong> @{{ invoice.business.instagram_url }}</span>
+                <span class="social-item"><strong>IG:</strong> {{ invoice.business.instagram_url }}</span>
             {% endif %}
             {% if invoice.business.tiktok_url %}
-                <span class="social-item"><strong>TikTok:</strong> @{{ invoice.business.tiktok_url }}</span>
+                <span class="social-item"><strong>TikTok:</strong> {{ invoice.business.tiktok_url }}</span>
             {% endif %}
             {% if invoice.business.website_url %}
                 <span class="social-item" style="float: right; margin-right: 0;">{{ invoice.business.website_url }}</span>
@@ -329,20 +334,19 @@
                         <span class="card-title">Metadata</span>
                         {% if invoice.business.business_type %}
                             <div class="meta-row">
-                                <span class="meta-label">Operating:</span>
-                                <strong style="color: #334155;">{{ invoice.business.business_type }}</strong>
+                                <span class="meta-label">Date Issued:</span>
+                                <strong style="color: #334155;">{{ invoice.created_at|date:'d M Y' }}</strong>
                             </div>
                         {% endif %}
                         <div class="meta-row">
-                            <span class="meta-label">Date Issued:</span>
-                            <strong style="color: #334155;">{{ invoice.created_at|date:"d M Y • h:i A" }}</strong>
+                            <span class="meta-label">Time Issued:</span>
+                            <strong style="color: #334155;">{{ invoice.created_at|date:"h:i A" }}</strong>
                         </div>
-                        {% if invoice.channel %}
-                            <div class="meta-row">
-                                <span class="meta-label">Channel:</span>
-                                <strong style="color: #334155;">{{ invoice.channel }}</strong>
-                            </div>
-                        {% endif %}
+                        
+                        <div class="meta-row">
+                            <span class="meta-label">Business Ref:</span>
+                            <strong style="color: #334155;">{{ invoice.business.code }}</strong>
+                        </div>            
                     </div>
                 </td>
             </tr>
@@ -362,7 +366,7 @@
                 {% for item in invoice.items %}
                     <tr>
                         <td>
-                            <span class="item-name">{{ item.name }}</span>
+                            <span class="item-name">{{ item.product_name|title }}</span>
                             <span class="product-tag 
                                 {% if item.product_type == 'physical' %}tag-physical
                                 {% elif item.product_type == 'digital' %}tag-digital
@@ -370,15 +374,15 @@
                                 {{ item.product_type }}
                             </span>
                         </td>
-                        <td style="text-align: center; font-weight: bold; color: #334155;">
+                        <td style="text-align: center; font-weight: medium; color: #334155;">
                             {% if item.product_type == 'service' %}
                                 <span style="color: #cbd5e1; font-weight: normal;">N/A</span>
                             {% else %}
                                 {{ item.quantity }}
                             {% endif %}
                         </td>
-                        <td style="text-align: right; color: #475569;" class="mono-text">₦{{ item.unit_price|floatformat:2 }}</td>
-                        <td style="text-align: right; font-weight: bold; color: #0f172a; font-size: 12px;" class="mono-text">₦{{ item.total_price|floatformat:2 }}</td>
+                        <td style="text-align: right; color: #475569;" class="mono-text">₦{{ item.unit_price|floatformat:2|intcomma }}</td>
+                        <td style="text-align: right; font-weight: medium; color: #0f172a; font-size: 12px;" class="mono-text">₦{{ item.line_subtotal|floatformat:2|intcomma }}</td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -397,23 +401,23 @@
                         <table style="width: 100%; border-collapse: collapse;">
                             <tr class="summary-row">
                                 <td style="color: #94a3b8;">Subtotal</td>
-                                <td style="text-align: right; color: #e2e8f0;" class="mono-text">₦{{ invoice.sub_total|floatformat:2 }}</td>
+                                <td style="text-align: right; color: #e2e8f0;" class="mono-text">₦{{ invoice.subtotal|floatformat:2|intcomma }}</td>
                             </tr>
                             {% if invoice.discount_amount > 0 %}
                                 <tr class="summary-row">
-                                    <td style="color: #94a3b8;">Discount ({{ invoice.discount_percentage }}%)</td>
-                                    <td style="text-align: right; color: #fb7185;" class="mono-text">-₦{{ invoice.discount_amount|floatformat:2 }}</td>
+                                    <td style="color: #94a3b8;">Discount ({{ invoice.discount_value|floatformat }}%)</td>
+                                    <td style="text-align: right; color: #fb7185;" class="mono-text">-₦{{ invoice.discount_amount|floatformat:2|intcomma }}</td>
                                 </tr>
                             {% endif %}
                             {% if invoice.tax_amount > 0 %}
                                 <tr class="summary-row">
-                                    <td style="color: #94a3b8;">{{ invoice.tax_name }} ({{ invoice.tax_percentage }}%)</td>
+                                    <td style="color: #94a3b8;">{{ invoice.tax_name }} ({{ invoice.tax_percentage|floatformat }}%)</td>
                                     <td style="text-align: right; color: #e2e8f0;" class="mono-text">+₦{{ invoice.tax_amount|floatformat:2 }}</td>
                                 </tr>
                             {% endif %}
                             <tr class="summary-total">
                                 <td>Total Amount Paid</td>
-                                <td style="text-align: right; color: #34d399; font-size: 14px;" class="mono-text">₦{{ invoice.total_amount_paid|floatformat:2 }}</td>
+                                <td style="text-align: right; color: #34d399; font-size: 14px;" class="mono-text">₦{{ invoice.total|floatformat:2|intcomma }}</td>
                             </tr>
                         </table>
                     </div>

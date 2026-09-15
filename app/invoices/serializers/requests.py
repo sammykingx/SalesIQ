@@ -1,7 +1,8 @@
 from pydantic import BaseModel, Field, model_validator
 from decimal import Decimal
 from customers.serializers import CreateCustomerSchema
-from products.serializers import BaseProductSchema
+from products.serializers import CreateProductsSchema
+from datetime import datetime
 from typing import Dict, Literal, List, Optional, Union
 from uuid import UUID
 
@@ -65,7 +66,7 @@ class InvoiceSchema(BaseModel):
         return self
 
     
-class InvoiceLineItemSchema(BaseProductSchema):
+class InvoiceLineItemSchema(CreateProductsSchema):
     id: Union[UUID, int, None] = None
     quantity: int
 

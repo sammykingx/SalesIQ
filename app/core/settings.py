@@ -46,13 +46,16 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     
+    "django.contrib.humanize",
     "django_extensions",
     "django_vite",
     "anymail",
+    "mathfilters",
     
     "accounts.apps.AccountsConfig",
     "customers.apps.CustomersConfig",
     "products.apps.ProductsConfig",
+    "invoices.apps.InvoicesConfig",
 ]
 
 MIDDLEWARE = [

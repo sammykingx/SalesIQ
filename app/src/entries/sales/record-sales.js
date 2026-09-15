@@ -204,7 +204,22 @@ export function recordSaleComponent(endpoint) {
             return this.subTotal + this.taxAmount - this.discountAmount;
         },
 
-        // Payload Submission Handler
+        resetForm() {
+            this.selectedCustomer = {
+                id: null,
+                first_name: '',
+                last_name: '',
+                email: '',
+                phone_number: ''
+            };
+
+            this.items = [];
+
+            this.discountPercentage = 0;
+            this.taxName = 'VAT';
+            this.taxPercentage = 0;
+        },
+
         async submitSaleForm() {
             this.isSubmitting = true;
 
@@ -232,7 +247,6 @@ export function recordSaleComponent(endpoint) {
                 total_amount: this.grandTotal
             };
 
-            console.log('SalesIQ Transaction Payload Generated:', JSON.stringify(payload, null, 2));
             try {
                 const response = await apiRequest(endpoint, "POST", payload);
                 const data = await response.json().catch(() => { })
@@ -266,12 +280,11 @@ export function recordSaleComponent(endpoint) {
                     data?.status || "success"
                 );
                 this.submitSuccess = true;
-
+                this.resetForm();
                 if (data?.redirect && data?.redirect_url) {
-
                     setTimeout(() => {
-                        window.location.assign(redirect_url);
-                    }, 1200);
+                        window.location.assign(data.redirect_url);
+                    }, 2500);
                 }
 
             } catch (err) {

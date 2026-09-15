@@ -8,6 +8,7 @@ dependencies = [
     "django>=6.1",
     "django-anymail[resend]>=15.1",
     "django-extensions>=4.1",
+    "django-mathfilters>=1.0.0",
     "django-vite>=3.1.0",
     "django-weasyprint>=2.5.0",
     "email-validator>=2.3.0",

@@ -4,16 +4,14 @@ from typing import Literal, Optional
 from uuid import UUID
 
 
-class BaseProductSchema(BaseModel):
-    name: str = Field(..., max_length=100)
-    product_type: Literal["digital", "physical", "service"]
-    price: Decimal = Field(..., max_digits=10, decimal_places=2)
-
-class CreateProductsSchema(BaseProductSchema):
+class CreateProductsSchema(BaseModel):
     """
         Schema used for validating input data when a user 
         is creating a new product for their business.
     """
+    name: str = Field(..., max_length=100)
+    product_type: Literal["digital", "physical", "service"]
+    price: Decimal = Field(..., max_digits=10, decimal_places=2)
     description: Optional[str] = None
 
 class ModifyProductSchema(CreateProductsSchema):

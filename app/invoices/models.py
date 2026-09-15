@@ -18,14 +18,14 @@ class Invoice(models.Model):
     display_id = models.CharField(max_length=20, unique=True, editable=False, help_text="public facing invoice id")
     slug = models.SlugField(max_length=72, unique=True, editable=False, help_text="public receipt URL, separate from display_id")
     business = models.ForeignKey("accounts.Business", on_delete=models.CASCADE, related_name="invoices")
-    customer = models.ForeignKey("clients.BusinessCustomers", on_delete=models.PROTECT, related_name="invoices")
+    customer = models.ForeignKey("customers.BusinessCustomers", on_delete=models.PROTECT, related_name="invoices")
     subtotal = models.DecimalField(max_digits=12, decimal_places=2)
     discount_type = models.CharField(max_length=10, choices=DiscountType.choices, default=DiscountType.NONE)
     discount_value = models.DecimalField(
-        max_digits=12, 
+        max_digits=12,
         decimal_places=2, 
         default=Decimal("0"), 
-        help_text="Enter as a decimal percentage (e.g., use 0.05 for 5%)."
+        help_text="Enter as a decimal percentage (e.g., use 5.78 for 5.78%)."
     )
 
     discount_amount = models.DecimalField(

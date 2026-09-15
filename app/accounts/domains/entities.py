@@ -56,3 +56,4 @@ class BusinessEntity:
     whatsapp_number: Optional[str] = None
     created_at: Optional[datetime] = field(default=None)
     updated_at: Optional[datetime] = field(default=None)
+    
