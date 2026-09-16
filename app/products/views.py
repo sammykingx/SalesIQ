@@ -9,7 +9,7 @@ from accounts.domains.exceptions import AccountsDomainException
 from accounts.selectors import BusinessSelector
 from core.template_names import APP_TEMPLATES
 from core.url_names import PRODUCTS
-from products.serializers import CreateProductsSchema, ModifyProductSchema
+from products.serializers import CreateProductsSchema, ModifyProductSchema, ProductListItemSchema
 from products.domain.demo_data import PRODUCTS_DATA
 from products.domain.exceptions import ProductDomainException
 from products.selectors import ProductsSelector
@@ -23,8 +23,8 @@ from typing import Any
 
 class CreateProductsView(LoginRequiredMixin, View):
     """
-    Handles incoming HTTP POST requests to create a new product record 
-    directly to the authenticated user's business.
+        Handles incoming HTTP POST requests to create a new product record 
+        directly to the authenticated user's business.
     """
     biz_selector = BusinessSelector()
     
@@ -72,7 +72,7 @@ class UpdateProductsView(LoginRequiredMixin, View):
     def put(self, request: HttpRequest):
         try:
             data = ModifyProductSchema.model_validate_json(request.body, strict=True)
-            # ProductsService(request=request).update_product(product_data=data)
+            ProductsService(request=request).update_product(product_data=data)
             return JsonResponse({
                 "message": "Product locked, loaded, and ready to sell. Our analytics engine are ready to start tracking data.",
                 "status": "success",
@@ -114,17 +114,12 @@ class ProductsListView(LoginRequiredMixin, TemplateView):
          return context
      
     def template_context(self) -> dict[str, Any]:
-        products_data = []
         biz = BusinessSelector().get_user_business(user_email=self.request.user.email) # type:ignore
-        if biz:
-            products_data = self.product_selector.get_business_products(business_id=biz.id)
-        
-        
-        main_endpoint = reverse_lazy(PRODUCTS.DETAIL)
-        qs=f"{main_endpoint}?{urlencode(QUERY_PARAMS)}"
+        products = self.product_selector.get_business_products(business_id=biz.id) # type:ignore
+        products_data = [ProductListItemSchema.model_validate(product).model_dump() for product in products]
         
         return {
-            "products_json": PRODUCTS_DATA,
+            "products_json": products_data,
         }
         
 class ProductDetailView(LoginRequiredMixin, TemplateView):

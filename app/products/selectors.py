@@ -1,5 +1,9 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count
+from django.urls import reverse
+from urllib.parse import urlencode
+
+from core.url_names import PRODUCTS
 from products.models import Products
 from products.domain.entities import ProductEntity
 from products.domain.exceptions import ProductNotFoundError
@@ -51,11 +55,10 @@ class ProductsSelector:
             Annotates total sales and formats dates for the frontend list schema if not returning instances.
         """
         # Annotate total sales (assuming your sales/order relation is named 'sales' or 'order_items')
-        # queryset = self.model.objects.filter(business_id=business_id).annotate(
-        #     total_sales=Count('sales') 
-        # ).order_by('-created_at')
+        queryset = self.model.objects.filter(business_id=business_id).annotate(
+            total_sales=Count("line_items__invoice", distinct=True)
+        ).order_by('-created_at')
         
-        queryset = self.model.objects.filter(business_id=business_id)
         if not queryset:
             return []
 
@@ -70,6 +73,7 @@ class ProductsSelector:
                 "product_type": product.product_type,
                 "total_sales": getattr(product, 'total_sales', 0),
                 "created_at": product.created_at.isoformat(),
+                "url": f"{reverse(PRODUCTS.DETAIL)}?{urlencode({'p_ref': product.id})}"
             }
             for product in queryset
         ]

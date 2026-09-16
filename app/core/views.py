@@ -6,7 +6,11 @@ from django.shortcuts import render
 from .template_names import ERROR_PAGES
 
 from accounts.selectors import BusinessSelector
+from customers.selectors import CustomerSelector
 from invoices.selectors import InvoiceSelectors
+from products.selectors import ProductsSelector
+
+from products.serializers import ProductListItemSchema
 from invoices.serializers import InvoiceListResponseSchema
 from public.adapters import WaitlistStorage
 from datetime import datetime
@@ -38,21 +42,24 @@ class ComingSoonView(View):
         return JsonResponse({"message": msg}, status=200)
     
 
-class BusinessJSONDataView(LoginRequiredMixin, View):
+class BusinessJSONDataView(View):
     """
         Returns a unified payload of customers, products, and sales records 
         for client-side live search and autocomplete.
     """
     def get(self, request: HttpRequest) -> JsonResponse:
-        from products.domain.demo_data import PRODUCTS_DATA
-        
         business = BusinessSelector().get_user_business(user_email=self.request.user.email, as_instance=True) # type: ignore
         invoices = InvoiceSelectors().list_business_invoices(biz_id=business) # type: ignore
         invoices_data = [InvoiceListResponseSchema.model_validate(invoice).model_dump() for invoice in invoices ]
         
+        products = ProductsSelector().get_business_products(business_id=business.id) # type: ignore
+        products_data = [ProductListItemSchema.model_validate(product).model_dump() for product in products]
+        
+        customers_data = CustomerSelector().get_all_business_customers_frontend_json(biz_id=business.id) #type: ignore
+         
         return JsonResponse({
-            "customers_json": [],
-            "products_data": PRODUCTS_DATA,
+            "customers_json": customers_data,
+            "products_json": products_data,
             "invoice_json": invoices_data,
         }, status=200)
     

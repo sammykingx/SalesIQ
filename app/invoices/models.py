@@ -74,4 +74,10 @@ class InvoiceLineItem(models.Model):
     class Meta:
         db_table = "invoice_line_items"
         indexes = [models.Index(fields=["product"])]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["invoice", "product"],
+                name="unique_product_per_invoice"
+            )
+        ]
         

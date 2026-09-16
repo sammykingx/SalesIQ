@@ -5,7 +5,7 @@ from django.views.generic import TemplateView, View
 from accounts.selectors import BusinessSelector
 from core.template_names import APP_TEMPLATES
 from customers.selectors import CustomerSelector
-from customers.serializers import CreateCustomerSchema
+from customers.serializers import CreateCustomerSchema, CustomerMetricsSchema
 from customers.repositories import CustomersRepo
 from utils.pydantic_formatter import format_pydantic_errors
 
@@ -63,8 +63,11 @@ class BusinessCustomersListView(LoginRequiredMixin, TemplateView):
     def template_context(self) -> dict[str, Any]:
         biz = self.biz_selector.get_user_business(user_email=self.request.user.email) # type: ignore
         customers_data = self.buisness_clients_selector.get_all_business_customers_frontend_json(biz_id=biz.id) #type: ignore
+        metrics = self.buisness_clients_selector.get_business_customer_metrics(biz_id=biz.id) #type: ignore
+        metrics_data = CustomerMetricsSchema.model_validate(metrics).model_dump()
         
         return {
             "customers_json": customers_data,
+            "metrics": metrics_data,
         }
     

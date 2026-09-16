@@ -9,10 +9,13 @@ from accounts.domains.exceptions import AccountsDomainException
 from accounts.selectors import BusinessSelector
 from core.template_names import APP_TEMPLATES
 from core.url_names import INVOICES
+from customers.selectors import CustomerSelector
 from invoices.domains.exceptions import InvoiceDomainException
 from invoices.serializers import CreateSalesInvoiceSchema, InvoiceDetailResponseSchema, InvoiceListResponseSchema
 from invoices.selectors import InvoiceSelectors
 from invoices.services import InvoiceService
+from products.selectors import ProductsSelector
+from products.serializers import ProductListItemSchema
 from utils.pydantic_formatter import format_pydantic_errors
 
 from decimal import Decimal
@@ -52,8 +55,23 @@ class InvoiceListView(LoginRequiredMixin, TemplateView):
         }
 
 class RecordSalesInvoiceView(LoginRequiredMixin, View):
+    biz_selector = BusinessSelector()
+    product_selector = ProductsSelector()
+    buisness_clients_selector = CustomerSelector()
+    
     def get(self, request: HttpRequest) -> HttpResponse:
-        return render(request, APP_TEMPLATES.SALES.ADD)
+        biz = self.biz_selector.get_user_business(user_email=self.request.user.email) # type: ignore
+        customers_data = self.buisness_clients_selector.get_all_business_customers_frontend_json(biz_id=biz.id) #type: ignore
+        
+        products = self.product_selector.get_business_products(business_id=biz.id) # type:ignore
+        products_data = [ProductListItemSchema.model_validate(product).model_dump() for product in products]
+        
+        ctx = {
+            "customers_json": customers_data,
+            "products_json": products_data,
+        }
+                
+        return render(request, APP_TEMPLATES.SALES.ADD, context=ctx)
     
     def post(self, request:HttpRequest):
         try:

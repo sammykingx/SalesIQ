@@ -1,5 +1,6 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 from decimal import Decimal
+from datetime import datetime
 from typing import Literal, Optional
 from uuid import UUID
 
@@ -29,12 +30,11 @@ class ProductListItemSchema(BaseModel):
         to the frontend. Excludes the heavy description field and includes 
         computed metrics like total sales and a string-formatted creation date.
     """
+    model_config = ConfigDict(from_attributes=True)
     id: UUID
     name: str
     price: Decimal
     product_type: Literal["digital", "physical", "service"]
     total_sales: int = Field(..., description="Computed total number of sales for this product")
-    created_at: str = Field(..., description="ISO formatted string of when the product was created")
-
-    # class Config:
-    #     from_attributes = True
+    created_at: datetime = Field(..., description="ISO formatted string of when the product was created")
+    url: str

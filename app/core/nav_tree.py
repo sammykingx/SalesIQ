@@ -39,10 +39,10 @@ SIDEBAR_NAV_TREE = [
     #     "group_icon": "file-text",
     #     "group_url":  "#" #INVOICES.LIST,
     # },
-    {
-        "group_name": "reports",
-        "group_label": "Reports",
-        "group_icon": "bar-chart-2",
-        "group_url": "#",
-    },
+    # {
+    #     "group_name": "reports",
+    #     "group_label": "Reports",
+    #     "group_icon": "bar-chart-2",
+    #     "group_url": "#",
+    # },
 ]

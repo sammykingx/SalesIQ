@@ -60,16 +60,38 @@ class InvoiceRepository:
                 return candidate
         raise RuntimeError("Could not generate a unique invoice slug after 10 attempts")
 
+
     def create_invoice_line_item(self, *, invoice_obj: Invoice, product_obj: Model, line_item:InvoiceLineItemSchema):
-        return self.inv_line_item_model.objects.create(
-            invoice=invoice_obj,
-            product=product_obj,
-            product_name=line_item.name,
-            product_type=line_item.product_type,
-            unit_price=line_item.price,
-            quantity=line_item.quantity,
-            line_subtotal=(line_item.price * line_item.quantity).quantize(Decimal("0.01"))
-        )
+        """
+            Create an invoice sale line item record for a product.
+
+            If the product has already been registered previously under this invoice, 
+            an IntegrityError is raised due to uniqueness constraints. This exception 
+            is silently caught and ignored since the product is already part of the 
+            invoice line items.
+
+            Args:
+                invoice_obj (Invoice): The invoice instance to attach the line item to.
+                product_obj (Model): The product instance being added.
+                line_item (InvoiceLineItemSchema): The schema containing details such as 
+                    name, product type, price, and quantity.
+
+            Returns:
+                Model or None: The created invoice line item instance, or None if the 
+                product already exists on the invoice and the creation was skipped.
+        """
+        try:
+            return self.inv_line_item_model.objects.create(
+                invoice=invoice_obj,
+                product=product_obj,
+                product_name=line_item.name,
+                product_type=line_item.product_type,
+                unit_price=line_item.price,
+                quantity=line_item.quantity,
+                line_subtotal=(line_item.price * line_item.quantity).quantize(Decimal("0.01"))
+            )
+        except IntegrityError:
+            pass
         
     def create_invoice(self, *, business_instance: Business, customer_instance: Model, data: CreateSalesInvoiceSchema):
         for attempt in range(3):

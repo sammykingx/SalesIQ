@@ -1,7 +1,7 @@
 // app/src/entries/customers/all-customers.js
 import { demoCustomers } from './demo-data.js';
 
-export function allCustomersComponent(useDemo = true) {
+export function allCustomersComponent(useDemo = false) {
     return {
         sortBy: 'spend',
         sortOrder: 'desc',
@@ -53,8 +53,8 @@ export function allCustomersComponent(useDemo = true) {
             if (!c) return {};
             const customerObj = c.customer || {};
 
-            const firstName = c.firstName ?? c.first_name ?? customerObj.firstName ?? customerObj.first_name ?? '';
-            const lastName = c.lastName ?? c.last_name ?? customerObj.lastName ?? customerObj.last_name ?? '';
+            const firstName = c.first_name ?? customerObj.first_name ?? '';
+            const lastName = c.last_name ?? customerObj.last_name ?? '';
 
             const fallbackName = `${firstName} ${lastName}`.trim() || 'Customer';
             const displayName = (c.displayName || c.display_name) ? (c.displayName || c.display_name) : fallbackName;
@@ -66,8 +66,8 @@ export function allCustomersComponent(useDemo = true) {
                 lastName: lastName,
                 email: c.email ?? customerObj.email ?? '',
                 phone: c.phone ?? c.phone_number ?? customerObj.phone ?? customerObj.phone_number ?? '',
-                spend: Number(c.spend ?? c.total_spend ?? 0),
-                totalOrders: Number(c.totalOrders ?? c.total_orders ?? 0),
+                spend: Number(c.total_spend ?? 0),
+                totalOrders: Number(c.total_orders ?? 0),
                 status: c.status ?? 'Active',
                 dateCreated: c.dateCreated ?? c.created_at ?? c.added_at ?? c.date_created ?? '',
                 avatar: c.avatar ?? c.avatar_url ?? null

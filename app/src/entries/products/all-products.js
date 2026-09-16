@@ -36,7 +36,7 @@ export function allProductsComponent() {
                 status: p.status || (p.is_active !== false ? 'Active' : 'Draft'),
                 dateCreated: p.date_created || p.created_at || p.added_at || p.dateAdded || new Date().toISOString(),
                 // description: p.description || '',
-                url: '#', // p.url || p.detail_url || '#',
+                url: p.url || p.detail_url || '#',
                 imageUrl: p.image_url || p.imageUrl || p.image || null
             };
         },
