@@ -36,7 +36,7 @@ export async function mockSearch(query, signal) {
         .map((inv) => ({
             group: 'Invoices',
             label: `${inv.id} — ${inv.customer}`,
-            meta: `$${inv.amount}`,
+            meta: `₦${inv.amount}`,
             href: `/invoicing/${inv.id}/`,
         }));
 
@@ -73,7 +73,7 @@ export async function mockSearch(query, signal) {
                 group: 'Products',
                 label: p.name,
                 meta: `Revenue: ₦${totalRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} | Sales: ${p.salesCount}`,
-                href: '/products/', //p.url,
+                href: p.url,
             };
         });
 

@@ -23,6 +23,8 @@ ACCOUNTS = SimpleNamespace(
     )
 )
 
+BUSINESS_DATA = 'business_data'
+
 PRODUCTS = SimpleNamespace(
     LIST='products_list',
     ADD='products_add',

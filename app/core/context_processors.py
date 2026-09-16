@@ -1,6 +1,6 @@
 from django.http import HttpRequest
 from core.nav_tree import SIDEBAR_NAV_TREE
-from core.url_names import ACCOUNTS, CUSTOMERS, PRODUCTS, INVOICES
+from core.url_names import ACCOUNTS, BUSINESS_DATA, CUSTOMERS, PRODUCTS, INVOICES
 
 
 def url_name_registry(request: HttpRequest):
@@ -9,6 +9,7 @@ def url_name_registry(request: HttpRequest):
         "CUSTOMERS": CUSTOMERS,
         "PRODUCTS": PRODUCTS,
         "INVOICES": INVOICES,
+        "BUSINESS_DATA": BUSINESS_DATA,
     }
     
 def template_context(request: HttpRequest):

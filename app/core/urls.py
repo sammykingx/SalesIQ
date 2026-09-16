@@ -18,6 +18,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from core.url_names import BUSINESS_DATA
 from core.views import ComingSoonView, BusinessJSONDataView
 
 
@@ -28,7 +29,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     
     path("", ComingSoonView.as_view(), name="coming-soon"),
-    path("business-json/", BusinessJSONDataView.as_view(), name="business-data"),
+    path("business-json/", BusinessJSONDataView.as_view(), name=BUSINESS_DATA),
     path("accounts/", include("accounts.urls")),
     path("customers/", include("customers.urls")),
     path("products/", include("products.urls")),

@@ -1,6 +1,9 @@
 import focus from '@alpinejs/focus';
 import { navManifest } from '../../entries/data/manifest.js';
-import { mockSearch } from '../../entries/data/mock-serach.js'; // swap for remote-search.js later
+import { inAppToast } from '../../lib/in-app-toast.js';
+import { remoteSearch } from '../data/remote-search.js';
+// import { mockSearch } from '../../entries/data/mock-serach.js';
+
 
 export function initSearchDialogModule(Alpine) {
     Alpine.plugin(focus);
@@ -53,9 +56,16 @@ export function initSearchDialogModule(Alpine) {
             this.loading = true;
 
             try {
-                this.remoteItems = await mockSearch(q, this.controller.signal);
+                this.remoteItems = await remoteSearch(q, this.controller.signal);
             } catch (err) {
-                if (err.name !== 'AbortError') console.error(err);
+                if (err.name !== 'AbortError') {
+                    inAppToast(
+                        'Search Error',
+                        'Unable to fetch search results. Please try again.',
+                        'error'
+                    );
+                    console.error(err);
+                }
             } finally {
                 if (!this.controller.signal.aborted) this.loading = false;
             }

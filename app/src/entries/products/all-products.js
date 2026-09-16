@@ -1,4 +1,5 @@
 // app/src/entries/products/all-products.js
+import { inAppToast } from '../../lib/in-app-toast.js'
 
 export function allProductsComponent() {
     return {
@@ -10,14 +11,17 @@ export function allProductsComponent() {
         rawProducts: [],
 
         init() {
-            // Read JSON script tag injected by Django template context
             const scriptTag = document.getElementById('products-data');
             if (scriptTag && scriptTag.textContent.trim()) {
                 try {
                     const parsed = JSON.parse(scriptTag.textContent);
                     this.rawProducts = Array.isArray(parsed) ? parsed : [];
                 } catch (e) {
-                    console.error('Failed to parse backend products_json script:', e);
+                    inAppToast(
+                        'Initialization Error',
+                        'The page failed to load essential data. Please try refreshing.',
+                        'error'
+                    );
                     this.rawProducts = [];
                 }
             } else {
