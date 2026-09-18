@@ -17,4 +17,5 @@ staticfiles/
 node_modules/
 private_data/
 app/**/migrations/
+app/templates/invoices/hosting*
 !app/**/migrations/__init__.py

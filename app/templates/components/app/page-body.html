@@ -1,8 +1,8 @@
 <div class="grid grid-cols-12 gap-6">
     <!-- ───── Canonical empty-state (first-run) — full width on mobile, 8/12 on desktop ───── -->
     <!-- ┌────────────────────────────────────────────────────────────┐ -->
-    <!-- │  REGION: primary content. Replace this empty-state block    │ -->
-    <!-- │  with your page's cards / table / chart / form.             │ -->
+    <!-- │  REGION: primary content. Replace this empty-state block   │ -->
+    <!-- │  with your page's cards / table / chart / form.            │ -->
     <!-- └────────────────────────────────────────────────────────────┘ -->
     <section class="col-span-12 rounded-2xl border border-neutral-200 bg-white p-6 lg:col-span-8 dark:border-neutral-800 dark:bg-neutral-900" role="region" aria-label="Chart loading state">
         <div class="flex items-center justify-between pb-6">
@@ -15,7 +15,6 @@
         
         <!-- Shimmer loading placeholder for the chart canvas -->
         <div class="relative flex h-72 w-full items-end justify-between gap-3 overflow-hidden rounded-xl bg-neutral-50/50 p-4 dark:bg-neutral-900/50">
-            <!-- Subtle background shimmer effect -->
             <div class="absolute inset-0 -translate-x-full animate-[shimmer_2s_infinite] bg-linear-to-r from-transparent via-neutral-200/30 to-transparent dark:via-neutral-800/30"></div>
             
             <!-- Mock loading bars with staggered heights -->
@@ -30,65 +29,6 @@
     </section>
 
     <!-- ───── Empty-state top performing products ───── -->
-    {% comment %} <section class="col-span-12 rounded-2xl border border-neutral-200 bg-white lg:col-span-4 dark:border-neutral-800 dark:bg-neutral-900" role="region" aria-label="Empty-state variants">
-        <div class="border-b border-neutral-200 px-5 py-4 dark:border-neutral-800">
-            <h2 class="text-base font-semibold text-neutral-900 dark:text-white">State Variants</h2>
-            <p class="text-sm text-neutral-500 dark:text-neutral-400">One pattern, four contexts</p>
-        </div>
-        <div class="px-5 py-4">
-            <ul class="space-y-3">
-                <li class="flex items-center gap-3">
-                    <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-indigo-100 text-indigo-600 dark:bg-indigo-500/10 dark:text-indigo-400">
-                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <path d="M12 5l0 14" />
-                            <path d="M5 12l14 0" />
-                        </svg>
-                    </span>
-                    <span class="flex flex-col">
-                        <span class="text-sm font-medium text-neutral-900 dark:text-white">First-run</span>
-                        <span class="text-xs text-neutral-400">CTA to create the first record</span>
-                    </span>
-                </li>
-                <li class="flex items-center gap-3">
-                    <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-cyan-100 text-cyan-600 dark:bg-cyan-500/10 dark:text-cyan-400">
-                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <path d="M4 6h16" />
-                            <path d="M6 12h12" />
-                            <path d="M9 18h6" />
-                        </svg>
-                    </span>
-                    <span class="flex flex-col">
-                        <span class="text-sm font-medium text-neutral-900 dark:text-white">Filtered-empty</span>
-                        <span class="text-xs text-neutral-400">"Clear filters" secondary action</span>
-                    </span>
-                </li>
-                <li class="flex items-center gap-3">
-                    <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-violet-100 text-violet-600 dark:bg-violet-500/10 dark:text-violet-400">
-                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <path d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
-                            <path d="M21 21l-6 -6" />
-                        </svg>
-                    </span>
-                    <span class="flex flex-col">
-                        <span class="text-sm font-medium text-neutral-900 dark:text-white">Search-empty</span>
-                        <span class="text-xs text-neutral-400">No matches + spelling tips</span>
-                    </span>
-                </li>
-                <li class="flex items-center gap-3">
-                    <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-rose-100 text-rose-600 dark:bg-rose-500/10 dark:text-rose-400">
-                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4" />
-                            <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4" />
-                        </svg>
-                    </span>
-                    <span class="flex flex-col">
-                        <span class="text-sm font-medium text-neutral-900 dark:text-white">Error-empty</span>
-                        <span class="text-xs text-neutral-400">"Retry" action after a failure</span>
-                    </span>
-                </li>
-            </ul>
-        </div>
-    </section> {% endcomment %}
     <section class="col-span-12 rounded-2xl border border-neutral-200 bg-white lg:col-span-4 dark:border-neutral-800 dark:bg-neutral-900" role="region" aria-label="Top performing products">
         <div class="flex items-center justify-between border-b border-neutral-200 px-5 py-4 dark:border-neutral-800">
             <div>
@@ -108,7 +48,7 @@
                             <span class="text-xs text-neutral-400">142 sales</span>
                         </div>
                     </div>
-                    <span class="text-sm font-semibold text-neutral-900 dark:text-white">$14,200</span>
+                    <span class="text-sm font-semibold text-neutral-900 dark:text-white">₦14,200</span>
                 </li>
                 <!-- Rank 2 -->
                 <li class="flex items-center justify-between gap-3">
@@ -119,7 +59,7 @@
                             <span class="text-xs text-neutral-400">98 sales</span>
                         </div>
                     </div>
-                    <span class="text-sm font-semibold text-neutral-900 dark:text-white">$4,900</span>
+                    <span class="text-sm font-semibold text-neutral-900 dark:text-white">₦4,900</span>
                 </li>
                 <!-- Rank 3 -->
                 <li class="flex items-center justify-between gap-3">
@@ -130,7 +70,7 @@
                             <span class="text-xs text-neutral-400">64 sales</span>
                         </div>
                     </div>
-                    <span class="text-sm font-semibold text-neutral-900 dark:text-white">$3,200</span>
+                    <span class="text-sm font-semibold text-neutral-900 dark:text-white">₦3,200</span>
                 </li>
                 <!-- Rank 4 -->
                 <li class="flex items-center justify-between gap-3">
@@ -141,7 +81,7 @@
                             <span class="text-xs text-neutral-400">41 sales</span>
                         </div>
                     </div>
-                    <span class="text-sm font-semibold text-neutral-900 dark:text-white">$1,640</span>
+                    <span class="text-sm font-semibold text-neutral-900 dark:text-white">₦1,640</span>
                 </li>
             </ul>
         </div>

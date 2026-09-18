@@ -45,3 +45,7 @@ INVOICES = SimpleNamespace(
     DOWNLOAD='download_invoices',
     LIST_SALES='list_sales_invoices'
 )
+
+METRICS = SimpleNamespace(
+    BIZ_REVENUE="metrics_business_revenue",
+)

@@ -19,7 +19,8 @@ from django.contrib import admin
 from django.urls import path, include
 
 from core.url_names import BUSINESS_DATA
-from core.views import ComingSoonView, BusinessJSONDataView
+from core.views import ComingSoonView, BusinessJSONDataView, HostingerInvoiceView
+from metrics import urls as metric_urls
 
 
 handler404 = "core.views.custom_404"
@@ -30,8 +31,10 @@ urlpatterns = [
     
     path("", ComingSoonView.as_view(), name="coming-soon"),
     path("business-json/", BusinessJSONDataView.as_view(), name=BUSINESS_DATA),
+    # path("hostinger/", HostingerInvoiceView.as_view(), name="hst"),
     path("accounts/", include("accounts.urls")),
     path("customers/", include("customers.urls")),
     path("products/", include("products.urls")),
     path("invoices/", include("invoices.urls")),
+    path("metrics/", include(metric_urls))
 ]
