@@ -34,7 +34,6 @@ export function busiestDaysChart(endpoint) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const data = await response.json();
-                console.log(JSON.stringify(data, null, 2));
                 this.$nextTick(() => this.render(data ?? {}));
             } catch (error) {
                 this.$nextTick(() => this.render({}));

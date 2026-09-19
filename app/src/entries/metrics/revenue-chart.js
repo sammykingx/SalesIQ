@@ -33,8 +33,6 @@ export function revenueTrendChart(endpoint) {
                 const url = new URL(endpoint, window.location.origin);
                 url.searchParams.set('period', this.period);
 
-                console.log('The url: ', url);
-
                 const response = await fetch(url.toString());
                 if (!response.ok) {
                     inAppToast(
@@ -44,7 +42,6 @@ export function revenueTrendChart(endpoint) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const data = await response.json();
-                console.log(JSON.stringify(data, null, 2));
                 this.$nextTick(() => this.render(data ?? {}));
             } catch (error) {
                 this.$nextTick(() => this.render({}));
