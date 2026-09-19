@@ -5,7 +5,7 @@
         <!-- Header Section -->
         <div class="flex flex-col gap-1 border-b border-neutral-100 pb-5 dark:border-neutral-800 sm:flex-row sm:items-center sm:justify-between">
             <div>
-                <h2 class="text-base font-semibold tracking-tight text-neutral-900 dark:text-white">Personal Profile</h2>
+                <h2 class="text-base font-medium tracking-tight text-neutral-900 dark:text-white">Personal Profile</h2>
                 <p class="text-xs text-neutral-500 dark:text-neutral-400">View your verified account details and update your active contact phone number.</p>
             </div>
             {% if user.is_verified %}
@@ -19,7 +19,7 @@
         <!-- Avatar Section (Coming Soon) -->
         <div class="mt-6 flex flex-col items-start gap-4 rounded-xl border border-dashed border-neutral-200 bg-neutral-50/50 p-4 dark:border-neutral-800 dark:bg-neutral-950/40 sm:flex-row sm:items-center sm:justify-between">
             <div class="flex items-center gap-4">
-                <div class="relative flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-emerald-100 text-sm font-semibold text-emerald-700 ring-1 ring-white dark:bg-emerald-950/60 dark:text-emerald-400 dark:ring-emerald-900">
+                <div class="relative flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-emerald-100 text-sm font-medium text-emerald-700 ring-1 ring-white dark:bg-emerald-950/60 dark:text-emerald-400 dark:ring-emerald-900">
                     {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
                     <span class="absolute -top-1 -right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-amber-500 ring-2 ring-white dark:ring-neutral-900">
                         <span class="h-1.5 w-1.5 rounded-full bg-white"></span>
@@ -27,7 +27,7 @@
                 </div>
                 <div>
                     <div class="flex items-center gap-2">
-                        <h3 class="text-xs font-semibold text-neutral-800 dark:text-neutral-200">Profile Photo Customization</h3>
+                        <h3 class="text-xs font-medium text-neutral-800 dark:text-neutral-200">Profile Photo Customization</h3>
                         <span class="hidden md:block rounded-md bg-amber-100 px-2 py-0.5 text-[10px] font-medium text-amber-700 dark:bg-amber-950/80 dark:text-amber-400">Coming Soon</span>
                     </div>
                     <p class="mt-0.5 text-[11px] text-neutral-500 dark:text-neutral-400">Avatar uploads and brand assets management will be enabled in an upcoming release.</p>
@@ -42,7 +42,7 @@
         <div class="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2">
             <div>
                 <div class="flex items-center justify-between">
-                    <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">First Name</label>
+                    <label class="block text-xs font-medium text-neutral-700 dark:text-neutral-300">First Name</label>
                     <i data-lucide="lock" class="h-3 w-3 text-neutral-400"></i>
                 </div>
                 <div class="relative mt-1.5">
@@ -52,7 +52,7 @@
 
             <div>
                 <div class="flex items-center justify-between">
-                    <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">Last Name</label>
+                    <label class="block text-xs font-medium text-neutral-700 dark:text-neutral-300">Last Name</label>
                     <i data-lucide="lock" class="h-3 w-3 text-neutral-400"></i>
                 </div>
                 <div class="relative mt-1.5">
@@ -62,7 +62,7 @@
 
             <div>
                 <div class="flex items-center justify-between">
-                    <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">Email Address</label>
+                    <label class="block text-xs font-medium text-neutral-700 dark:text-neutral-300">Email Address</label>
                     <i data-lucide="lock" class="h-3 w-3 text-neutral-400"></i>
                 </div>
                 <div class="relative mt-1.5">
@@ -73,7 +73,7 @@
             <!-- Phone Number Field -->
             <div>
                 <div class="flex items-center justify-between">
-                    <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">Phone Number</label>
+                    <label class="block text-xs font-medium text-neutral-700 dark:text-neutral-300">Phone Number</label>
                     <i data-lucide="lock-open" class="h-3 w-3 text-neutral-400"></i>
                 </div>
                 <div class="relative mt-1.5">
@@ -89,7 +89,7 @@
             <!-- Timezone -->
             <div>
                 <div class="flex items-center justify-between">
-                    <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">Detected Timezone</label>
+                    <label class="block text-xs font-medium text-neutral-700 dark:text-neutral-300">Detected Timezone</label>
                     <span class="text-[10px] font-medium text-neutral-400">Auto</span>
                 </div>
                 <div class="relative mt-1.5 flex items-center">
@@ -100,7 +100,7 @@
 
             <div>
                 <div class="flex items-center justify-between">
-                    <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">Preferred Language</label>
+                    <label class="block text-xs font-medium text-neutral-700 dark:text-neutral-300">Preferred Language</label>
                     <span class="text-[10px] font-medium text-neutral-400">Auto</span>
                 </div>
                 <div class="relative mt-1.5 flex items-center">
@@ -114,7 +114,7 @@
         <!-- Save Action Row -->
         <div class="mt-8 flex items-center justify-between border-t border-neutral-100 pt-5 dark:border-neutral-800">
             <span class="text-[11px] text-neutral-400">Updates take effect immediately.</span>
-            <button type="submit" :disabled="!isValidForm" class="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2 text-xs font-semibold text-white shadow-xs hover:bg-indigo-700 hover:cursor-pointer active:bg-indigo-800 disabled:cursor-not-allowed disabled:opacity-50">
+            <button type="submit" :disabled="!isValidForm" class="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2 text-xs font-medium text-white shadow-xs hover:bg-indigo-700 hover:cursor-pointer active:bg-indigo-800 disabled:cursor-not-allowed disabled:opacity-50">
                 <i data-lucide="check" class="h-3.5 w-3.5"></i>
                 <span x-text="isSubmitting ? 'Updating...' : 'Update Profile'"></span>
             </button>

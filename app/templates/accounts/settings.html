@@ -9,7 +9,7 @@
     <!-- PAGE HEADER -->
     <div class="flex flex-col gap-1 md:flex-row md:items-center md:justify-between">
         <div>
-            <h1 class="text-xl font-semibold tracking-tight text-neutral-900 dark:text-white sm:text-2xl">Account Settings</h1>
+            <h1 class="text-xl font-medium tracking-tight text-neutral-900 dark:text-white sm:text-2xl">Account Settings</h1>
             <p class="text-xs text-neutral-500 dark:text-neutral-400">Manage your personal preferences, security options, and business links.</p>
         </div>
     </div>
@@ -24,7 +24,7 @@
                 <!-- Profile Link -->
                 <button 
                     @click="activeTab = 'profile'"
-                    :class="activeTab === 'profile' ? 'bg-indigo-50 text-indigo-700 dark:bg-neutral-800 dark:text-white font-semibold' : 'text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800/60'"
+                    :class="activeTab === 'profile' ? 'bg-indigo-50 text-indigo-700 dark:bg-neutral-800 dark:text-white font-medium' : 'text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800/60'"
                     class="flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-xs font-medium whitespace-nowrap text-left"
                 >
                     <i data-lucide="user" class="h-4 w-4 shrink-0"></i>
@@ -34,7 +34,7 @@
                 <!-- Password & Security Link -->
                 <button 
                     @click="activeTab = 'update-password'"
-                    :class="activeTab === 'update-password' ? 'bg-indigo-50 text-indigo-700 dark:bg-neutral-800 dark:text-white font-semibold' : 'text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800/60'"
+                    :class="activeTab === 'update-password' ? 'bg-indigo-50 text-indigo-700 dark:bg-neutral-800 dark:text-white font-medium' : 'text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800/60'"
                     class="flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-xs font-medium whitespace-nowrap text-left"
                 >
                     <i data-lucide="lock" class="h-4 w-4 shrink-0"></i>
@@ -44,7 +44,7 @@
                 <!-- Business & Social Links -->
                 <button 
                     @click="activeTab = 'socials'"
-                    :class="activeTab === 'socials' ? 'bg-indigo-50 text-indigo-700 dark:bg-neutral-800 dark:text-white font-semibold' : 'text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800/60'"
+                    :class="activeTab === 'socials' ? 'bg-indigo-50 text-indigo-700 dark:bg-neutral-800 dark:text-white font-medium' : 'text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800/60'"
                     class="flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-xs font-medium whitespace-nowrap text-left"
                 >
                     <i data-lucide="link" class="h-4 w-4 shrink-0"></i>

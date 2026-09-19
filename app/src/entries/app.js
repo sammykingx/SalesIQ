@@ -52,5 +52,7 @@ createIcons({
 });
 
 window.Alpine = Alpine;
-Alpine.start();
 window.inAppToast = inAppToast;
+
+Alpine.start();
+

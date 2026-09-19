@@ -50,7 +50,7 @@
                 </span>
             </div>
             <div class="mt-3 flex items-baseline justify-between">
-                <p class="text-2xl font-semibold text-neutral-900 dark:text-white">{{ metrics.total_customers|intcomma|default:'0' }}</p>
+                <p class="text-2xl text-neutral-900 dark:text-white">{{ metrics.total_customers|intcomma|default:'0' }}</p>
                 {% comment %} <span class="inline-flex items-center text-xs font-semibold text-emerald-600 dark:text-emerald-400">+12% mo</span> {% endcomment %}
             </div>
         </div>
@@ -65,7 +65,7 @@
                 </span>
             </div>
             <div class="mt-3 flex items-baseline justify-between">
-                <p class="text-2xl font-semibold text-neutral-900 dark:text-white">₦{{ metrics.avg_lifetime_value|floatformat:2|intcomma|default:'0' }}</p>
+                <p class="text-2xl text-neutral-900 dark:text-white">₦{{ metrics.avg_lifetime_value|floatformat:2|intcomma|default:'0' }}</p>
                 {% comment %} <span class="inline-flex items-center text-xs font-semibold text-emerald-600 dark:text-emerald-400">+5.4%</span> {% endcomment %}
             </div>
         </div>
@@ -80,7 +80,7 @@
                 </span>
             </div>
             <div class="mt-3 flex items-baseline justify-between">
-                <p class="text-2xl font-semibold text-neutral-900 dark:text-white">{{ metrics.repeat_rate|default:'0.0' }}%</p>
+                <p class="text-2xl text-neutral-900 dark:text-white">{{ metrics.repeat_rate|default:'0.0' }}%</p>
                 {% comment %} <span class="inline-flex items-center text-xs font-semibold text-emerald-600 dark:text-emerald-400">+2.1%</span> {% endcomment %}
             </div>
         </div>
@@ -95,7 +95,7 @@
                 </span>
             </div>
             <div class="mt-3 flex items-baseline justify-between">
-                <p class="text-2xl font-semibold text-neutral-900 dark:text-white">₦{{ metrics.total_revenue|floatformat:2|intcomma|default:'0' }}</p>
+                <p class="text-2xl text-neutral-900 dark:text-white">₦{{ metrics.total_revenue|floatformat:2|intcomma|default:'0' }}</p>
                 {% comment %} <span class="inline-flex items-center text-xs font-semibold text-neutral-500">21% of total</span> {% endcomment %}
             </div>
         </div>
@@ -124,7 +124,7 @@
             
             <!-- Sort Field Select -->
             <div class="flex items-center gap-1.5">
-                <span class="text-xs font-semibold text-neutral-500 dark:text-neutral-400">Sort:</span>
+                <span class="text-xs text-neutral-500 dark:text-neutral-400">Sort:</span>
                 <select 
                     x-model="sortBy" 
                     class="rounded-xl border border-neutral-200 bg-white px-3 py-2 text-xs font-medium text-neutral-700 shadow-2xs focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/20 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-200"
@@ -141,7 +141,7 @@
             <button 
                 @click="sortOrder = sortOrder === 'asc' ? 'desc' : 'asc'" 
                 type="button" 
-                class="inline-flex items-center gap-1.5 rounded-xl border border-neutral-200 bg-white px-3 py-2 text-xs font-semibold text-neutral-700 shadow-2xs hover:bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-200 dark:hover:bg-neutral-800"
+                class="inline-flex items-center gap-1.5 rounded-xl border border-neutral-200 bg-white px-3 py-2 text-xs text-neutral-700 shadow-2xs hover:bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-200 dark:hover:bg-neutral-800"
                 :title="sortOrder === 'asc' ? 'Ascending' : 'Descending'"
             >
                 <span x-text="sortOrder === 'asc' ? 'Ascending' : 'Descending'"></span>
@@ -151,7 +151,7 @@
 
             <!-- Per-Page Select -->
             <div class="flex items-center gap-1.5">
-                <span class="text-xs font-semibold text-neutral-500 dark:text-neutral-400">Show:</span>
+                <span class="text-xs text-neutral-500 dark:text-neutral-400">Show:</span>
                 <select 
                     x-model="perPage" 
                     @change="currentPage = 1"
@@ -184,21 +184,21 @@
                             <template x-if="!customer.avatar">
                                 <div 
                                     :class="getAvatarBgClass(customer.id)"
-                                    class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full font-semibold text-sm ring-1 ring-neutral-100 dark:ring-neutral-800"
+                                    class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-sm ring-1 ring-neutral-100 dark:ring-neutral-800"
                                     x-text="getInitials(customer.firstName, customer.lastName)"
                                 ></div>
                             </template>
 
                             <div>
                                 <!-- Display Name Rendered Here -->
-                                <h3 class="text-sm font-semibold text-neutral-900 dark:text-white" x-text="customer.displayName"></h3>
+                                <h3 class="text-sm font-medium text-neutral-900 dark:text-white" x-text="customer.displayName"></h3>
                                 <span 
                                     :class="{
                                         'bg-amber-50 text-amber-700 dark:bg-amber-950/60 dark:text-amber-400': customer.status === 'VIP',
                                         'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-400': customer.status === 'Active',
                                         'bg-indigo-50 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-400': customer.status === 'New'
                                     }" 
-                                    class="inline-flex rounded-md px-2 py-0.5 text-[10px] font-semibold" 
+                                    class="inline-flex rounded-md px-2 py-0.5 text-[10px]" 
                                     x-text="customer.status"
                                 ></span>
                             </div>
@@ -231,11 +231,11 @@
                 <!-- Spend & Order Metrics -->
                 <div class="mt-5 flex items-center justify-between border-t border-neutral-100 pt-4 dark:border-neutral-800">
                     <div>
-                        <span class="text-[10px] font-semibold tracking-wider text-neutral-400 uppercase">Total Orders</span>
-                        <p class="text-xs font-semibold text-neutral-800 dark:text-neutral-200" x-text="customer.totalOrders + ' Orders'"></p>
+                        <span class="text-[10px] font-medium tracking-wider text-neutral-400 uppercase">Total Orders</span>
+                        <p class="text-xs text-neutral-800 dark:text-neutral-200" x-text="customer.totalOrders + ' Orders'"></p>
                     </div>
                     <div class="text-right">
-                        <span class="text-[10px] font-semibold tracking-wider text-neutral-400 uppercase">Total Spend</span>
+                        <span class="text-[10px] font-medium tracking-wider text-neutral-400 uppercase">Total Spend</span>
                         <p class="text-sm font-mono text-emerald-600 dark:text-emerald-400" x-text="'₦' + customer.spend.toLocaleString('en-US', { minimumFractionDigits: 2 })"></p>
                     </div>
                 </div>
@@ -247,16 +247,16 @@
     <!-- PAGINATION FOOTER -->
     <div x-show="sortedCustomers.length > 0" class="flex flex-col items-center justify-between gap-4 rounded-2xl border border-neutral-200/80 bg-white p-4 shadow-xs dark:border-neutral-800 dark:bg-neutral-900 sm:flex-row">
         <p class="text-xs text-neutral-500 dark:text-neutral-400">
-            Showing <span class="font-semibold text-neutral-800 dark:text-neutral-200" x-text="paginationStartIndex"></span> 
-            to <span class="font-semibold text-neutral-800 dark:text-neutral-200" x-text="paginationEndIndex"></span> 
-            of <span class="font-semibold text-neutral-800 dark:text-neutral-200" x-text="sortedCustomers.length"></span> customers
+            Showing <span class="font-medium text-neutral-800 dark:text-neutral-200" x-text="paginationStartIndex"></span> 
+            to <span class="font-medium text-neutral-800 dark:text-neutral-200" x-text="paginationEndIndex"></span> 
+            of <span class="font-medium text-neutral-800 dark:text-neutral-200" x-text="sortedCustomers.length"></span> customers
         </p>
 
         <div class="inline-flex items-center gap-1.5">
             <button 
                 @click="setPage(currentPage - 1)" 
                 :disabled="currentPage === 1"
-                class="rounded-xl border border-neutral-200 bg-white px-3 py-1.5 text-xs font-medium text-neutral-700 shadow-2xs hover:bg-neutral-50 disabled:opacity-40 disabled:hover:bg-white dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-200 dark:hover:bg-neutral-800"
+                class="rounded-xl border border-neutral-200 bg-white px-3 py-1.5 text-xs text-neutral-700 shadow-2xs hover:bg-neutral-50 disabled:opacity-40 disabled:hover:bg-white dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-200 dark:hover:bg-neutral-800"
             >
                 Previous
             </button>
@@ -266,7 +266,7 @@
             <button 
                 @click="setPage(currentPage + 1)" 
                 :disabled="currentPage === totalPages"
-                class="rounded-xl border border-neutral-200 bg-white px-3 py-1.5 text-xs font-medium text-neutral-700 shadow-2xs hover:bg-neutral-50 disabled:opacity-40 disabled:hover:bg-white dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-200 dark:hover:bg-neutral-800"
+                class="rounded-xl border border-neutral-200 bg-white px-3 py-1.5 text-xs text-neutral-700 shadow-2xs hover:bg-neutral-50 disabled:opacity-40 disabled:hover:bg-white dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-200 dark:hover:bg-neutral-800"
             >
                 Next
             </button>
@@ -278,7 +278,7 @@
         <svg class="mx-auto h-12 w-12 text-neutral-300 dark:text-neutral-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
         </svg>
-        <h3 class="mt-2 text-sm font-semibold text-neutral-800 dark:text-neutral-200">No Customers Found</h3>
+        <h3 class="mt-2 text-sm font-medium text-neutral-800 dark:text-neutral-200">No Customers Found</h3>
         <p class="mt-1 text-xs text-neutral-500" x-text="searchQuery ? 'Try adjusting your search criteria or sorting order.' : 'Get started by adding your first business customer.'"></p>
     </div>
 

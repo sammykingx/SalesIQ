@@ -48,4 +48,5 @@ INVOICES = SimpleNamespace(
 
 METRICS = SimpleNamespace(
     BIZ_REVENUE="metrics_business_revenue",
+    BUSIEST_DAYS="metrics_business_busiest_day",
 )

@@ -27,6 +27,17 @@ class ProductsSelector:
             created_at=product.created_at,
             updated_at=product.updated_at,
         )
+        
+    def get_business_product_count(self, *, business_id) -> int:
+        """Get the total number of products for a specific business.
+
+        Args:
+            business_id (int|str): The unique identifier of the business.
+
+        Returns:
+            int: The total count of products associated with the business.
+        """
+        return self.model.objects.filter(business_id=business_id).count()
 
     def get_product(self, *, product_id: UUID, as_instance: bool = False) -> Union[Products, ProductEntity, None]:
         """

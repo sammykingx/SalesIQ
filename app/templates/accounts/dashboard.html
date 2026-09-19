@@ -4,7 +4,92 @@
 
 {% block title %}salesiq | dashboard{% endblock %}
 
-{% block page_header %} {% include "components/app/page-header.html" %} {% endblock %}
+{% block page_header %}
+<!-- Dashboard Welcome Banner -->
+<div class="relative overflow-hidden rounded-2xl bg-white p-6 sm:p-8 shadow-xs border border-neutral-200 dark:border-neutral-800 dark:bg-neutral-900">
+    <!-- Ambient Background Glows -->
+    <div class="pointer-events-none absolute -top-24 -right-24 h-64 w-64 rounded-full bg-emerald-500/10 blur-3xl dark:bg-emerald-500/15"></div>
+    <div class="pointer-events-none absolute -bottom-24 -left-24 h-64 w-64 rounded-full bg-primary/10 blur-3xl dark:bg-primary/15"></div>
+
+    <div class="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+        
+        <!-- Left: Personalization & Messaging -->
+        <div class="max-w-xl space-y-3">
+            <div class="inline-flex items-center gap-2 rounded-full bg-emerald-500/10 px-3 py-1 text-xs text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400">
+                <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                </span>
+                Live Overview
+            </div>
+
+            <h1 class="text-2xl sm:text-3xl font-semibold tracking-tight text-neutral-900 dark:text-white">
+                Welcome back, <span class="bg-linear-to-r from-emerald-500 to-teal-500 bg-clip-text text-transparent">{{ user.first_name|title }}</span> 👋
+            </h1>
+            
+            <p class="text-sm sm:text-base text-neutral-600 dark:text-neutral-400 leading-relaxed">
+                Your daily business vitals at a glance: revenue, catalog, and customers, updated live.
+            </p>
+
+            <!-- Quick Action Buttons -->
+            <div class="flex flex-wrap items-center gap-3 pt-2">
+                <!-- Primary Action -->
+                <button 
+                    type="button"
+                    onClick="window.location.assign('{% url INVOICES.CREATE %}')"
+                    class="inline-flex items-center gap-2 rounded-xl bg-emerald-500 px-4 py-2.5 text-sm text-white shadow-md shadow-emerald-500/20 hover:bg-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 cursor-pointer"
+                >
+                    <svg class="h-4 w-4 stroke-[2.5]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    Record Sale
+                </button>
+
+                <!-- Secondary Action -->
+                <button 
+                    type="button"
+                    onClick="window.location.assign('{% url PRODUCTS.LIST %}')"
+                    class="inline-flex items-center gap-2 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800/80 px-4 py-2.5 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-neutral-800 cursor-pointer"
+                >
+                    View catalog
+                </button>
+            </div>
+        </div>
+
+        <!-- Right: Compact Performance Metrics -->
+        <div class="grid grid-cols-3 gap-3 sm:gap-4 lg:w-auto w-full pt-4 lg:pt-0 border-t lg:border-t-0 border-neutral-100 dark:border-neutral-800">
+
+            <!-- Revenue growth -->
+            {% if revenue_is_increase %}
+                <div class="rounded-xl bg-emerald-500/5 dark:bg-emerald-500/10 p-3.5 sm:p-4 border border-emerald-500/20 dark:border-emerald-500/20 min-w-25">
+                    <span class="block text-xs font-medium text-emerald-700 dark:text-emerald-300">Revenue</span>
+                    <span class="mt-1 block text-lg sm:text-xl font-medium text-emerald-950 dark:text-emerald-100">+{{ revenue_percent_change }}%</span>
+                </div>
+            {% else %}
+                <div class="rounded-xl bg-rose-500/5 dark:bg-rose-500/10 p-3.5 sm:p-4 border border-rose-500/20 dark:border-rose-500/20 min-w-25">
+                    <span class="block text-xs font-medium text-rose-700 dark:text-rose-300">Revenue</span>
+                    <span class="mt-1 block text-lg sm:text-xl font-medium text-rose-950 dark:text-rose-100">{{ revenue_percent_change }}%</span>
+                </div>
+            {% endif %}
+
+            <!-- products -->
+            <div class="rounded-xl bg-slate-100/70 dark:bg-slate-800/60 p-3.5 sm:p-4 border border-slate-200/80 dark:border-slate-700/50 min-w-25">
+                <span class="block text-xs font-medium text-slate-600 dark:text-slate-400">Products</span>
+                <span class="mt-1 block text-lg sm:text-xl font-medium text-slate-900 dark:text-white">{{ product_count|intcomma }}</span>
+            </div>
+
+            <!-- customers -->
+            <div class="rounded-xl bg-sky-500/5 dark:bg-sky-500/10 p-3.5 sm:p-4 border border-sky-500/20 dark:border-sky-500/20 min-w-25">
+                <span class="block text-xs font-medium text-sky-700 dark:text-sky-300">Customers</span>
+                <span class="mt-1 block text-lg sm:text-xl font-medium text-sky-950 dark:text-sky-100">{{ customer_count|intcomma }}</span>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+{% endblock %}
 
 {% block page_body %}
 <!-- 1st row -->
@@ -13,15 +98,13 @@
         class="col-span-12 rounded-2xl border border-neutral-200 bg-white p-6 lg:col-span-8 dark:border-neutral-800 dark:bg-neutral-900"
         data-endpoint="{% url METRICS.BIZ_REVENUE %}"
         x-data="revenueTrendChart($el.dataset.endpoint)"
-        x-init="init()"
     >
-
         <div class="flex items-center justify-between pb-6">
             <div>
-                <h2 class="text-base font-semibold text-neutral-900 dark:text-white">Revenue</h2>
+                <h2 class="text-base font-medium text-neutral-900 dark:text-white">Revenue</h2>
                 <p class="text-xs text-neutral-500 dark:text-neutral-400">Trend over time</p>
             </div>
-            <select x-model="period" class="rounded-lg border border-neutral-200 px-3 py-1.5 text-xs dark:border-neutral-800">
+            <select x-model="period" class="rounded-lg border border-neutral-200 px-3 py-1.5 text-xs text-neutral-400 dark:border-neutral-800 dark:text-neutral-500">
                 <option value="7d">7 Days</option>
                 <option value="30d">30 Days</option>
                 <option value="90d">90 Days</option>
@@ -29,10 +112,10 @@
         </div>
 
         <!-- Chart Skeleton Loader -->
-        <div x-show="loading" class="h-72 w-full flex flex-col justify-between pt-4 pb-2">
+        <div x-show="loading" class="flex h-72 w-full flex-col justify-between pt-4 pb-2">
             <!-- Graph Area with Shimmer Wave SVG & Gridlines -->
-            <div class="relative flex-1 w-full overflow-hidden">
-                <!-- Background Vertical Gridlines -->
+            <div class="relative w-full flex-1 overflow-hidden">
+                
                 <div class="absolute inset-0 flex justify-between px-2 opacity-40">
                     <div class="h-full w-px bg-neutral-200 dark:bg-neutral-800"></div>
                     <div class="h-full w-px bg-neutral-200 dark:bg-neutral-800"></div>
@@ -42,7 +125,7 @@
                 </div>
 
                 <!-- Glowing Animated Area Graph Skeleton -->
-                <svg class="w-full h-full animate-pulse" preserveAspectRatio="none" viewBox="0 0 500 150">
+                <svg class="h-full w-full animate-pulse" preserveAspectRatio="none" viewBox="0 0 500 150">
                     <defs>
                         <linearGradient id="chartSkeletonGradient" x1="0" y1="0" x2="0" y2="1">
                             <stop offset="0%" stop-color="#10b981" stop-opacity="0.25"/>
@@ -63,25 +146,38 @@
             </div>
 
             <!-- X-Axis Label Skeletons -->
-            <div class="flex justify-between items-center pt-3 px-2">
-                <div class="h-2.5 w-8 rounded bg-neutral-200 dark:bg-neutral-800 animate-pulse"></div>
-                <div class="h-2.5 w-8 rounded bg-neutral-200 dark:bg-neutral-800 animate-pulse"></div>
-                <div class="h-2.5 w-8 rounded bg-neutral-200 dark:bg-neutral-800 animate-pulse"></div>
-                <div class="h-2.5 w-8 rounded bg-neutral-200 dark:bg-neutral-800 animate-pulse"></div>
-                <div class="h-2.5 w-8 rounded bg-neutral-200 dark:bg-neutral-800 animate-pulse"></div>
-                <div class="h-2.5 w-8 rounded bg-neutral-200 dark:bg-neutral-800 animate-pulse"></div>
+            <div class="flex items-center justify-between px-2 pt-3">
+                <div class="h-2.5 w-8 animate-pulse rounded bg-neutral-200 dark:bg-neutral-800"></div>
+                <div class="h-2.5 w-8 animate-pulse rounded bg-neutral-200 dark:bg-neutral-800"></div>
+                <div class="h-2.5 w-8 animate-pulse rounded bg-neutral-200 dark:bg-neutral-800"></div>
+                <div class="h-2.5 w-8 animate-pulse rounded bg-neutral-200 dark:bg-neutral-800"></div>
+                <div class="h-2.5 w-8 animate-pulse rounded bg-neutral-200 dark:bg-neutral-800"></div>
+                <div class="h-2.5 w-8 animate-pulse rounded bg-neutral-200 dark:bg-neutral-800"></div>
             </div>
         </div>
 
-        <div x-show="!loading" x-cloak class="h-72">
-            <canvas x-ref="canvas"></canvas>
+        <!-- Active Canvas & Empty Overlay Container -->
+        
+        <div x-show="!loading" x-cloak class="relative h-72 w-full">
+            <canvas x-ref="canvas" class="h-full w-full"></canvas>
+
+            <!-- Centered Empty State Overlay Inside Demo Wave -->
+            <div x-show="isEmpty" x-cloak
+                class="pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center p-4 text-center">
+                <div class="rounded-xl bg-white/80 p-4 backdrop-blur-xs dark:bg-neutral-900/80">
+                    <p class="text-sm font-medium text-neutral-800 dark:text-neutral-200">No sales yet</p>
+                    <p class="mt-1 max-w-xs text-xs text-neutral-500 dark:text-neutral-400">
+                        Record your first sale, this updates the second you save it.
+                    </p>
+                </div>
+            </div>
         </div>
     </section>
 
     <section class="col-span-12 rounded-2xl border border-neutral-200 bg-white lg:col-span-4 dark:border-neutral-800 dark:bg-neutral-900" role="region" aria-label="Top performing products">
         <div class="flex items-center justify-between border-b border-neutral-200 px-5 py-4 dark:border-neutral-800">
             <div>
-                <h2 class="text-base font-semibold text-neutral-900 dark:text-white">Top Products</h2>
+                <h2 class="text-base font-medium text-neutral-800 dark:text-white">Top Products</h2>
                 <p class="text-xs text-neutral-500 dark:text-neutral-400">Best-selling items by revenue</p>
             </div>
             <span class="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400">This Month</span>
@@ -104,7 +200,7 @@
                             <span class="text-xs text-neutral-400">{{ product.total_sales }} sale{{ product.total_sales|pluralize }}</span>
                         </div>
                     </div>
-                    <span class="text-sm font-semibold text-neutral-900 dark:text-white">₦{{ product.total_revenue|floatformat:0|intcomma }}</span>
+                    <span class="text-sm font-medium text-ink dark:text-white">₦{{ product.total_revenue|floatformat:0|intcomma }}</span>
                 </li>
                 {% endfor %}
 
@@ -122,6 +218,180 @@
                 {% endfor %}
             </ul>
         </div>
+    </section>
+</div>
+
+<!-- Row 2-->
+<div class="mt-6 grid grid-cols-12 gap-6">
+
+    <!-- Top Customers — 1/3 -->
+    <section class="col-span-12 rounded-2xl border border-neutral-200 bg-white lg:col-span-4 dark:border-neutral-800 dark:bg-neutral-900" role="region" aria-label="Top customers">
+        <div class="flex items-center justify-between border-b border-neutral-200 px-5 py-4 dark:border-neutral-800">
+            <div>
+                <h2 class="text-base font-medium text-neutral-900 dark:text-white">Top Customers</h2>
+                <p class="text-xs text-neutral-500 dark:text-neutral-400">By total spend</p>
+            </div>
+            <span class="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400">All Time</span>
+        </div>
+
+        <div class="px-5 py-4">
+            {% if top_customers or empty_customer_slots %}
+            <ul class="space-y-4">
+                {% for customer in top_customers %}
+                <li class="flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-semibold
+                            {% if forloop.counter == 1 %}
+                                bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400 ring-1 ring-amber-400/30
+                            {% elif forloop.counter == 2 %}
+                                bg-slate-100 text-slate-700 dark:bg-slate-500/20 dark:text-slate-300 ring-1 ring-slate-400/30
+                            {% elif forloop.counter == 3 %}
+                                bg-orange-100 text-orange-700 dark:bg-orange-500/20 dark:text-orange-400 ring-1 ring-orange-400/30
+                            {% elif forloop.counter == 4 %}
+                                bg-blue-50 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400
+                            {% else %}
+                                bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300
+                            {% endif %}">
+                            {{ customer.name|first|upper }}
+                        </span>
+                        <div class="flex flex-col min-w-0">
+                            <span class="truncate text-sm font-medium text-neutral-900 dark:text-white">{{ customer.name }}</span>
+                            <span class="text-xs text-neutral-400">{{ customer.total_orders }} order{{ customer.total_orders|pluralize }}</span>
+                        </div>
+                    </div>
+                    <span class="text-sm font-mono text-neutral-900 dark:text-white">₦{{ customer.total_spent|floatformat:0|intcomma }}</span>
+                </li>
+                {% endfor %}
+
+                {% for _ in empty_customers_slots %}
+                <li class="flex items-center justify-between gap-3" aria-hidden="true">
+                    <div class="flex items-center gap-3 min-w-0 w-full">
+                        <span class="h-7 w-7 shrink-0 animate-pulse rounded-full bg-neutral-100 dark:bg-neutral-800"></span>
+                        <div class="flex flex-col gap-1.5 min-w-0 w-full">
+                            <span class="h-3.5 w-2/3 animate-pulse rounded bg-neutral-200 dark:bg-neutral-800"></span>
+                            <span class="h-2.5 w-1/3 animate-pulse rounded bg-neutral-100 dark:bg-neutral-800/60"></span>
+                        </div>
+                    </div>
+                    <span class="h-3.5 w-14 shrink-0 animate-pulse rounded bg-neutral-200 dark:bg-neutral-800"></span>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <div class="flex flex-col items-center justify-center gap-1 py-10 text-center">
+                <p class="text-sm font-medium text-neutral-500 dark:text-neutral-400">No customers yet</p>
+                <p class="max-w-50 text-xs text-neutral-400 dark:text-neutral-500">
+                    They'll show up here the moment you record their first sale.
+                </p>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- Busiest Days — 2/3 -->
+    <section id="busiest-days"
+        class="col-span-12 rounded-2xl border border-neutral-200 bg-white p-6 lg:col-span-8 dark:border-neutral-800 dark:bg-neutral-900"
+        data-endpoint="{% url METRICS.BUSIEST_DAYS %}"
+        x-data="busiestDaysChart($el.dataset.endpoint)"
+    >
+        <div class="flex items-center justify-between pb-6">
+            <div>
+                <h2 class="text-base font-medium text-neutral-900 dark:text-white">Busiest Days</h2>
+                <p class="text-xs text-neutral-500 dark:text-neutral-400">Revenue by weekday · Last 90 days</p>
+            </div>
+        </div>
+
+        <!-- Skeleton loader -->
+        <div x-show="loading" class="relative flex h-64 w-full items-end justify-between gap-3 overflow-hidden rounded-xl bg-neutral-50/50 p-4 dark:bg-neutral-900/50">
+            <div class="absolute inset-0 -translate-x-full animate-[shimmer_2s_infinite] bg-linear-to-r from-transparent via-neutral-200/30 to-transparent dark:via-neutral-800/30"></div>
+            <div class="w-full h-2/5 animate-pulse rounded-t bg-neutral-200/70 dark:bg-neutral-800"></div>
+            <div class="w-full h-3/5 animate-pulse rounded-t bg-neutral-200/70 dark:bg-neutral-800"></div>
+            <div class="w-full h-4/5 animate-pulse rounded-t bg-neutral-200/70 dark:bg-neutral-800"></div>
+            <div class="w-full h-1/2 animate-pulse rounded-t bg-neutral-200/70 dark:bg-neutral-800"></div>
+            <div class="w-full h-3/4 animate-pulse rounded-t bg-neutral-200/70 dark:bg-neutral-800"></div>
+            <div class="w-full h-2/3 animate-pulse rounded-t bg-neutral-200/70 dark:bg-neutral-800"></div>
+            <div class="w-full h-5/6 animate-pulse rounded-t bg-neutral-200/70 dark:bg-neutral-800"></div>
+        </div>
+
+        <!-- Main Chart Container -->
+        <div x-show="!loading" x-cloak class="relative h-64 w-full">
+            <canvas x-ref="canvas" class="h-full w-full"></canvas>
+
+            <!-- Centered Empty State Overlay -->
+            <div x-show="isEmpty" x-cloak
+                class="pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center p-4 text-center">
+                <div class="rounded-xl bg-white/80 p-4 backdrop-blur-xs dark:bg-neutral-900/80">
+                    <p class="text-sm font-medium text-neutral-800 dark:text-neutral-200">No pattern yet</p>
+                    <p class="mt-1 max-w-xs text-xs text-neutral-500 dark:text-neutral-400">
+                        Once you've logged a few weeks of sales, we'll show you your strongest days.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <p x-show="!loading && !isEmpty" x-cloak class="pt-4 text-center text-xs text-neutral-500 dark:text-neutral-400">
+            <span x-text="peakLabel"></span>s bring in <span x-text="peakPct"></span>% of your weekly revenue.
+        </p>
+    </section>
+</div>
+
+<!-- Recent activity -->
+<div class="mt-6 grid grid-cols-12 gap-6">
+    <section class="col-span-12 rounded-2xl border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900" role="region" aria-label="Recent sales">
+        <div class="flex items-center justify-between border-b border-neutral-200 px-5 py-4 dark:border-neutral-800">
+            <div>
+                <h2 class="text-base font-medium text-neutral-900 dark:text-white">Recent Sales</h2>
+                <p class="text-xs text-neutral-500 dark:text-neutral-400">Last 7 transactions</p>
+            </div>
+            <a href="{% url INVOICES.LIST_SALES %}" class="text-xs font-medium text-emerald-600 hover:underline dark:text-emerald-400">View all</a>
+        </div>
+
+        {% if recent_sales %}
+        <div class="overflow-x-auto">
+            <table class="w-full text-left">
+                <thead>
+                    <tr class="border-b border-neutral-200 dark:border-neutral-800">
+                        <th class="px-5 py-3 text-xs font-medium text-neutral-400 dark:text-neutral-500">Invoice #</th>
+                        <th class="px-5 py-3 text-xs font-medium text-neutral-400 dark:text-neutral-500">Customer</th>
+                        <th class="px-5 py-3 text-xs font-medium text-neutral-400 dark:text-neutral-500">Items</th>
+                        <th class="px-5 py-3 text-xs font-medium text-neutral-400 dark:text-neutral-500">Date</th>
+                        <th class="px-5 py-3 text-xs font-medium text-neutral-400 dark:text-neutral-500">Status</th>
+                        <th class="px-5 py-3 text-right text-xs font-medium text-neutral-400 dark:text-neutral-500">Amount</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-neutral-100 dark:divide-neutral-800/60">
+                    {% for sale in recent_sales %}
+                    <tr class="hover:bg-neutral-50 dark:hover:bg-neutral-800/40">
+                        <td class="px-5 py-4">
+                            <a href="{% url INVOICES.VIEW slug=sale.slug %}" class="text-sm font-medium text-emerald-600 hover:underline dark:text-emerald-400">{{ sale.display_id }}</a>
+                        </td>
+                        <td class="px-5 py-4 text-sm text-neutral-700 dark:text-neutral-300">{{ sale.customer_name }}</td>
+                        <td class="px-5 py-4 text-sm text-neutral-500 dark:text-neutral-400">
+                            <span class="truncate">{{ sale.first_item }}{% if sale.extra_count %} <span class="text-neutral-400 dark:text-neutral-500">+{{ sale.extra_count }} more</span>{% endif %}</span>
+                        </td>
+                        <td class="px-5 py-4 text-sm text-neutral-500 dark:text-neutral-400">{{ sale.date_display }}</td>
+                        <td class="px-5 py-4">
+                            {% if sale.status == "paid" %}
+                            <span class="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400">Paid</span>
+                            {% else %}
+                            <span class="inline-flex items-center rounded-full bg-red-50 px-2.5 py-1 text-xs font-medium text-red-600 dark:bg-red-500/10 dark:text-red-400">Void</span>
+                            {% endif %}
+                        </td>
+                        <td class="px-5 py-4 text-right text-sm font-mono {% if sale.status == 'void' %}text-neutral-400 line-through dark:text-neutral-500{% else %}text-neutral-900 dark:text-white{% endif %}">
+                            ₦{{ sale.total|floatformat:0|intcomma }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="flex flex-col items-center justify-center gap-1 py-14 text-center">
+            <p class="text-sm font-medium text-neutral-500 dark:text-neutral-400">No sales recorded yet</p>
+            <p class="max-w-60 text-xs text-neutral-400 dark:text-neutral-500">
+                Your transactions will show up here the moment you record your first sale.
+            </p>
+        </div>
+        {% endif %}
     </section>
 </div>
 {% endblock %}

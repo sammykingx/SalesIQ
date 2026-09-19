@@ -74,7 +74,7 @@
     <!-- ===== NAV TREE ===== -->
     <nav class="flex-1 space-y-1 overflow-y-auto px-2 py-3" role="tree" aria-label="Main menu" @keydown="onTreeKey($event)" x-ref="tree">
         <!-- MAIN -->
-        <p x-show="!$store.sidebar.collapsed || $store.sidebar.mobileOpen" class="px-3 pb-1 pt-1 text-xs font-semibold uppercase tracking-wider text-neutral-400" role="presentation">Main</p>
+        <p x-show="!$store.sidebar.collapsed || $store.sidebar.mobileOpen" class="px-3 pb-1 pt-1 text-xs font-sans uppercase tracking-wider text-neutral-400" role="presentation">Main</p>
         
         <div class="nav_grp" data-group-name="dashboard" x-show="matchesGroup('dashboard')">
             <a
@@ -96,7 +96,7 @@
         </div>
 
         <!-- MODULES -->
-        <p x-show="!$store.sidebar.collapsed || $store.sidebar.mobileOpen" class="px-3 pb-1 pt-4 text-xs font-semibold uppercase tracking-wider text-neutral-400" role="presentation">Modules</p>
+        <p x-show="!$store.sidebar.collapsed || $store.sidebar.mobileOpen" class="px-3 pb-1 pt-4 text-xs font-sans uppercase tracking-wider text-neutral-400" role="presentation">Modules</p>
 
         {% for nav_item in sidebar_nav_tree %}
             {% if nav_item.group_children %}

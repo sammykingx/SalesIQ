@@ -115,15 +115,15 @@
     "file": "fonts/space-grotesk-vietnamese-400-normal.B7xT_GF5.woff2",
     "src": "../node_modules/@fontsource/space-grotesk/files/space-grotesk-vietnamese-400-normal.woff2"
   },
-  "_api.CJtvwPVP.css": {
-    "file": "css/api.CJtvwPVP.css",
-    "src": "_api.CJtvwPVP.css"
+  "_api.C-Kc0C97.css": {
+    "file": "css/api.C-Kc0C97.css",
+    "src": "_api.C-Kc0C97.css"
   },
-  "_api.svgXtWjv.js": {
-    "file": "js/api.svgXtWjv.js",
+  "_api.ZC_NQ9s_.js": {
+    "file": "js/api.ZC_NQ9s_.js",
     "name": "api",
     "css": [
-      "css/api.CJtvwPVP.css"
+      "css/api.C-Kc0C97.css"
     ],
     "assets": [
       "fonts/inter-cyrillic-ext-400-normal.BQZuk6qB.woff2",
@@ -157,20 +157,20 @@
       "fonts/jetbrains-mono-latin-400-normal.6-qcROiO.woff"
     ]
   },
-  "_theme.Q2n3CB61.css": {
-    "file": "css/theme.Q2n3CB61.css",
-    "src": "_theme.Q2n3CB61.css"
+  "_theme.BVgfrJVX.css": {
+    "file": "css/theme.BVgfrJVX.css",
+    "src": "_theme.BVgfrJVX.css"
   },
   "src/entries/app.js": {
-    "file": "js/app.CYTtn7aI.js",
+    "file": "js/app.Cn7c7BYz.js",
     "name": "app",
     "src": "src/entries/app.js",
     "isEntry": true,
     "imports": [
-      "_api.svgXtWjv.js"
+      "_api.ZC_NQ9s_.js"
     ],
     "css": [
-      "css/theme.Q2n3CB61.css"
+      "css/theme.BVgfrJVX.css"
     ],
     "assets": [
       "fonts/inter-cyrillic-ext-400-normal.BQZuk6qB.woff2",
@@ -205,15 +205,15 @@
     ]
   },
   "src/entries/coming-soon.js": {
-    "file": "js/coming-soon.ErU50KCJ.js",
+    "file": "js/coming-soon.BPPRgyiz.js",
     "name": "coming-soon",
     "src": "src/entries/coming-soon.js",
     "isEntry": true,
     "imports": [
-      "_api.svgXtWjv.js"
+      "_api.ZC_NQ9s_.js"
     ],
     "css": [
-      "css/theme.Q2n3CB61.css"
+      "css/theme.BVgfrJVX.css"
     ],
     "assets": [
       "fonts/inter-cyrillic-ext-400-normal.BQZuk6qB.woff2",
@@ -248,12 +248,12 @@
     ]
   },
   "src/entries/invoices.js": {
-    "file": "js/invoices.CtEB15Hp.js",
+    "file": "js/invoices.CUxSfTdZ.js",
     "name": "invoices",
     "src": "src/entries/invoices.js",
     "isEntry": true,
     "css": [
-      "css/theme.Q2n3CB61.css"
+      "css/theme.BVgfrJVX.css"
     ],
     "assets": [
       "fonts/inter-cyrillic-ext-400-normal.BQZuk6qB.woff2",

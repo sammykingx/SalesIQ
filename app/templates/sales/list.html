@@ -57,7 +57,6 @@
         </div>
     </div>
 
-    <!-- SEARCH & CONTROLS TOOLBAR -->
     <div class="flex flex-col gap-3 rounded-2xl border border-neutral-200/80 bg-white p-4 shadow-xs dark:border-neutral-800 dark:bg-neutral-900 sm:flex-row sm:items-center sm:justify-between">
         <div class="relative flex-1">
             <svg class="pointer-events-none absolute left-3.5 top-3 h-4 w-4 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -86,33 +85,32 @@
         </div>
     </div>
 
-    <!-- PAGINATED TABLE LOG REPORT -->
     <div class="overflow-hidden rounded-2xl border border-neutral-200/80 bg-white shadow-xs dark:border-neutral-800 dark:bg-neutral-900">
         <div class="overflow-x-auto" x-show="!hasNoTransactions && filteredSales.length > 0">
             <table class="w-full text-left text-xs">
-                <thead class="border-b border-neutral-200/80 bg-neutral-50/80 text-[11px] font-semibold text-neutral-500 uppercase tracking-wider dark:border-neutral-800 dark:bg-neutral-950/80 dark:text-neutral-400">
+                <thead class="border-b border-neutral-200/80 bg-neutral-50/80 text-[11px] font-medium text-neutral-500 uppercase tracking-wider dark:border-neutral-800 dark:bg-neutral-950/80 dark:text-neutral-400">
                     <tr>
-                        <th scope="col" class="px-5 py-3.5">Invoice ID</th>
-                        <th scope="col" class="px-5 py-3.5 cursor-pointer hover:text-neutral-700 dark:hover:text-neutral-200" @click="toggleSort('created_at')">
+                        <th scope="col" class="px-5 py-3.5 font-light">Invoice ID</th>
+                        <th scope="col" class="px-5 py-3.5 font-light cursor-pointer hover:text-neutral-700 dark:hover:text-neutral-200" @click="toggleSort('created_at')">
                             <div class="flex items-center gap-1">
                                 <span>Date Logged</span>
                                 <span x-show="sortBy === 'created_at'" x-text="sortOrder === 'asc' ? '↑' : '↓'"></span>
                             </div>
                         </th>
-                        <th scope="col" class="px-5 py-3.5 cursor-pointer hover:text-neutral-700 dark:hover:text-neutral-200" @click="toggleSort('client')">
+                        <th scope="col" class="px-5 py-3.5 font-light cursor-pointer hover:text-neutral-700 dark:hover:text-neutral-200" @click="toggleSort('client')">
                             <div class="flex items-center gap-1">
                                 <span>Customer</span>
                                 <span x-show="sortBy === 'client'" x-text="sortOrder === 'asc' ? '↑' : '↓'"></span>
                             </div>
                         </th>
-                        <th scope="col" class="px-5 py-3.5">Payment Status</th>
-                        <th scope="col" class="px-5 py-3.5 text-right cursor-pointer hover:text-neutral-700 dark:hover:text-neutral-200" @click="toggleSort('amount')">
+                        <th scope="col" class="px-5 py-3.5 font-light">Payment Status</th>
+                        <th scope="col" class="px-5 py-3.5 font-light text-right cursor-pointer hover:text-neutral-700 dark:hover:text-neutral-200" @click="toggleSort('amount')">
                             <div class="flex items-center justify-end gap-1">
                                 <span>Total Amount</span>
                                 <span x-show="sortBy === 'amount'" x-text="sortOrder === 'asc' ? '↑' : '↓'"></span>
                             </div>
                         </th>
-                        <th scope="col" class="px-5 py-3.5 text-center">Linked Invoice</th>
+                        <th scope="col" class="px-5 py-3.5 text-center font-light">Linked Invoice</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-neutral-100 dark:divide-neutral-800/60 text-neutral-700 dark:text-neutral-300">
@@ -160,7 +158,7 @@
             <svg class="mx-auto h-12 w-12 text-neutral-300 dark:text-neutral-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
-            <h3 class="mt-2 text-sm font-semibold text-neutral-800 dark:text-neutral-200">No Sales Detected</h3>
+            <h3 class="mt-2 text-sm font-medium text-neutral-800 dark:text-neutral-200">No Sales Detected</h3>
             <p class="mt-1 text-xs text-neutral-500">Our sale engine detected no transactions for your business yet.</p>
             <div class="mt-4">
                 <a href="{% url INVOICES.CREATE %}" class="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2 text-xs font-semibold text-white hover:bg-emerald-700">

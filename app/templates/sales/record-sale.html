@@ -68,7 +68,7 @@
                 <div class="mt-5 space-y-4">
                     <!-- Customer Lookup Search Input -->
                     <div class="relative">
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-neutral-500 mb-1">Search Customer Registry</label>
+                        <label class="block text-xs uppercase tracking-wider text-neutral-500 mb-1">Search Customer Registry</label>
                         <div class="relative">
                             <input 
                                 type="text" 
@@ -92,10 +92,10 @@
                                     class="flex cursor-pointer items-center justify-between px-4 py-3 border-b border-neutral-100/80 hover:bg-emerald-50/50 dark:border-neutral-800 dark:hover:bg-neutral-800/60"
                                 >
                                     <div>
-                                        <p class="text-xs font-semibold text-neutral-900 dark:text-white" x-text="(cust.first_name || cust.firstName || '') + ' ' + (cust.last_name || cust.lastName || '')"></p>
+                                        <p class="text-xs font-medium text-neutral-900 dark:text-white" x-text="(cust.first_name || cust.firstName || '') + ' ' + (cust.last_name || cust.lastName || '')"></p>
                                         <p class="text-[11px] text-neutral-500" x-text="(cust.email || '') + ' • ' + (cust.phone_number || cust.phone || '')"></p>
                                     </div>
-                                    <span class="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400">Select</span>
+                                    <span class="text-[10px] font-medium text-emerald-600 dark:text-emerald-400">Select</span>
                                 </div>
                             </template>
                         </div>
@@ -104,7 +104,7 @@
                     <!-- Customer Profile Fields (Readonly when locked) -->
                     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                         <div>
-                            <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1">First Name</label>
+                            <label class="block text-xs font-medium text-neutral-700 dark:text-neutral-300 mb-1">First Name</label>
                             <input 
                                 type="text" 
                                 required
@@ -117,7 +117,7 @@
                             />
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Last Name</label>
+                            <label class="block text-xs font-medium text-neutral-700 dark:text-neutral-300 mb-1">Last Name</label>
                             <input 
                                 type="text" 
                                 required
@@ -130,7 +130,7 @@
                             />
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Email Address</label>
+                            <label class="block text-xs font-medium text-neutral-700 dark:text-neutral-300 mb-1">Email Address</label>
                             <input 
                                 type="email" 
                                 required
@@ -143,7 +143,7 @@
                             />
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Phone Number</label>
+                            <label class="block text-xs font-medium text-neutral-700 dark:text-neutral-300 mb-1">Phone Number</label>
                             <input 
                                 type="tel" 
                                 required
@@ -183,7 +183,7 @@
                                 
                                 <!-- Item Header Row -->
                                 <div class="flex items-center justify-between">
-                                    <span class="text-xs font-semibold text-neutral-400 uppercase tracking-wider" x-text="'Line Item #' + (index + 1)"></span>
+                                    <span class="text-xs font-medium text-neutral-400 uppercase tracking-wider" x-text="'Line Item #' + (index + 1)"></span>
                                     <div class="flex items-center gap-2">
                                         <span 
                                             :class="item.is_new ? 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300' : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'"
@@ -204,7 +204,7 @@
                                 <div class="grid grid-cols-1 gap-4 sm:grid-cols-12">
                                     <!-- Product Name Autocomplete Search -->
                                     <div class="relative sm:col-span-5">
-                                        <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Product Title</label>
+                                        <label class="block text-xs font-medium text-neutral-700 dark:text-neutral-300 mb-1">Product Title</label>
                                         <input 
                                             type="text" 
                                             required
@@ -224,10 +224,10 @@
                                                     class="flex cursor-pointer items-center justify-between px-3.5 py-2.5 border-b border-neutral-100 hover:bg-emerald-50/50 dark:border-neutral-800 dark:hover:bg-neutral-800/60"
                                                 >
                                                     <div>
-                                                        <p class="text-xs font-semibold text-neutral-900 dark:text-white" x-text="prod.product_name || prod.name"></p>
+                                                        <p class="text-xs text-neutral-900 dark:text-white" x-text="prod.product_name || prod.name"></p>
                                                         <p class="text-[10px] text-neutral-500 uppercase" x-text="(prod.product_type || 'physical') + ' • ₦' + (prod.price || prod.spend || 0).toLocaleString('en-NG')"></p>
                                                     </div>
-                                                    <span class="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400">Select</span>
+                                                    <span class="text-[10px] font-medium text-emerald-600 dark:text-emerald-400">Select</span>
                                                 </div>
                                             </template>
                                         </div>
@@ -235,7 +235,7 @@
 
                                     <!-- Product Type -->
                                     <div class="sm:col-span-3">
-                                        <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Product Type</label>
+                                        <label class="block text-xs font-medium text-neutral-700 dark:text-neutral-300 mb-1">Product Type</label>
                                         <select 
                                             x-model="item.product_type"
                                             :disabled="!item.is_new"
@@ -250,7 +250,7 @@
 
                                     <!-- Quantity (Spinners Disabled) -->
                                     <div class="sm:col-span-2">
-                                        <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Qty</label>
+                                        <label class="block text-xs font-medium text-neutral-700 dark:text-neutral-300 mb-1">Qty</label>
                                         <input 
                                             type="number" 
                                             min="1"
@@ -263,7 +263,7 @@
 
                                     <!-- Sale Price Input -->
                                     <div class="sm:col-span-2">
-                                        <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Price (₦)</label>
+                                        <label class="block text-xs font-medium text-neutral-700 dark:text-neutral-300 mb-1">Price (₦)</label>
                                         <input 
                                             type="text" 
                                             required
@@ -323,15 +323,15 @@
                     
                     <!-- Subtotal (Read-only) -->
                     <div class="flex items-center justify-between">
-                        <span class="font-semibold text-neutral-600 dark:text-neutral-400">Subtotal</span>
+                        <span class="font-medium text-neutral-600 dark:text-neutral-400">Subtotal</span>
                         <span class="font-mono text-neutral-900 dark:text-white text-sm" x-text="'₦' + formatCurrency(subTotal)"></span>
                     </div>
 
                     <!-- Discount Percentage Input -->
                     <div class="space-y-1">
                         <div class="flex items-center justify-between">
-                            <label class="font-semibold text-neutral-700 dark:text-neutral-300">Discount (%)</label>
-                            <span class="text-neutral-500 font-semibold" x-text="'- ₦' + formatCurrency(discountAmount)"></span>
+                            <label class="font-medium text-neutral-700 dark:text-neutral-300">Discount (%)</label>
+                            <span class="text-neutral-500 font-medium" x-text="'- ₦' + formatCurrency(discountAmount)"></span>
                         </div>
                         <input 
                             type="number" 
@@ -348,7 +348,7 @@
                     <div class="space-y-2">
                         <div class="grid grid-cols-2 gap-2">
                             <div>
-                                <label class="block font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Tax Name</label>
+                                <label class="block font-medium text-neutral-700 dark:text-neutral-300 mb-1">Tax Name</label>
                                 <input 
                                     type="text" 
                                     x-model="taxName"
@@ -357,7 +357,7 @@
                                 />
                             </div>
                             <div>
-                                <label class="block font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Tax Rate (%)</label>
+                                <label class="block font-medium text-neutral-700 dark:text-neutral-300 mb-1">Tax Rate (%)</label>
                                 <input 
                                     type="number" 
                                     min="0" 
@@ -371,7 +371,7 @@
                         </div>
                         <div class="flex items-center justify-between text-[11px] text-neutral-500">
                             <span>Calculated Tax</span>
-                            <span class="font-semibold text-emerald-600 dark:text-emerald-400" x-text="'+ ₦' + formatCurrency(taxAmount)"></span>
+                            <span class="font-medium text-emerald-600 dark:text-emerald-400" x-text="'+ ₦' + formatCurrency(taxAmount)"></span>
                         </div>
                     </div>
 

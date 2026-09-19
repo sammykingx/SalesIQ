@@ -1,0 +1,55 @@
+{% if not user.is_verified %}
+<div class="relative overflow-hidden bg-amber-500/10 dark:bg-amber-500/15 border-b border-amber-500/20 text-amber-900 dark:text-amber-200">
+    <div class="flex items-center justify-between px-4 py-2.5 sm:px-6 text-xs sm:text-sm font-medium gap-3">
+        
+        <!-- Left: Static Icon & Label Badge -->
+        <div class="hidden md:flex items-center gap-2 shrink-0 z-10 bg-amber-100 dark:bg-amber-950/80 px-2.5 py-1 rounded-lg border border-amber-500/30">
+            <svg class="h-4 w-4 text-amber-600 dark:text-amber-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+            </svg>
+            <span class="font-medium text-amber-800 dark:text-amber-300">Action Needed</span>
+        </div>
+
+        <!-- Center: Marquee Scrolling Track -->
+        <div class="relative flex overflow-x-hidden flex-1 select-none">
+            <div class="animate-marquee whitespace-nowrap flex items-center gap-8 py-0.5">
+                <span>⚠️ Your account is unverified. Please check your primary or promotional mailbox for your verification link.</span>
+                <span>•</span>
+                <span>Then search for salesiq to locate the verification mail.</span>
+                <span>•</span>
+                <span>You're almost there.</span>
+                {% comment %} <span>⚠️ Your account is unverified. Please check your primary or promotional mailbox for your verification link.</span>
+                <span>•</span> {% endcomment %}
+            </div>
+
+            <!-- Seamless second loop for smooth marquee scrolling -->
+            <div class="absolute top-0 animate-marquee2 whitespace-nowrap flex items-center gap-8 py-0.5" aria-hidden="true">
+                <span>⚠️ Your account is unverified. Please check your primary or promotional mailbox for your verification link.</span>
+                <span>•</span>
+                <span>Then search for salesiq to locate the verification mail.</span>
+                <span>•</span>
+                <span>You're almost there.</span>
+                {% comment %} <span>Didn't receive the email? Check your spam folder or request a new link.</span>
+                <span>•</span>
+                <span>⚠️ Your account is unverified. Please check your primary or promotional mailbox for your verification link.</span>
+                <span>•</span> {% endcomment %}
+            </div>
+        </div>
+
+        <!-- Right: Resend Link Button -->
+        {% comment %} <div class="shrink-0 z-10">
+            <button 
+                type="button"
+                @click="inAppToast('Email Sent', 'Verification email resent! Check your inbox.', 'info')"
+                class="inline-flex items-center gap-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 dark:bg-amber-600 dark:hover:bg-amber-500 text-white font-medium text-xs px-3 py-1.5 shadow-xs cursor-pointer focus:outline-none focus:ring-2 focus:ring-amber-500/50"
+            >
+                <span>Resend Email</span>
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                </svg>
+            </button>
+        </div> {% endcomment %}
+
+    </div>
+</div>
+{% endif %}

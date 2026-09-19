@@ -28,6 +28,17 @@ class CustomerSelector:
             updated_at=link.updated_at,
         )
         
+    def get_customer_count(self, *, business_id) -> int:
+        """Get the total number of customers for a specific business.
+
+        Args:
+            business_id (int|str): The unique identifier of the business.
+
+        Returns:
+            int: The total count of customers associated with the business.
+        """
+        return self.model.objects.filter(business_id=business_id).count()
+        
     def get_all_for_business(self, biz_id: UUID) -> list[BusinessClientEntity]:
         """Retrieve all client relationships for a specific business, mapped to entities."""
         links = self.model.objects.filter(business=biz_id).select_related("client")
@@ -111,3 +122,36 @@ class CustomerSelector:
             "repeat_rate": round(repeat_rate, 1),
             "total_revenue": total_revenue,
         }
+        
+    def get_top_customers(self, *, business_id, limit: int = 5):
+        """
+        Return the top customers by total spend for dashboard display.
+
+        Args:
+            business_id: The ID of the business.
+            limit: Maximum number of customers to return (default 5).
+
+        Returns:
+            list: A list of dictionaries containing customer names, total spent, 
+                  and total paid orders.
+        """
+        queryset = (
+            BusinessCustomers.objects
+            .filter(business_id=business_id)
+            .annotate(
+                total_spent=Sum("invoices__total", filter=Q(invoices__status=InvoiceStatus.PAID)),
+                total_orders=Count("invoices", filter=Q(invoices__status=InvoiceStatus.PAID), distinct=True),
+            )
+            .filter(total_spent__gt=0)
+            .order_by("-total_spent")[:limit]
+            .select_related("client")
+        )
+        
+        return [
+            {
+                "name": bc.display_name or f"{bc.client.first_name} {bc.client.last_name}".strip(),
+                "total_spent": float(bc.total_spent), # type:ignore
+                "total_orders": bc.total_orders, # type:ignore
+            }
+            for bc in queryset
+        ]
