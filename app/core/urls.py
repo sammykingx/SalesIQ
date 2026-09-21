@@ -17,6 +17,7 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
+from django.views.generic import TemplateView
 
 from core.url_names import BUSINESS_DATA
 from core.views import ComingSoonView, BusinessJSONDataView, HostingerInvoiceView
@@ -36,5 +37,6 @@ urlpatterns = [
     path("customers/", include("customers.urls")),
     path("products/", include("products.urls")),
     path("invoices/", include("invoices.urls")),
-    path("metrics/", include(metric_urls))
+    path("metrics/", include(metric_urls)),
+    path("home/", TemplateView.as_view(template_name="index.html"), name="home")
 ]

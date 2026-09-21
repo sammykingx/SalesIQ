@@ -19,7 +19,6 @@ export default defineConfig(({ command }) => {
                     app: resolve(import.meta.dirname, 'app/src/entries/app.js'),
                     invoices: resolve(import.meta.dirname, 'app/src/entries/invoices.js'),
                     "coming-soon": resolve(import.meta.dirname, 'app/src/entries/coming-soon.js'),
-
                 },
                 output: {
                     entryFileNames: 'js/[name].[hash].js',

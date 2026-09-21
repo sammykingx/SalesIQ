@@ -9,7 +9,7 @@ from core.template_names import APP_TEMPLATES
 class AccountLoginView(LoginView):
     template_name = APP_TEMPLATES.ACCOUNTS.AUTH.LOGIN
     redirect_authenticated_user = True
-    success_url = reverse_lazy(ACCOUNTS.DASHBOARD)
+    # success_url = reverse_lazy(ACCOUNTS.DASHBOARD)
 
     def form_invalid(self, form) -> HttpResponse:
         errors = form.errors.as_json()
