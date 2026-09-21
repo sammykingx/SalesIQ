@@ -71,6 +71,7 @@ class InvoiceSelectors:
             })
         return results
 
+    # Metrics
     def get_revenue_trend(self, *, business, period="7d"):
         days = PERIOD_DAYS.get(period, 7)
         start = timezone.now().date() - timedelta(days=days - 1)
@@ -162,6 +163,29 @@ class InvoiceSelectors:
             percent_change = 0
 
         return {"revenue_percent_change": percent_change, "revenue_is_increase": percent_change >= 0}
+    
+    def get_platform_gmv_trend(self, *, period: str = "7d") -> dict:
+        """GMV = gross transaction volume across every business on the platform,
+        not SalesIQ's own revenue."""
+        days = PERIOD_DAYS.get(period, 7)
+        start = timezone.now().date() - timedelta(days=days - 1)
+
+        rows = (
+            self.inv_model.objects
+            .filter(status=InvoiceStatus.PAID, created_at__date__gte=start)
+            .annotate(day=TruncDate("created_at"))
+            .values("day")
+            .annotate(gmv=Sum("total"))
+        )
+        by_day = {r["day"]: r["gmv"] for r in rows}
+
+        labels, gmv = [], []
+        for i in range(days):
+            d = start + timedelta(days=i)
+            labels.append(d.strftime("%b %d"))
+            gmv.append(float(by_day.get(d, 0)))
+
+        return {"labels": labels, "gmv": gmv, "has_data": bool(by_day)}
     
     def _base_detail_queryset(self):
         return (

@@ -35,4 +35,4 @@ class BusinessBusiestDayBiew(LoginRequiredMixin, View):
     def get(self, request:HttpRequest) -> JsonResponse:
         window = request.GET.get("window", 90)
         data = InvoiceSelectors().get_busiest_days(business_id=self.user_biz.id, window_days=window) # type: ignore
-        return JsonResponse(data, status=200)    
+        return JsonResponse(data, status=200)

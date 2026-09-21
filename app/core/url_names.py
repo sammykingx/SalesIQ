@@ -6,6 +6,7 @@ from types import SimpleNamespace
 ACCOUNTS = SimpleNamespace(
     PROFILE='accounts_profile',
     DASHBOARD='accounts_dashboard',
+    ANALYST_DASHBOARD='accounts_analyst_dashboard',
     SETTINGS='accounts_settings',
     ONBOARDING='accounts_onboarding',
     ACTIVATION='accounts_activation',
@@ -49,4 +50,6 @@ INVOICES = SimpleNamespace(
 METRICS = SimpleNamespace(
     BIZ_REVENUE="metrics_business_revenue",
     BUSIEST_DAYS="metrics_business_busiest_day",
+    PLATFORM_GMV="metrics_platform_gmv",
+    PLATFORM_ADOPTION="metrics_platform_adoption",
 )

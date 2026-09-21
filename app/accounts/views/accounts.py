@@ -50,6 +50,19 @@ class DashboardView(LoginRequiredMixin, TemplateView):
             **revenue_change
         }
         
+class PlatformDashboardView(LoginRequiredMixin, TemplateView):
+    template_name = APP_TEMPLATES.ACCOUNTS.ANALYST_DASHBOARD
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(self.template_context())
+        return context
+    
+    def template_context(self) -> Dict[str, Any]:
+        recent_signups = BusinessSelector().get_recent_signups(limit=7)
+        return {
+            "recent_signups": recent_signups,
+        }
 
 class UserProfileView(LoginRequiredMixin, TemplateView):
     template_name = APP_TEMPLATES.ACCOUNTS.PROFILE

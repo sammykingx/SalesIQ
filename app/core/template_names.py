@@ -16,6 +16,7 @@ class APP_TEMPLATES:
         ONBOARDING = f'{_ACCOUNTS_BASE}/onboarding.html'
         ACTIVATION = f'{_ACCOUNTS_BASE}/activation.html'
         DASHBOARD = f'{_ACCOUNTS_BASE}/dashboard.html'
+        ANALYST_DASHBOARD = f'{_ACCOUNTS_BASE}/analyst-dashboard.html'
 
         class AUTH:
             LOGIN = f'{_AUTH_BASE}/login.html'
