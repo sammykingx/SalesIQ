@@ -6,7 +6,54 @@
         {% vite_hmr_client %}
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>SalesIQ | Turn Social Chatter into Traceable Revenue</title>
+
+        <!-- Primary Title & Meta Tags -->
+        <title>SalesIQ — Social Commerce Analytics & Sales Tracking Engine</title>
+        <meta name="title" content="SalesIQ — Social Commerce Analytics & Sales Tracking Engine" />
+        <meta name="description" content="Turn social chatter into traceable revenue. Log daily sales, track best-selling vs. top-grossing products, and identify loyal buyers with zero friction." />
+        <meta name="keywords" content="sales tracking, social commerce analytics, product performance, customer loyalty, business vitals, sales log, seller tools" />
+        <meta name="robots" content="index, follow" />
+        <meta name="theme-color" content="#090d16" />
+
+        <!-- Favicon & Touch Icons -->
+        <link rel="icon" type="image/png" href="{% static 'images/logo/light-favicon.png' %}" media="(prefers-color-scheme: light)">
+        <link rel="apple-touch-icon" href="{% static 'images/logo/light-favicon.png' %}" media="(prefers-color-scheme: light)">
+        <link rel="icon" type="image/png" href="{% static 'images/logo/dark-favicon.png' %}" media="(prefers-color-scheme: dark)">
+        <link rel="apple-touch-icon" href="{% static 'images/logo/dark-favicon.png' %}" media="(prefers-color-scheme: dark)">
+
+        <!-- Open Graph / Facebook / WhatsApp -->
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://salesiq.com.ng/" />
+        <meta property="og:title" content="SalesIQ — Turn Social Chatter into Traceable Revenue" />
+        <meta property="og:description" content="The modern, lightweight sales and customer analytics engine built specifically for growing social commerce brands." />
+        {% comment %} <meta property="og:image" content="{% static 'images/og-preview.png' %}" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" /> {% endcomment %}
+        <meta property="og:site_name" content="SalesIQ" />
+
+        <!-- Twitter / X -->
+        {% comment %} <meta name="twitter:card" content="summary_large_image" /> {% endcomment %}
+        <meta name="twitter:url" content="https://salesiq.com.ng/" />
+        <meta name="twitter:title" content="SalesIQ — Turn Social Chatter into Traceable Revenue" />
+        <meta name="twitter:description" content="Log daily sales, track best-selling vs. top-grossing products, and identify loyal buyers effortlessly." />
+        {% comment %} <meta name="twitter:image" content="{% static 'images/og-preview.png' %}" /> {% endcomment %}
+
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            "name": "SalesIQ",
+            "operatingSystem": "Web",
+            "applicationCategory": "BusinessApplication",
+            "offers": {
+                "@type": "Offer",
+                "price": "0",
+                "priceCurrency": "NGN"
+            },
+            "description": "SalesIQ is a social commerce analytics and sales tracking platform for growing brands."
+        }
+        </script>
+
         {% vite_asset 'src/entries/app.js' %}
     </head>
     <body
