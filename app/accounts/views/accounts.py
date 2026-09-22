@@ -1,10 +1,15 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import TemplateView
+from django.conf import settings
+from django.http import HttpRequest, HttpResponse, JsonResponse
+from django.shortcuts import redirect
+from django.urls import reverse
 from django.utils import timezone
+from django.views.generic import TemplateView
 
 from accounts.selectors import UserSelector, BusinessSelector
 from customers.selectors import CustomerSelector
 from core.template_names import APP_TEMPLATES
+from core.url_names import ACCOUNTS
 from invoices.selectors import InvoiceSelectors
 from products.selectors import ProductsSelector
 
@@ -52,6 +57,13 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         
 class PlatformDashboardView(LoginRequiredMixin, TemplateView):
     template_name = APP_TEMPLATES.ACCOUNTS.ANALYST_DASHBOARD
+    
+    def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+            user = request.user
+            if user.email not in settings.PREVILEDGE_USERS: # type: ignore
+                return redirect(reverse(ACCOUNTS.DASHBOARD))
+            
+            return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

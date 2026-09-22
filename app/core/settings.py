@@ -30,6 +30,7 @@ DEBUG = config("DEBUG", default=False, cast=bool)
 
 ALLOWED_DOMAINS = cast(str, config("ALLOWED_DOMAINS", default="")).split(", ")
 ALLOWED_HOSTS = ALLOWED_DOMAINS or []
+PREVILEDGE_USERS = cast(str, config("PREVILEDGE_USERS", default="")).split(", ")
 
 LOGIN_URL = ACCOUNTS.AUTH.LOGIN
 LOGOUT_REDIRECT_URL = ACCOUNTS.AUTH.LOGIN

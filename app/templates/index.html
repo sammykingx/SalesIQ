@@ -49,22 +49,20 @@
 
                 <!-- Center Navigation Links -->
                 <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600 dark:text-slate-300">
-                    <a href="#problem" class="hover:text-emerald-500 dark:hover:text-emerald-400">The Problem</a>
+                    <a href="#process" class="hover:text-emerald-500 dark:hover:text-emerald-400">The Process</a>
                     <a href="#solution" class="hover:text-emerald-500 dark:hover:text-emerald-400">Solution</a>
                     <a href="#showcase" class="hover:text-emerald-500 dark:hover:text-emerald-400">Platform</a>
-                    <a href="#features" class="hover:text-emerald-500 dark:hover:text-emerald-400">Features</a>
+                    
                 </nav>
 
                 <!-- Right Action Items -->
                 <div class="flex items-center gap-3 sm:gap-4">
-                    <!-- Theme Switcher Button (Hooks into axHeader) -->
                     <button
                         @click="toggleTheme()"
                         type="button"
                         class="p-2.5 rounded-2xl bg-white/80 dark:bg-white/5 border border-slate-200/80 dark:border-white/10 text-slate-600 dark:text-slate-300 hover:text-emerald-500 dark:hover:text-emerald-400 backdrop-blur-md shadow-xs cursor-pointer focus:outline-none"
                         aria-label="Toggle Light/Dark Theme"
                     >
-                        <!-- Sun Icon (Shown in Dark Mode) -->
                         <svg
                             x-show="theme === 'dark'"
                             x-cloak
@@ -80,7 +78,7 @@
                                 d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
                             />
                         </svg>
-                        <!-- Moon Icon (Shown in Light Mode) -->
+
                         <svg
                             x-show="theme === 'light'"
                             class="w-5 h-5"
@@ -97,7 +95,6 @@
                         </svg>
                     </button>
 
-                    <!-- Primary Action CTA -->
                     <a
                         href="{% url ACCOUNTS.AUTH.REGISTER %}"
                         class="hidden sm:inline-flex items-center justify-center px-5 py-2.5 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white font-semibold text-sm shadow-lg shadow-emerald-500/25 hover:scale-[1.02] active:scale-95"
@@ -109,10 +106,7 @@
         </header>
 
         <main class="relative flex-1">
-            <!-- ════════════════ HERO SECTION ════════════════ -->
-            <section
-                class="relative min-h-screen flex flex-col justify-center overflow-hidden py-16 lg:py-24"
-            >
+            <section class="relative min-h-screen flex flex-col justify-center overflow-hidden py-16 lg:py-18">
                 <!-- Background Image & Gradient Layer -->
                 <div class="pointer-events-none absolute inset-0 z-0 overflow-hidden">
                     <div
@@ -137,192 +131,122 @@
                     <div
                         class="animate-float-slow absolute top-40 left-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/80 dark:bg-white/10 backdrop-blur-md border border-slate-200/80 dark:border-white/10 shadow-md scale-90"
                     >
-                        <div
-                            class="p-1 rounded-full bg-emerald-100 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400"
-                        >
+                        <div class="p-1 rounded-full bg-emerald-100 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
-                                ></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
                             </svg>
                         </div>
-                        <span class="text-[11px] font-semibold text-slate-700 dark:text-slate-200">Sales</span>
+                        <span class="text-[11px] font-medium text-slate-700 dark:text-slate-200">Products & Services</span>
                     </div>
 
                     <!-- Invoices Badge -->
                     <div
-                        class="animate-float-delayed absolute top-30 right-4 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/80 dark:bg-white/10 backdrop-blur-md border border-slate-200/80 dark:border-white/10 shadow-md scale-90"
+                        class="animate-float-delayed absolute top-28 right-4 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/80 dark:bg-white/10 backdrop-blur-md border border-slate-200/80 dark:border-white/10 shadow-md scale-90"
                     >
-                        <div
-                            class="p-1 rounded-full bg-purple-100 dark:bg-purple-500/20 text-purple-600 dark:text-purple-400"
-                        >
+                        <div class="p-1 rounded-full bg-purple-100 dark:bg-purple-500/20 text-purple-600 dark:text-purple-400">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                                ></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                             </svg>
                         </div>
-                        <span class="text-[11px] font-semibold text-slate-700 dark:text-slate-200">Invoices</span>
+                        <span class="text-[11px] font-medium text-slate-700 dark:text-slate-200">Instant Receipts</span>
                     </div>
 
-                    <!-- Records Badge -->
+                    <!-- Revenue Insights Badge -->
                     <div
-                        class="animate-float-delayed absolute bottom-34 left-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/80 dark:bg-white/10 backdrop-blur-md border border-slate-200/80 dark:border-white/10 shadow-md scale-85"
-                    >
-                        <div class="p-1 rounded-full bg-blue-100 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400">
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                                ></path>
-                            </svg>
-                        </div>
-                        <span class="text-[11px] font-semibold text-slate-700 dark:text-slate-200">Records</span>
-                    </div>
-
-                    <!-- Insights Badge -->
-                    <div
-                        class="animate-float-delayed absolute bottom-44 right-5 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/80 dark:bg-white/10 backdrop-blur-md border border-slate-200/80 dark:border-white/10 shadow-md scale-85"
+                        class="animate-float-delayed absolute bottom-36 right-4 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/80 dark:bg-white/10 backdrop-blur-md border border-slate-200/80 dark:border-white/10 shadow-md scale-85"
                     >
                         <div class="p-1 rounded-full bg-amber-100 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400">
-                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 01-2 2h-1.5a2 2 0 01-2-2v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
                         </div>
-                        <span class="text-[11px] font-semibold text-slate-700 dark:text-slate-200">Insights</span>
+                        <span class="text-[11px] font-medium text-slate-700 dark:text-slate-200">Revenue Tracking</span>
                     </div>
                 </div>
 
                 <!-- Main Hero Canvas Container -->
-                <div
-                    class="relative z-10 flex flex-col items-center justify-center text-center w-full max-w-5xl mx-auto px-6"
-                >
+                <div class="relative flex flex-col items-center justify-center text-center w-full max-w-5xl mx-auto px-6">
+                    
                     <!-- Desktop Floating Badges -->
                     <div class="w-full relative pointer-events-none">
                         <!-- Badge 1: Sales Tracking -->
                         <div
-                            class="hidden lg:inline-flex pointer-events-auto animate-float-slow absolute -top-4 -left-12 items-center gap-2.5 px-4 py-2 rounded-full bg-white/90 dark:bg-white/10 backdrop-blur-md border border-slate-200/80 dark:border-white/10 shadow-xl shadow-emerald-500/5 hover:scale-105"
+                            class="hidden lg:inline-flex pointer-events-auto animate-float-slow absolute -top-4 -left-12 items-center gap-2.5 px-4 py-2 rounded-full bg-white/90 dark:bg-white/10 backdrop-blur-md border border-slate-200/80 dark:border-white/10 shadow-xl shadow-emerald-500/5 hover:scale-105 transition-transform"
                         >
-                            <div
-                                class="p-1.5 rounded-full bg-emerald-100 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400"
-                            >
+                            <div class="p-1.5 rounded-full bg-emerald-100 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
-                                    ></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
                                 </svg>
                             </div>
-                            <span class="text-xs font-semibold text-slate-700 dark:text-slate-200">Sales Tracking</span>
+                            <span class="text-xs font-medium text-slate-700 dark:text-slate-200">Physical & Digital Products</span>
                         </div>
 
-                        <!-- Badge 2: Instant Records -->
+                        <!-- Badge 2: Services -->
                         <div
-                            class="hidden lg:inline-flex pointer-events-auto animate-float-delayed absolute top-36 -left-20 items-center gap-2.5 px-4 py-2 rounded-full bg-white/90 dark:bg-white/10 backdrop-blur-md border border-slate-200/80 dark:border-white/10 shadow-xl shadow-blue-500/5 hover:scale-105"
+                            class="hidden lg:inline-flex pointer-events-auto animate-float-delayed absolute top-64 -left-20 items-center gap-2.5 px-4 py-2 rounded-full bg-white/90 dark:bg-white/10 backdrop-blur-md border border-slate-200/80 dark:border-white/10 shadow-xl shadow-blue-500/5 hover:scale-105 transition-transform"
                         >
-                            <div
-                                class="p-1.5 rounded-full bg-blue-100 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400"
-                            >
+                            <div class="p-1.5 rounded-full bg-blue-100 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                                    ></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                                 </svg>
                             </div>
-                            <span class="text-xs font-semibold text-slate-700 dark:text-slate-200"
-                                >Instant Records</span
-                            >
+                            <span class="text-xs font-medium text-slate-700 dark:text-slate-200">Service Bookings & Retainers</span>
                         </div>
 
                         <!-- Badge 3: Smart Receipts -->
                         <div
-                            class="hidden lg:inline-flex pointer-events-auto animate-float-delayed absolute -top-4 -right-12 items-center gap-2.5 px-4 py-2 rounded-full bg-white/90 dark:bg-white/10 backdrop-blur-md border border-slate-200/80 dark:border-white/10 shadow-xl shadow-purple-500/5 hover:scale-105"
+                            class="hidden lg:inline-flex pointer-events-auto animate-float-delayed absolute -top-4 -right-12 items-center gap-2.5 px-4 py-2 rounded-full bg-white/90 dark:bg-white/10 backdrop-blur-md border border-slate-200/80 dark:border-white/10 shadow-xl shadow-purple-500/5 hover:scale-105 transition-transform"
                         >
-                            <div
-                                class="p-1.5 rounded-full bg-purple-100 dark:bg-purple-500/20 text-purple-600 dark:text-purple-400"
-                            >
+                            <div class="p-1.5 rounded-full bg-purple-100 dark:bg-purple-500/20 text-purple-600 dark:text-purple-400">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                                    ></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                                 </svg>
                             </div>
-                            <span class="text-xs font-semibold text-slate-700 dark:text-slate-200">Smart Receipts</span>
+                            <span class="text-xs font-medium text-slate-700 dark:text-slate-200">Instant Digital Receipts</span>
                         </div>
 
-                        <!-- Badge 4: Business Insights -->
+                        <!-- Badge 4: Live Revenue -->
                         <div
-                            class="hidden lg:inline-flex pointer-events-auto animate-float-slow absolute top-36 -right-20 items-center gap-2.5 px-4 py-2 rounded-full bg-white/90 dark:bg-white/10 backdrop-blur-md border border-slate-200/80 dark:border-white/10 shadow-xl shadow-amber-500/5 hover:scale-105"
+                            class="hidden lg:inline-flex pointer-events-auto animate-float-slow absolute top-56 -right-20 items-center gap-2.5 px-4 py-2 rounded-full bg-white/90 dark:bg-white/10 backdrop-blur-md border border-slate-200/80 dark:border-white/10 shadow-xl shadow-amber-500/5 hover:scale-105 transition-transform"
                         >
-                            <div
-                                class="p-1.5 rounded-full bg-amber-100 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400"
-                            >
+                            <div class="p-1.5 rounded-full bg-amber-100 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 01-2 2h-1.5a2 2 0 01-2-2v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
-                                    ></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
                             </div>
-                            <span class="text-xs font-semibold text-slate-700 dark:text-slate-200">Live Insights</span>
+                            <span class="text-xs font-medium text-slate-700 dark:text-slate-200">Real-Time Revenue Analytics</span>
                         </div>
                     </div>
 
                     <div
-                        class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-semibold tracking-wide uppercase mb-6 backdrop-blur-md"
+                        class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-medium tracking-wide uppercase mb-6 backdrop-blur-md"
                     >
                         <span class="relative flex h-2 w-2">
-                            <span
-                                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"
-                            ></span>
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                             <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                         </span>
-                        Built for Social Sellers
+                        Built for Modern Businesses
                     </div>
 
-                    <!-- Main Headline -->
-                    <h1
-                        class="text-4xl sm:text-6xl lg:text-7xl font-semibold tracking-tight mb-6 max-w-4xl leading-[1.1] text-slate-900 dark:text-white"
-                    >
-                        Know your sales. <br />
-                        <span
-                            class="bg-linear-to-r from-emerald-500 via-teal-400 to-indigo-400 bg-clip-text text-transparent font-serif italic font-normal"
-                        >
-                            Grow your business.
+                    <h1 class="text-4xl sm:text-6xl lg:text-7xl font-medium tracking-tight mb-6 max-w-4xl leading-[1.1] text-slate-900 dark:text-white">
+                        Track every sale. <br />
+                        <span class="bg-linear-to-r from-emerald-500 via-teal-400 to-indigo-400 bg-clip-text text-transparent font-serif italic font-normal">
+                            Know your real revenue.
                         </span>
                     </h1>
 
-                    <!-- Subtitle -->
-                    <p class="text-slate-600 dark:text-slate-300 text-base sm:text-xl max-w-2xl mb-10 leading-relaxed">
-                        Turn every DM order and direct payment into a traceable financial record. Log sales in under 10
-                        seconds and share instant verified receipts.
+                    <p class="text-slate-600 dark:text-slate-300 text-base sm:text-xl max-w-2xl mb-10 leading-relaxed font-normal">
+                        Turn scattered DM sales and direct payments into total financial clarity for your growing business.
                     </p>
 
-                    <!-- Call to Action Button Area -->
-                    <div class="flex flex-col sm:flex-row items-center justify-center gap-4 w-full max-w-md">
+                    <div class="flex items-center justify-center w-full">
                         <a
                             href="{% url ACCOUNTS.AUTH.REGISTER %}"
-                            class="w-auto sm:w-auto px-6 py-3.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-2xl shadow-xl shadow-emerald-500/25 text-base sm:text-lg hover:scale-105 active:scale-95 flex items-center justify-center gap-3 group"
+                            class="inline-flex items-center justify-center gap-3 px-7 py-3.5 bg-linear-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-medium rounded-xl shadow-lg shadow-emerald-500/20 text-base hover:shadow-emerald-500/35 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 ring-1 ring-white/20 group"
                         >
-                            <span>Start Recording Sales</span>
+                            <span>Start Tracking Revenue</span>
                             <svg
-                                class="w-5 h-5 group-hover:translate-x-1 transition-transform"
+                                class="w-4 h-4 group-hover:translate-x-1 transition-transform"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -337,389 +261,577 @@
                         </a>
                     </div>
 
-                    <!-- Platforms -->
-                    <div class="mt-7 flex flex-col sm:flex-row items-center justify-center gap-3.5 text-xs sm:text-sm text-slate-600 dark:text-slate-400 font-medium">
-                      
-                      <div class="flex -space-x-2 overflow-hidden p-0.5">
-                          <!-- WhatsApp Icon Badge -->
-                          <div class="inline-flex h-8 w-8 rounded-full ring-1 ring-white dark:ring-[#080C14] bg-emerald-50/80 dark:bg-emerald-950/60 backdrop-blur-sm items-center justify-center shadow-xs transition-transform hover:scale-105">
-                              <svg class="w-4 h-4 text-[#25D366]" fill="currentColor" viewBox="0 0 24 24">
-                                  <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/>
-                              </svg>
-                          </div>
+                    <div class="mt-4 flex flex-wrap items-center justify-center gap-3 text-xs sm:text-sm text-slate-600 dark:text-slate-400 font-medium">
+                        <div class="flex items-center gap-1.5 text-slate-600 dark:text-slate-300">
+                            <span class="font-medium text-slate-600 dark:text-white">Trusted by fast-growing sellers</span>
+                            <span class="text-slate-400 dark:text-slate-500 hidden md:inline">•</span>
+                            <span class="hidden md:inline">Products (Physical or Digital) & Services</span>
+                        </div>
+                    </div>
 
-                          <!-- Instagram Icon Badge -->
-                          <div class="inline-flex h-8 w-8 rounded-full ring-1 ring-white dark:ring-[#080C14] bg-rose-50/80 dark:bg-rose-950/60 backdrop-blur-sm items-center justify-center shadow-xs transition-transform hover:scale-105">
-                              <svg class="w-4 h-4 text-[#E4405F]" fill="currentColor" viewBox="0 0 24 24">
-                                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                              </svg>
-                          </div>
-
-                          <!-- Facebook Icon Badge -->
-                          <div class="inline-flex h-8 w-8 rounded-full ring-1 ring-white dark:ring-[#080C14] bg-blue-50/80 dark:bg-blue-950/60 backdrop-blur-sm items-center justify-center shadow-xs transition-transform hover:scale-105">
-                              <svg class="w-4 h-4 text-[#1877F2]" fill="currentColor" viewBox="0 0 24 24">
-                                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                              </svg>
-                          </div>
-                      </div>
-
-                      <!-- Clear Label Text -->
-                      <span class="tracking-tight text-slate-400 dark:text-white/20">Built for <strong class="font-medium text-slate-400 dark:text-white/20">WhatsApp, Instagram & Facebook sellers</strong></span>
-                  </div>
-                  </div>
+                </div>
             </section>
 
-            <!-- ════════════════ 3. SOCIAL PROOF / CHANNELS BAR ════════════════ -->
-            <section
-                class="py-10 border-y border-slate-200 dark:border-white/10 bg-slate-100/50 dark:bg-ink-800/40 backdrop-blur-md"
-            >
-                <div class="max-w-7xl mx-auto px-6 text-center">
-                    <p class="text-xs font-semibold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-6">
-                        Empowering Direct-To-Consumer Sellers Across Every Channel
-                    </p>
-                    <div
-                        class="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-75 font-semibold text-slate-700 dark:text-slate-300"
-                    >
-                        <div class="flex items-center gap-2 text-sm sm:text-base">💬 WhatsApp Business</div>
-                        <div class="flex items-center gap-2 text-sm sm:text-base">📸 Instagram DMs</div>
-                        <div class="flex items-center gap-2 text-sm sm:text-base">🎵 TikTok Shop</div>
-                        <div class="flex items-center gap-2 text-sm sm:text-base">🏪 In-Person Sales</div>
+            <section class="relative border-y border-neutral-200/80 bg-white/70 py-6 backdrop-blur-xl dark:border-neutral-800/80 dark:bg-neutral-900/70 transition-colors">
+                <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                    
+                    <div class="flex flex-col items-center justify-between gap-5 lg:flex-row">
+                        <div class="flex items-center gap-3 text-center lg:text-left">
+                            <span class="relative hidden h-2.5 w-2.5 shrink-0 md:flex">
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                <span class="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500"></span>
+                            </span>
+                            <div>
+                                <h3 class="text-xs sm:text-sm font-medium tracking-wide text-neutral-900 dark:text-white">
+                                    Every Channel. One Unified Sales Book.
+                                </h3>
+                                <p class="text-xs text-neutral-500 dark:text-neutral-400">
+                                    Record sales wherever your customers buy, no complex setup required.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2.5 sm:grid-cols-4 w-full lg:w-auto">
+                            
+                            <!-- WhatsApp Channel Card -->
+                            <div class="group flex items-center justify-between gap-3 rounded-xl border border-emerald-500/20 bg-emerald-500/5 px-3.5 py-2.5 transition-all hover:border-emerald-500/40 hover:bg-emerald-500/10 dark:bg-emerald-500/10">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-base">💬</span>
+                                    <div class="text-left">
+                                        <span class="block text-xs font-medium text-neutral-900 dark:text-white">WhatsApp</span>
+                                        <span class="block text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">Direct Chats & Groups</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Instagram Channel Card -->
+                            <div class="group flex items-center justify-between gap-3 rounded-xl border border-fuchsia-500/20 bg-fuchsia-500/5 px-3.5 py-2.5 transition-all hover:border-fuchsia-500/40 hover:bg-fuchsia-500/10 dark:bg-fuchsia-500/10">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-base">📸</span>
+                                    <div class="text-left">
+                                        <span class="block text-xs font-medium text-neutral-900 dark:text-white">Instagram</span>
+                                        <span class="block text-[10px] text-fuchsia-600 dark:text-fuchsia-400 font-medium">DMs & Stories</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- TikTok Channel Card -->
+                            <div class="group flex items-center justify-between gap-3 rounded-xl border border-sky-500/20 bg-sky-500/5 px-3.5 py-2.5 transition-all hover:border-sky-500/40 hover:bg-sky-500/10 dark:bg-sky-500/10">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-base">🎵</span>
+                                    <div class="text-left">
+                                        <span class="block text-xs font-medium text-neutral-900 dark:text-white">TikTok</span>
+                                        <span class="block text-[10px] text-sky-600 dark:text-sky-400 font-medium">Lives & Comments</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- In-Person Channel Card -->
+                            <div class="group flex items-center justify-between gap-3 rounded-xl border border-amber-500/20 bg-amber-500/5 px-3.5 py-2.5 transition-all hover:border-amber-500/40 hover:bg-amber-500/10 dark:bg-amber-500/10">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-base">🏪</span>
+                                    <div class="text-left">
+                                        <span class="block text-xs font-medium text-neutral-900 dark:text-white">In-Person</span>
+                                        <span class="block text-[10px] text-amber-600 dark:text-amber-400 font-medium">Walk-ins & Pop-ups</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
                     </div>
                 </div>
             </section>
 
-            <!-- ════════════════ 4. THE PAIN POINT SECTION ════════════════ -->
-            <section id="problem" class="py-24 px-6 relative">
+            <section id="process" class="py-18 px-6 relative">
                 <div class="max-w-7xl mx-auto">
+                    <!-- Header -->
                     <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
-                        <h2 class="text-xs font-bold uppercase tracking-widest text-rose-500">The Problem</h2>
-                        <p class="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white">
-                            Running a business inside DMs and WhatsApp chats is costing you revenue.
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs uppercase tracking-wider">
+                            Instant Onboarding
+                        </div>
+                        <h2 class="text-2xl sm:text-4xl font-semibold text-slate-900 dark:text-white tracking-tight">
+                            Up and running in less than 2 minutes.
+                        </h2>
+                        <p class="text-slate-600 dark:text-slate-400 text-base sm:text-lg">
+                            No complex 3rd-party integrations, zero waiting for verification, and no technical setup required.
                         </p>
                     </div>
 
-                    <!-- 3 Problem Cards -->
+                    <!-- 3 Step Cards -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        <!-- Card 1 -->
-                        <div
-                            class="p-8 rounded-3xl bg-white/60 dark:bg-white/5 border border-slate-200 dark:border-white/10 backdrop-blur-xl hover:border-rose-500/50 group"
-                        >
-                            <div
-                                class="w-12 h-12 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-500 flex items-center justify-center mb-6 text-xl font-bold group-hover:scale-110 transition-transform"
-                            >
-                                📂
+                        
+                        <!-- Step 1 -->
+                        <div class="p-8 rounded-3xl bg-white/60 dark:bg-white/5 border border-slate-200 dark:border-white/10 backdrop-blur-xl hover:border-emerald-500/50 transition-all duration-300 group relative overflow-hidden">
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xl font-medium group-hover:scale-110 transition-transform">
+                                    1
+                                </div>
+                                <span class="text-xs uppercase tracking-wider text-slate-400 dark:text-slate-500">Step 01</span>
                             </div>
-                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">
-                                Unorganized Payment Proofs
+                            <h3 class="text-xl font-semibold text-slate-900 dark:text-white mb-3">
+                                Quick Sign Up
                             </h3>
                             <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
-                                Scouring through endless WhatsApp and Instagram chat histories just to verify who paid,
-                                who owes balance, and what needs delivery.
+                                Enter your basic details(name, email, and password). No complex KYC forms or identity documents needed to start.
                             </p>
                         </div>
 
-                        <!-- Card 2 -->
-                        <div
-                            class="p-8 rounded-3xl bg-white/60 dark:bg-white/5 border border-slate-200 dark:border-white/10 backdrop-blur-xl hover:border-rose-500/50 group"
-                        >
-                            <div
-                                class="w-12 h-12 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-500 flex items-center justify-center mb-6 text-xl font-bold group-hover:scale-110 transition-transform"
-                            >
-                                📊
+                        <!-- Step 2 -->
+                        <div class="p-8 rounded-3xl bg-white/60 dark:bg-white/5 border border-slate-200 dark:border-white/10 backdrop-blur-xl hover:border-emerald-500/50 transition-all duration-300 group relative overflow-hidden">
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xl font-medium group-hover:scale-110 transition-transform">
+                                    2
+                                </div>
+                                <span class="text-xs uppercase tracking-wider text-slate-400 dark:text-slate-500">Step 02</span>
                             </div>
-                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Blind-Spot Financials</h3>
+                            <h3 class="text-xl font-semibold text-slate-900 dark:text-white mb-3">
+                                Add Business Info
+                            </h3>
                             <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
-                                End of the month arrives, account balance is low, and you have zero clarity on your
-                                top-performing items or actual net profit margin.
+                                Provide your business name and your social handles if available. That’s all it takes to personalize your profile.
                             </p>
                         </div>
 
-                        <!-- Card 3 -->
-                        <div
-                            class="p-8 rounded-3xl bg-white/60 dark:bg-white/5 border border-slate-200 dark:border-white/10 backdrop-blur-xl hover:border-rose-500/50 group"
-                        >
-                            <div
-                                class="w-12 h-12 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-500 flex items-center justify-center mb-6 text-xl font-bold group-hover:scale-110 transition-transform"
-                            >
-                                📝
+                        <!-- Step 3 -->
+                        <div class="p-8 rounded-3xl bg-white/60 dark:bg-white/5 border border-slate-200 dark:border-white/10 backdrop-blur-xl hover:border-emerald-500/50 transition-all duration-300 group relative overflow-hidden">
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xl font-medium group-hover:scale-110 transition-transform">
+                                    3
+                                </div>
+                                <span class="text-xs uppercase tracking-wider text-slate-400 dark:text-slate-500">Step 03</span>
                             </div>
-                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">
-                                Unprofessional Receipts
+                            <h3 class="text-xl font-semibold text-slate-900 dark:text-white mb-3">
+                                Start Logging Sales
                             </h3>
                             <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
-                                Sending manual plain-text notes or cropped bank transfer screenshots as "proof", hurting
-                                brand credibility and repeat order rates.
+                                You're ready immediately! Record orders, generate instant receipts, and track your cash flow right away.
                             </p>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- ════════════════ 5. THE SOLUTION (BEFORE VS AFTER) ════════════════ -->
-            <section
-                id="solution"
-                class="py-20 px-6 bg-slate-900 text-white relative overflow-hidden my-12 rounded-3xl max-w-7xl mx-auto border border-white/10"
-            >
-                <div class="absolute inset-0 glow-emerald opacity-50"></div>
-
-                <div class="relative z-10 max-w-5xl mx-auto">
-                    <div class="text-center mb-12">
-                        <h2 class="text-xs font-bold uppercase tracking-widest text-primary mb-2">
+            <section id="solution" class="py-18 px-6 relative overflow-hidden">
+                <div class="max-w-7xl mx-auto">
+                    <!-- Header -->
+                    <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+                        <span class="text-xs uppercase tracking-widest text-emerald-500 bg-emerald-500/10 border border-emerald-500/20 px-3.5 py-1.5 rounded-full inline-block">
                             The Transformation
+                        </span>
+                        <h2 class="text-2xl sm:text-4xl font-semibold text-slate-900 dark:text-white tracking-tight">
+                            Stop running your business in the dark.
                         </h2>
-                        <p class="text-3xl font-extrabold">Upgrade to The SalesIQ Operating Model</p>
+                        <p class="text-slate-600 dark:text-slate-400 text-base sm:text-lg">
+                            See what happens when you replace manual chat-based hustle with the SalesIQ Operating Model.
+                        </p>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                        <!-- Before -->
-                        <div class="p-6 rounded-2xl bg-red-950/30 border border-red-500/20 space-y-4">
-                            <span
-                                class="text-xs font-extrabold uppercase px-3 py-1 rounded-full bg-red-500/20 text-red-400 inline-block"
-                                >Old Way</span
-                            >
-                            <ul class="space-y-3 text-sm text-slate-300">
-                                <li class="flex items-center gap-3">❌ Lost sales records in buried chat messages</li>
-                                <li class="flex items-center gap-3">❌ Manual arithmetic errors on sales revenue</li>
-                                <li class="flex items-center gap-3">
-                                    ❌ Customers constantly asking for payment confirmation
-                                </li>
-                            </ul>
+                    <!-- Bento Grid System -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+                        <!-- Card 1: Co-mingled Money & Profit Confusion (Span 2) -->
+                        <div class="md:col-span-2 rounded-3xl bg-linear-to-br from-amber-500/10 via-rose-500/5 to-slate-50 dark:from-slate-900 dark:via-slate-900/90 dark:to-slate-950 border border-amber-500/20 dark:border-slate-800 p-8 flex flex-col justify-between relative overflow-hidden group hover:border-amber-500/40 transition-all duration-300 shadow-sm dark:shadow-none">
+                            <div class="absolute -right-12 -top-12 w-64 h-64 bg-amber-500/10 dark:bg-amber-500/5 rounded-full blur-3xl pointer-events-none"></div>
+                            <div class="absolute -left-12 -bottom-12 w-64 h-64 bg-rose-500/10 dark:bg-rose-500/5 rounded-full blur-3xl pointer-events-none"></div>
+
+                            <div class="space-y-4 relative z-10">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs font-mono font-medium uppercase text-slate-500 dark:text-slate-400 tracking-wider">Financial Clarity</span>
+                                    <span class="text-xs font-medium text-rose-600 dark:text-rose-400 bg-rose-500/10 border border-rose-500/20 px-2.5 py-1 rounded-full">Common Trap</span>
+                                </div>
+                                <h3 class="text-2xl font-semibold text-slate-900 dark:text-slate-100">
+                                    Personal vs. Business Money
+                                </h3>
+                                <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed max-w-xl">
+                                    When all funds land in one account, personal expenses eat into business revenue unnoticed. You end up asking: <em>"Where did the profit go?"</em>
+                                </p>
+                            </div>
+
+                            <!-- Comparison Split Box -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8 relative z-10">
+                                <div class="p-5 rounded-2xl bg-white/80 dark:bg-slate-800/50 border border-red-500/20 dark:border-red-900/30 space-y-2 shadow-xs dark:shadow-none">
+                                    <div class="flex items-center gap-2 text-red-600 dark:text-red-400 font-medium text-sm">
+                                        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                        Without SalesIQ
+                                    </div>
+                                    <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                                        Bank balance looks healthy until personal debit transactions drain inventory capital secretly.
+                                    </p>
+                                </div>
+
+                                <div class="p-5 rounded-2xl bg-white/80 dark:bg-slate-800/50 border border-emerald-500/30 dark:border-emerald-900/30 space-y-2 shadow-xs dark:shadow-none">
+                                    <div class="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-medium text-sm">
+                                        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                        With SalesIQ
+                                    </div>
+                                    <p class="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+                                        Every logged transaction extracts real revenue and profit margins regardless of where money lands.
+                                    </p>
+                                </div>
+                            </div>
                         </div>
 
-                        <!-- After -->
-                        <div class="p-6 rounded-2xl bg-emerald-950/30 border border-primary/30 space-y-4">
-                            <span
-                                class="text-xs font-extrabold uppercase px-3 py-1 rounded-full bg-primary/20 text-primary inline-block"
-                                >SalesIQ Way</span
-                            >
-                            <ul class="space-y-3 text-sm text-slate-100">
-                                <li class="flex items-center gap-3">✅ Single tap sale recording (<10 seconds)</li>
-                                <li class="flex items-center gap-3">✅ Automated live revenue growth charts (+100%)</li>
-                                <li class="flex items-center gap-3">✅ Branded, shareable digital receipt links</li>
-                            </ul>
+                        <!-- Card 2: Instant Reconciliation & Item Tracking (Span 1) -->
+                        <div class="rounded-3xl bg-linear-to-br from-sky-500/10 via-indigo-500/5 to-slate-50 dark:from-slate-900 dark:via-slate-900/90 dark:to-slate-950 border border-sky-500/20 dark:border-slate-800 p-8 flex flex-col justify-between relative overflow-hidden group hover:border-sky-500/40 transition-all duration-300 shadow-sm dark:shadow-none">
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs font-mono font-medium uppercase text-slate-500 dark:text-slate-400 tracking-wider">Inventory & Stock</span>
+                                    <div class="w-2 h-2 rounded-full bg-sky-500 animate-pulse"></div>
+                                </div>
+                                <h3 class="text-xl font-semibold text-slate-900 dark:text-slate-100">
+                                    Reconciliation Stress
+                                </h3>
+                                <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+                                    Trying to match inventory sold with physical bank alerts at the end of the week creates massive backlogs.
+                                </p>
+                            </div>
+
+                            <div class="mt-8 space-y-3">
+                                <div class="p-3.5 rounded-xl bg-white/80 dark:bg-slate-800/50 border border-red-500/20 dark:border-red-900/30 flex items-start gap-3 shadow-xs dark:shadow-none">
+                                    <span class="text-base shrink-0">❌</span>
+                                    <p class="text-xs text-slate-600 dark:text-slate-400">Scrolling hours of DM threads to recall what item was delivered to who.</p>
+                                </div>
+                                <div class="p-3.5 rounded-xl bg-white/80 dark:bg-slate-800/50 border border-emerald-500/20 dark:border-emerald-900/30 flex items-start gap-3 shadow-xs dark:shadow-none">
+                                    <span class="text-base shrink-0">✅</span>
+                                    <p class="text-xs text-slate-800 dark:text-slate-200">Logged sales tie directly to receipts items in &lt;10 seconds, no scrolling required.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 3: Speed & Customer Experience (Span 1) -->
+                        <div class="rounded-3xl bg-linear-to-br from-purple-500/10 via-pink-500/5 to-slate-50 dark:from-slate-900 dark:via-slate-900/90 dark:to-slate-950 border border-purple-500/20 dark:border-slate-800 p-8 flex flex-col justify-between relative overflow-hidden group hover:border-purple-500/40 transition-all duration-300 shadow-sm dark:shadow-none">
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs font-medium uppercase text-slate-500 dark:text-slate-400 tracking-wider">Brand Experience</span>
+                                </div>
+                                <h3 class="text-xl font-semibold text-slate-900 dark:text-slate-100">
+                                    Customer Receipts
+                                </h3>
+                                <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+                                    Say goodbye to plain text chat notes or cropped bank transfer screenshots.
+                                </p>
+                            </div>
+
+                            <div class="mt-8 p-4 rounded-2xl bg-white/80 dark:bg-slate-800/50 border border-purple-500/20 dark:border-slate-700/50 space-y-3 shadow-xs dark:shadow-none">
+                                <div class="flex items-center justify-between text-xs pb-2 border-b border-purple-100 dark:border-slate-700">
+                                    <span class="text-slate-500 dark:text-slate-400">Professional Identity</span>
+                                    <span class="text-purple-600 dark:text-purple-400 font-medium">1-Tap Link</span>
+                                </div>
+                                <p class="text-xs text-slate-700 dark:text-slate-300">
+                                    Generate branded, shareable digital receipt via links or pdf's instantly, no integrations required.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Card 4: Business Intelligence & Real-time Metrics (Span 2) -->
+                        <div class="md:col-span-2 rounded-3xl bg-linear-to-br from-emerald-500/10 via-teal-500/5 to-slate-50 dark:from-slate-900 dark:via-slate-900/90 dark:to-slate-950 border border-emerald-500/20 dark:border-slate-800 p-8 flex flex-col justify-between relative overflow-hidden group hover:border-emerald-500/40 transition-all duration-300 shadow-sm dark:shadow-none">
+                            <div class="space-y-4 relative z-10">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs font-medium uppercase text-slate-500 dark:text-slate-400 tracking-wider">Growth Engine</span>
+                                    <span class="text-xs font-medium text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-full">Real-time Analytics</span>
+                                </div>
+                                <h3 class="text-2xl font-semibold text-slate-900 dark:text-slate-100">
+                                    From Guesswork to Real-Time Metrics
+                                </h3>
+                                <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed max-w-xl">
+                                    Know your top-performing products, total sales revenue, and top customers without touching a spreadsheet or manual ledger.
+                                </p>
+                            </div>
+
+                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-8 relative z-10">
+                                <div class="p-4 rounded-2xl bg-white/80 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 text-center shadow-xs dark:shadow-none">
+                                    <span class="text-xs text-slate-500 dark:text-slate-400 block mb-1">Old Way</span>
+                                    <span class="text-sm text-red-600 dark:text-red-400">Manual Calculator</span>
+                                </div>
+                                <div class="p-4 rounded-2xl bg-white/80 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 text-center shadow-xs dark:shadow-none">
+                                    <span class="text-xs text-slate-500 dark:text-slate-400 block mb-1">SalesIQ Way</span>
+                                    <span class="text-sm text-emerald-600 dark:text-emerald-400">Automated Charts</span>
+                                </div>
+                                <div class="col-span-2 sm:col-span-1 p-4 rounded-2xl bg-white/80 dark:bg-slate-800/50 border border-emerald-500/30 dark:border-emerald-900/30 text-center flex flex-col justify-center shadow-xs dark:shadow-none">
+                                    <span class="text-xs text-emerald-700 dark:text-emerald-400 font-medium">Reconciliation Time</span>
+                                    <span class="text-lg text-slate-900 dark:text-slate-100">Zero Hours</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- ════════════════ 6. BENTO GRID PRODUCT SHOWCASE ════════════════ -->
-            <section id="showcase" class="py-24 px-6">
+            <section id="showcase" class="py-18 px-6">
                 <div class="max-w-7xl mx-auto">
                     <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
-                        <h2 class="text-xs font-bold uppercase tracking-widest text-primary">Platform Deep-Dive</h2>
-                        <p class="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white">
-                            Built for speed. Engineered for clarity.
+                        <h2 class="text-xs font-medium uppercase tracking-widest text-primary">Core Platform Modules</h2>
+                        <p class="text-2xl sm:text-4xl font-semibold text-slate-900 dark:text-slate-100">
+                            Engineered for social commerce & growing brands.
                         </p>
                     </div>
 
                     <!-- BENTO GRID -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <!-- Bento Card 1: Main Dashboard (Spans 2 columns) -->
-                        <div
-                            class="md:col-span-2 p-8 rounded-3xl bg-white/70 dark:bg-white/5 border border-slate-200 dark:border-white/10 backdrop-blur-xl flex flex-col justify-between space-y-6"
-                        >
-                            <div>
-                                <span class="text-xs font-semibold px-3 py-1 rounded-full bg-primary/10 text-primary"
-                                    >Live Dashboard</span
-                                >
-                                <h3 class="text-2xl font-bold text-slate-900 dark:text-white mt-4">
-                                    Real-Time Revenue Vitals
+
+                        <!-- Bento Card 1: Business Insights Engine (Spans 2 columns) -->
+                        <div class="md:col-span-2 p-8 rounded-3xl bg-white/80 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 backdrop-blur-xl flex flex-col justify-between space-y-6 shadow-sm dark:shadow-none">
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs font-medium px-3 py-1 rounded-full bg-primary/10 text-primary">
+                                        Core Analytics Engine
+                                    </span>
+                                    <span class="text-xs font-mono text-slate-500 dark:text-slate-400">Heart of SalesIQ</span>
+                                </div>
+                                <h3 class="text-2xl font-semibold text-slate-900 dark:text-slate-100">
+                                    The Business Insights Engine
                                 </h3>
-                                <p class="text-slate-600 dark:text-slate-400 text-sm mt-2 max-w-xl">
-                                    Get an instant snapshot of daily revenue growth, product performance rankings, and
-                                    customer metrics—all updated live as orders come in.
+                                <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed max-w-xl">
+                                    Computes all your vital metrics behind the scenes from overall sales to product performance and customer behavior. Get complete business analytics delivered in a simple, highly readable format.
                                 </p>
                             </div>
 
-                            <!-- UI Placeholder Desktop Mockup -->
-                            <div
-                                class="rounded-2xl border border-slate-200 dark:border-white/10 overflow-hidden bg-slate-900/10 p-2"
-                            >
-                                <div class="text-[10px] text-slate-400 font-mono mb-2 px-2">
-                                    [DESKTOP MOCKUP]: Revenue Trend & Top Products Widget
+                            <!-- Live Analytics Preview Box -->
+                            <div class="rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden bg-slate-50 dark:bg-slate-950 p-4 space-y-3">
+                                <div class="flex items-center justify-between text-xs font-mono text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800 pb-2">
+                                    <span>BUSINESS VITALS OVERVIEW</span>
+                                    <span class="text-emerald-600 dark:text-emerald-400">● Live Updates</span>
                                 </div>
-                                <div class="aspect-video rounded-xl overflow-hidden bg-slate-950">
-                                  <!-- Light Mode Image -->
-                                  <img
-                                      src="{% static "images/dashboard.png" %}"
-                                      alt="Light UI"
-                                      class="w-full h-full object-cover block dark:hidden"
-                                  />
-                                  
-                                  <!-- Dark Mode Image -->
-                                  <img
-                                      src="{% static "images/dashboard-dark.png" %}"
-                                      alt="Dark UI"
-                                      class="w-full h-full object-cover hidden dark:block"
-                                  />
-                              </div>
-                            </div>
-                        </div>
-
-                        <!-- Bento Card 2: Rapid Sale Entry (1 column) -->
-                        <div
-                            class="p-8 rounded-3xl bg-white/70 dark:bg-white/5 border border-slate-200 dark:border-white/10 backdrop-blur-xl flex flex-col justify-between space-y-6"
-                        >
-                            <div>
-                                <span class="text-xs font-semibold px-3 py-1 rounded-full bg-primary/10 text-primary"
-                                    >Fast Logging</span
-                                >
-                                <h3 class="text-2xl font-bold text-slate-900 dark:text-white mt-4">
-                                    10-Second Record Sale
-                                </h3>
-                                <p class="text-slate-600 dark:text-slate-400 text-sm mt-2">
-                                    Type customer details or catalog items with smart autocomplete. Log completed sales
-                                    without leaving your chat window.
-                                </p>
-                            </div>
-
-                            <!-- UI Placeholder Modal / Action Mockup -->
-                            <div class="p-4 rounded-2xl bg-primary/5 border border-primary/20 space-y-3">
-                                <div class="text-[10px] text-primary font-mono">
-                                    [ACTION MOCKUP]: Quick Record Sale Drawer
-                                </div>
-                                <div
-                                    class="w-full h-10 rounded-xl bg-primary text-slate-950 font-bold flex items-center justify-center text-sm shadow-md"
-                                >
-                                    + Record Sale
-                                </div>
-                                <div
-                                    class="p-3 rounded-xl bg-white dark:bg-ink-900 border border-slate-200 dark:border-white/10 text-xs space-y-1"
-                                >
-                                    <div class="text-slate-400">Customer</div>
-                                    <div class="font-semibold text-slate-800 dark:text-slate-200">Nosa Raven</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Bento Card 3: Mobile Instant Receipts (1 column) -->
-                        <div
-                            class="p-8 rounded-3xl bg-white/70 dark:bg-white/5 border border-slate-200 dark:border-white/10 backdrop-blur-xl flex flex-col justify-between space-y-6"
-                        >
-                            <div>
-                                <span class="text-xs font-semibold px-3 py-1 rounded-full bg-primary/10 text-primary"
-                                    >Digital Invoicing</span
-                                >
-                                <h3 class="text-2xl font-bold text-slate-900 dark:text-white mt-4">
-                                    Instant Digital Receipts
-                                </h3>
-                                <p class="text-slate-600 dark:text-slate-400 text-sm mt-2">
-                                    Share beautiful, verified payment receipts via WhatsApp link. Build trust instantly
-                                    with every buyer.
-                                </p>
-                            </div>
-
-                            <!-- UI Placeholder Mobile Receipt -->
-                            <div
-                                class="rounded-2xl border border-slate-200 dark:border-white/10 p-4 bg-slate-100 dark:bg-slate-900 text-center space-y-2"
-                            >
-                                <div class="text-[10px] text-slate-400 font-mono">[MOBILE RECEIPT MOCKUP]</div>
-                                <div
-                                    class="py-6 px-4 rounded-xl bg-white dark:bg-ink-800 shadow-sm border border-slate-200 dark:border-white/5 text-left text-xs space-y-2"
-                                >
-                                    <div class="font-bold text-primary">Receipt #SLS-2026-09</div>
-                                    <div class="text-slate-500">Making your 1st million - ₦35,000</div>
-                                    <div
-                                        class="text-xs px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-500 inline-block font-semibold"
-                                    >
-                                        VERIFIED PAID
+                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                    <div class="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+                                        <span class="text-[10px] text-slate-500 dark:text-slate-400 block uppercase">Sales Health</span>
+                                        <span class="text-sm text-slate-900 dark:text-slate-100">Optimal Growth</span>
+                                    </div>
+                                    <div class="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+                                        <span class="text-[10px] text-slate-500 dark:text-slate-400 block uppercase">Product Efficiency</span>
+                                        <span class="text-sm  text-slate-900 dark:text-slate-100">High Turnover</span>
+                                    </div>
+                                    <div class="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+                                        <span class="text-[10px] text-slate-500 dark:text-slate-400 block uppercase">Customer Retention</span>
+                                        <span class="text-sm text-emerald-600 dark:text-emerald-400">84% Repeat Rate</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Bento Card 4: Product Video Demo Placeholder (Spans 2 columns) -->
-                        <div
-                            class="md:col-span-2 p-8 rounded-3xl bg-white/70 dark:bg-white/5 border border-slate-200 dark:border-white/10 backdrop-blur-xl flex flex-col justify-between space-y-6"
-                        >
-                            <div>
-                                <span class="text-xs font-semibold px-3 py-1 rounded-full bg-primary/10 text-primary"
-                                    >Video Walkthrough</span
-                                >
-                                <h3 class="text-2xl font-bold text-slate-900 dark:text-white mt-4">
-                                    See SalesIQ in Action
+                        <!-- Bento Card 2: Customers Module (1 column) -->
+                        <div class="p-8 rounded-3xl bg-white/80 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 backdrop-blur-xl flex flex-col justify-between space-y-6 shadow-sm dark:shadow-none">
+                            <div class="space-y-3">
+                                <span class="text-xs font-medium px-3 py-1 rounded-full bg-primary/10 text-primary">
+                                    Customer Module
+                                </span>
+                                <h3 class="text-2xl font-semibold text-slate-900 dark:text-slate-100">
+                                    Top & Loyal Buyers
                                 </h3>
-                                <p class="text-slate-600 dark:text-slate-400 text-sm mt-2">
-                                    Watch how easily you can switch between catalog products, monitor daily trends, and
-                                    manage your inventory on the fly.
+                                <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+                                    Identify your most loyal customers and highest spenders using actual transaction history, not guesswork.
                                 </p>
                             </div>
 
-                            <!-- Video Player Placeholder -->
-                            <div
-                                class="relative rounded-2xl border border-slate-200 dark:border-white/10 aspect-video bg-slate-950 flex flex-col items-center justify-center text-slate-400 overflow-hidden group"
-                            >
-                                <div class="text-xs font-mono mb-2">[VIDEO DEMO MOCKUP]: Platform Walkthrough</div>
-                                <div
-                                    class="w-16 h-16 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center text-primary group-hover:scale-110 transition-transform cursor-pointer"
-                                >
-                                    <svg class="w-8 h-8 fill-current ml-1" viewBox="0 0 24 24">
-                                        <path d="M8 5v14l11-7z" />
-                                    </svg>
+                            <!-- Customer Cards Visual -->
+                            <div class="space-y-2">
+                                <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs">
+                                    <div>
+                                        <span class="font-semibold text-slate-900 dark:text-slate-200 block">Nosa R.</span>
+                                        <span class="text-[10px] text-slate-500 dark:text-slate-400">12 Purchases</span>
+                                    </div>
+                                    <span class="px-2 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 text-[10px] border border-amber-500/20">
+                                        Top Buyer
+                                    </span>
                                 </div>
-                                <span class="text-xs mt-3 text-slate-500"
-                                    >Click to preview interactive walkthrough</span
-                                >
+                                <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs">
+                                    <div>
+                                        <span class="font-semibold text-slate-900 dark:text-slate-200 block">Amina K.</span>
+                                        <span class="text-[10px] text-slate-500 dark:text-slate-400">Repeat VIP</span>
+                                    </div>
+                                    <span class="px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-[10px] border border-indigo-500/20">
+                                        Loyal
+                                    </span>
+                                </div>
                             </div>
                         </div>
+
+                        <!-- Bento Card 3: Intelligent Product Module (Spans 3 columns / Full Width) -->
+                        <div class="md:col-span-3 p-8 rounded-3xl bg-white/80 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 backdrop-blur-xl flex flex-col md:flex-row justify-between items-stretch gap-8 shadow-sm dark:shadow-none">
+                            <div class="space-y-4 max-w-xl flex flex-col justify-center">
+                                <span class="text-xs font-medium px-3 py-1 rounded-full bg-primary/10 text-primary w-fit">
+                                    Product Module
+                                </span>
+                                <h3 class="text-2xl font-semibold text-slate-900 dark:text-slate-100">
+                                    Active Catalog & Dual Metrics
+                                </h3>
+                                <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+                                    Add products explicitly to your store catalog or let SalesIQ auto-save them passively as you log sales. Just because an item sells the most volume doesn't mean it drives the highest revenue, our module tracks volume vs. actual revenue so you optimize stock intelligently.
+                                </p>
+                            </div>
+
+                            <!-- Product Dual Metrics Box -->
+                            <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-4 bg-slate-50 dark:bg-slate-950 p-4 rounded-2xl border border-slate-200 dark:border-slate-800">
+                                <!-- Volume Leader -->
+                                <div class="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex flex-col justify-between space-y-3">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-[10px] font-mono text-slate-500 dark:text-slate-400 uppercase">Most Units Sold</span>
+                                        <span class="text-[10px] px-2 py-0.5 rounded bg-sky-500/10 text-sky-600 dark:text-sky-400 border border-sky-500/20">Volume Leader</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-sm font-medium text-slate-900 dark:text-slate-100 block">Classic Canvas Tote</span>
+                                        <span class="text-xs text-slate-500 dark:text-slate-400">142 units sold</span>
+                                    </div>
+                                </div>
+
+                                <!-- Revenue Leader -->
+                                <div class="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex flex-col justify-between space-y-3">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-[10px] font-mono text-slate-500 dark:text-slate-400 uppercase">Top Gross Revenue</span>
+                                        <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">Revenue Leader</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-sm font-medium text-slate-900 dark:text-slate-100 block">Leather Crossbody</span>
+                                        <span class="text-xs text-slate-500 dark:text-slate-400">₦1.2M Total Revenue</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </section>
 
-            <!-- ════════════════ 7. FINAL CTA SECTION ════════════════ -->
-            <section id="signup" class="py-20 px-6 my-16">
-                <div
-                    class="max-w-5xl mx-auto rounded-3xl bg-linear-to-br from-primary/20 via-emerald-500/10 to-transparent border border-primary/30 p-10 md:p-16 text-center space-y-8 backdrop-blur-2xl relative overflow-hidden"
-                >
-                    <h2 class="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white">
-                        Ready to get full control of your business numbers?
-                    </h2>
+            <section id="signup" class="py-18 px-6 my-12 relative overflow-hidden">
+                <!-- Ambient Glow Fills -->
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-primary/10 dark:bg-primary/5 rounded-full blur-3xl pointer-events-none"></div>
 
-                    <p class="max-w-2xl mx-auto text-slate-600 dark:text-slate-300 text-base md:text-lg">
-                        Join smart sellers recording their daily sales and scaling revenue with zero friction.
-                    </p>
-
-                    <form @submit.prevent class="max-w-md mx-auto flex flex-col sm:flex-row gap-3">
-                        <input
-                            type="email"
-                            placeholder="Enter your email address"
-                            class="flex-1 px-5 py-3.5 rounded-xl bg-white dark:bg-ink-900 border border-slate-300 dark:border-white/10 text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-primary text-sm"
-                            required
-                        />
-                        <button
-                            type="submit"
-                            class="px-6 py-3.5 rounded-xl bg-primary text-slate-950 font-bold text-sm hover:bg-emerald-400 shadow-lg shadow-primary/20 whitespace-nowrap"
-                        >
-                            Get Started Free
-                        </button>
-                    </form>
-
-                    <div class="text-xs text-slate-500">
-                        No credit card required • Instant account setup in 60 seconds
+                <div class="max-w-5xl mx-auto rounded-3xl bg-linear-to-br from-primary/15 via-slate-50 to-emerald-500/5 dark:from-slate-900 dark:via-slate-900/90 dark:to-slate-950 border border-primary/20 dark:border-slate-800 p-10 md:p-16 text-center space-y-8 backdrop-blur-2xl relative z-10 shadow-sm dark:shadow-none transition-all duration-300">
+                    
+                    <!-- Live Status Pill -->
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary/10 dark:bg-primary/15 border border-primary/20 text-xs text-primary">
+                        <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                        Instant Access{% comment %}  • Free 14-Day Trial {% endcomment %}
                     </div>
+
+                    <div class="space-y-4 max-w-3xl mx-auto">
+                        <h2 class="text-2xl sm:text-4xl font-semibold text-slate-900 dark:text-slate-100 tracking-tight leading-tight">
+                            Ready to take full control of your business numbers?
+                        </h2>
+
+                        <p class="max-w-2xl mx-auto text-slate-600 dark:text-slate-400 text-base md:text-lg leading-relaxed">
+                            Join hundreds of smart sellers recording sales in seconds, tracking top products, and growing revenues without accounting headaches.
+                        </p>
+                    </div>
+
+                    <!-- App Direct Sign-Up Action Stack -->
+                    <div class="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto pt-2">
+                        <!-- Primary Action: Direct App Signup -->
+                        <a 
+                            href="{% url ACCOUNTS.AUTH.REGISTER %}" 
+                            class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-primary text-slate-950 text-base hover:bg-emerald-400 hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-primary/25 transition-all duration-200 flex items-center justify-center gap-2 group"
+                        >
+                            <span>Create Free Account</span>
+                            <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                            </svg>
+                        </a>
+
+                        <!-- Secondary Action: Demo / Sign In -->
+                        <a 
+                            href="{% url ACCOUNTS.AUTH.LOGIN %}" 
+                            class="w-full sm:w-auto px-6 py-4 rounded-2xl bg-white/80 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 text-slate-700 dark:text-slate-300 font-medium text-base hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-all duration-200 flex items-center justify-center"
+                        >
+                            Log In
+                        </a>
+                    </div>
+
+                    <!-- Trust Badges & Guarantees -->
+                    <div class="pt-2 flex flex-wrap items-center justify-center gap-y-2 gap-x-6 text-xs text-slate-500 dark:text-slate-400">
+                        <div class="flex items-center gap-1.5">
+                            <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <span>No credit card required</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <span>Setup in &lt;60 seconds</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                            <span>Top-level security</span>
+                        </div>
+                    </div>
+
                 </div>
             </section>
         </main>
 
-        <!-- ════════════════ 8. FOOTER ════════════════ -->
-        <footer
-            class="border-t border-slate-200 dark:border-white/10 py-12 px-6 bg-white/50 dark:bg-ink-900 backdrop-blur-md"
-        >
-            <div
-                class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-sm text-slate-500"
-            >
-                <div class="flex items-center gap-3">
-                    <span class="font-bold text-slate-900 dark:text-white"
-                        >sales<span class="text-primary">iq</span></span
-                    >
-                    <span>© 2026 SalesIQ. All rights reserved.</span>
+        <footer class="border-t border-slate-200 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-950/80 backdrop-blur-md pt-16 pb-12 px-6">
+            <div class="max-w-7xl mx-auto space-y-12">
+                
+                <!-- Main Footer Navigation -->
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-8 text-sm">
+                    
+                    <!-- Brand & Tagline Column -->
+                    <div class="col-span-2 space-y-4">
+                        <a href="#" class="inline-block text-xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
+                            sales<span class="text-primary">iq</span>
+                        </a>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm max-w-sm leading-relaxed">
+                            The modern, lightweight sales and customer analytics engine built specifically for growing social commerce brands.
+                        </p>
+                        <div class="flex items-center gap-2 pt-1 text-xs text-slate-500 dark:text-slate-400">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
+                            <span>All systems operational</span>
+                        </div>
+                    </div>
+
+                    <!-- Column 1: Product -->
+                    <div class="space-y-3">
+                        <p class="font-semibold text-slate-900 dark:text-slate-200 text-xs uppercase tracking-wider">Product</p>
+                        <ul class="space-y-2 text-slate-600 dark:text-slate-400">
+                            <li><a href="#showcase" class="hover:text-primary transition-colors">Business Vitals</a></li>
+                            <li><a href="#" class="hover:text-primary transition-colors">Product Analytics</a></li>
+                            <li><a href="#" class="hover:text-primary transition-colors">Customer Insights</a></li>
+                            <li><a href="#" class="hover:text-primary transition-colors">Pricing</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Column 2: Resources & Support -->
+                    <div class="space-y-3">
+                        <p class="font-semibold text-slate-900 dark:text-slate-200 text-xs uppercase tracking-wider">Resources</p>
+                        <ul class="space-y-2 text-slate-600 dark:text-slate-400">
+                            <li><a href="#" class="hover:text-primary transition-colors">Help Center</a></li>
+                            <li><a href="#" class="hover:text-primary transition-colors">Seller Guides</a></li>
+                            <li><a href="#" class="hover:text-primary transition-colors">API Documentation</a></li>
+                            <li><a href="mailto:support@salesiq.com" class="hover:text-primary transition-colors">Contact Support</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Column 3: Legal -->
+                    <div class="space-y-3">
+                        <p class="font-semibold text-slate-900 dark:text-slate-200 text-xs uppercase tracking-wider">Legal</p>
+                        <ul class="space-y-2 text-slate-600 dark:text-slate-400">
+                            <li><a href="#" class="hover:text-primary transition-colors">Privacy Policy</a></li>
+                            <li><a href="#" class="hover:text-primary transition-colors">Terms of Service</a></li>
+                            <li><a href="#" class="hover:text-primary transition-colors">Security Overview</a></li>
+                        </ul>
+                    </div>
+
                 </div>
 
-                <div class="flex items-center gap-6">
-                    <a href="#" class="hover:text-primary">Privacy Policy</a>
-                    <a href="#" class="hover:text-primary">Terms of Service</a>
-                    <a href="#" class="hover:text-primary">Support</a>
+                <!-- Divider Line -->
+                <div class="border-t border-slate-200/80 dark:border-slate-800/60"></div>
+
+                <!-- Bottom Bar: Copyright & Social Links -->
+                <div class="flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-400">
+                    <p>© 2026 SalesIQ Inc. All rights reserved.</p>
+
+                    <!-- Social Media Icons -->
+                    <div class="flex items-center gap-5">
+                        <a href="#" aria-label="Twitter / X" class="hover:text-primary transition-colors">
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                        </a>
+                        <a href="#" aria-label="Instagram" class="hover:text-primary transition-colors">
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                        </a>
+                        <a href="#" aria-label="LinkedIn" class="hover:text-primary transition-colors">
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.762-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                        </a>
+                    </div>
                 </div>
+
             </div>
         </footer>
     </body>
