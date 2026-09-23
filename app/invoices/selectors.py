@@ -187,6 +187,14 @@ class InvoiceSelectors:
 
         return {"labels": labels, "gmv": gmv, "has_data": bool(by_day)}
     
+    def get_platform_volume(self) -> Decimal:
+        platform_vol = (
+            self.inv_model.objects
+            .filter(status=InvoiceStatus.PAID).aggregate(total=Sum("total"))["total"]
+            or Decimal("0")
+        )
+        return platform_vol
+    
     def _base_detail_queryset(self):
         return (
             self.inv_model.objects

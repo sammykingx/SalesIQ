@@ -75,3 +75,20 @@ to:
 SalesIQ's core value can therefore be summarized as:
 
 > *Record every sale. Keep every transaction traceable. Understand your business.*
+
+## CONFIG VARIBALES
+```sh
+ENV="" # "local" | "prod"
+DEBUG=False
+SECRET_KEY=""
+
+DOCUMENT_ROOT=""
+ALLOWED_DOMAINS="example.com, example.com.ng, ..."
+PREVILEDGE_USERS="user1@example.com, user2@example.com, ..."
+RESEND_API_KEY=""
+
+# DB SETTINGS
+DB_NAME=""
+DB_USER=""
+DB_PASSWORD=""
+```

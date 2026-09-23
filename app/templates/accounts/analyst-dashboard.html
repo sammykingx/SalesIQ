@@ -1,12 +1,13 @@
 {% extends "layouts/_base_app.html" %}
 {% load static %}
 {% load humanize %}
+{% load number_format %}
 
-{% block title %}salesiq | dashboard{% endblock %}
+{% block title %}salesiq | Platform dashboard{% endblock %}
 
 {% block page_header %}
 <!-- Platform Analyst Dashboard Welcome Banner -->
-<div class="relative overflow-hidden rounded-2xl bg-white p-6 sm:p-8 shadow-xs border border-neutral-200 dark:border-neutral-800 dark:bg-neutral-900 transition-colors duration-200">
+<div class="relative overflow-hidden rounded-2xl bg-white p-6 sm:p-8 shadow-xs border border-neutral-200 dark:border-neutral-800 dark:bg-neutral-900 transition-colors">
     <!-- Ambient Background Glows (Indigo & Emerald Blend) -->
     <div class="pointer-events-none absolute -top-24 -right-24 h-64 w-64 rounded-full bg-indigo-500/10 blur-3xl dark:bg-indigo-500/15"></div>
     <div class="pointer-events-none absolute -bottom-24 -left-24 h-64 w-64 rounded-full bg-emerald-500/10 blur-3xl dark:bg-emerald-500/15"></div>
@@ -36,7 +37,7 @@
                 <!-- Primary Action -->
                 <button 
                     type="button" 
-                    class="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-sm text-white shadow-md shadow-indigo-500/20 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all cursor-pointer"
+                    class="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-sm text-white shadow-md shadow-indigo-500/20 hover:bg-emerald-700 focus:outline-none focus:ring-1 focus:ring-emerald-500/50 cursor-pointer"
                 >
                     <svg class="h-4 w-4 stroke-2" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
@@ -56,23 +57,23 @@
 
         <!-- Right: Alternating Premium Macro Metrics -->
         <div class="grid grid-cols-3 gap-4 sm:gap-6 lg:w-auto w-full pt-4 lg:pt-0 border-t lg:border-t-0 border-neutral-100 dark:border-neutral-800">
-            
-            <!-- Metric 1: Total Merchants Onboarded (Emerald Tint) -->
-            <div class="rounded-xl bg-emerald-500/5 dark:bg-emerald-500/10 p-3.5 sm:p-4 border border-emerald-500/20 dark:border-emerald-500/20 transition-all">
+
+            <!-- Active Merchants -->
+            <div class="rounded-xl bg-emerald-500/5 dark:bg-emerald-500/10 p-3.5 sm:p-4 border border-emerald-500/20 dark:border-emerald-500/20">
                 <span class="block text-xs font-medium text-emerald-700 dark:text-emerald-300">Active Merchants</span>
-                <span class="mt-1 block text-lg sm:text-xl font-medium text-emerald-950 dark:text-emerald-100">1,248</span>
+                <span class="mt-1 block text-lg sm:text-xl font-medium text-emerald-950 dark:text-emerald-100">{{ active_merchants|compact_number }}</span>
             </div>
 
-            <!-- Metric 2: Total Platform Transactions (Slate Tint) -->
-            <div class="rounded-xl bg-slate-100/70 dark:bg-slate-800/60 p-3.5 sm:p-4 border border-slate-200/80 dark:border-slate-700/50 transition-all">
+            <!-- Platform Volume -->
+            <div class="rounded-xl bg-slate-100/70 dark:bg-slate-800/60 p-3.5 sm:p-4 border border-slate-200/80 dark:border-slate-700/50">
                 <span class="block text-xs font-medium text-slate-600 dark:text-slate-400">Platform Volume</span>
-                <span class="mt-1 block text-lg sm:text-xl font-medium text-slate-900 dark:text-white">₦48.2M</span>
+                <span class="mt-1 block text-lg sm:text-xl font-medium text-slate-900 dark:text-white">₦{{ platform_volume|compact_number }}</span>
             </div>
 
-            <!-- Metric 3: Active Platform Users / Engagement Rate (Sky/Indigo Tint) -->
-            <div class="rounded-xl bg-indigo-500/5 dark:bg-indigo-500/10 p-3.5 sm:p-4 border border-indigo-500/20 dark:border-indigo-500/20 transition-all">
+            <!-- Active Today -->
+            <div class="rounded-xl bg-indigo-500/5 dark:bg-indigo-500/10 p-3.5 sm:p-4 border border-indigo-500/20 dark:border-indigo-500/20">
                 <span class="block text-xs font-medium text-indigo-700 dark:text-indigo-300">Active Today</span>
-                <span class="mt-1 block text-lg sm:text-xl font-medium text-indigo-950 dark:text-indigo-100">94.2%</span>
+                <span class="mt-1 block text-lg sm:text-xl font-medium text-indigo-950 dark:text-indigo-100">{{ active_today_rate|floatformat:1 }}%</span>
             </div>
 
         </div>

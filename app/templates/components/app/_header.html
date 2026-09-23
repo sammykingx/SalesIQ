@@ -278,7 +278,7 @@
                     </div>
                 {% endif %}
                 <span class="flex min-w-0 flex-col">
-                    <b class="truncate text-sm font-medium text-neutral-900 dark:text-white">{{ user.first_name }} {{ user.last_name }}</b>
+                    <b class="truncate text-sm font-medium text-neutral-900 dark:text-white">{{ user.first_name|title }} {{ user.last_name|title }}</b>
                     <small class="truncate text-xs text-neutral-400">{{ user.email }}</small>
                 </span>
             </div>
@@ -290,6 +290,12 @@
                 <i data-lucide="settings" class="h-4 w-4 shrink-0"></i>
                 Account Settings
             </a>
+            {% if is_previledged %}
+                <a class="flex items-center gap-2 rounded-lg px-3 py-2 text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800" role="menuitem" href="{% url ACCOUNTS.ANALYST_DASHBOARD %}">
+                    <i data-lucide="shield-user" class="h-4 w-4 shrink-0"></i>
+                    Platform Metrics
+                </a>
+            {% endif %}
             {% comment %} <a class="flex items-center gap-2 rounded-lg px-3 py-2 text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800" role="menuitem" href="#">
                 <svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 12a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M15 15l3.35 3.35" /><path d="M9 15l-3.35 3.35" /><path d="M5.65 5.65l3.35 3.35" /><path d="M18.35 5.65l-3.35 3.35" /></svg>
                 Support

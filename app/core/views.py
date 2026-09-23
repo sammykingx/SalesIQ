@@ -1,21 +1,21 @@
-from typing import Any
-
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.utils import timezone
 from django.views.generic import View
 from django.shortcuts import render
-from .template_names import ERROR_PAGES
+
 
 from accounts.selectors import BusinessSelector
 from customers.selectors import CustomerSelector
 from invoices.selectors import InvoiceSelectors
-from products.selectors import ProductsSelector
-
-from products.serializers import ProductListItemSchema
 from invoices.serializers import InvoiceListResponseSchema
+from products.selectors import ProductsSelector
+from products.serializers import ProductListItemSchema
 from public.adapters import WaitlistStorage
+from .template_names import ERROR_PAGES
+
 from datetime import datetime
+from typing import Any
+
 
 import json
 
@@ -154,11 +154,13 @@ class BusinessJSONDataView(View):
         }, status=200)
     
     
+def custom_403(request: HttpRequest, exception):
+    return render(request, ERROR_PAGES.FORBIDDEN, status=403)
+
 def custom_404(request: HttpRequest, exception):
     return render(request, ERROR_PAGES.NOT_FOUND, status=404)
 
-import sys
-import traceback
+import sys, traceback
 
 def custom_500(request: HttpRequest):
     exc_type, exc_value, exc_tb = sys.exc_info()

@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     "customers.apps.CustomersConfig",
     "products.apps.ProductsConfig",
     "invoices.apps.InvoicesConfig",
+    "shared_tags.apps.SharedTagsConfig",
 ]
 
 MIDDLEWARE = [

@@ -71,9 +71,13 @@ class PlatformDashboardView(LoginRequiredMixin, TemplateView):
         return context
     
     def template_context(self) -> Dict[str, Any]:
-        recent_signups = BusinessSelector().get_recent_signups(limit=7)
+        selector = BusinessSelector()
+        recent_signups = selector.get_recent_signups(limit=7)
+        platform_summary = selector.get_platform_summary()
+        
         return {
             "recent_signups": recent_signups,
+            **platform_summary,
         }
 
 class UserProfileView(LoginRequiredMixin, TemplateView):

@@ -46,11 +46,6 @@ class APP_TEMPLATES:
         VIEW=f'{_INVOICES_BASE}/inv-view.html'
         INVOICE_PDF=f'{_INVOICES_BASE}/inv-pdf.html'
         
-            
-                
-# 1. padlock animation https://lottiefiles.com/free-animation/password-set-LjQJxPwnaB
-# https://lottiefiles.com/free-animation/lock-Ds4qQXD1Bz
-# 
 
 _EMAIL_BASE_FOLDER = "email"
 class EMAIL_TEMPLATES:
@@ -62,6 +57,7 @@ class LANDING_PAGES:
     FEEDBACK = 'public/feedback.html'
     
 class ERROR_PAGES:
+    FORBIDDEN = "errors/403.html"
     NOT_FOUND = "errors/404.html"
     INETERNAL_ERROR = "errors/500.html"
     

@@ -23,7 +23,7 @@ from core.url_names import BUSINESS_DATA
 from core.views import ComingSoonView, BusinessJSONDataView, HostingerInvoiceView
 from metrics import urls as metric_urls
 
-
+handler403 = "core.views.custom_403"
 handler404 = "core.views.custom_404"
 handler500 = "core.views.custom_500"
 

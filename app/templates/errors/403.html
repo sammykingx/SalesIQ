@@ -1,31 +1,32 @@
-{# 404.html #}
+{# 403.html #}
 {% extends "layouts/_base_errors.html" %}
 {% load static %}
 
-{% block title %}Page Not Found (404) - SalesIQ{% endblock %}
+{% block title %}Access Restricted (403) - SalesIQ{% endblock %}
 
 {% block error_content %}
 <div class="w-full max-w-md mx-auto animate-in fade-in zoom-in-95 duration-500">
-  <div class="relative bg-surface/90 dark:bg-ink-900/80 backdrop-blur-2xl border border-sky-500/20 dark:border-sky-500/30 rounded-3xl p-8 sm:p-10 shadow-2xl shadow-sky-950/10 dark:shadow-sky-950/30 text-center overflow-hidden">
-    <div class="absolute -top-20 left-1/2 -translate-x-1/2 w-56 h-56 bg-linear-to-tr from-sky-500/25 via-primary/20 to-emerald-500/15 rounded-full blur-3xl pointer-events-none"></div>
+  <div class="relative bg-surface/90 dark:bg-ink-900/80 backdrop-blur-2xl border border-rose-500/20 dark:border-rose-500/30 rounded-3xl p-8 sm:p-10 shadow-2xl shadow-rose-950/10 dark:shadow-rose-950/30 text-center overflow-hidden">
+    <div class="absolute -top-20 left-1/2 -translate-x-1/2 w-56 h-56 bg-linear-to-tr from-rose-500/25 via-primary/20 to-amber-500/15 rounded-full blur-3xl pointer-events-none"></div>
+    
+    <!-- Status Code & Icon -->
     <div class="relative inline-flex items-center justify-center mb-6">
-      <div class="absolute -inset-2 rounded-full bg-linear-to-r from-sky-500/30 to-primary/30 blur-md animate-pulse"></div>
-      <div class="relative px-5 py-2.5 bg-white/90 dark:bg-ink-950/90 backdrop-blur-xl border border-sky-200/60 dark:border-sky-500/30 rounded-full shadow-lg flex items-center gap-2.5">
-        <span class="text-3xl sm:text-4xl animate-bounce">🕵️‍♂️</span>
-        <span class="text-2xl sm:text-3xl font-semibold tracking-tight text-sky-600 dark:text-sky-400">
-          404
+      <div class="absolute -inset-2 rounded-full bg-linear-to-r from-rose-500/30 to-amber-500/30 blur-md animate-pulse"></div>
+      <div class="relative px-5 py-2.5 bg-white/90 dark:bg-ink-950/90 backdrop-blur-xl border border-rose-200/60 dark:border-rose-500/30 rounded-full shadow-lg flex items-center gap-2.5">
+        <span class="text-3xl sm:text-4xl animate-bounce">🔐</span>
+        <span class="text-2xl sm:text-3xl font-semibold tracking-tight text-rose-600 dark:text-rose-400">
+          403
         </span>
-        
       </div>
     </div>
 
-    <!-- Headline & Friendly Content -->
+    <!-- Headline & Generic Security Message -->
     <div class="space-y-2 mb-7 animate-in fade-in slide-in-from-bottom-2 duration-400 delay-100 fill-mode-both">
       <h1 class="text-2xl sm:text-3xl font-semibold text-ink-900 dark:text-white tracking-tight">
-        Lost in space?
+        Access Restricted
       </h1>
       <p class="text-sm text-ink-600 dark:text-slate-400 leading-relaxed max-w-xs mx-auto">
-        The page you are looking for disappeared into thin air. Let’s get you back on track! ✨
+        We couldn't load this page. It looks like your session may have expired or you might need a different account level to view it.
       </p>
     </div>
 
