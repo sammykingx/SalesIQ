@@ -20,7 +20,7 @@ from django.urls import path, include
 from django.views.generic import TemplateView
 
 from core.url_names import BUSINESS_DATA
-from core.views import ComingSoonView, BusinessJSONDataView, HostingerInvoiceView
+from core.views import ComingSoonView, BusinessJSONDataView
 from metrics import urls as metric_urls
 
 handler403 = "core.views.custom_403"
@@ -32,7 +32,6 @@ urlpatterns = [
     
     path("", TemplateView.as_view(template_name="index.html"), name="home"),
     path("business-json/", BusinessJSONDataView.as_view(), name=BUSINESS_DATA),
-    # path("hostinger/", HostingerInvoiceView.as_view(), name="hst"),
     path("accounts/", include("accounts.urls")),
     path("customers/", include("customers.urls")),
     path("products/", include("products.urls")),

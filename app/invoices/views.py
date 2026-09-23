@@ -1,9 +1,11 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
+from django.template.loader import render_to_string
 from django.urls import reverse
 from django.views.generic import View, TemplateView
-from django_weasyprint import WeasyTemplateView
+# from django_weasyprint import WeasyTemplateView
+from weasyprint import HTML
 
 from accounts.domains.exceptions import AccountsDomainException
 from accounts.selectors import BusinessSelector
@@ -126,28 +128,67 @@ class InvoicesWebView(TemplateView):
         return context
     
 
-class InvoicePDFDownloadView(WeasyTemplateView):
-    template_name = APP_TEMPLATES.INVOICE.INVOICE_PDF
-    # pdf_attachment = True
-    invoice_selector = InvoiceSelectors()
+# class InvoicePDFDownloadView(WeasyTemplateView):
+#     template_name = APP_TEMPLATES.INVOICE.INVOICE_PDF
+#     # pdf_attachment = True
+#     invoice_selector = InvoiceSelectors()
     
+#     def get_invoice(self):
+#         """
+#             Memoize the invoice object. It queries the DB on the first call 
+#             and reuses the cached instance for all subsequent calls in this request.
+#         """
+#         if not hasattr(self, '_invoice'):
+#             inv_slug = self.kwargs.get("slug", None)
+#             self._invoice = self.invoice_selector.get_invoice_by_slug(slug=inv_slug)
+#         return self._invoice
+    
+#     def get_pdf_filename(self): # type:ignore
+#         invoice = self.get_invoice()
+#         return f"Invoice-{invoice.display_id}.pdf" # type: ignore
+    
+#     def get_context_data(self, **kwargs) -> Dict[str, Any]:
+#         context = super().get_context_data(**kwargs)
+#         invoice = InvoiceDetailResponseSchema.model_validate(self.get_invoice())
+#         context.update({"invoice": invoice})
+#         return context
+
+class InvoicePDFDownloadView(TemplateView):
+    template_name = APP_TEMPLATES.INVOICE.INVOICE_PDF
+    invoice_selector = InvoiceSelectors()
+
     def get_invoice(self):
         """
-            Memoize the invoice object. It queries the DB on the first call 
-            and reuses the cached instance for all subsequent calls in this request.
+        Memoize the invoice object. It queries the DB on the first call 
+        and reuses the cached instance for all subsequent calls in this request.
         """
         if not hasattr(self, '_invoice'):
             inv_slug = self.kwargs.get("slug", None)
             self._invoice = self.invoice_selector.get_invoice_by_slug(slug=inv_slug)
         return self._invoice
-    
-    def get_pdf_filename(self): # type:ignore
+
+    def get_pdf_filename(self) -> str:
         invoice = self.get_invoice()
         return f"Invoice-{invoice.display_id}.pdf" # type: ignore
-    
+
     def get_context_data(self, **kwargs) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
         invoice = InvoiceDetailResponseSchema.model_validate(self.get_invoice())
         context.update({"invoice": invoice})
         return context
+
+    def render_to_response(self, context: Dict[str, Any], **response_kwargs) -> HttpResponse:
+        html_string = render_to_string(
+            template_name=self.template_name, 
+            context=context, 
+            request=self.request
+        )
+
+        base_url = self.request.build_absolute_uri('/')
+        pdf_bytes = HTML(string=html_string, base_url=base_url).write_pdf()
+
+        filename = self.get_pdf_filename()
+        response = HttpResponse(pdf_bytes, content_type='application/pdf')
+        response['Content-Disposition'] = f'attachment; filename="{filename}"'
         
+        return response

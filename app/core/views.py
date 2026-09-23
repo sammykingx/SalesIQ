@@ -20,93 +20,93 @@ from typing import Any
 import json
 
 
-from django_weasyprint import WeasyTemplateView
-from django.views.generic import TemplateView
-from decimal import Decimal
+# from django_weasyprint import WeasyTemplateView
+# from django.views.generic import TemplateView
+# from decimal import Decimal
 
-from decouple import config
+# from decouple import config
 
 
-class HostingerInvoiceView(WeasyTemplateView):
-    template_name="invoices/hostinger-inv-v2.html"
-    inv_id = "INV-2026-4ZHG-7KVI"
+# class HostingerInvoiceView(WeasyTemplateView):
+#     template_name="invoices/hostinger-inv-v2.html"
+#     inv_id = "INV-2026-4ZHG-7KVI"
     
-    def get_pdf_filename(self) -> str: #type:ignore
-        return f"HTNGR-{self.inv_id}.pdf"
+#     def get_pdf_filename(self) -> str: #type:ignore
+#         return f"HTNGR-{self.inv_id}.pdf"
     
-    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
-        context = super().get_context_data(**kwargs)
-        context.update(self.invoice_context())
-        return context
+#     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+#         context = super().get_context_data(**kwargs)
+#         context.update(self.invoice_context())
+#         return context
     
-    def invoice_context(self):
-        conv_rate = Decimal("1330")
-        usd_subtotal = self._calc_subtotal()
-        sub_total = (usd_subtotal * conv_rate).quantize(Decimal("0.01"))
+#     def invoice_context(self):
+#         conv_rate = Decimal("1330")
+#         usd_subtotal = self._calc_subtotal()
+#         sub_total = (usd_subtotal * conv_rate).quantize(Decimal("0.01"))
 
-        tax_rate = Decimal("7.65")
-        tax_amount = ((tax_rate / Decimal("100")) * sub_total).quantize(Decimal("0.01"))
-        total_amount = (sub_total + tax_amount).quantize(Decimal("0.01"))
+#         tax_rate = Decimal("7.65")
+#         tax_amount = ((tax_rate / Decimal("100")) * sub_total).quantize(Decimal("0.01"))
+#         total_amount = (sub_total + tax_amount).quantize(Decimal("0.01"))
         
-        return {
-            "conv_rate": conv_rate,
-            "invoice_number": self.inv_id,
-            "client_name": config("CUSTOMER_NAME"),
-            "client_email": config("CUSTOMER_EMAIL"),
-            "client_phone": config("CUSTOMER_PHONE"),
-            "client_company": "The Rebirth Initiative",
+#         return {
+#             "conv_rate": conv_rate,
+#             "invoice_number": self.inv_id,
+#             "client_name": config("CUSTOMER_NAME"),
+#             "client_email": config("CUSTOMER_EMAIL"),
+#             "client_phone": config("CUSTOMER_PHONE"),
+#             "client_company": "The Rebirth Initiative",
             
-            "issue_date": "2026-09-10",
-            "due_date": "2026-10-07",
-            "sub_total": sub_total,
-            "tax_amount": tax_amount,
-            "total_amount": total_amount,
-            "items": self._line_items()
-        }
+#             "issue_date": "2026-09-10",
+#             "due_date": "2026-10-07",
+#             "sub_total": sub_total,
+#             "tax_amount": tax_amount,
+#             "total_amount": total_amount,
+#             "items": self._line_items()
+#         }
         
-    def _calc_subtotal(self):
-        line_items = self._line_items()
-        total_usd = sum(Decimal(str(item["amount"])) for item in line_items)
-        return total_usd
+#     def _calc_subtotal(self):
+#         line_items = self._line_items()
+#         total_usd = sum(Decimal(str(item["amount"])) for item in line_items)
+#         return total_usd
         
-    def _line_items(self):
-        return [
-            {
-                "description": "Hosting Package Renewal",
-                "details": "Includes Storage, SSL, Daily Backups & Hostinger CDN",
-                "provider": "Hosting",
-                "term": "12 Months",
-                "amount": 189.00
-            },
-            {
-                "description": "Primary Domain Renewal '.ORG'",
-                "details": "therebirthinitiative.org",
-                "provider": "Domain",
-                "term": "1 Year",
-                "amount": 20.99
-            },
-            {
-                "description": "ICANN Domain Annual Fee",
-                "details": "Mandatory Internet Corporation for Assigned Names and Numbers registry fee",
-                "provider": "ICANN",
-                "term": "1 Year",
-                "amount": 7.99
-            },
-            {
-                "description": "Domain WHOIS Privacy Protection",
-                "details": "Identity Shield & Automated Spam Prevention",
-                "provider": "WHOIS",
-                "term": "1 Year",
-                "amount": 11.85
-            },
-            {
-                "description": "Core Infrastructure & Security",
-                "details": "Secure FTP Protocols, Encrypted Mailbox, System Firewall & Core Security Hardening",
-                "provider": "Hostinger",
-                "term": "Annual",
-                "amount": 36.50
-            }
-        ]
+#     def _line_items(self):
+#         return [
+#             {
+#                 "description": "Hosting Package Renewal",
+#                 "details": "Includes Storage, SSL, Daily Backups & Hostinger CDN",
+#                 "provider": "Hosting",
+#                 "term": "12 Months",
+#                 "amount": 189.00
+#             },
+#             {
+#                 "description": "Primary Domain Renewal '.ORG'",
+#                 "details": "therebirthinitiative.org",
+#                 "provider": "Domain",
+#                 "term": "1 Year",
+#                 "amount": 20.99
+#             },
+#             {
+#                 "description": "ICANN Domain Annual Fee",
+#                 "details": "Mandatory Internet Corporation for Assigned Names and Numbers registry fee",
+#                 "provider": "ICANN",
+#                 "term": "1 Year",
+#                 "amount": 7.99
+#             },
+#             {
+#                 "description": "Domain WHOIS Privacy Protection",
+#                 "details": "Identity Shield & Automated Spam Prevention",
+#                 "provider": "WHOIS",
+#                 "term": "1 Year",
+#                 "amount": 11.85
+#             },
+#             {
+#                 "description": "Core Infrastructure & Security",
+#                 "details": "Secure FTP Protocols, Encrypted Mailbox, System Firewall & Core Security Hardening",
+#                 "provider": "Hostinger",
+#                 "term": "Annual",
+#                 "amount": 36.50
+#             }
+#         ]
 
 class ComingSoonView(View):
     def get(self, request: HttpRequest) -> HttpResponse:

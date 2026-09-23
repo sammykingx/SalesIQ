@@ -12,27 +12,30 @@
 
         <!-- Center: Marquee Scrolling Track -->
         <div class="relative flex overflow-x-hidden flex-1 select-none">
-            <div class="animate-marquee whitespace-nowrap flex items-center gap-8 py-0.5">
-                <span>⚠️ Your account is unverified. Please check your primary or promotional mailbox for your verification link.</span>
+            
+            <div class="animate-marquee whitespace-nowrap flex items-center gap-8 py-0.5 pr-8">
+                <span class="flex items-center gap-2">
+                    <span class="text-amber-500">⚠️</span> 
+                    Your account is unverified. Please check your primary or promotional mailbox for your verification link.
+                </span>
                 <span>•</span>
                 <span>Then search for salesiq to locate the verification mail.</span>
                 <span>•</span>
                 <span>You're almost there.</span>
-                {% comment %} <span>⚠️ Your account is unverified. Please check your primary or promotional mailbox for your verification link.</span>
-                <span>•</span> {% endcomment %}
+                <span>•</span>
             </div>
 
-            <!-- Seamless second loop for smooth marquee scrolling -->
-            <div class="absolute top-0 animate-marquee2 whitespace-nowrap flex items-center gap-8 py-0.5" aria-hidden="true">
-                <span>⚠️ Your account is unverified. Please check your primary or promotional mailbox for your verification link.</span>
+            <!-- Seamless second marquee sequence -->
+            <div class="absolute top-0 animate-marquee2 whitespace-nowrap flex items-center gap-8 py-0.5 pr-8" aria-hidden="true">
+                <span class="flex items-center gap-2">
+                    <span class="text-amber-500">⚠️</span> 
+                    Your account is unverified. Please check your primary or promotional mailbox for your verification link.
+                </span>
                 <span>•</span>
                 <span>Then search for salesiq to locate the verification mail.</span>
                 <span>•</span>
                 <span>You're almost there.</span>
-                {% comment %} <span>Didn't receive the email? Check your spam folder or request a new link.</span>
                 <span>•</span>
-                <span>⚠️ Your account is unverified. Please check your primary or promotional mailbox for your verification link.</span>
-                <span>•</span> {% endcomment %}
             </div>
         </div>
 
