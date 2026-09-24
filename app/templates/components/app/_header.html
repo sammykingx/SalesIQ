@@ -43,7 +43,7 @@
     <div class="relative hidden lg:block" x-data="axDropdown()" @keydown.escape="close()" @click.outside="close()">
         <button
             type="button"
-            class="inline-flex h-9 items-center rounded-lg px-2.5 text-sm font-medium text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white"
+            class="inline-flex h-9 items-center rounded-lg px-2.5 text-sm font-medium text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white hover:cursor-pointer"
             @click="toggle()"
             aria-haspopup="menu"
             :aria-expanded="open"
@@ -79,7 +79,7 @@
     <!-- 6 · LIGHT/DARK QUICK-TOGGLE -->
     <button
         type="button"
-        class="inline-flex h-9 w-9 items-center justify-center rounded-lg text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white"
+        class="inline-flex h-9 w-9 items-center justify-center rounded-lg text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white hover:cursor-pointer"
         @click="toggleTheme()"
         
         aria-label="Toggle dark mode"
@@ -258,7 +258,7 @@
             {% csrf_token %}
         </form>
 
-        <button type="button" class="rounded-full" @click="toggle()" aria-haspopup="menu" :aria-expanded="open" aria-controls="ax-profile-menu" aria-label="Account menu">
+        <button type="button" class="rounded-full hover:cursor-pointer" @click="toggle()" aria-haspopup="menu" :aria-expanded="open" aria-controls="ax-profile-menu" aria-label="Account menu">
             {% comment %} <img class="h-8 w-8 rounded-full ring-2 ring-transparent hover:ring-neutral-200 dark:hover:ring-neutral-700" src="https://i.pravatar.cc/64?img=12" alt="{{ user.first_name }} {{ user.last_name }}" width="32" height="32" /> {% endcomment %}
             {% if user.avatar %}
                 <img class="h-10 w-10 rounded-full object-cover" src="{{ user.avatar.url }}" alt="{{ user.get_full_name }}" width="40" height="40" />

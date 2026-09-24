@@ -29,6 +29,6 @@ export const navManifest = [
     { group: 'Personal', label: 'Update profile info', href: '/accounts/settings/#profile' },
     { group: 'Personal', label: 'Update password', href: '/accounts/settings/#update-password' },
 
-    { group: 'Actions', label: 'Toggle dark mode', action: 'toggleTheme' },
+    { group: 'Actions', label: 'Toggle theme', action: 'toggleTheme' },
     { group: 'Actions', label: 'Log Out', action: 'logout' },
 ];

@@ -51,7 +51,7 @@ class AccountRegistrationView(View):
         except AccountsDomainException as err:
             response_data = AuthActionResponseSchema(
                 message=err.message,
-                status="success",
+                status="info",
                 redirect=False
             )
             return JsonResponse(response_data.model_dump(mode="json"), status=400)

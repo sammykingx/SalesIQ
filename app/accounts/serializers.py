@@ -55,7 +55,7 @@ class AuthActionResponseSchema(BaseModel):
 class SocialLinksSchema(BaseModel):
     """Represents the digital and social media presence channels for a business."""
     
-    whatsapp_number: str = Field(..., description="Whatsapp phone number.")
+    whatsapp_number: Optional[str] = Field(None, description="Whatsapp phone number.")
     instagram_url: Optional[str] = Field(None, description="Official Instagram profile URL.")
     tiktok_url: Optional[str] = Field(None, description="Official TikTok profile URL.")
     website_url: Optional[str] = Field(None, description="Primary business website or online storefront URL.")

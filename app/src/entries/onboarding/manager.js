@@ -107,7 +107,7 @@ export function onboardingForm(endpointUrl = '') {
                 socials: {
                     instagram_url: cleanHandle(this.formData.instagram),
                     tiktok_url: cleanHandle(this.formData.tiktok),
-                    website_url: website
+                    website_url: website,
                 }
             };
 

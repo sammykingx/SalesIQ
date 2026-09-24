@@ -7,6 +7,7 @@ from accounts.domains.exceptions import AccountsDomainException
 from accounts.serializers import BusinessOnboardingSchema
 from accounts.services import BusinessService
 from pydantic import ValidationError
+from utils.pydantic_formatter import format_pydantic_errors
 
 
 class BizAccountOnboardingView(LoginRequiredMixin, View):
@@ -16,14 +17,14 @@ class BizAccountOnboardingView(LoginRequiredMixin, View):
     def post(self, request: HttpRequest):
         try:
             data = BusinessOnboardingSchema.model_validate_json(request.body, strict=True)
-            print(data.model_dump_json(indent=2))
             BusinessService(self.request.user).register_business(data) # type: ignore
             return JsonResponse({
                 "message": "Your business has been successfully registered.",
                 "status": "success",
             }, status=201)
             
-        except ValidationError:
+        except ValidationError as err:
+            # print(format_pydantic_errors(err))
             return JsonResponse({
                 "message": "Please review the data provided",
                 "status": "warning"
