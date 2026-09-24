@@ -16,7 +16,7 @@ django-vite==3.1.0
 django-weasyprint==2.5.0
 dnspython==2.8.0
 email-validator==2.3.0
-fonttools==4.65.0
+fonttools==4.66.0
 h11==0.16.0
 httpcore==1.0.9
 httpx==0.28.1

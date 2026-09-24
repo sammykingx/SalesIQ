@@ -1,6 +1,7 @@
 {% extends "layouts/_base_app.html" %}
 {% load static %}
 {% load humanize %}
+{% load number_format %}
 
 {% block title %}salesiq | dashboard{% endblock %}
 
@@ -28,7 +29,7 @@
             </h1>
             
             <p class="text-sm sm:text-base text-neutral-600 dark:text-neutral-400 leading-relaxed">
-                Your daily business vitals at a glance: revenue, catalog, and customers, updated live.
+                Your weekly business vitals at a glance: revenue, catalog, and customers, updated live.
             </p>
 
             <!-- Quick Action Buttons -->
@@ -64,12 +65,12 @@
             {% if revenue_is_increase %}
                 <div class="rounded-xl bg-emerald-500/5 dark:bg-emerald-500/10 p-3.5 sm:p-4 border border-emerald-500/20 dark:border-emerald-500/20 min-w-25">
                     <span class="block text-xs font-medium text-emerald-700 dark:text-emerald-300">Revenue</span>
-                    <span class="mt-1 block text-lg sm:text-xl font-medium text-emerald-950 dark:text-emerald-100">+{{ revenue_percent_change }}%</span>
+                    <span class="mt-1 block text-lg sm:text-xl font-medium text-emerald-950 dark:text-emerald-100">+{{ revenue_percent_change|compact_number|intcomma }}%</span>
                 </div>
             {% else %}
                 <div class="rounded-xl bg-rose-500/5 dark:bg-rose-500/10 p-3.5 sm:p-4 border border-rose-500/20 dark:border-rose-500/20 min-w-25">
                     <span class="block text-xs font-medium text-rose-700 dark:text-rose-300">Revenue</span>
-                    <span class="mt-1 block text-lg sm:text-xl font-medium text-rose-950 dark:text-rose-100">{{ revenue_percent_change }}%</span>
+                    <span class="mt-1 block text-lg sm:text-xl font-medium text-rose-950 dark:text-rose-100">{{ revenue_percent_change|intcomma }}%</span>
                 </div>
             {% endif %}
 

@@ -37,5 +37,4 @@ urlpatterns = [
     path("products/", include("products.urls")),
     path("invoices/", include("invoices.urls")),
     path("metrics/", include(metric_urls)),
-    # path("/coming-soon", ComingSoonView.as_view(), name="coming-soon"),
 ]

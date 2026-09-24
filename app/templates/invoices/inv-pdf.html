@@ -32,7 +32,6 @@
             border-radius: 16px;
         }
 
-        /* Watermark - Fixed absolute positioning using CSS transform */
         .watermark {
             position: absolute;
             top: 35%;
@@ -41,7 +40,6 @@
             opacity: 0.05;
             transform: rotate(2deg);
             z-index: 0;
-            pointer-events: none;
         }
 
         .content {
@@ -91,7 +89,7 @@
             padding: 4px 10px;
             border-radius: 20px;
             font-size: 10px;
-            font-weight: medium;
+            font-weight: 500;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin-bottom: 8px;
@@ -105,7 +103,7 @@
             font-family: 'Courier New', Courier, monospace;
             color: #34d399;
             font-size: 12px;
-            font-weight: medium;
+            font-weight: 500;
             display: inline-block;
         }
 
@@ -144,7 +142,7 @@
         .card-title {
             font-size: 9px;
             text-transform: uppercase;
-            font-weight: medium;
+            font-weight: 500;
             color: #94a3b8;
             letter-spacing: 0.5px;
             margin-bottom: 6px;
@@ -163,7 +161,7 @@
         }
 
         .meta-label {
-            color: #94a3b8;
+            color: #64748b;
             display: inline-block;
             width: 80px;
             font-weight: 400;
@@ -205,7 +203,7 @@
             padding: 2px 6px;
             border-radius: 4px;
             font-size: 8px;
-            font-weight: medium;
+            font-weight: 500;
             text-transform: uppercase;
             margin-top: 3px;
         }
@@ -247,7 +245,7 @@
             padding-top: 10px;
             margin-top: 10px;
             font-size: 12px;
-            font-weight: medium;
+            font-weight: 500;
             color: #ffffff;
         }
 
@@ -374,7 +372,7 @@
                                 {{ item.product_type }}
                             </span>
                         </td>
-                        <td style="text-align: center; font-weight: medium; color: #334155;">
+                        <td style="text-align: center; font-weight: 500; color: #334155;">
                             {% if item.product_type == 'service' %}
                                 <span style="color: #cbd5e1; font-weight: normal;">N/A</span>
                             {% else %}
@@ -382,7 +380,7 @@
                             {% endif %}
                         </td>
                         <td style="text-align: right; color: #475569;" class="mono-text">₦{{ item.unit_price|floatformat:2|intcomma }}</td>
-                        <td style="text-align: right; font-weight: medium; color: #0f172a; font-size: 12px;" class="mono-text">₦{{ item.line_subtotal|floatformat:2|intcomma }}</td>
+                        <td style="text-align: right; font-weight: 500; color: #0f172a; font-size: 12px;" class="mono-text">₦{{ item.line_subtotal|floatformat:2|intcomma }}</td>
                     </tr>
                 {% endfor %}
             </tbody>

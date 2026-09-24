@@ -52,7 +52,7 @@ class InvoiceSelectors:
 
             local_dt = timezone.localtime(invoice.created_at)
             date_display = (
-                local_dt.strftime("%-I:%M %p") if local_dt.date() == today
+                local_dt.strftime("%I:%M %p").lstrip("0") if local_dt.date() == today
                 else local_dt.strftime("%b %d")
             )
 
@@ -63,7 +63,7 @@ class InvoiceSelectors:
                 "display_id": invoice.display_id,
                 "slug": invoice.slug,
                 "customer_name": customer_name,
-                "first_item": first_item,
+                "first_item": first_item.title(),
                 "extra_count": extra_count,
                 "date_display": date_display,
                 "status": invoice.status,

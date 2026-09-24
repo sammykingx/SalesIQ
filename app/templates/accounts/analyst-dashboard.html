@@ -36,7 +36,8 @@
             <div class="flex flex-wrap items-center gap-3 pt-2">
                 <!-- Primary Action -->
                 <button 
-                    type="button" 
+                    type="button"
+                    onclick="inAppToast('Data Export Disabled', 'PDF metric module is not connected. Platform data cannot be exported.', 'info')"
                     class="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-sm text-white shadow-md shadow-indigo-500/20 hover:bg-emerald-700 focus:outline-none focus:ring-1 focus:ring-emerald-500/50 cursor-pointer"
                 >
                     <svg class="h-4 w-4 stroke-2" viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -59,21 +60,21 @@
         <div class="grid grid-cols-3 gap-4 sm:gap-6 lg:w-auto w-full pt-4 lg:pt-0 border-t lg:border-t-0 border-neutral-100 dark:border-neutral-800">
 
             <!-- Active Merchants -->
-            <div class="rounded-xl bg-emerald-500/5 dark:bg-emerald-500/10 p-3.5 sm:p-4 border border-emerald-500/20 dark:border-emerald-500/20">
+            <div class="rounded-xl bg-emerald-500/5 dark:bg-emerald-500/10 p-2 sm:p-2.5 border border-emerald-500/20 dark:border-emerald-500/20">
                 <span class="block text-xs font-medium text-emerald-700 dark:text-emerald-300">Active Merchants</span>
-                <span class="mt-1 block text-lg sm:text-xl font-medium text-emerald-950 dark:text-emerald-100">{{ active_merchants|compact_number }}</span>
+                <span class="mt-1 block text-md sm:text-lg font-medium text-emerald-950 dark:text-emerald-100">{{ active_merchants|compact_number }}</span>
             </div>
 
             <!-- Platform Volume -->
-            <div class="rounded-xl bg-slate-100/70 dark:bg-slate-800/60 p-3.5 sm:p-4 border border-slate-200/80 dark:border-slate-700/50">
+            <div class="rounded-xl bg-slate-100/70 dark:bg-slate-800/60 p-2 sm:p-2.5 border border-slate-200/80 dark:border-slate-700/50">
                 <span class="block text-xs font-medium text-slate-600 dark:text-slate-400">Platform Volume</span>
-                <span class="mt-1 block text-lg sm:text-xl font-medium text-slate-900 dark:text-white">₦{{ platform_volume|compact_number }}</span>
+                <span class="mt-1 block text-md sm:text-lg font-medium text-slate-900 dark:text-white">₦{{ platform_volume|compact_number }}</span>
             </div>
 
             <!-- Active Today -->
-            <div class="rounded-xl bg-indigo-500/5 dark:bg-indigo-500/10 p-3.5 sm:p-4 border border-indigo-500/20 dark:border-indigo-500/20">
+            <div class="rounded-xl bg-indigo-500/5 dark:bg-indigo-500/10 p-3 sm:3.5 border border-indigo-500/20 dark:border-indigo-500/20">
                 <span class="block text-xs font-medium text-indigo-700 dark:text-indigo-300">Active Today</span>
-                <span class="mt-1 block text-lg sm:text-xl font-medium text-indigo-950 dark:text-indigo-100">{{ active_today_rate|floatformat:1 }}%</span>
+                <span class="mt-1 block text-md sm:text-lg font-medium text-indigo-950 dark:text-indigo-100">{{ active_today_rate|floatformat:1 }}%</span>
             </div>
 
         </div>

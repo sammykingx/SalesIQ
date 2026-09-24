@@ -1,8 +1,10 @@
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 from decimal import Decimal
 from datetime import datetime
 from typing import Literal, Optional
 from uuid import UUID
+
+import string
 
 
 class CreateProductsSchema(BaseModel):
@@ -38,3 +40,10 @@ class ProductListItemSchema(BaseModel):
     total_sales: int = Field(..., description="Computed total number of sales for this product")
     created_at: datetime = Field(..., description="ISO formatted string of when the product was created")
     url: str
+    
+    @field_validator("name", mode="before")
+    @classmethod
+    def format_title_case(cls, v: str) -> str:
+        if isinstance(v, str):
+            return string.capwords(v.lower())
+        return v

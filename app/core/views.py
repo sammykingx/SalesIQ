@@ -163,12 +163,12 @@ def custom_404(request: HttpRequest, exception):
 import sys, traceback
 
 def custom_500(request: HttpRequest):
-    exc_type, exc_value, exc_tb = sys.exc_info()
-    if exc_type is not None:
-        print("\n" + "="*60)
-        print("--- CAPTURED 500 ERROR TRACEBACK ---")
-        traceback.print_exception(exc_type, exc_value, exc_tb)
-        print("="*60 + "\n")
+    # exc_type, exc_value, exc_tb = sys.exc_info()
+    # if exc_type is not None:
+    #     print("\n" + "="*60)
+    #     print("--- CAPTURED 500 ERROR TRACEBACK ---")
+    #     traceback.print_exception(exc_type, exc_value, exc_tb)
+    #     print("="*60 + "\n")
         
     return render(request, ERROR_PAGES.INETERNAL_ERROR, status=500)
     

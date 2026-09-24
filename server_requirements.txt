@@ -12,7 +12,6 @@ django-anymail==15.1
 django-extensions==4.1
 django-mathfilters==1.0.0
 django-vite==3.1.0
-# django-weasyprint==2.2.0
 dnspython==2.8.0
 email-validator==2.3.0
 h11==0.16.0
@@ -38,6 +37,6 @@ typing-inspection==0.4.4
 tzdata==2026.3
 urllib3==2.7.0
 uuid6==2025.0.1
-weasyprint==53.0
+weasyprint==52.5
 webencodings==0.6.1
 wrapt==2.3.0
