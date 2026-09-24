@@ -343,28 +343,28 @@
 
         {% if recent_signups %}
         <div class="overflow-x-auto">
-            <table class="w-full text-left">
+            <table class="w-full min-w-162 text-left">
                 <thead>
                     <tr class="border-b border-neutral-200 dark:border-neutral-800">
-                        <th class="px-5 py-3 text-xs font-medium text-neutral-400 dark:text-neutral-500">Business</th>
-                        <th class="px-5 py-3 text-xs font-medium text-neutral-400 dark:text-neutral-500">Owner</th>
-                        <th class="px-5 py-3 text-xs font-medium text-neutral-400 dark:text-neutral-500">Business ID</th>
-                        <th class="px-5 py-3 text-xs font-medium text-neutral-400 dark:text-neutral-500">Type</th>
-                        <th class="px-5 py-3 text-xs font-medium text-neutral-400 dark:text-neutral-500">Joined</th>
-                        <th class="px-5 py-3 text-right text-xs font-medium text-neutral-400 dark:text-neutral-500">Status</th>
+                        <th class="whitespace-nowrap px-5 py-3 text-xs font-medium text-neutral-400 dark:text-neutral-500">Business</th>
+                        <th class="whitespace-nowrap px-5 py-3 text-xs font-medium text-neutral-400 dark:text-neutral-500">Owner</th>
+                        <th class="whitespace-nowrap px-5 py-3 text-xs font-medium text-neutral-400 dark:text-neutral-500">Business ID</th>
+                        <th class="whitespace-nowrap px-5 py-3 text-xs font-medium text-neutral-400 dark:text-neutral-500">Type</th>
+                        <th class="whitespace-nowrap px-5 py-3 text-xs font-medium text-neutral-400 dark:text-neutral-500">Joined</th>
+                        <th class="whitespace-nowrap px-5 py-3 text-right text-xs font-medium text-neutral-400 dark:text-neutral-500">Status</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-neutral-100 dark:divide-neutral-800/60">
                     {% for biz in recent_signups %}
                     <tr class="hover:bg-neutral-50 dark:hover:bg-neutral-800/40">
-                        <td class="px-5 py-4 text-sm font-medium text-neutral-900 dark:text-white">{{ biz.name|title }}</td>
-                        <td class="px-5 py-4 text-sm text-neutral-700 dark:text-neutral-300">{{ biz.owner_name|title }}</td>
-                        <td class="px-5 py-4">
+                        <td class="whitespace-nowrap px-5 py-4 text-sm font-medium text-neutral-900 dark:text-white">{{ biz.name|title }}</td>
+                        <td class="whitespace-nowrap px-5 py-4 text-sm text-neutral-700 dark:text-neutral-300">{{ biz.owner_name|title }}</td>
+                        <td class="whitespace-nowrap px-5 py-4">
                             <span class="font-mono text-xs text-neutral-500 dark:text-neutral-400">{{ biz.code }}</span>
                         </td>
-                        <td class="px-5 py-4 text-sm text-neutral-500 dark:text-neutral-400">{{ biz.business_type|title }}</td>
-                        <td class="px-5 py-4 text-sm text-neutral-500 dark:text-neutral-400">{{ biz.joined_display|title }}</td>
-                        <td class="px-5 py-4 text-right">
+                        <td class="whitespace-nowrap px-5 py-4 text-sm text-neutral-500 dark:text-neutral-400">{{ biz.business_type|title }}</td>
+                        <td class="whitespace-nowrap px-5 py-4 text-sm text-neutral-500 dark:text-neutral-400">{{ biz.joined_display|title }}</td>
+                        <td class="whitespace-nowrap px-5 py-4 text-right">
                             {% if biz.is_dormant %}
                             <span class="inline-flex items-center rounded-full bg-amber-50 px-2.5 py-1 text-xs font-medium text-amber-600 dark:bg-amber-500/10 dark:text-amber-400">Dormant</span>
                             {% else %}

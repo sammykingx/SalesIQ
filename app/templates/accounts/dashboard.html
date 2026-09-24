@@ -348,36 +348,38 @@
 
         {% if recent_sales %}
         <div class="overflow-x-auto">
-            <table class="w-full text-left">
+            <table class="w-full min-w-162 text-left">
                 <thead>
                     <tr class="border-b border-neutral-200 dark:border-neutral-800">
-                        <th class="px-5 py-3 text-xs font-medium text-neutral-400 dark:text-neutral-500">Invoice #</th>
-                        <th class="px-5 py-3 text-xs font-medium text-neutral-400 dark:text-neutral-500">Customer</th>
-                        <th class="px-5 py-3 text-xs font-medium text-neutral-400 dark:text-neutral-500">Items</th>
-                        <th class="px-5 py-3 text-xs font-medium text-neutral-400 dark:text-neutral-500">Date</th>
-                        <th class="px-5 py-3 text-xs font-medium text-neutral-400 dark:text-neutral-500">Status</th>
-                        <th class="px-5 py-3 text-right text-xs font-medium text-neutral-400 dark:text-neutral-500">Amount</th>
+                        <th class="whitespace-nowrap px-5 py-3 text-xs font-medium text-neutral-400 dark:text-neutral-500">Invoice #</th>
+                        <th class="whitespace-nowrap px-5 py-3 text-xs font-medium text-neutral-400 dark:text-neutral-500">Customer</th>
+                        <th class="whitespace-nowrap px-5 py-3 text-xs font-medium text-neutral-400 dark:text-neutral-500">Items</th>
+                        <th class="whitespace-nowrap px-5 py-3 text-xs font-medium text-neutral-400 dark:text-neutral-500">Date</th>
+                        <th class="whitespace-nowrap px-5 py-3 text-xs font-medium text-neutral-400 dark:text-neutral-500">Status</th>
+                        <th class="whitespace-nowrap px-5 py-3 text-right text-xs font-medium text-neutral-400 dark:text-neutral-500">Amount</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-neutral-100 dark:divide-neutral-800/60">
                     {% for sale in recent_sales %}
                     <tr class="hover:bg-neutral-50 dark:hover:bg-neutral-800/40">
-                        <td class="px-5 py-4">
+                        <td class="whitespace-nowrap px-5 py-4">
                             <a href="{% url INVOICES.VIEW slug=sale.slug %}" class="text-sm font-medium text-emerald-600 hover:underline dark:text-emerald-400">{{ sale.display_id }}</a>
                         </td>
-                        <td class="px-5 py-4 text-sm text-neutral-700 dark:text-neutral-300">{{ sale.customer_name }}</td>
-                        <td class="px-5 py-4 text-sm text-neutral-500 dark:text-neutral-400">
-                            <span class="truncate">{{ sale.first_item }}{% if sale.extra_count %} <span class="text-neutral-400 dark:text-neutral-500">+{{ sale.extra_count }} more</span>{% endif %}</span>
+                        <td class="whitespace-nowrap px-5 py-4 text-sm text-neutral-700 dark:text-neutral-300">{{ sale.customer_name|title }}</td>
+                        <td class="whitespace-nowrap px-5 py-4 text-sm text-neutral-500 dark:text-neutral-400">
+                            <span class="inline-block max-w-xs truncate align-bottom">
+                                {{ sale.first_item }}{% if sale.extra_count %} <span class="text-neutral-400 dark:text-neutral-500">+{{ sale.extra_count }} more</span>{% endif %}
+                            </span>
                         </td>
-                        <td class="px-5 py-4 text-sm text-neutral-500 dark:text-neutral-400">{{ sale.date_display }}</td>
-                        <td class="px-5 py-4">
+                        <td class="whitespace-nowrap px-5 py-4 text-sm text-neutral-500 dark:text-neutral-400">{{ sale.date_display }}</td>
+                        <td class="whitespace-nowrap px-5 py-4">
                             {% if sale.status == "paid" %}
                             <span class="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400">Paid</span>
                             {% else %}
                             <span class="inline-flex items-center rounded-full bg-red-50 px-2.5 py-1 text-xs font-medium text-red-600 dark:bg-red-500/10 dark:text-red-400">Void</span>
                             {% endif %}
                         </td>
-                        <td class="px-5 py-4 text-right text-sm font-mono {% if sale.status == 'void' %}text-neutral-400 line-through dark:text-neutral-500{% else %}text-neutral-900 dark:text-white{% endif %}">
+                        <td class="whitespace-nowrap px-5 py-4 text-right text-sm font-mono {% if sale.status == 'void' %}text-neutral-400 line-through dark:text-neutral-500{% else %}text-neutral-900 dark:text-white{% endif %}">
                             ₦{{ sale.total|floatformat:0|intcomma }}
                         </td>
                     </tr>

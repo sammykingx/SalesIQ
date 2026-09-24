@@ -1,5 +1,5 @@
-import { demoCustomers } from "../customers/demo-data.js";
-import { demoProductsData } from "../products/demo-data.js";
+// import { demoCustomers } from "../customers/demo-data.js";
+// import { demoProductsData } from "../products/demo-data.js";
 import { inAppToast } from "../../lib/in-app-toast.js";
 import { apiRequest } from "../../lib/http/api.js";
 
@@ -57,8 +57,11 @@ export function recordSaleComponent(endpoint) {
         submitSuccess: false,
 
         init() {
-            this.customersJson = loadInitialData('customers_data', demoCustomers);
-            this.productsJson = loadInitialData('products_data', demoProductsData);
+            // this.customersJson = loadInitialData('customers_data', demoCustomers);
+            // this.productsJson = loadInitialData('products_data', demoProductsData);
+
+            this.customersJson = loadInitialData('customers_data', []);
+            this.productsJson = loadInitialData('products_data', []);
 
             // Initialize with one default blank line item
             this.addItem();

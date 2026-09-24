@@ -17,8 +17,8 @@
 export const navManifest = [
     { group: 'Main', label: 'Dashboard', href: '/dashboard/' },
 
-    { group: 'Business', label: 'Sales', href: 'invoices/sales/' },
-    { group: 'Business', label: 'Record a sale', href: 'invoices/record-sale/' },
+    { group: 'Business', label: 'Sales', href: '/invoices/sales/' },
+    { group: 'Business', label: 'Record a sale', href: '/invoices/record-sale/' },
     { group: 'Business', label: 'Update Business Socials', href: '/accounts/settings/#socials' },
 
     { group: 'Management', label: 'All customers', href: '/customers/' },
