@@ -50,7 +50,7 @@ export function recordSaleComponent(endpoint) {
         // Taxes & Discounts State
         discountPercentage: 0,
         taxName: 'VAT',
-        taxPercentage: 0,
+        taxPercentage: '',
 
         // UI Loading & Submission State
         isSubmitting: false,
@@ -217,7 +217,7 @@ export function recordSaleComponent(endpoint) {
 
             this.discountPercentage = 0;
             this.taxName = 'VAT';
-            this.taxPercentage = 0;
+            this.taxPercentage = '';
         },
 
         async submitSaleForm() {
