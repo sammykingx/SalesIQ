@@ -2,6 +2,8 @@
 import { inAppToast } from '../../lib/in-app-toast.js';
 import { Chart } from '../../lib/register-chart.js';
 
+const chartInstances = new WeakMap();
+
 function demoWave(pointCount) {
     return Array.from({ length: pointCount }, (_, i) =>
         40 + 25 * Math.sin(i / 1.5) + 10 * Math.sin(i / 0.7)
@@ -16,7 +18,6 @@ export function revenueTrendChart(endpoint) {
         period: '7d',
         loading: true,
         isEmpty: false,
-        trendChartInstance: null,
 
         async init() {
             this.$watch('period', (newVal, oldVal) => {
@@ -42,12 +43,19 @@ export function revenueTrendChart(endpoint) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const data = await response.json();
-                this.$nextTick(() => this.render(data ?? {}));
+
+                // 1. Render the chart underneath while skeleton is still covering it
+                this.render(data ?? {});
+
+                // 2. Trigger smooth fade out of skeleton on next DOM tick
+                this.$nextTick(() => {
+                    this.loading = false;
+                });
             } catch (error) {
-                this.$nextTick(() => this.render({}));
-                console.error("Failed to load data:", error);
-            } finally {
-                this.loading = false;
+                this.render({});
+                this.$nextTick(() => {
+                    this.loading = false;
+                });
             }
         },
 
@@ -59,6 +67,7 @@ export function revenueTrendChart(endpoint) {
 
             const dataset = this.isEmpty
                 ? {
+                    label: 'Revenue',
                     data: chartData,
                     borderColor: '#a3a3a3',
                     backgroundColor: 'rgba(163,163,163,0.06)',
@@ -69,6 +78,7 @@ export function revenueTrendChart(endpoint) {
                     borderDash: [6, 4],
                 }
                 : {
+                    label: 'Revenue',
                     data: chartData,
                     borderColor: '#10b981',
                     backgroundColor: 'rgba(16,185,129,0.08)',
@@ -81,27 +91,28 @@ export function revenueTrendChart(endpoint) {
             const canvas = this.$refs.canvas;
             if (!canvas) return;
 
-            // Update existing instance if it belongs to the current canvas node
-            if (this.trendChartInstance && this.trendChartInstance.ctx.canvas === canvas) {
-                this.trendChartInstance.data.labels = chartLabels;
-                this.trendChartInstance.data.datasets[0] = dataset;
-                this.trendChartInstance.options.plugins.tooltip.enabled = !this.isEmpty;
-                this.trendChartInstance.options.scales.y.ticks.display = !this.isEmpty;
-                this.trendChartInstance.update();
-                return;
+            // Retrieve pure Chart instance from WeakMap using $el
+            const existingChart = chartInstances.get(this.$el);
+
+            if (existingChart) {
+                existingChart.destroy();
+                chartInstances.delete(this.$el);
             }
 
-            // Destroy stale chart instance before binding a new one
-            if (this.trendChartInstance) {
-                this.trendChartInstance.destroy();
-            }
-
-            this.trendChartInstance = new Chart(canvas.getContext('2d'), {
+            // Create fresh Chart instance directly
+            const chart = new Chart(canvas.getContext('2d'), {
                 type: 'line',
-                data: { labels: chartLabels, datasets: [dataset] },
+                data: {
+                    labels: chartLabels,
+                    datasets: [dataset],
+                },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    animation: {
+                        duration: 400,
+                        easing: 'easeOutQuart',
+                    },
                     plugins: {
                         legend: { display: false },
                         tooltip: {
@@ -113,16 +124,25 @@ export function revenueTrendChart(endpoint) {
                                     const value = context.parsed.y ?? 0;
                                     const label = context.dataset.label || 'Revenue';
                                     return `${label}: ${formatNaira(value)}`;
-                                }
-                            }
+                                },
+                            },
                         },
                     },
                     scales: {
-                        y: { beginAtZero: true, grid: { display: false }, ticks: { display: !this.isEmpty } },
-                        x: { grid: { display: false } },
+                        y: {
+                            beginAtZero: true,
+                            grid: { display: false },
+                            ticks: { display: !this.isEmpty },
+                        },
+                        x: {
+                            grid: { display: false },
+                        },
                     },
                 },
             });
+
+            // Save pure instance into WeakMap
+            chartInstances.set(this.$el, chart);
         },
     };
 }

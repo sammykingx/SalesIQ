@@ -1,9 +1,3 @@
-<!--
-    COMMAND PALETTE · #ax-command
-    Opened by: the header's ⌘K button ($dispatch('ax-command-open')), Cmd/Ctrl+K
-    anywhere on the page, or any element with @click="$dispatch('ax-command-open')".
-    Results are computed client-side from nav-manifest.js — see search-dialog.js.
--->
 <div
     id="ax-command"
     x-data="commandPalette()"
@@ -84,7 +78,7 @@
                 <div>
                     <p
                         x-show="idx === 0 || filtered[idx - 1].group !== item.group"
-                        class="px-2 pb-1 pt-3 text-xs font-semibold uppercase tracking-wide text-neutral-400 first:pt-1"
+                        class="px-2 pb-1 pt-3 text-xs font-medium uppercase tracking-wide text-neutral-400 first:pt-1"
                         x-text="item.group"
                     ></p>
                     <div

@@ -2,28 +2,40 @@
 import { inAppToast } from '../../lib/in-app-toast.js';
 import { Chart } from '../../lib/register-chart.js';
 
+
+const chartInstances = new WeakMap();
+
 function demoWave(pointCount) {
     return Array.from({ length: pointCount }, (_, i) =>
         40 + 25 * Math.sin(i / 1.5) + 10 * Math.sin(i / 0.7)
     );
 }
 
+const formatNaira = (value) =>
+    `₦${Number(value || 0).toLocaleString('en-NG')}`;
+
 export function platformGmvChart(endpoint) {
     return {
         period: '7d',
         loading: true,
         isEmpty: false,
-        gmvChartInstance: null,
 
         async init() {
+            this.$watch('period', (newVal, oldVal) => {
+                if (newVal !== oldVal) {
+                    this.load();
+                }
+            });
             await this.load();
-            this.$watch('period', () => this.load());
         },
 
         async load() {
             this.loading = true;
             try {
-                const response = await fetch(`${endpoint}?period=${this.period}`);
+                const url = new URL(endpoint, window.location.origin);
+                url.searchParams.set('period', this.period);
+
+                const response = await fetch(url.toString());
                 if (!response.ok) {
                     inAppToast(
                         "Oops, glitch in the matrix!",
@@ -32,12 +44,17 @@ export function platformGmvChart(endpoint) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const data = await response.json();
-                this.$nextTick(() => this.render(data));
+
+                this.render(data ?? {});
+                this.$nextTick(() => {
+                    this.loading = false;
+                });
             } catch (error) {
                 console.error("Failed to load platform GMV:", error);
-                this.$nextTick(() => this.render({}));
-            } finally {
-                this.loading = false;
+                this.render({});
+                this.$nextTick(() => {
+                    this.loading = false;
+                });
             }
         },
 
@@ -49,6 +66,7 @@ export function platformGmvChart(endpoint) {
 
             const dataset = this.isEmpty
                 ? {
+                    label: 'GMV',
                     data: chartData,
                     borderColor: '#a3a3a3',
                     backgroundColor: 'rgba(163,163,163,0.06)',
@@ -59,6 +77,7 @@ export function platformGmvChart(endpoint) {
                     borderDash: [6, 4],
                 }
                 : {
+                    label: 'GMV',
                     data: chartData,
                     borderColor: '#10b981',
                     backgroundColor: 'rgba(16,185,129,0.08)',
@@ -68,31 +87,61 @@ export function platformGmvChart(endpoint) {
                     borderWidth: 2,
                 };
 
-            if (this.gmvChartInstance) {
-                this.gmvChartInstance.data.labels = chartLabels;
-                this.gmvChartInstance.data.datasets[0] = dataset;
-                this.gmvChartInstance.options.plugins.tooltip.enabled = !this.isEmpty;
-                this.gmvChartInstance.options.scales.y.ticks.display = !this.isEmpty;
-                this.gmvChartInstance.update();
-                return;
+            const canvas = this.$refs.canvas;
+            if (!canvas) return;
+
+            // Retrieve existing instance keyed by component root ($el)
+            const existingChart = chartInstances.get(this.$el);
+
+            // Destroy stale instance on dataset length change (7d -> 30d -> 90d)
+            if (existingChart) {
+                existingChart.destroy();
+                chartInstances.delete(this.$el);
             }
 
-            this.gmvChartInstance = new Chart(this.$refs.canvas.getContext('2d'), {
+            // Create fresh Chart instance directly on visible canvas
+            const chart = new Chart(canvas.getContext('2d'), {
                 type: 'line',
-                data: { labels: chartLabels, datasets: [dataset] },
+                data: {
+                    labels: chartLabels,
+                    datasets: [dataset],
+                },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    animation: {
+                        duration: 250,
+                    },
                     plugins: {
                         legend: { display: false },
-                        tooltip: { intersect: false, mode: 'index', enabled: !this.isEmpty },
+                        tooltip: {
+                            intersect: false,
+                            mode: 'index',
+                            enabled: !this.isEmpty,
+                            callbacks: {
+                                label: (context) => {
+                                    const value = context.parsed.y ?? 0;
+                                    const label = context.dataset.label || 'GMV';
+                                    return `${label}: ${formatNaira(value)}`;
+                                },
+                            },
+                        },
                     },
                     scales: {
-                        y: { beginAtZero: true, grid: { display: false }, ticks: { display: !this.isEmpty } },
-                        x: { grid: { display: false } },
+                        y: {
+                            beginAtZero: true,
+                            grid: { display: false },
+                            ticks: { display: !this.isEmpty },
+                        },
+                        x: {
+                            grid: { display: false },
+                        },
                     },
                 },
             });
+
+            // Store pure unproxied instance in WeakMap
+            chartInstances.set(this.$el, chart);
         },
     };
 }

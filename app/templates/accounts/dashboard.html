@@ -112,66 +112,75 @@
             </select>
         </div>
 
-        <!-- Chart Skeleton Loader -->
-        <div x-show="loading" class="flex h-72 w-full flex-col justify-between pt-4 pb-2">
-            <!-- Graph Area with Shimmer Wave SVG & Gridlines -->
-            <div class="relative w-full flex-1 overflow-hidden">
+        <!-- Chart & Skeleton Stacked Container -->
+        <div class="relative h-72 w-full overflow-hidden">
+
+            <!-- Chart Skeleton Loader (Sits on top & fades out smoothly) -->
+            <div x-show="loading"
+                x-transition:leave="transition ease-in duration-300"
+                x-transition:leave-start="opacity-100"
+                x-transition:leave-end="opacity-0"
+                class="absolute inset-0 z-10 flex flex-col justify-between pt-4 pb-2 bg-white dark:bg-neutral-900">
                 
-                <div class="absolute inset-0 flex justify-between px-2 opacity-40">
-                    <div class="h-full w-px bg-neutral-200 dark:bg-neutral-800"></div>
-                    <div class="h-full w-px bg-neutral-200 dark:bg-neutral-800"></div>
-                    <div class="h-full w-px bg-neutral-200 dark:bg-neutral-800"></div>
-                    <div class="h-full w-px bg-neutral-200 dark:bg-neutral-800"></div>
-                    <div class="h-full w-px bg-neutral-200 dark:bg-neutral-800"></div>
+                <!-- Graph Area with Shimmer Wave SVG & Gridlines -->
+                <div class="relative w-full flex-1 overflow-hidden">
+                    <div class="absolute inset-0 flex justify-between px-2 opacity-40">
+                        <div class="h-full w-px bg-neutral-200 dark:bg-neutral-800"></div>
+                        <div class="h-full w-px bg-neutral-200 dark:bg-neutral-800"></div>
+                        <div class="h-full w-px bg-neutral-200 dark:bg-neutral-800"></div>
+                        <div class="h-full w-px bg-neutral-200 dark:bg-neutral-800"></div>
+                        <div class="h-full w-px bg-neutral-200 dark:bg-neutral-800"></div>
+                    </div>
+
+                    <!-- Glowing Animated Area Graph Skeleton -->
+                    <svg class="h-full w-full animate-pulse" preserveAspectRatio="none" viewBox="0 0 500 150">
+                        <defs>
+                            <linearGradient id="chartSkeletonGradient" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#10b981" stop-opacity="0.25"/>
+                                <stop offset="100%" stop-color="#10b981" stop-opacity="0"/>
+                            </linearGradient>
+                        </defs>
+                        <path d="M0,110 Q 75,40 150,80 T 300,50 T 450,90 L 500,60 L 500,150 L 0,150 Z" 
+                            fill="url(#chartSkeletonGradient)" />
+                        <path d="M0,110 Q 75,40 150,80 T 300,50 T 450,90 L 500,60" 
+                            fill="none" 
+                            stroke="#10b981" 
+                            stroke-width="1" 
+                            stroke-linecap="round" 
+                            class="opacity-50" />
+                    </svg>
                 </div>
 
-                <!-- Glowing Animated Area Graph Skeleton -->
-                <svg class="h-full w-full animate-pulse" preserveAspectRatio="none" viewBox="0 0 500 150">
-                    <defs>
-                        <linearGradient id="chartSkeletonGradient" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stop-color="#10b981" stop-opacity="0.25"/>
-                            <stop offset="100%" stop-color="#10b981" stop-opacity="0"/>
-                        </linearGradient>
-                    </defs>
-                    <!-- Filled Area -->
-                    <path d="M0,110 Q 75,40 150,80 T 300,50 T 450,90 L 500,60 L 500,150 L 0,150 Z" 
-                        fill="url(#chartSkeletonGradient)" />
-                    <!-- Line Outline -->
-                    <path d="M0,110 Q 75,40 150,80 T 300,50 T 450,90 L 500,60" 
-                        fill="none" 
-                        stroke="#10b981" 
-                        stroke-width="1" 
-                        stroke-linecap="round" 
-                        class="opacity-50" />
-                </svg>
-            </div>
-
-            <!-- X-Axis Label Skeletons -->
-            <div class="flex items-center justify-between px-2 pt-3">
-                <div class="h-2.5 w-8 animate-pulse rounded bg-neutral-200 dark:bg-neutral-800"></div>
-                <div class="h-2.5 w-8 animate-pulse rounded bg-neutral-200 dark:bg-neutral-800"></div>
-                <div class="h-2.5 w-8 animate-pulse rounded bg-neutral-200 dark:bg-neutral-800"></div>
-                <div class="h-2.5 w-8 animate-pulse rounded bg-neutral-200 dark:bg-neutral-800"></div>
-                <div class="h-2.5 w-8 animate-pulse rounded bg-neutral-200 dark:bg-neutral-800"></div>
-                <div class="h-2.5 w-8 animate-pulse rounded bg-neutral-200 dark:bg-neutral-800"></div>
-            </div>
-        </div>
-
-        <!-- Active Canvas & Empty Overlay Container -->
-        
-        <div x-show="!loading" x-cloak class="relative h-72 w-full">
-            <canvas x-ref="canvas" class="h-full w-full"></canvas>
-
-            <!-- Centered Empty State Overlay Inside Demo Wave -->
-            <div x-show="isEmpty" x-cloak
-                class="pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center p-4 text-center">
-                <div class="rounded-xl bg-white/80 p-4 backdrop-blur-xs dark:bg-neutral-900/80">
-                    <p class="text-sm font-medium text-neutral-800 dark:text-neutral-200">No sales yet</p>
-                    <p class="mt-1 max-w-xs text-xs text-neutral-500 dark:text-neutral-400">
-                        Record your first sale, this updates the second you save it.
-                    </p>
+                <!-- X-Axis Label Skeletons -->
+                <div class="flex items-center justify-between px-2 pt-3">
+                    <div class="h-2.5 w-8 animate-pulse rounded bg-neutral-200 dark:bg-neutral-800"></div>
+                    <div class="h-2.5 w-8 animate-pulse rounded bg-neutral-200 dark:bg-neutral-800"></div>
+                    <div class="h-2.5 w-8 animate-pulse rounded bg-neutral-200 dark:bg-neutral-800"></div>
+                    <div class="h-2.5 w-8 animate-pulse rounded bg-neutral-200 dark:bg-neutral-800"></div>
+                    <div class="h-2.5 w-8 animate-pulse rounded bg-neutral-200 dark:bg-neutral-800"></div>
+                    <div class="h-2.5 w-8 animate-pulse rounded bg-neutral-200 dark:bg-neutral-800"></div>
                 </div>
             </div>
+
+            <!-- Canvas (Always mounted underneath) -->
+            <div class="absolute inset-0 h-full w-full">
+                <canvas x-ref="canvas" class="h-full w-full"></canvas>
+
+                <!-- Centered Empty State Overlay -->
+                <div x-show="isEmpty && !loading" x-cloak
+                    x-transition:enter="transition ease-out duration-300"
+                    x-transition:enter-start="opacity-0"
+                    x-transition:enter-end="opacity-100"
+                    class="pointer-events-none absolute inset-0 z-20 flex flex-col items-center justify-center p-4 text-center">
+                    <div class="rounded-xl bg-white/80 p-4 backdrop-blur-xs dark:bg-neutral-900/80">
+                        <p class="text-sm font-medium text-neutral-800 dark:text-neutral-200">No sales yet</p>
+                        <p class="mt-1 max-w-xs text-xs text-neutral-500 dark:text-neutral-400">
+                            Record your first sale, this updates the second you save it.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </section>
 

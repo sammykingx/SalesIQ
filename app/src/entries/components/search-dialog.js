@@ -93,7 +93,7 @@ export function initSearchDialogModule(Alpine) {
             this.close();
             if (item.action === 'toggleTheme') {
                 const isDark = document.documentElement.classList.toggle('dark');
-                localStorage.setItem('vireo-theme', isDark ? 'dark' : 'light');
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
             } else if (item.href) {
                 window.location.href = item.href;
             }

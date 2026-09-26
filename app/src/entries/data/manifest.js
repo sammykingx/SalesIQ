@@ -30,5 +30,5 @@ export const navManifest = [
     { group: 'Personal', label: 'Update password', href: '/accounts/settings/#update-password' },
 
     { group: 'Actions', label: 'Toggle theme', action: 'toggleTheme' },
-    { group: 'Actions', label: 'Log Out', action: 'logout' },
+    // { group: 'Actions', label: 'Log Out', action: 'logout' },
 ];
