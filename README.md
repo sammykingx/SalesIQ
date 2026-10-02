@@ -83,8 +83,8 @@ DEBUG=False
 SECRET_KEY=""
 
 DOCUMENT_ROOT=""
-ALLOWED_DOMAINS="example.com, example.com.ng, ..."
-PREVILEDGE_USERS="user1@example.com, user2@example.com, ..."
+ALLOWED_DOMAINS="example.com, example.com.ng, ..." # comma-spaced separted values
+PREVILEDGE_USERS="user1@example.com, user2@example.com, ..." # comma-spaced separted values
 RESEND_API_KEY=""
 
 # DB SETTINGS

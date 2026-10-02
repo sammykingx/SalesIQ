@@ -69,6 +69,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     
+    "middlewares.exception_request.ExceptionRequestMiddleware",
     "middlewares.enforce_onboarding.OnboardingEnforcementMiddleware",
     # "middlewares.guest_restriction.GuestRestrictionMiddleware",
 ]
@@ -115,9 +116,10 @@ else:
         "HOST": os.getenv("DB_HOST", "localhost"),
         "PORT": "3306",
         "CONN_MAX_AGE": 120,
+        "CONN_HEALTH_CHECKS": True,
         "OPTIONS": {
             "charset": "utf8mb4",
-            "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
+            "init_command": "SET sql_mode='STRICT_TRANS_TABLES', innodb_lock_wait_timeout=5",
             "connect_timeout": 10,
             "read_timeout": 30,
             "write_timeout": 30,
@@ -229,3 +231,43 @@ if not DEBUG:
     DJANGO_VITE["default"]["static_url_prefix"] = "dist"
     
 AUTH_USER_MODEL = "accounts.CustomUserModel"
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "filters": {
+        "error_context": {"()": "core.logging.ErrorContextFilter"},
+    },
+    "formatters": {
+        "detailed": {
+            "format": (
+                "%(asctime)s %(levelname)s %(name)s | "
+                "user=%(user_email)s business=%(business_code)s | "
+                "at=%(error_loc)s | %(message)s"
+            ),
+            "datefmt": "%Y-%m-%d %H:%M:%S",
+        },
+        "plain": {
+            "format": "%(asctime)s %(levelname)s %(name)s | %(message)s",
+            "datefmt": "%Y-%m-%d %H:%M:%S",
+        },
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "detailed",
+            "filters": ["error_context"],
+        },
+        "console_plain": {
+            "class": "logging.StreamHandler",
+            "formatter": "plain",
+        },
+    },
+    "root": {"handlers": ["console"], "level": "WARNING"},
+    "loggers": {
+        # Clear Django's default handlers so records go through root only (no duplicates)
+        "django": {"handlers": [], "propagate": True},
+        "django.server": {"handlers": ["console_plain"], "propagate": False},
+    },
+}
+

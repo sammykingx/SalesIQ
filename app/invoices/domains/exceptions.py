@@ -48,7 +48,7 @@ class InvoiceWriteFailedError(InvoiceDomainException):
     """
     def __init__(
         self,
-        message: str = "This sale could not be saved because related data was missing or changed.",
+        message: str = "This sale could not be saved because required data was missing or changed.",
         *,
         code: str = "invoice_write_failed",
         title: str = "Sale Not Saved",
@@ -58,15 +58,15 @@ class InvoiceWriteFailedError(InvoiceDomainException):
 
 class InvoiceServiceUnavailableError(InvoiceDomainException):
     """
-    Raised for transient DB failures (connection drop, deadlock, timeout)
-    where retrying the same request is likely to succeed.
+        Raised for transient DB failures (connection drop, deadlock, timeout)
+        where retrying the same request is likely to succeed.
     """
     def __init__(
         self,
         message: str = "A temporary issue prevented this sale from saving. Please try again.",
         *,
         code: str = "invoice_service_unavailable",
-        title: str = "Sale Not Saved",
+        title: str = "Couldn't Record Sale",
         err_type: str = "warning",
     ):
         super().__init__(message, code=code, title=title, err_type=err_type)

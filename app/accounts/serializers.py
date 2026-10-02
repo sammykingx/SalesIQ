@@ -73,11 +73,12 @@ class BusinessOnboardingSchema(BaseModel):
     business_name: str = Field(
         ..., 
         min_length=2, 
-        max_length=60, 
+        max_length=48,
         description="The official registered or trading name of the business."
     )
     phone_number: str = Field(
-        ..., 
+        ...,
+        max_length=48,
         description="Primary official phone number for customer contact and verification."
     )
     business_type: Literal["online", "physical", "both"] = Field(

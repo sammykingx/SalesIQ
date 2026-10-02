@@ -28,7 +28,7 @@ import json
 
 
 # class HostingerInvoiceView(WeasyTemplateView):
-#     template_name="invoices/hostinger-inv-v2.html"
+#     template_name="invoices/hostinger-inv-1.html"
 #     inv_id = "INV-2026-4ZHG-7KVI"
     
 #     def get_pdf_filename(self) -> str: #type:ignore
@@ -58,6 +58,7 @@ import json
             
 #             "issue_date": "2026-09-10",
 #             "due_date": "2026-10-07",
+#             "payment_date": "2026-09-29",
 #             "sub_total": sub_total,
 #             "tax_amount": tax_amount,
 #             "total_amount": total_amount,

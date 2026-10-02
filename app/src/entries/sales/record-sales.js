@@ -272,7 +272,7 @@ export function recordSaleComponent(endpoint) {
                             4500
                         );
                     } else {
-                        inAppToast('Ecosystem Glitch ⚠️', data?.message || 'An unexpected error occurred.', 'error');
+                        inAppToast(data?.title || 'Sale Engine ⚠️', data?.message || 'An unexpected error occurred.', 'error');
                     }
                     return;
                 }

@@ -34,8 +34,6 @@ class InvoiceListView(LoginRequiredMixin, TemplateView):
         return context
     
     def template_context(self) -> Dict[str, Any]:
-        from .domains.demo_data import demo_invoice_data
-        
         business = BusinessSelector().get_user_business(user_email=self.request.user.email, as_instance=True) # type: ignore
         invoices = InvoiceSelectors().list_business_invoices(biz_id=business) # type: ignore
         data = [InvoiceListResponseSchema.model_validate(invoice).model_dump() for invoice in invoices ]
@@ -72,7 +70,7 @@ class RecordSalesInvoiceView(LoginRequiredMixin, View):
             "customers_json": customers_data,
             "products_json": products_data,
         }
-                
+
         return render(request, APP_TEMPLATES.SALES.ADD, context=ctx)
     
     def post(self, request:HttpRequest):

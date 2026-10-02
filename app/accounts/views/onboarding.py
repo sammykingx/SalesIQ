@@ -1,16 +1,39 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpRequest, JsonResponse
+from django.urls import reverse
 from django.views.generic import View
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from core.template_names import APP_TEMPLATES
 from accounts.domains.exceptions import AccountsDomainException
 from accounts.serializers import BusinessOnboardingSchema
 from accounts.services import BusinessService
+from accounts.selectors import BusinessSelector
+from core.url_names import ACCOUNTS
 from pydantic import ValidationError
 from utils.pydantic_formatter import format_pydantic_errors
 
 
 class BizAccountOnboardingView(LoginRequiredMixin, View):
+    # def dispatch(self, request: HttpRequest, *args, **kwargs):
+    #     """
+    #         Overrides the default dispatch to check if the user has a business
+    #         account. If they do, redirect them to the dashboard.
+    #     """
+    #     try:
+    #         business = BusinessSelector().get_user_business(user_email=request.user.email, as_instance=True) # type: ignore
+    #         if business:
+    #             return redirect(reverse(ACCOUNTS.DASHBOARD))
+    #             # return JsonResponse({
+    #             #     "message": "You already have a business account.",
+    #             #     "status": "info",
+    #             #     "redirect": True,
+    #             #     "redirect_url": "/dashboard/",
+    #             # }, status=302)
+    #     except AccountsDomainException:
+    #         pass
+
+    #     return super().dispatch(request, *args, **kwargs)
+    
     def get(self, request: HttpRequest):
        return render(request, APP_TEMPLATES.ACCOUNTS.ONBOARDING)
    
@@ -27,7 +50,8 @@ class BizAccountOnboardingView(LoginRequiredMixin, View):
             # print(format_pydantic_errors(err))
             return JsonResponse({
                 "message": "Please review the data provided",
-                "status": "warning"
+                "status": "warning",
+                "errors": format_pydantic_errors(err),
             }, status=422)
             
         except AccountsDomainException as err:
