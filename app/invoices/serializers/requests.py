@@ -2,8 +2,7 @@ from pydantic import BaseModel, Field, model_validator
 from decimal import Decimal
 from customers.serializers import CreateCustomerSchema
 from products.serializers import CreateProductsSchema
-from datetime import datetime
-from typing import Dict, Literal, List, Optional, Union
+from typing import List, Optional, Union
 from uuid import UUID
 
 

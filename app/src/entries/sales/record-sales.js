@@ -208,19 +208,16 @@ export function recordSaleComponent(endpoint) {
         },
 
         resetForm() {
-            this.selectedCustomer = {
-                id: null,
-                first_name: '',
-                last_name: '',
-                email: '',
-                phone_number: ''
-            };
+            this.unlockCustomer();
 
             this.items = [];
 
             this.discountPercentage = 0;
             this.taxName = 'VAT';
             this.taxPercentage = '';
+            this.customerLocked = false;
+
+            this.addItem();
         },
 
         async submitSaleForm() {
@@ -294,6 +291,7 @@ export function recordSaleComponent(endpoint) {
                 inAppToast('Connection Void 🌪️', err.message || 'Failed to reach the server. Check your network connection.', 'error');
             } finally {
                 this.isSubmitting = false;
+                this.submitSuccess = false;
             }
 
         }

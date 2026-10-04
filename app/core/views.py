@@ -3,9 +3,9 @@ from django.utils import timezone
 from django.views.generic import View
 from django.shortcuts import render
 
-
 from accounts.selectors import BusinessSelector
 from customers.selectors import CustomerSelector
+from core.template_names import PUBLIC
 from invoices.selectors import InvoiceSelectors
 from invoices.serializers import InvoiceListResponseSchema
 from products.selectors import ProductsSelector
@@ -114,7 +114,7 @@ class ComingSoonView(View):
         ctx = {
             "launch_date": timezone.make_aware(datetime(2026, 9, 25, 8, 0, 0))
         }
-        return render(request, template_name="public/coming-soon.html", context=ctx)
+        return render(request, template_name=PUBLIC.COMING_SOON, context=ctx)
         
     def post(self, request: HttpRequest)-> JsonResponse:
         if not request.headers.get("X-Requested-With") == "XMLHttpRequest":
@@ -154,6 +154,20 @@ class BusinessJSONDataView(View):
             "invoice_json": invoices_data,
         }, status=200)
     
+class FeedbackView(View):
+    """Test feedback template and context rendering."""
+    
+    def get(self, request: HttpRequest) -> HttpResponse:
+        ctx = {
+            "status": request.GET.get("status", "info"),
+            "title": request.GET.get("title", "Feedback"),
+            "message": request.GET.get("message", "Here's some feedback for you."),
+            "primary_btn_label": request.GET.get("primary_btn_label", "OK"),
+            "primary_btn_url": request.GET.get("primary_btn_url", "/"),
+            "secondary_btn_label": request.GET.get("secondary_btn_label", "secondary"),
+            "secondary_btn_url": request.GET.get("secondary_btn_url", "/"),
+        }
+        return render(request, template_name=PUBLIC.FEEDBACK, context=ctx)
     
 def custom_403(request: HttpRequest, exception):
     return render(request, ERROR_PAGES.FORBIDDEN, status=403)

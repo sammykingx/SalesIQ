@@ -2,7 +2,7 @@ from django.views.generic import View
 from django.urls import reverse
 from django.shortcuts import render
 from django.http import HttpRequest, JsonResponse
-from core.template_names import APP_TEMPLATES, LANDING_PAGES
+from core.template_names import APP_TEMPLATES, PUBLIC
 from core.url_names import ACCOUNTS
 from accounts.domains.exceptions import AccountsDomainException
 from accounts.services import TokenService, PasswordResetService
@@ -17,7 +17,7 @@ class GuestPasswordChangeView(View):
         token_manager = TokenService()
         token_obj = token_manager.get_token_obj(token=token, tkn_type=TokenType.PASSWORD_RESET)
         if token_obj is None or not token_obj.is_valid:
-            return render(request, LANDING_PAGES.FEEDBACK, {
+            return render(request, PUBLIC.FEEDBACK, {
                 "status": "error",
                 "title": "Invalid Link",
                 "message": "We couldn't verify your password reset link. It may have expired or invalid. Kindly request a fresh one.",

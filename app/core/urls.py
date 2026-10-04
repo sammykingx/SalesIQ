@@ -20,8 +20,10 @@ from django.urls import path, include
 from django.views.generic import TemplateView
 
 from core.url_names import BUSINESS_DATA
-from core.views import ComingSoonView, BusinessJSONDataView
+from core.views import ComingSoonView, BusinessJSONDataView, FeedbackView
+from core.template_names import PUBLIC
 from metrics import urls as metric_urls
+
 
 handler403 = "core.views.custom_403"
 handler404 = "core.views.custom_404"
@@ -30,12 +32,13 @@ handler500 = "core.views.custom_500"
 urlpatterns = [
     path("admin/", admin.site.urls),
     
-    path("", TemplateView.as_view(template_name="index.html"), name="home"),
+    path("", TemplateView.as_view(template_name=PUBLIC.INDEX), name="home"),
     path("business-json/", BusinessJSONDataView.as_view(), name=BUSINESS_DATA),
-    # path("hostinger/", HostingerInvoiceView.as_view(), name="hostinger"),
     path("accounts/", include("accounts.urls")),
     path("customers/", include("customers.urls")),
     path("products/", include("products.urls")),
     path("invoices/", include("invoices.urls")),
     path("metrics/", include(metric_urls)),
+    # path("hostinger/", HostingerInvoiceView.as_view(), name="hostinger"),
+    # path("test-feedback/", FeedbackView.as_view(), name="feedback"),
 ]

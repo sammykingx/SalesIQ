@@ -8,6 +8,10 @@ _PRODUCTS_BASE = 'products'
 _SALES_BASE = 'sales'
 _INVOICES_BASE = 'invoices'
 
+_EMAIL_BASE_FOLDER = "email"
+_PUBLIC_BASE_FOLDER = "public"
+_ERROR_BASE_FOLDER = "errors"
+
 
 class APP_TEMPLATES:
     class ACCOUNTS:
@@ -46,18 +50,17 @@ class APP_TEMPLATES:
         VIEW=f'{_INVOICES_BASE}/inv-view.html'
         INVOICE_PDF=f'{_INVOICES_BASE}/inv-pdf.html'
         
-
-_EMAIL_BASE_FOLDER = "email"
 class EMAIL_TEMPLATES:
     ACCOUNT_ACTIVATION = f'{_EMAIL_BASE_FOLDER}/account-activation.html'
     ACCOUNT_RECOVERY = f'{_EMAIL_BASE_FOLDER}/account-recovery.html'
     
-    
-class LANDING_PAGES:
-    FEEDBACK = 'public/feedback.html'
-    
 class ERROR_PAGES:
-    FORBIDDEN = "errors/403.html"
-    NOT_FOUND = "errors/404.html"
-    INETERNAL_ERROR = "errors/500.html"
+    FORBIDDEN = f'{_ERROR_BASE_FOLDER}/403.html'
+    NOT_FOUND = f'{_ERROR_BASE_FOLDER}/404.html'
+    INETERNAL_ERROR = f'{_ERROR_BASE_FOLDER}/500.html'
+    
+class PUBLIC:
+    INDEX = f'{_PUBLIC_BASE_FOLDER}/index.html'
+    COMING_SOON = f'{_PUBLIC_BASE_FOLDER}/coming-soon.html'
+    FEEDBACK = f'{_PUBLIC_BASE_FOLDER}/feedback.html'
     

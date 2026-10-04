@@ -28,7 +28,7 @@
 
   <!-- Email Input Group -->
   <div class="animate-in fade-in slide-in-from-bottom-2 duration-500 delay-75 fill-mode-both">
-    <label for="email" class="block text-xs font-semibold text-ink-600 dark:text-slate-500 mb-1.5">Email Address</label>
+    <label for="email" class="block text-xs font-medium text-ink-600 dark:text-slate-500 mb-1.5">Email Address</label>
     <div class="relative">
       <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-ink-400">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -49,7 +49,7 @@
   <!-- Password Input Group -->
   <div class="animate-in fade-in slide-in-from-bottom-2 duration-500 delay-150 fill-mode-both">
     <div class="flex items-center justify-between mb-1.5">
-      <label for="password" class="block text-xs font-semibold text-ink-600 dark:text-slate-500">Password</label>
+      <label for="password" class="block text-xs font-medium text-ink-600 dark:text-slate-500">Password</label>
       <a href="{% url ACCOUNTS.AUTH.PASSWORD_RESET %}" class="text-xs text-primary hover:underline font-medium">Forgot password?</a>
     </div>
     <div class="relative" x-data="{ showPassword: false }">
@@ -99,7 +99,7 @@
   <button 
     type="submit" 
     class="w-full py-2.5 px-4 rounded-xl bg-primary hover:bg-emerald-600 
-      text-white font-semibold text-sm shadow-md shadow-primary/20 
+      text-white font-medium text-sm shadow-md shadow-primary/20 
       transition-all duration-200 focus:outline-none focus:ring-2 
       focus:ring-primary/50 cursor-pointer active:scale-[0.99] 
       animate-in fade-in slide-in-from-bottom-2 delay-300 
@@ -113,6 +113,6 @@
 {% block auth_footer_link %}
 <p class="text-xs text-ink-600 dark:text-ink-400">
   Don't have an account yet? 
-  <a href={% url ACCOUNTS.AUTH.REGISTER %} class="text-primary hover:underline font-semibold">Sign up</a>
+  <a href={% url ACCOUNTS.AUTH.REGISTER %} class="text-primary hover:underline font-medium">Sign up</a>
 </p>
 {% endblock %}

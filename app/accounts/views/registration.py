@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.shortcuts import render
 from django.http import HttpRequest, JsonResponse
 
-from core.template_names import APP_TEMPLATES, LANDING_PAGES
+from core.template_names import APP_TEMPLATES, PUBLIC
 from core.url_names import ACCOUNTS
 from mailer.exceptions import EmailSendError
 from ..services import AccountOnboardingService
@@ -96,7 +96,7 @@ class AccountActivationView(View):
             btn_label = "Login to request one"
             btn_url = reverse(ACCOUNTS.AUTH.LOGIN) 
 
-        return render(request, LANDING_PAGES.FEEDBACK, {
+        return render(request, PUBLIC.FEEDBACK, {
             "status": status,
             "title": title,
             "message": message,

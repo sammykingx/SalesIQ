@@ -1,8 +1,13 @@
 {% extends "layouts/_base_landing.html" %}
 {% load static %}
 
-{% block page_content %}
 {% comment %}
+  Feedback Page Template
+
+  This template is used to display feedback messages to users after certain actions, such as email verifications submissions.
+  
+  It provides a consistent layout and styling for success, error, warning, and informational messages.
+
   Context variables expected:
   - status: 'success' | 'error' | 'warning' | 'info' (defaults to 'success')
   - title: Heading string (e.g. "Email Verified!", "Payment Failed")
@@ -13,6 +18,7 @@
   - secondary_btn_url: (Optional) Secondary URL link
 {% endcomment %}
 
+{% block page_content %}
 {% with is_error=status|default:'success'|slugify %}
 <div class="w-full max-w-md animate-in fade-in zoom-in-95 duration-500">
   
@@ -61,7 +67,7 @@
 
     <!-- Title & Description Header -->
     <div class="space-y-2 mb-8 animate-in fade-in slide-in-from-bottom-2 duration-400 delay-150 fill-mode-both">
-      <h1 class="text-2xl sm:text-3xl font-semibold tracking-tight text-ink-900 dark:text-white">
+      <h1 class="text-2xl sm:text-3xl font-medium tracking-tight text-ink-900 dark:text-white">
         {{ title|default:"Notification" }}
       </h1>
       <p class="text-sm text-ink-600 dark:text-slate-400 leading-relaxed max-w-sm mx-auto">
@@ -74,7 +80,7 @@
       {% if primary_btn_url %}
         <a 
           href="{{ primary_btn_url }}" 
-          class="w-full inline-flex items-center justify-center py-3 px-5 rounded-xl text-white font-semibold text-sm shadow-md transition-all duration-200 focus:outline-none focus:ring-2 active:scale-[0.99]
+          class="w-full inline-flex items-center justify-center py-3 px-5 rounded-xl text-white font-medium text-sm shadow-md transition-all duration-200 focus:outline-none focus:ring-2 active:scale-[0.99]
             {% if is_error == 'error' %}
               bg-rose-600 hover:bg-rose-700 focus:ring-rose-500/50 shadow-rose-600/20
             {% elif is_error == 'warning' %}
@@ -88,7 +94,7 @@
       {% else %}
         <a 
           href="/" 
-          class="w-full inline-flex items-center justify-center py-3 px-5 rounded-xl text-white font-semibold text-sm shadow-md transition-all duration-200 focus:outline-none focus:ring-2 active:scale-[0.99]
+          class="w-full inline-flex items-center justify-center py-3 px-5 rounded-xl text-white font-medium text-sm shadow-md transition-all duration-200 focus:outline-none focus:ring-2 active:scale-[0.99]
             {% if is_error == 'error' %}
               bg-rose-600 hover:bg-rose-700 focus:ring-rose-500/50 shadow-rose-600/20
             {% else %}
@@ -102,7 +108,7 @@
       {% if secondary_btn_url %}
         <a 
           href="{{ secondary_btn_url }}" 
-          class="w-full inline-flex items-center justify-center py-3 px-5 rounded-xl border border-slate-300 dark:border-white/10 bg-white/50 dark:bg-ink-800/50 hover:bg-slate-100 dark:hover:bg-ink-800 text-ink-700 dark:text-slate-300 font-semibold text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/40 active:scale-[0.99]"
+          class="w-full inline-flex items-center justify-center py-3 px-5 rounded-xl border border-slate-300 dark:border-white/10 bg-white/50 dark:bg-ink-800/50 hover:bg-slate-100 dark:hover:bg-ink-800 text-ink-700 dark:text-slate-300 font-medium text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/40 active:scale-[0.99]"
         >
           {{ secondary_btn_label|default:"Back" }}
         </a>
