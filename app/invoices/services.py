@@ -74,13 +74,13 @@ class InvoiceService:
         except InvoiceIdentifierCollisionError:
             raise
         except DataError as e:
-            logger.exception("Data error persisting sale for business %s", business.code)
+            logger.exception("Data error persisting sale for business %s", e)
             raise InvalidInvoiceDataError() from e
         except IntegrityError as e:
-            logger.exception("Integrity error persisting sale for business %s", business.code)
+            logger.exception("Integrity error persisting sale for business %s", e)
             raise InvoiceWriteFailedError() from e
         except OperationalError as e:
-            logger.exception("DB operational error persisting sale for business %s", business.code)
+            logger.exception("DB operational error persisting sale for business %s", e)
             raise InvoiceServiceUnavailableError() from e
     
     def _map_invoice_to_entity(self, invoice_obj) -> InvoiceEntity:

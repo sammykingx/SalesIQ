@@ -175,15 +175,22 @@ def custom_403(request: HttpRequest, exception):
 def custom_404(request: HttpRequest, exception):
     return render(request, ERROR_PAGES.NOT_FOUND, status=404)
 
+
 import sys, traceback
+import logging
+
+logger = logging.getLogger(__name__)
 
 def custom_500(request: HttpRequest):
+    # logger.error("500 error captured, logging traceback...")
     # exc_type, exc_value, exc_tb = sys.exc_info()
     # if exc_type is not None:
     #     print("\n" + "="*60)
     #     print("--- CAPTURED 500 ERROR TRACEBACK ---")
     #     traceback.print_exception(exc_type, exc_value, exc_tb)
     #     print("="*60 + "\n")
+    
+    logger.exception("Unhandled exception on %s %s", request.method, request.path)
         
     return render(request, ERROR_PAGES.INETERNAL_ERROR, status=500)
     

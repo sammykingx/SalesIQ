@@ -19,3 +19,19 @@ dependencies = [
     "python-decouple>=3.8",
     "uuid6>=2025.0.1",
 ]
+
+[dependency-groups]
+dev = [
+    "factory-boy>=3.3.3",
+    "pytest>=9.1.1",
+    "pytest-cov>=7.1.0",
+    "pytest-django>=4.14.0",
+    "time-machine>=3.5.1",
+]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "core.settings.test"
+python_files = ["test_*.py", "*_test.py"]
+pythonpath = ["app"]
+testpaths = ["app"]
+

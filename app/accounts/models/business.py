@@ -4,7 +4,6 @@ from uuid6 import uuid7
 from nanoid import generate
 
 
-
 def generate_business_id():
     seed = "123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     return "SIQ-BIZ-" + generate(seed, 10)

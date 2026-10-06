@@ -15,6 +15,9 @@ from products.selectors import ProductsSelector
 
 from typing import Any, Dict
 
+import logging
+
+logger = logging.getLogger(__name__)
 
 class DashboardView(LoginRequiredMixin, TemplateView):
     template_name = APP_TEMPLATES.ACCOUNTS.DASHBOARD
@@ -27,7 +30,8 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         return context
     
     def template_context(self) -> Dict[str, Any]:
-        user_biz = BusinessSelector().get_user_business(user_email=self.request.user.email, as_instance=True) # type:ignore
+        user_email = getattr(self.request.user, "email", None)
+        user_biz = BusinessSelector().get_user_business(user_email=user_email, as_instance=True) # type:ignore
         since = timezone.now().date().replace(day=1)
 
         top_products = self.invoice_selector.get_top_products(
@@ -59,11 +63,13 @@ class PlatformDashboardView(LoginRequiredMixin, TemplateView):
     template_name = APP_TEMPLATES.ACCOUNTS.ANALYST_DASHBOARD
     
     def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
-            user = request.user
-            if user.email not in settings.PREVILEDGE_USERS: # type: ignore
-                return redirect(reverse(ACCOUNTS.DASHBOARD))
+        user = request.user
+        user_email = getattr(user, "email", None)
+        if user_email not in settings.PREVILEDGE_USERS:
+            logger.warning(f"User {user_email} is not a privileged user")
+            return redirect(reverse(ACCOUNTS.DASHBOARD))
             
-            return super().dispatch(request, *args, **kwargs)
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -91,8 +97,9 @@ class UserProfileView(LoginRequiredMixin, TemplateView):
         return context
     
     def template_context(self):
-        user_entity = self.user_selector.get_by_email(email=self.request.user.email) #type: ignore
-        biz_entity = self.business_selector.get_user_business(user_email=self.request.user.email) #type: ignore
+        user_email = getattr(self.request.user, "email", None)
+        user_entity = self.user_selector.get_by_email(email=user_email) #type: ignore
+        biz_entity = self.business_selector.get_user_business(user_email=user_email) #type: ignore
         return {
             "user": user_entity,
             "business": biz_entity,

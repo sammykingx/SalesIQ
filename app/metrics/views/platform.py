@@ -12,7 +12,8 @@ from typing import Any
 class PlatformGmvTrendView(LoginRequiredMixin, View):
     def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
         user = request.user
-        if user.email not in settings.PREVILEDGE_USERS: # type: ignore
+        user_email = getattr(user, "email", None)
+        if user_email not in settings.PREVILEDGE_USERS:
             return JsonResponse({"has_data": False})
         return super().dispatch(request, *args, **kwargs)
     
@@ -25,7 +26,8 @@ class PlatformGmvTrendView(LoginRequiredMixin, View):
 class PlatformAdoptionView(LoginRequiredMixin, View):
     def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
             user = request.user
-            if user.email not in settings.PREVILEDGE_USERS: # type: ignore
+            user_email = getattr(user, "email", None)
+            if user_email not in settings.PREVILEDGE_USERS:
                 return JsonResponse({"has_data": False})
             return super().dispatch(request, *args, **kwargs)
         

@@ -24,6 +24,10 @@ from decimal import Decimal
 from pydantic import ValidationError
 from typing import Any, Dict
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 class InvoiceListView(LoginRequiredMixin, TemplateView):
     template_name = APP_TEMPLATES.SALES.LIST
@@ -100,8 +104,7 @@ class RecordSalesInvoiceView(LoginRequiredMixin, View):
             }, status=400)
             
         except Exception as err:
-            import traceback
-            traceback.print_exc()
+            logger.exception("Unexpected error while recording sales invoice: %s", str(err))
             return JsonResponse({
                 "message": "The hamsters powering our servers just went on an unscheduled coffee break. We're waking them up.",
                 "status": "error"
