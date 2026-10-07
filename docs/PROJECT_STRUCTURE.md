@@ -2,7 +2,7 @@
 
 This document explains the folder structure of the SalesIQ repository so contributors can quickly understand where things live and why.
 
-![SalesIQ coming soon mockup](../business/mockups/salesiq-v1.png)
+![SalesIQ coming soon mockup](../business/mockups/dashboard-dark.png)
 ## Root Layout
 
 ```sh
@@ -21,6 +21,9 @@ SalesIQ/                       # Git repository root
 |-- uv.lock
 |-- vite.config.js
 ```
+
+![SalesIQ coming soon mockup](../business/mockups/dashboard.png)
+
 
 | Folder    | Purpose |
 |-----------|---------|
@@ -56,6 +59,9 @@ app/
 |   |   |   |-- signup.js
 |   |   |   |-- password-reset.js
 |   |   |   |-- ...
+|   |   |-- compnents
+|   |   |   |-- _header.js
+|   |   |   |-- ...
 |   |   |-- ...
 |   |-- lib/                   # Shared JS components/utilities
 |   |   |-- http               # http modules
@@ -81,6 +87,7 @@ app/
 |
 |-- templates/                 # Django HTML templates
 |-- manage.py
+|-- conftest.py
 ```
 
 ### `core/`
@@ -96,32 +103,51 @@ accounts/
 |   |-- exceptions.py               # Domain-specific exceptions
 |   |-- policies.py                 # Domain-specific policies
 |   |-- validators.py               # Domain-specific validators
+|   |-- errors.py
 |   |-- ...
 |
 |-- models/                         # Django ORM models (persistence layer)
 |   |-- __init__.py
+|   |-- user_model.py
+|   |-- business.py
 |   |-- ...
 |
 |-- repositories/                   # Abstraction over Writing/Mutating data to ORM,
 |   |-- ...
 |
-|-- views/                          # Views,
+|-- selectros/                      # Read-only query logic
+|   |-- ...
+|
+|-- views/                          # HTTP Views,
+|   |-- accounts.py                 # User-business dashboard, platform dashboard and user-business profile view
+|   |-- login.py                    # User authentication
+|   |-- onboarding.py               # Business Onboarding
+|   |-- settings.py                 # account update settings
+|   |-- registration.py             # account sign-up
 |   |-- ...
 |
 |-- services.py                     # Application/business logic — use cases that orchestrate models
 |
 |-- migrations/                     # Migrations folder that shouldn't be committed to git
-|-- selectors.py                    # Read-only query logic (fetching/filtering data for views)
 |
-|
-|-- serializers.py                  # DRF (or plain) serializers for API I/O
+|-- serializers.py                  # Pydanntic models for I/O
 |-- forms.py                        # Django forms, if used
 |-- urls.py
 |-- admin.py
 |-- apps.py
 |-- signals.py                      # Django signal handlers, if any
 |-- constants.py                    # App-level enums/constants
+|-- conftest.py                     # accounts-only fixtures
 |-- tests/
+|   |-- __init__.py
+|   |-- factories.py                # UserFactory, BusinessFactory
+|   |-- domain/                     # pure unit tests, no db
+|   |-- repositories/
+|   |-- selectors/
+|   |-- views/
+|   |   |-- test_login.py
+|   |   |-- test_onboarding.py
+|   |   |-- test_registration.py
 |   |-- test_models.py
 |   |-- test_services.py
 |   |-- test_views.py
@@ -166,13 +192,13 @@ templates/
 │   ├── _footer.html
 │   └── _toast_alerts.html     # Django messages rendered as toasts
 │
-├── public/                      # Public pages
+├── public/                    # Public pages
 │   ├── index.html             # Extends _base_public.html
 │   ├── coming_soon.html       # Standalone
 |   |
 |   └── legal/
-│       ├── tos.html             # Extends _base_legal.html
-│       └── privacy.html             # Extends _base_legal.html
+│       ├── tos.html           # Extends _base_legal.html
+│       └── privacy.html       # Extends _base_legal.html
 │
 ├── accounts/                  # Auth pages
 │   ├── login.html             # Extends _base_auth.html
@@ -199,7 +225,6 @@ templates/
 | `docs/` | Developer documentation |
 | `app/core/` | Django project settings/config |
 | `app/accounts/`, `invoices/`, `products/`, `notifications/` | Domain apps (DDD structure) |
-| `app/services/` | Shared logic across domain apps |
 | `app/src/` | Vite source (JS entries, shared lib, styles, pre-bundle assets) |
 | `app/static/images/` | Images served as-is by Django |
 | `app/static/dist/` | Vite's compiled output |
