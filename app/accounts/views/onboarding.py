@@ -12,6 +12,10 @@ from core.url_names import ACCOUNTS
 from pydantic import ValidationError
 from utils.pydantic_formatter import format_pydantic_errors
 
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 class BizAccountOnboardingView(LoginRequiredMixin, View):
     # def dispatch(self, request: HttpRequest, *args, **kwargs):
@@ -47,7 +51,6 @@ class BizAccountOnboardingView(LoginRequiredMixin, View):
             }, status=201)
             
         except ValidationError as err:
-            # print(format_pydantic_errors(err))
             return JsonResponse({
                 "message": "Please review the data provided",
                 "status": "warning",
@@ -61,8 +64,11 @@ class BizAccountOnboardingView(LoginRequiredMixin, View):
             }, status=400)
             
         except Exception:
-            import traceback
-            traceback.print_exc()
+            logger.exception(
+                "Unexpected error during business onboarding for user: %s with email: %s",
+                request.user.get_full_name() or request.user.id, # type: ignore
+                request.user.email # type: ignore
+            )
             return JsonResponse({
                 "title": "System Glitch",
                 "message": "We encountered an unexpected hiccup. Please try again shortly!",

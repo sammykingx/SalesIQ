@@ -1,150 +1,66 @@
 import pytest
 from django.test import Client
 
-from accounts.tests.factories import BusinessFactory, UserFactory
+from accounts.tests.factories import BusinessFactory
 
 
-def _login(user) -> Client:
-    c = Client()
-    c.force_login(user)
-    return c
+# ---- business tenants ----------------
 
-
-# ---- businesses (only exist for onboarded users) ----------------
 @pytest.fixture
 def business(db):
-    """Business whose owner email is verified + onboarded."""
-    return BusinessFactory(online=True)
-
+    """A Business whose owner email is verified + onboarded."""
+    return BusinessFactory(online=True, owner__verified=True, owner__onboarded=True)
 
 @pytest.fixture
 def unverified_business(db):
-    """Business whose owner is onboarded but has NOT verified their email."""
+    """A Business whose owner is onboarded but has NOT verified their email."""
     return BusinessFactory(online=True, owner__verified=False)
 
 
 @pytest.fixture
 def other_business(db):
     """A second tenant, for isolation/permission tests."""
-    return BusinessFactory(online=True)
+    return BusinessFactory(both=True, owner__verified=True, owner__onboarded=True)
 
 
-# ---- users: verified & onboarded ---------------------------------
+# ---- owners (for billing/subscriptions) -------------
 @pytest.fixture
-def new_user(db):
-    """
-        A brand-new user right after sign-up.
-        - Email status: Unverified (`is_verified = False`)
-        - Onboarding status: Not started / No business (`onboarded = False`)
-        
-        Use for testing registration flows, email verification triggers, 
-        or onboarding steps.
-    """
-    return UserFactory()
-
-
-@pytest.fixture
-def verified_not_onboarded_user(db):
-    """
-    A user who has verified their email but has NOT completed onboarding.
-    - Email status: Verified (`is_verified = True`)
-    - Onboarding status: Not started / No business (`onboarded = False`)
-    
-    Use for testing middleware blocks, redirect rules to onboarding, 
-    or the onboarding API endpoint itself.
-    """
-    return UserFactory(verified=True)
-
-
-@pytest.fixture
-def unverified_onboarded_user(unverified_business):
-    """
-    A user who has completed onboarding (has a registered business) 
-    but has NOT verified their email yet.
-    - Email status: Unverified (`is_verified = False`)
-    - Onboarding status: Completed (`onboarded = True`)
-    
-    Use for testing edge cases where users interact with business features 
-    before completing their email confirmation, or checking verification restrictions.
-    """
-    return unverified_business.owner
-
-
-@pytest.fixture
-def verified_onboarded_user(business):
-    """
-    A user who has both verified their email and completed onboarding.
-    - Email status: Verified (`is_verified = True`)
-    - Onboarding status: Completed (`onboarded = True`)
-    
-    Use for testing features that require a fully onboarded user.
-    """
+def business_owner(business):
+    """Returns the owner of the standard test business (verified and onboarded)."""
     return business.owner
 
+verified_onboarded_user = business_owner
 
 @pytest.fixture
-def privileged_user(db, settings):
-    user = UserFactory(verified=True, onboarded=True)
+def privileged_owner(business, settings):
+    """Returns the business owner and adds their email to the privileged users setting."""
+    user = business.owner
     settings.PREVILEDGE_USERS = [user.email]
     return user
 
 
-# ---- clients: same names, logged in ------------------------------------
+# ---- clients -------------------------------------------
+
+@pytest.fixture
+def make_client():
+    """Factory: logged-in client for any user allowing dynamic creation of test clients for different user fixtures."""
+    def _make(user) -> Client:
+        c = Client()
+        c.force_login(user)
+        return c
+    return _make
+
 @pytest.fixture
 def anon_client(client):
     """Not logged in."""
     return client
 
+@pytest.fixture
+def business_client(make_client, business_owner):
+    """A business owner client who is logged in and has verified their email and completed onboarding."""
+    return make_client(business_owner)
 
 @pytest.fixture
-def unverified_not_onboarded_client(new_user):
-    """
-    Test client authenticated as a brand-new, unverified, and not onboarded user.
-    - Email status: Unverified (`is_verified = False`)
-    - Onboarding status: Not started / No business (`onboarded = False`)
-    
-    Use for testing middleware redirects, sign-up flows, 
-    or permission blocks on protected routes for new users.
-    """
-    return _login(new_user)
+def other_business_client(make_client, other_business):
+    return make_client(other_business.owner)
 
-
-@pytest.fixture
-def verified_not_onboarded_client(verified_not_onboarded_user):
-    """
-    Test client authenticated as a user with a verified email but no business.
-    - Email status: Verified (`is_verified = True`)
-    - Onboarding status: Not started / No business (`onboarded = False`)
-    
-    Use for testing access to the onboarding flow or middleware redirect behaviors.
-    """
-    return _login(verified_not_onboarded_user)
-
-
-@pytest.fixture
-def unverified_onboarded_client(unverified_onboarded_user):
-    """
-    Test client authenticated as a business owner with an unverified email.
-    - Email status: Unverified (`is_verified = False`)
-    - Onboarding status: Completed / Has business (`onboarded = True`)
-    
-    Use for testing restriction rules or business-specific endpoints for unverified accounts.
-    """
-    return _login(unverified_onboarded_user)
-
-
-@pytest.fixture
-def verified_onboarded_client(verified_onboarded_user):
-    """
-    Test client authenticated as a fully verified business owner.
-    - Email status: Verified (`is_verified = True`)
-    - Onboarding status: Completed / Has business (`onboarded = True`)
-    
-    Use for testing full access to authorized business endpoints and features.
-    """
-    return _login(verified_onboarded_user)
-
-
-@pytest.fixture
-def privileged_client(privileged_user):
-    return _login(privileged_user)

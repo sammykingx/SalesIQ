@@ -46,9 +46,10 @@ app/
 |   |-- __init__.py
 |
 |-- accounts/                  # Django app (domain-driven design)
+|-- customers/                 # Django app (domain-driven design)
 |-- invoices/                  # Django app (domain-driven design)
 |-- products/                  # Django app (domain-driven design)
-|-- notifications/             # Django app (domain-driven design)
+|-- ...
 |
 |-- src/                       # Vite input — source for compiled frontend assets
 |   |-- entries/               # Per-page JS entry points
@@ -229,3 +230,4 @@ templates/
 | `app/static/images/` | Images served as-is by Django |
 | `app/static/dist/` | Vite's compiled output |
 | `app/templates/` | Django HTML templates |
+

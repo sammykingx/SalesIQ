@@ -20,7 +20,7 @@ MAILERS = {
     "default": {"BACKEND": "django.core.mail.backends.locmem.EmailBackend", "OPTIONS": {}},
     "anymail": {"BACKEND": "django.core.mail.backends.locmem.EmailBackend", "OPTIONS": {}},
 }
-EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
+
 MAILER_EMS = "default"
 
 
