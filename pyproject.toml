@@ -34,4 +34,4 @@ DJANGO_SETTINGS_MODULE = "core.settings.test"
 python_files = ["test_*.py", "*_test.py"]
 pythonpath = ["app"]
 testpaths = ["app"]
-
+addopts = "-v"

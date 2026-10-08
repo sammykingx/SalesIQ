@@ -80,6 +80,24 @@ class AccountRegistrationView(View):
             }, status=500)
      
 class AccountActivationView(View):
+    """
+    Handles user account activation by verifying their email address via a secure token.
+
+    Attributes:
+        skip_onboarding_check (bool): Bypasses the onboarding enforcement 
+            middleware, allowing unverified/unboarded users to access 
+            the activation route safely without infinite redirect loops.
+
+    Behavior:
+        - GET: Extracts the activation token from URL keyword arguments, delegates 
+          the verification logic to AccountOnboardingService, and renders a public 
+          feedback template. 
+          - On Success: Displays a confirmation message with a link to the dashboard.
+          - On Failure: Displays an error message with a link back to the login page.
+    """
+    
+    skip_onboarding_check = True
+    
     def get(self, request:HttpRequest, **kwargs):
         token = kwargs.get("token", "")
         was_verified = AccountOnboardingService(request).activate_account(token=token)

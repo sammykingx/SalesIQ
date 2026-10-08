@@ -1,3 +1,4 @@
+from django.contrib.auth.views import LogoutView
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -16,4 +17,9 @@ class AccountLoginView(LoginView):
         
         response = super().form_invalid(form)
         return response
+    
+
+class AccountLogoutView(LogoutView):
+    next_page = reverse_lazy(ACCOUNTS.AUTH.LOGIN)
+    skip_onboarding_check = True
     

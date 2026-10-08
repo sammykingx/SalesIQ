@@ -14,7 +14,7 @@ def business(db):
 @pytest.fixture
 def unverified_business(db):
     """A Business whose owner is onboarded but has NOT verified their email."""
-    return BusinessFactory(online=True, owner__verified=False)
+    return BusinessFactory(online=True, owner__verified=False, owner__onboarded=True)
 
 
 @pytest.fixture

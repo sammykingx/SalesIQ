@@ -18,25 +18,44 @@ import logging
 logger = logging.getLogger(__name__)
 
 class BizAccountOnboardingView(LoginRequiredMixin, View):
-    # def dispatch(self, request: HttpRequest, *args, **kwargs):
-    #     """
-    #         Overrides the default dispatch to check if the user has a business
-    #         account. If they do, redirect them to the dashboard.
-    #     """
-    #     try:
-    #         business = BusinessSelector().get_user_business(user_email=request.user.email, as_instance=True) # type: ignore
-    #         if business:
-    #             return redirect(reverse(ACCOUNTS.DASHBOARD))
-    #             # return JsonResponse({
-    #             #     "message": "You already have a business account.",
-    #             #     "status": "info",
-    #             #     "redirect": True,
-    #             #     "redirect_url": "/dashboard/",
-    #             # }, status=302)
-    #     except AccountsDomainException:
-    #         pass
+    """
+    Handles the business onboarding process for authenticated users.
 
-    #     return super().dispatch(request, *args, **kwargs)
+    Attributes:
+        skip_onboarding_check (bool): Bypasses the onboarding enforcement 
+            middleware, preventing infinite redirect loops when users access 
+            the onboarding page.
+
+    Behavior:
+        - Dispatch: Checks if the user already has a business account. If 
+          found, they are automatically redirected to the dashboard.
+        - GET: Renders the business onboarding HTML template.
+        - POST: Validates the incoming payload against BusinessOnboardingSchema, 
+          registers the business via BusinessService, and returns a JSON response.
+    """
+    
+    skip_onboarding_check = True
+    
+    def dispatch(self, request: HttpRequest, *args, **kwargs):
+        """
+            Overrides the default dispatch to check if the user has a business
+            account. If they do, redirect them to the dashboard.
+        """
+        if request.user.is_authenticated:
+            try:
+                business = BusinessSelector().get_user_business(user_email=request.user.email, as_instance=True) # type: ignore
+                if business:
+                    return redirect(reverse(ACCOUNTS.DASHBOARD))
+                    # return JsonResponse({
+                    #     "message": "You already have a business account.",
+                    #     "status": "info",
+                    #     "redirect": True,
+                    #     "redirect_url": "/dashboard/",
+                    # }, status=302)
+            except AccountsDomainException:
+                pass
+
+        return super().dispatch(request, *args, **kwargs)
     
     def get(self, request: HttpRequest):
        return render(request, APP_TEMPLATES.ACCOUNTS.ONBOARDING)

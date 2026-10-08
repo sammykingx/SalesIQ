@@ -41,7 +41,7 @@ class UserFactory(factory.django.DjangoModelFactory):
             
     class Params: # type: ignore
         verified = factory.Trait(is_verified=True)  # type: ignore
-        onboarded = factory.Trait(onboarded=True)   # type: ignore
+        is_onboarded = factory.Trait(onboarded=True)   # type: ignore
         
 
 class BusinessFactory(factory.django.DjangoModelFactory):
@@ -81,8 +81,8 @@ class BusinessFactory(factory.django.DjangoModelFactory):
     
     address = factory.Faker("address")      # type: ignore
     whatsapp_number = factory.Faker("phone_number")     # type: ignore
-    instagram_url = factory.Sequence(lambda n: f"https://instagram.com_{n}")        # type: ignore
-    tiktok_url = factory.Sequence(lambda n: f"https://tiktok.com_{n}")      # type: ignore
+    instagram_url = factory.Sequence(lambda n: f"https://instagram.com/test_shop_{n}")        # type: ignore
+    tiktok_url = factory.Sequence(lambda n: f"https://tiktok.com/test_shop_{n}")      # type: ignore
     website_url = factory.Faker("url")      # type: ignore
     
     class Meta: # type: ignore
