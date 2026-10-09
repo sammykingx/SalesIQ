@@ -9,9 +9,11 @@ from accounts.serializers import AccountUpdateSchema
 from core.template_names import APP_TEMPLATES
 from utils.pydantic_formatter import format_pydantic_errors
 from datetime import timedelta
-from pydantic import BaseModel, ValidationError
-import json
+from pydantic import ValidationError
+import logging
 
+
+logger = logging.getLogger(__name__)
 
 class AccountSettingsView(LoginRequiredMixin, TemplateView):
     """
@@ -76,7 +78,6 @@ class UpdateAccountProfileDataView(LoginRequiredMixin, View):
         try:
             payload = AccountUpdateSchema.model_validate_json(request.body, strict=True)
             update_type = payload.update_type
-            print(payload.model_dump_json(indent=2))
             
             if  update_type == 'profile':
                 self.user_repo.update_multiple_fields(user_id=request.user.id, **payload.data.model_dump())  # type: ignore
@@ -88,7 +89,13 @@ class UpdateAccountProfileDataView(LoginRequiredMixin, View):
             
         except ValidationError as e:
             error_message = format_pydantic_errors(e)
-            print(error_message)
+            user = self.request.user
+            user_info = f"{user.get_full_name()} with email {user.email}" # type: ignore
+            logger.warning(
+                "Pydantic validation failed for %s: %s",
+                user_info,
+                error_message,
+            )
             
             return JsonResponse({
                 "message": "Your data is looking a bit confused, double-check your fields and formats before we try this again!", 
@@ -97,6 +104,9 @@ class UpdateAccountProfileDataView(LoginRequiredMixin, View):
             }, status=422)
         
         except Exception as e:
-            import traceback
-            traceback.print_exc()
+            logger.exception(
+                "Failed updating profile data for user %s: %s",
+                self.request.user.email, #type:ignore
+                e,
+            )
             return JsonResponse({"message": "An error occurred while updating the account data.", "status": "error"}, status=500)

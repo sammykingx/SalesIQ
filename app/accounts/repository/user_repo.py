@@ -1,4 +1,3 @@
-# manage write operations (creating, updating, and deleting) to db
 from django.contrib.auth import get_user_model
 from django.db import transaction
 from accounts.serializers import UserRegistrationSchema
@@ -11,7 +10,8 @@ class UserRepository:
 
     @transaction.atomic
     def create_user(self, user: UserRegistrationSchema) -> None:
-        """Persists a UserEntity by creating a new database record and returns the saved entity."""
+        """Persists a UserEntity to database"""
+        
         instance = self.model(
             first_name=user.first_name,
             last_name=user.last_name,
@@ -43,14 +43,14 @@ class UserRepository:
             email=user_email, onboarded=False
         ).update(onboarded=True)
         
-    def update_social_links(self, *, user_email: str, instagram_url: Optional[str] = None, tiktok_url: Optional[str] = None, website_url: Optional[str] = None):
-        self.model.objects.filter(
-            email=user_email
-        ).update(
-            instagram_url=instagram_url,
-            tiktok_url=tiktok_url,
-            website_url=website_url
-        )
+    # def update_social_links(self, *, user_email: str, instagram_url: Optional[str] = None, tiktok_url: Optional[str] = None, website_url: Optional[str] = None):
+    #     self.model.objects.filter(
+    #         email=user_email
+    #     ).update(
+    #         instagram_url=instagram_url,
+    #         tiktok_url=tiktok_url,
+    #         website_url=website_url
+    #     )
         
     def update_multiple_fields(self, *, user_id, **kwargs):
         """
