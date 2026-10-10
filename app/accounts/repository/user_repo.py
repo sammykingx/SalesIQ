@@ -56,6 +56,11 @@ class UserRepository:
         """
         Safely updates fields, ignoring any keys that do not 
         match actual model fields to prevent FieldErrors.
+        
+        Args:
+            user_id: The primary key (pk) of the user record, 
+                not email or any other field.
+            **kwargs: Field-value pairs to update on the model.
         """
         valid_fields = {f.name for f in self.model._meta.get_fields()}
         filtered_kwargs = {key: val for key, val in kwargs.items() if key in valid_fields}
