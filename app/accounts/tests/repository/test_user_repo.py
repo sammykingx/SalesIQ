@@ -69,10 +69,19 @@ def test_update_multiple_fields_ignores_unknown_model_fields(repo, new_user, kwa
     assert {"first_name": user.first_name, "last_name": user.last_name} == after_update #type: ignore
     
     
-def test_repo_update_password(repo, new_user):
+def test_repo_update_password_for_known_user(repo, new_user):
     repo.update_password(user_email=new_user.email, new_password=PASSWORD)
     prev_pwd_hash = new_user.password
     user = reload_from_db(new_user)
     
-    assert user.password != prev_pwd_hash   # type: ignore
+    # assert user.password != prev_pwd_hash   # type: ignore
+    assert user.check_password(PASSWORD)        # type: ignore
+    
+
+@pytest.mark.django_db
+def test_repo_update_password_for_unknown_user(repo):
+    email = "james@example.com"
+    assert not repo.model.objects.filter(email=email).exists()
+    repo.update_password(user_email=email, new_password=PASSWORD)
+    assert not repo.model.objects.filter(email=email).exists()
     

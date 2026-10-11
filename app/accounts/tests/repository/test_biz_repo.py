@@ -1,7 +1,10 @@
 import pytest
 
 from django.db.models import Model
+from django.db import IntegrityError
 from accounts.repository import BusinessRepo
+from accounts.serializers import BusinessOnboardingSchema, SocialLinksSchema
+from unittest.mock import patch
 
 @pytest.fixture
 def repo():
@@ -37,3 +40,52 @@ def test_update_multiple_fields_for_business_ignores_unknown_model_fields(repo, 
     
     assert updated == (1 if applied else 0)
     assert {"name": business.name, "phone_number": business.phone_number} == after_update
+    
+    
+def create_new_business_succefully(repo, new_user):
+    """Test that a brand new business is successfully created and returns (business, True)."""
+    biz_data = BusinessOnboardingSchema( # type: ignore
+        business_name="Acme Fashion",
+        phone_number="+1234567890",
+        business_type="online",
+        socials=SocialLinksSchema(instagram_url="https://instagram.com/acme") #type: ignore
+    )
+    
+    business, created = repo.create_business(biz_owner=new_user, biz_data=biz_data)
+    
+    assert created is True
+    assert business is not None
+    assert business.name == "Acme Fashion"
+
+
+def test_get_existing_business_if_already_created(repo, new_user):
+    """Test that calling create_business again fetches the existing record and returns (business, False)."""
+    biz_data = BusinessOnboardingSchema(    # type: ignore
+        business_name="Acme Fashion",
+        phone_number="+1234567890",
+        business_type="online"
+    )
+    
+    business_first, created_first = repo.create_business(biz_owner=new_user, biz_data=biz_data)
+    assert created_first is True
+
+    business_second, created_second = repo.create_business(biz_owner=new_user, biz_data=biz_data)
+    
+    assert created_second is False
+    assert business_second.pk == business_first.pk
+
+
+def test_create_business_handles_integrity_error(repo, new_user):
+    """Test that an IntegrityError is caught gracefully and returns (None, False)."""
+    biz_data = BusinessOnboardingSchema(
+        business_name="Error Shop",
+        phone_number="+1234567890",
+        business_type="physical",
+        address="123 Main St"
+    )
+    
+    with patch.object(repo.model.objects, 'get_or_create', side_effect=IntegrityError("Unique constraint violation")):
+        business, created = repo.create_business(biz_owner=new_user, biz_data=biz_data)
+        
+        assert business is None
+        assert created is False

@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.template.loader import render_to_string as django_render_to_string
 from unittest.mock import MagicMock
 
+from accounts.domains.exceptions import InvalidTokenError
 from accounts.models.user_token import TokenType
 from accounts.services import PasswordResetService, TokenService
 from accounts.tests.factories import UserFactory
@@ -14,6 +15,8 @@ from core.url_names import ACCOUNTS
 
 
 SERVICES = "accounts.services.account_reset"
+NEW_PASSWORD = "N3w!password"
+FACTORY_PASSWORD = "securepassword123"
 
 def reload(obj: Model):
     obj.refresh_from_db()
@@ -80,3 +83,44 @@ def test_pwd_reset_template_is_loaded_with_right_context(service, new_user, rend
             reverse(ACCOUNTS.AUTH.PASSWORD_CHANGE, kwargs={"token": "tok-123"})
         ),
     }
+    
+def test_initiate_password_reset_for_unverified_users(service, new_user, send_spy):
+    service.initiate_password_reset(user_email=new_user.email)
+    send_spy.assert_called_once_with(first_name=new_user.first_name, user_email=new_user.email)
+
+def test_initiate_password_reset_for_verified_users(service, verified_not_onboarded_user, send_spy):
+    service.initiate_password_reset(user_email=verified_not_onboarded_user.email)
+    send_spy.assert_called_once_with(
+        first_name=verified_not_onboarded_user.first_name, 
+        user_email=verified_not_onboarded_user.email
+    )
+
+def test_update_password_with_valid_token_changes_the_password(service, new_user):
+    service.update_password(token=reset_token(new_user), new_password=NEW_PASSWORD)
+
+    user = reload(new_user)
+    assert user.check_password(NEW_PASSWORD)            # type:ignore
+    assert not user.check_password(FACTORY_PASSWORD)    # type:ignore
+    
+def test_reset_token_cannot_be_reused(service, new_user):
+    token = reset_token(new_user)
+    service.update_password(token=token, new_password=NEW_PASSWORD)
+
+    with pytest.raises(InvalidTokenError):
+        service.update_password(token=token, new_password="An0ther!pass")
+
+    assert reload(new_user).check_password(NEW_PASSWORD)    # type:ignore
+    
+def test_unknown_token_is_rejected_and_nothing_changes(service, new_user):
+    with pytest.raises(InvalidTokenError):
+        service.update_password(token="not-a-real-token", new_password=NEW_PASSWORD)
+
+    assert reload(new_user).check_password(FACTORY_PASSWORD)     # type:ignore
+
+def test_email_verification_token_cannot_reset_a_password(service, new_user):
+    token = reset_token(new_user, token_type=TokenType.EMAIL_VERIFICATION)
+
+    with pytest.raises(InvalidTokenError):
+        service.update_password(token=token, new_password=NEW_PASSWORD)
+
+    assert reload(new_user).check_password(FACTORY_PASSWORD)     # type:ignore

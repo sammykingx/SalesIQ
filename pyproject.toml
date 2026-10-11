@@ -35,3 +35,31 @@ python_files = ["test_*.py", "*_test.py"]
 pythonpath = ["app"]
 testpaths = ["app"]
 addopts = "-v"
+
+[tool.coverage.run]
+source = ["app"]
+branch = true
+omit = [
+    "*/migrations/*",
+    "*/tests/*",
+    "*/conftest.py",
+    "*/test_*.py",
+    "*/*_test.py",
+    "*/admin.py",
+    "*/apps.py",
+    "*/manage.py",
+    "*/wsgi.py",
+    "*/asgi.py",
+    "*/core/settings/*",
+]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+exclude_also = [
+    "if TYPE_CHECKING:",
+    "raise NotImplementedError",
+    "def __repr__",
+    "def __str__",
+]
+# fail_under = 85
