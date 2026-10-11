@@ -1,6 +1,3 @@
-# test create_user actually creates a user to the db raises possible errors that could happen
-# like integrity or operational errors 
-
 import pytest
 
 from accounts.serializers import UserRegistrationSchema

@@ -28,9 +28,9 @@ class MultipleBusinessNotAllowedError(AccountsDomainException):
     """Raised when a user attempts to register more than one business account."""
     def __init__(
         self, 
-        message: str = "You can only register one business account at a time.", 
+        message: str = "You can only host one active business on SalesIQ right now. Looks like you've got a spot is already!", 
         code: str = "MULTIPLE_BUSINESS_NOT_ALLOWED", 
-        title: str = "Business Already Exists", 
+        title: str = "Business Limit Reached", 
         err_type: str = "warning"
     ):
         super().__init__(message, code=code, title=title, err_type=err_type)

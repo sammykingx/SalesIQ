@@ -12,7 +12,7 @@ class BusinessService:
         
     def register_business(self, data:BusinessOnboardingSchema):
         if not self.biz_owner.onboarded: # type: ignore
-            created = self.biz_repo.create_business(biz_owner=self.biz_owner, biz_data=data)
+            _, created = self.biz_repo.create_business(biz_owner=self.biz_owner, biz_data=data)
             if not created:
                 raise MultipleBusinessNotAllowedError()
             self.user_repo.complete_onboarding(user_email=self.biz_owner.email)

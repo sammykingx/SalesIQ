@@ -17,25 +17,25 @@ from types import SimpleNamespace
 
 SERVICES = "accounts.services.registration"
 
-@pytest.fixture(autouse=True)
-def mailer(monkeypatch):
-    """
-    Replaces AppMailerService for EVERY test in this file, so nothing can reach Resend,
-    even a test that forgets to ask for it. Returns the instance the service will use.
-    """
-    mailer_cls = MagicMock(name="AppMailerService")
-    instance = mailer_cls.return_value
-    instance.prepare_message.return_value = instance
-    monkeypatch.setattr(f"{SERVICES}.AppMailerService", mailer_cls)
-    return instance
+# @pytest.fixture(autouse=True)
+# def mailer(monkeypatch):
+#     """
+#     Replaces AppMailerService for EVERY test in this file, so nothing can reach Resend,
+#     even a test that forgets to ask for it. Returns the instance the service will use.
+#     """
+#     mailer_cls = MagicMock(name="AppMailerService")
+#     instance = mailer_cls.return_value
+#     instance.prepare_message.return_value = instance
+#     monkeypatch.setattr(f"{SERVICES}.AppMailerService", mailer_cls)
+#     return instance
 
-@pytest.fixture
-def token_service(monkeypatch):
-    """Fake TokenService for the email tests only, where the token's value is all we need."""
-    cls = MagicMock(name="TokenService")
-    cls.return_value.create_token.return_value = SimpleNamespace(token="tok-123")
-    monkeypatch.setattr(f"{SERVICES}.TokenService", cls)
-    return cls.return_value
+# @pytest.fixture
+# def token_service(monkeypatch):
+#     """Fake TokenService for the email tests only, where the token's value is all we need."""
+#     cls = MagicMock(name="TokenService")
+#     cls.return_value.create_token.return_value = SimpleNamespace(token="tok-123")
+#     monkeypatch.setattr(f"{SERVICES}.TokenService", cls)
+#     return cls.return_value
 
 @pytest.fixture
 def service(rf: RequestFactory, new_user: UserFactory):
@@ -43,12 +43,12 @@ def service(rf: RequestFactory, new_user: UserFactory):
     req.user = new_user # type:ignore
     return AccountOnboardingService(req)
 
-@pytest.fixture
-def render_spy(monkeypatch):
-    """Records render_to_string calls made by the service, but still renders for real."""
-    spy = MagicMock(wraps=django_render_to_String)
-    monkeypatch.setattr(f"{SERVICES}.render_to_string", spy)
-    return spy
+# @pytest.fixture
+# def render_spy(monkeypatch):
+#     """Records render_to_string calls made by the service, but still renders for real."""
+#     spy = MagicMock(wraps=django_render_to_String)
+#     monkeypatch.setattr(f"{SERVICES}.render_to_string", spy)
+#     return spy
 
 @pytest.fixture
 def bystander(db):
@@ -65,15 +65,18 @@ def test_activation_email_is_sent_once_to_new_user(service, mailer, new_user, to
 
 
 def test_template_is_rendered_with_the_expected_context(service, new_user, render_spy, token_service):
-    service.send_activation_link(email=new_user.email, first_name="Ada")
-
+    service.send_activation_link(email=new_user.email, first_name=new_user.first_name)
+    
+    token_service.create_token.assert_called_once_with(
+        user_email=new_user.email, token_type=TokenType.EMAIL_VERIFICATION
+    )
     render_spy.assert_called_once()
     call = render_spy.call_args.kwargs
     assert call["template_name"] == EMAIL_TEMPLATES.ACCOUNT_ACTIVATION
     assert call["request"] is service.request
     assert call["context"] == {
         "host": service.request.build_absolute_uri("/"),
-        "first_name": "Ada",
+        "first_name": new_user.first_name,
         "url": service.request.build_absolute_uri(
             reverse(ACCOUNTS.ACTIVATION, kwargs={"token": "tok-123"})
         ),
