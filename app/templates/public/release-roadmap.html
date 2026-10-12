@@ -1,0 +1,303 @@
+{# publick/release-roadmapr.html #}
+{% extends "layouts/_base_app.html" %}
+{% load static %}
+
+{% block title %}salesiq | Release & Roadmap{% endblock %}
+
+{% block page_body %}
+{% comment %} <section class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-16" x-data="{ activeVersion: 'v1.0.1' }">
+    
+    <!-- Ambient Glow Background Accent -->
+    <div class="pointer-events-none absolute inset-0 -z-10 flex items-center justify-center overflow-hidden" aria-hidden="true">
+        <div class="w-96 h-96 bg-emerald-500/10 dark:bg-emerald-500/5 rounded-full blur-[100px]"></div>
+        <div class="w-96 h-96 bg-indigo-500/10 dark:bg-indigo-500/5 rounded-full blur-[100px]"></div>
+    </div>
+
+    <!-- Section Header -->
+    <div class="text-center mb-12 sm:mb-16">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs mb-4 shadow-xs">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            Changelog & System Architecture
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-medium tracking-tight text-neutral-900 dark:text-neutral-100 mb-3">
+            Release Notes & Upcoming Features
+        </h2>
+        <p class="text-neutral-600 dark:text-neutral-400 text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
+            Explore stable platform updates deployed in v1.0.1 and preview our upcoming architectural roadmap for v1.1.0.
+        </p>
+    </div>
+
+    <!-- Roadmap Accordion Container -->
+    <div class="space-y-6">
+
+        <!-- v1.0.1 Shipped Release Card -->
+        <div class="group rounded-2xl bg-white/90 dark:bg-neutral-900/90 backdrop-blur-xl border border-neutral-200/80 dark:border-neutral-800/80 shadow-md hover:border-emerald-500/30 dark:hover:border-emerald-500/30 overflow-hidden transition-all duration-300">
+            <button @click="activeVersion = activeVersion === 'v1.0.1' ? null : 'v1.0.1'" 
+                    class="w-full px-5 sm:px-6 py-5 flex items-center justify-between text-left focus:outline-none cursor-pointer">
+                <div class="flex items-center gap-4 min-w-0">
+                    <div class="w-11 h-11 shrink-0 rounded-xl bg-emerald-500/10 dark:bg-emerald-500/15 flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-medium text-sm group-hover:scale-105 transition-transform duration-300">
+                        v1.0
+                    </div>
+                    <div class="min-w-0">
+                        <div class="flex items-center gap-2.5 flex-wrap">
+                            <h3 class="text-base font-medium text-neutral-900 dark:text-neutral-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors truncate">
+                                v1.0.1: Core Onboarding & Client Directory
+                            </h3>
+                            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20 shrink-0">Ready</span>
+                        </div>
+                        <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5 truncate">Deployed to Production • Stabilized Client</p>
+                    </div>
+                </div>
+                <div class="w-8 h-8 shrink-0 rounded-full bg-neutral-100 dark:bg-neutral-800/80 flex items-center justify-center text-neutral-500 dark:text-neutral-400 ml-3 transition-colors group-hover:bg-emerald-500/10 group-hover:text-emerald-600 dark:group-hover:text-emerald-400">
+                    <svg class="w-4 h-4 transform transition-transform duration-300" :class="{ 'rotate-180': activeVersion === 'v1.0.1' }" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </div>
+            </button>
+
+            <!-- Accordion Details Content -->
+            <div x-show="activeVersion === 'v1.0.1'" 
+                 x-transition:enter="transition ease-out duration-300"
+                 x-transition:enter-start="opacity-0 max-h-0"
+                 x-transition:enter-end="opacity-100 max-h-[800px]"
+                 x-transition:leave="transition ease-in duration-200"
+                 x-transition:leave-start="opacity-100 max-h-[800px]"
+                 x-transition:leave-end="opacity-0 max-h-0"
+                 class="px-5 sm:px-6 pb-6 pt-2 border-t border-neutral-100 dark:border-neutral-800/80 bg-neutral-50/50 dark:bg-neutral-950/30">
+                <ul class="space-y-4 text-sm text-neutral-600 dark:text-neutral-300 pt-2">
+                    <li class="flex items-start gap-3.5 p-3 rounded-xl bg-white dark:bg-neutral-900 border border-neutral-200/60 dark:border-neutral-800/60 shadow-2xs">
+                        <span class="inline-flex items-center justify-center w-6 h-6 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs mt-0.5 shrink-0 font-medium">✓</span>
+                        <div>
+                            <h4 class="font-medium text-neutral-900 dark:text-neutral-100 text-sm">Smooth Onboarding Flow for Business Registration</h4> 
+                            <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1 leading-relaxed">Guided multi-step wizard linking owner verification, business type assignment, and location handling.</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-3.5 p-3 rounded-xl bg-white dark:bg-neutral-900 border border-neutral-200/60 dark:border-neutral-800/60 shadow-2xs">
+                        <span class="inline-flex items-center justify-center w-6 h-6 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs mt-0.5 shrink-0 font-medium">✓</span>
+                        <div>
+                            <h4 class="font-medium text-neutral-900 dark:text-neutral-100 text-sm">Modify Existing Customer Details</h4> 
+                            <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1 leading-relaxed">Streamlined directory tools allowing seamless edits to client names, profiles, and associated metadata.</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-3.5 p-3 rounded-xl bg-white dark:bg-neutral-900 border border-neutral-200/60 dark:border-neutral-800/60 shadow-2xs">
+                        <span class="inline-flex items-center justify-center w-6 h-6 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs mt-0.5 shrink-0 font-medium">✓</span>
+                        <div>
+                            <h4 class="font-medium text-neutral-900 dark:text-neutral-100 text-sm">Flexible Customer Record Creation</h4> 
+                            <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1 leading-relaxed">Register business customers with either their direct mobile phone number or email address.</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-3.5 p-3 rounded-xl bg-white dark:bg-neutral-900 border border-neutral-200/60 dark:border-neutral-800/60 shadow-2xs">
+                        <span class="inline-flex items-center justify-center w-6 h-6 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs mt-0.5 shrink-0 font-medium">✓</span>
+                        <div>
+                            <h4 class="font-medium text-neutral-900 dark:text-neutral-100 text-sm">Improved Account Security & Protection</h4> 
+                            <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1 leading-relaxed">Enhanced authentication controls, secure session management, and robust password update workflows.</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- v1.1.0 Coming Soon Release Card -->
+        <div class="group rounded-2xl bg-white/90 dark:bg-neutral-900/90 backdrop-blur-xl border border-neutral-200/80 dark:border-neutral-800/80 shadow-md hover:border-indigo-500/30 dark:hover:border-indigo-500/30 overflow-hidden transition-all duration-300">
+            <button @click="activeVersion = activeVersion === 'v1.1.0' ? null : 'v1.1.0'" 
+                    class="w-full px-5 sm:px-6 py-5 flex items-center justify-between text-left focus:outline-none cursor-pointer">
+                <div class="flex items-center gap-4 min-w-0">
+                    <div class="w-11 h-11 shrink-0 rounded-xl bg-indigo-500/10 dark:bg-indigo-500/15 flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-medium text-sm group-hover:scale-105 transition-transform duration-300">
+                        v1.1
+                    </div>
+                    <div class="min-w-0">
+                        <div class="flex items-center gap-2.5 flex-wrap">
+                            <h3 class="text-base font-medium text-neutral-900 dark:text-neutral-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors truncate">
+                                v1.1.0: Billing, Subscriptions & Automated Payments
+                            </h3>
+                            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-indigo-100 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-500/20 shrink-0">In Development</span>
+                        </div>
+                        <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5 truncate">Target Release: Q3 Architecture Cycle</p>
+                    </div>
+                </div>
+                <div class="w-8 h-8 shrink-0 rounded-full bg-neutral-100 dark:bg-neutral-800/80 flex items-center justify-center text-neutral-500 dark:text-neutral-400 ml-3 transition-colors group-hover:bg-indigo-500/10 group-hover:text-indigo-600 dark:group-hover:text-indigo-400">
+                    <svg class="w-4 h-4 transform transition-transform duration-300" :class="{ 'rotate-180': activeVersion === 'v1.1.0' }" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </div>
+            </button>
+
+            <!-- Accordion Details Content -->
+            <div x-show="activeVersion === 'v1.1.0'" 
+                 x-transition:enter="transition ease-out duration-300"
+                 x-transition:enter-start="opacity-0 max-h-0"
+                 x-transition:enter-end="opacity-100 max-h-[800px]"
+                 x-transition:leave="transition ease-in duration-200"
+                 x-transition:leave-start="opacity-100 max-h-[800px]"
+                 x-transition:leave-end="opacity-0 max-h-0"
+                 class="px-5 sm:px-6 pb-6 pt-2 border-t border-neutral-100 dark:border-neutral-800/80 bg-neutral-50/50 dark:bg-neutral-950/30">
+                <ul class="space-y-4 text-sm text-neutral-600 dark:text-neutral-300 pt-2">
+                    <li class="flex items-start gap-3.5 p-3 rounded-xl bg-white dark:bg-neutral-900 border border-neutral-200/60 dark:border-neutral-800/60 shadow-2xs">
+                        <span class="inline-flex items-center justify-center w-6 h-6 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-xs mt-0.5 shrink-0 font-medium">✦</span>
+                        <div>
+                            <h4 class="font-medium text-neutral-900 dark:text-neutral-100 text-sm">Automated Billing & Invoicing Engine</h4> 
+                            <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1 leading-relaxed">Streamline customer billing flows with automated recurring invoices and digital receipts.</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-3.5 p-3 rounded-xl bg-white dark:bg-neutral-900 border border-neutral-200/60 dark:border-neutral-800/60 shadow-2xs">
+                        <span class="inline-flex items-center justify-center w-6 h-6 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-xs mt-0.5 shrink-0 font-medium">✦</span>
+                        <div>
+                            <h4 class="font-medium text-neutral-900 dark:text-neutral-100 text-sm">Subscription Tier Management</h4> 
+                            <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1 leading-relaxed">Flexible tools to manage customer subscription plans, upgrade prompts, and lifecycle renewals.</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-3.5 p-3 rounded-xl bg-white dark:bg-neutral-900 border border-neutral-200/60 dark:border-neutral-800/60 shadow-2xs">
+                        <span class="inline-flex items-center justify-center w-6 h-6 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-xs mt-0.5 shrink-0 font-medium">✦</span>
+                        <div>
+                            <h4 class="font-medium text-neutral-900 dark:text-neutral-100 text-sm">Secure Payment Gateway Integration</h4> 
+                            <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1 leading-relaxed">Real-time webhooks and transaction processing directly connected to your platform ledger.</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</section> {% endcomment %}
+
+<section class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-16" x-data="{ activeVersion: 'v1.0.1' }">
+    
+    <!-- Ambient Background Glow Accents -->
+    <div class="pointer-events-none absolute inset-0 -z-10 flex items-center justify-center overflow-hidden" aria-hidden="true">
+        <div class="w-125 h-125 bg-emerald-400/15 dark:bg-emerald-500/5 rounded-full blur-[120px]"></div>
+        <div class="w-125 h-125 bg-indigo-400/15 dark:bg-indigo-500/5 rounded-full blur-[120px]"></div>
+    </div>
+
+    <!-- Section Header -->
+    <div class="text-center mb-12 sm:mb-16">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-100/80 dark:bg-emerald-950/50 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 text-xs font-medium mb-4 shadow-xs">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            Changelog & System Architecture
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-medium tracking-tight text-neutral-900 dark:text-neutral-100 mb-4">
+            Release Notes & Upcoming Features
+        </h2>
+        <p class="text-neutral-600 dark:text-neutral-400 text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
+            Explore stable platform updates deployed in v1.0.1 and preview our upcoming architectural roadmap for v1.1.0.
+        </p>
+    </div>
+
+    <!-- Bento Grid Container -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+        <!-- v1.0.1 SHIPPED BENTO CARD -->
+        <div class="group relative rounded-3xl bg-linear-to-br from-emerald-50/80 via-white to-teal-50/40 dark:from-neutral-900 dark:via-neutral-900 dark:to-emerald-950/20 p-6 sm:p-8 border border-emerald-500/20 dark:border-emerald-500/10 shadow-xl shadow-emerald-500/5 backdrop-blur-2xl flex flex-col justify-between transition-all duration-300 hover:shadow-2xl hover:border-emerald-500/40">
+            
+            <!-- Card Header & Badge -->
+            <div>
+                <div class="flex items-center justify-between mb-6">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-500 text-white flex items-center justify-center font-medium text-sm shadow-lg shadow-emerald-500/30 group-hover:scale-105 transition-transform duration-300">
+                        v1.0
+                    </div>
+                    <span class="px-3 py-1 rounded-full text-xs font-medium bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border border-emerald-500/30 flex items-center gap-1.5 shadow-2xs">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Active
+                    </span>
+                </div>
+
+                <h3 class="text-lg md:text-xl font-medium text-neutral-900 dark:text-neutral-100 tracking-tight mb-1">
+                    <span class="text-sm">v1.0.1:</span> Core Onboarding & Client Directory
+                </h3>
+                <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-6 font-medium">
+                    Deployed to Production • Stabilized Client & Business Reg Core
+                </p>
+
+                <!-- Feature Mini Bento List -->
+                <ul class="space-y-3">
+                    <li class="p-3 rounded-2xl bg-white/80 dark:bg-neutral-800/60 border border-emerald-500/10 dark:border-white/5 shadow-2xs flex items-start gap-3">
+                        <span class="w-6 h-6 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 font-medium text-xs mt-0.5">✓</span>
+                        <div>
+                            <h4 class="text-xs font-medium text-neutral-900 dark:text-neutral-100">Smooth Onboarding Flow</h4>
+                            <p class="text-[11px] text-neutral-500 dark:text-neutral-400 mt-0.5 leading-relaxed">Guided multi-step wizard linking owner verification, business type assignment, and location handling.</p>
+                        </div>
+                    </li>
+                    <li class="p-3 rounded-2xl bg-white/80 dark:bg-neutral-800/60 border border-emerald-500/10 dark:border-white/5 shadow-2xs flex items-start gap-3">
+                        <span class="w-6 h-6 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 font-medium text-xs mt-0.5">✓</span>
+                        <div>
+                            <h4 class="text-xs font-medium text-neutral-900 dark:text-neutral-100">Modify Customer Details</h4>
+                            <p class="text-[11px] text-neutral-500 dark:text-neutral-400 mt-0.5 leading-relaxed">Streamlined directory tools allowing seamless edits to client names, profiles, and associated metadata.</p>
+                        </div>
+                    </li>
+                    <li class="p-3 rounded-2xl bg-white/80 dark:bg-neutral-800/60 border border-emerald-500/10 dark:border-white/5 shadow-2xs flex items-start gap-3">
+                        <span class="w-6 h-6 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 font-medium text-xs mt-0.5">✓</span>
+                        <div>
+                            <h4 class="text-xs font-medium text-neutral-900 dark:text-neutral-100">Flexible Record Creation</h4>
+                            <p class="text-[11px] text-neutral-500 dark:text-neutral-400 mt-0.5 leading-relaxed">Register business customers with either direct mobile numbers or email addresses.</p>
+                        </div>
+                    </li>
+                    <li class="p-3 rounded-2xl bg-white/80 dark:bg-neutral-800/60 border border-emerald-500/10 dark:border-white/5 shadow-2xs flex items-start gap-3">
+                        <span class="w-6 h-6 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 font-medium text-xs mt-0.5">✓</span>
+                        <div>
+                            <h4 class="text-xs font-medium text-neutral-900 dark:text-neutral-100">Account Security & Protection</h4>
+                            <p class="text-[11px] text-neutral-500 dark:text-neutral-400 mt-0.5 leading-relaxed">Enhanced authentication controls, secure session management, and robust password workflows.</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="mt-6 pt-4 border-t border-emerald-500/10 flex items-center justify-between text-xs font-medium text-emerald-700 dark:text-emerald-400">
+                <span>Status: Active Build</span>
+                <span class="inline-flex items-center gap-1">Stable v1.0.1</span>
+            </div>
+        </div>
+
+        <!-- v1.1.0 IN DEVELOPMENT BENTO CARD -->
+        <div class="group relative rounded-3xl bg-linear-to-br from-indigo-50/80 via-white to-purple-50/40 dark:from-neutral-900 dark:via-neutral-900 dark:to-indigo-950/20 p-6 sm:p-8 border border-indigo-500/20 dark:border-indigo-500/10 shadow-xl shadow-indigo-500/5 backdrop-blur-2xl flex flex-col justify-between transition-all duration-300 hover:shadow-2xl hover:border-indigo-500/40">
+            
+            <!-- Card Header & Badge -->
+            <div>
+                <div class="flex items-center justify-between mb-6">
+                    <div class="w-12 h-12 rounded-2xl bg-indigo-500 text-white flex items-center justify-center font-medium text-sm shadow-lg shadow-indigo-500/30 group-hover:scale-105 transition-transform duration-300">
+                        v1.1
+                    </div>
+                    <span class="px-3 py-1 rounded-full text-xs font-medium bg-indigo-100 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 border border-indigo-500/30 flex items-center gap-1.5 shadow-2xs">
+                        <span class="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse"></span> In-coming
+                    </span>
+                </div>
+
+                <h3 class="text-lg md:text-xl font-medium text-neutral-900 dark:text-neutral-100 tracking-tight mb-1">
+                    <span class="text-sm">v1.1.0:</span> Billing, Subscriptions & Payments
+                </h3>
+                <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-6 font-medium">
+                    Target Release: Q3 Architecture Cycle
+                </p>
+
+                <!-- Feature Mini Bento List -->
+                <ul class="space-y-3">
+                    <li class="p-3 rounded-2xl bg-white/80 dark:bg-neutral-800/60 border border-indigo-500/10 dark:border-white/5 shadow-2xs flex items-start gap-3">
+                        <span class="w-6 h-6 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0 font-medium text-xs mt-0.5">✦</span>
+                        <div>
+                            <h4 class="text-xs font-medium text-neutral-900 dark:text-neutral-100">Automated Billing & Invoicing Engine</h4>
+                            <p class="text-[11px] text-neutral-500 dark:text-neutral-400 mt-0.5 leading-relaxed">Streamline customer billing flows with automated recurring invoices and digital receipts.</p>
+                        </div>
+                    </li>
+                    <li class="p-3 rounded-2xl bg-white/80 dark:bg-neutral-800/60 border border-indigo-500/10 dark:border-white/5 shadow-2xs flex items-start gap-3">
+                        <span class="w-6 h-6 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0 font-medium text-xs mt-0.5">✦</span>
+                        <div>
+                            <h4 class="text-xs font-medium text-neutral-900 dark:text-neutral-100">Subscription Tier Management</h4>
+                            <p class="text-[11px] text-neutral-500 dark:text-neutral-400 mt-0.5 leading-relaxed">Flexible tools to manage customer subscription plans, upgrade prompts, and lifecycle renewals.</p>
+                        </div>
+                    </li>
+                    <li class="p-3 rounded-2xl bg-white/80 dark:bg-neutral-800/60 border border-indigo-500/10 dark:border-white/5 shadow-2xs flex items-start gap-3">
+                        <span class="w-6 h-6 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0 font-medium text-xs mt-0.5">✦</span>
+                        <div>
+                            <h4 class="text-xs font-medium text-neutral-900 dark:text-neutral-100">Secure Payment Gateway Integration</h4>
+                            <p class="text-[11px] text-neutral-500 dark:text-neutral-400 mt-0.5 leading-relaxed">Real-time webhooks and transaction processing directly connected to your platform ledger.</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="mt-6 pt-4 border-t border-indigo-500/10 flex items-center justify-between text-xs font-medium text-indigo-600 dark:text-indigo-400">
+                <span>Status: Active Sprint</span>
+                <span class="inline-flex items-center gap-1">Incoming Q3</span>
+            </div>
+        </div>
+
+    </div>
+</section>
+{% endblock %}

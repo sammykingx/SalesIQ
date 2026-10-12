@@ -12,6 +12,11 @@ from utils.pydantic_formatter import format_pydantic_errors
 from pydantic import ValidationError
 from typing import Any
 
+import logging
+
+
+logger = logging.getLogger(__name__)
+
 
 class CreateCustomersView(LoginRequiredMixin, View):
     """
@@ -42,8 +47,11 @@ class CreateCustomersView(LoginRequiredMixin, View):
             }, status=422)
             
         except Exception as err:
-            import traceback
-            traceback.print_exc()
+            logger.exception(
+                "Failed to create customer for business owner '%s': %s",
+                getattr(request.user, "email", "unknown"),
+                err,
+            )
             return JsonResponse({
                 "message": "The hamsters powering our servers just went on an unscheduled coffee break. We're waking them up.",
                 "status": "error"

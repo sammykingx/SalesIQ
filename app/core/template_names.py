@@ -63,4 +63,5 @@ class PUBLIC:
     INDEX = f'{_PUBLIC_BASE_FOLDER}/index.html'
     COMING_SOON = f'{_PUBLIC_BASE_FOLDER}/coming-soon.html'
     FEEDBACK = f'{_PUBLIC_BASE_FOLDER}/feedback.html'
+    RELEASE_ROADMAP = f'{_PUBLIC_BASE_FOLDER}/release-roadmap.html'
     

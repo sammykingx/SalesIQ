@@ -33,6 +33,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     
     path("", TemplateView.as_view(template_name=PUBLIC.INDEX), name="home"),
+    path("release/", TemplateView.as_view(template_name=PUBLIC.RELEASE_ROADMAP), name="release-roadmap"),
     path("business-json/", BusinessJSONDataView.as_view(), name=BUSINESS_DATA),
     path("accounts/", include("accounts.urls")),
     path("customers/", include("customers.urls")),

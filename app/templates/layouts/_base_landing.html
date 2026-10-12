@@ -5,24 +5,20 @@
 {% block body %}
 <div 
   x-data="{
-    darkMode: document.documentElement.classList.contains('dark'),
+    theme: document.documentElement.classList.contains('dark') ? 'dark' : 'light',
     selectedLang: 'Africa/Lagos',
     toastTitle: '',
     showToast: false,
     toastMessage: '',
     toastType: 'success', // 'success' | 'error' | 'warning' | 'info'
     init() {
-      this.$watch('darkMode', value => {
-        localStorage.setItem('theme', JSON.stringify(value ? 'dark' : 'light'));
-        if (value) {
-          document.documentElement.classList.add('dark');
-        } else {
-          document.documentElement.classList.remove('dark');
-        }
+      this.$watch('theme', value => {
+        document.documentElement.classList.toggle('dark', value === 'dark');
+        localStorage.setItem('theme', value);
       });
     },
     toggleTheme() {
-      this.darkMode = !this.darkMode;
+      this.theme = this.theme === 'dark' ? 'light' : 'dark';
     },
     triggerToast(title, msg, type = 'success') {
       this.toastTitle = title;
@@ -131,14 +127,14 @@
     
     <!-- Brand Logo Anchor -->
     <a href="/" class="flex items-center group focus:outline-none">
-      <template x-if="!darkMode">
+      <template x-if="!theme">
         <img 
           src="{% static 'images/logo/main-logo-light.png' %}" 
           alt="SalesIQ Logo" 
           class="h-8 sm:h-10 w-auto object-contain transition-transform duration-200 group-hover:scale-105"
         />
       </template>
-      <template x-if="darkMode">
+      <template x-if="theme">
         <img 
           src="{% static 'images/logo/main-logo-dark.png' %}" 
           alt="SalesIQ Logo" 
@@ -166,10 +162,10 @@
         class="text-ink-600 dark:text-ink-400 hover:text-ink-900 dark:hover:text-white transition-colors p-2 rounded-2xl bg-white dark:bg-ink-900/80 border border-ink-100 dark:border-white/10 focus:outline-none focus:ring-1 focus:ring-primary/50 shadow-xs backdrop-blur-md cursor-pointer"
         aria-label="Toggle Theme"
       >
-        <svg x-show="darkMode" class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg x-show="theme" class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
         </svg>
-        <svg x-show="!darkMode" class="w-4 h-4 text-ink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg x-show="!theme" class="w-4 h-4 text-ink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
         </svg>
       </button>

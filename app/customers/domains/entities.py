@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from datetime import datetime
 from uuid import UUID
+from typing import Optional
 
 
 @dataclass
@@ -8,8 +9,8 @@ class CustomerEntity:
     id: int
     first_name: str
     last_name: str
-    email: str
-    phone_number: str
+    email: Optional[str]
+    phone_number: Optional[str]
     
 
 @dataclass
