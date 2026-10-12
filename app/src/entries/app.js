@@ -17,7 +17,7 @@ import {
 
 import { initAuthModule } from "./auth/index.js";
 import { initComponentsModule } from "./components/index.js";
-import { initOnboarding } from "./onboarding/index.js";
+import { initOnboarding } from "./onboarding";
 import { inAppToast } from "../lib/in-app-toast.js";
 
 import { initAccountsModule } from "./accounts";

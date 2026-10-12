@@ -7,6 +7,7 @@
   x-data="{
     darkMode: document.documentElement.classList.contains('dark'),
     selectedLang: 'Africa/Lagos',
+    toastTitle: '',
     showToast: false,
     toastMessage: '',
     toastType: 'success', // 'success' | 'error' | 'warning' | 'info'
@@ -23,7 +24,8 @@
     toggleTheme() {
       this.darkMode = !this.darkMode;
     },
-    triggerToast(msg, type = 'success') {
+    triggerToast(title, msg, type = 'success') {
+      this.toastTitle = title;
       this.toastMessage = msg;
       this.toastType = type;
       this.showToast = true;
@@ -88,8 +90,8 @@
     <!-- Content -->
     <div class="flex-1 pt-0.5 min-w-0">
       <p 
-        class="text-sm font-semibold capitalize tracking-tight text-slate-900 dark:text-white" 
-        x-text="toastTitle || toastType"
+        class="text-sm font-medium capitalize tracking-tight text-slate-900 dark:text-white" 
+        x-text="toastTitle"
       ></p>
       <p 
         class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-0.5 leading-relaxed wrap-break-word" 
@@ -195,3 +197,141 @@
 
 </div>
 {% endblock %}
+<!-- FORM STEP 1: Business Identity -->
+    <div x-show="currentStep === 1" class="space-y-6">
+      <div class="relative overflow-hidden p-4 rounded-2xl bg-linear-to-r from-emerald-500/10 via-teal-500/5 to-transparent border border-emerald-500/20 dark:border-emerald-500/10">
+        <div class="flex items-center space-x-3">
+          <span class="w-9 h-9 rounded-xl bg-emerald-500 text-slate-950 font-medim flex items-center justify-center shrink-0 shadow-sm shadow-emerald-500/30">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+          </span>
+          <div>
+            <h2 class="text-base md:text-lg font-medium text-slate-900 dark:text-white leading-tight">Welcome! Let's set up your business identity</h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5 font-light">Enter your official trading details to launch your custom hub.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <!-- Field 1: Business Name Card -->
+        <div class="p-4 rounded-2xl bg-white/60 dark:bg-slate-900/40 border border-slate-200/80 dark:border-white/10 transition-all duration-200 hover:border-slate-300 dark:hover:border-white/20 flex flex-col justify-between">
+          <div class="mb-3">
+            <label class="block text-xs font-medim text-slate-800 dark:text-slate-200 mb-1">Business Name <span class="text-rose-500 dark:text-rose-400">*</span></label>
+            <p class="text-[11px] text-slate-400 dark:text-slate-500 font-light">Your registered trade or brand name (max 45 chars).</p>
+          </div>
+          
+          <div class="relative flex items-center">
+            <span class="absolute left-3.5 text-slate-400 dark:text-slate-500 pointer-events-none">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m0 0h4m-4 0V11m0 0h4" />
+              </svg>
+            </span>
+            <input 
+              type="text" 
+              x-model="formData.businessName" 
+              maxlength="45"
+              placeholder="e.g. Apex Retail Store"
+              class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 font-light transition-all focus:outline-none focus:border-emerald-500 focus:ring-0 shadow-none"
+            />
+          </div>
+        </div>
+
+        <!-- Field 2: Official Phone Number Card -->
+        <div class="p-4 rounded-2xl bg-white/60 dark:bg-slate-900/40 border border-slate-200/80 dark:border-white/10 transition-all duration-200 hover:border-slate-300 dark:hover:border-white/20 flex flex-col justify-between">
+          <div class="mb-3">
+            <label class="block text-xs font-medim text-slate-800 dark:text-slate-200 mb-1">Official Phone Number <span class="text-rose-500 dark:text-rose-400">*</span></label>
+            <p class="text-[11px] text-slate-400 dark:text-slate-500 font-light">Primary line for customer contact (max 25 chars).</p>
+          </div>
+
+          <div class="relative flex items-center">
+            <span class="absolute left-3.5 text-slate-400 dark:text-slate-500 pointer-events-none">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+              </svg>
+            </span>
+            <input 
+              type="tel" 
+              x-model="formData.officialNumber"
+              @input="sanitizePhoneNumber"
+              maxlength="25"
+              placeholder="e.g. +2348000000000"
+              class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 font-light transition-all focus:outline-none focus:border-emerald-500 focus:ring-0 shadow-none"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FORM STEP 4: Review & Finalize -->
+    <div x-show="currentStep === 4" class="space-y-6" style="display: none;">
+      <div>
+        <h2 class="text-xl font-medim text-slate-900 dark:text-white">Business Overview</h2>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 font-light">Here is the data we've gathered so far. Take a quick moment to verify everything looks right.</p>
+      </div>
+
+      <div class="space-y-3.5">
+        <!-- Card 1: Core Identity -->
+        <div 
+          class="p-4 rounded-2xl border transition-all duration-200"
+          :class="(backendErrors.business_name || backendErrors.phone_number) ? 'bg-rose-50/60 dark:bg-rose-500/10 border-rose-500/50' : 'bg-white/60 dark:bg-slate-900/40 border-slate-200/80 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/20'"
+        >
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center space-x-2">
+              <span class="w-7 h-7 rounded-lg bg-emerald-500/15 dark:bg-emerald-400/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m0 0h4m-4 0V11m0 0h4" />
+                </svg>
+              </span>
+              <span class="text-xs font-medim text-slate-900 dark:text-white">Business Identity</span>
+            </div>
+            <button @click="currentStep = 1" type="button" class="text-[11px] text-emerald-600 dark:text-emerald-400 hover:underline cursor-pointer">Edit</button>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs pt-1">
+            <div :class="backendErrors.business_name ? 'text-rose-600 dark:text-rose-400' : ''">
+              <span class="block text-[11px] font-light text-slate-500 dark:text-slate-400">Legal / Trade Name</span>
+              <span class="mt-0.5 block font-medium" x-text="formData.businessName || '—'"></span>
+              <span x-show="backendErrors.business_name" class="text-[10px] text-rose-500 mt-1 block" x-text="backendErrors.business_name"></span>
+            </div>
+            <div :class="backendErrors.phone_number ? 'text-rose-600 dark:text-rose-400' : ''">
+              <span class="block text-[11px] font-light text-slate-500 dark:text-slate-400">Official Phone Number</span>
+              <span class="mt-0.5 block font-medium" x-text="formData.officialNumber || '—'"></span>
+              <span x-show="backendErrors.phone_number" class="text-[10px] text-rose-500 mt-1 block" x-text="backendErrors.phone_number"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2: Operational Model & Location -->
+        <div 
+          class="p-4 rounded-2xl border transition-all duration-200"
+          :class="(backendErrors.business_type || backendErrors.address) ? 'bg-rose-50/60 dark:bg-rose-500/10 border-rose-500/50' : 'bg-white/60 dark:bg-slate-900/40 border-slate-200/80 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/20'"
+        >
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center space-x-2">
+              <span class="w-7 h-7 rounded-lg bg-lime-500/15 dark:bg-lime-400/10 text-lime-600 dark:text-lime-400 flex items-center justify-center">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                </svg>
+              </span>
+              <span class="text-xs font-medim text-slate-900 dark:text-white">Model & Location</span>
+            </div>
+            <button @click="currentStep = 2" type="button" class="text-[11px] text-emerald-600 dark:text-emerald-400 hover:underline cursor-pointer">Edit</button>
+          </div>
+
+          <div class="space-y-3 text-xs pt-1">
+            <div :class="backendErrors.business_type ? 'text-rose-600 dark:text-rose-400' : ''">
+              <span class="block text-[11px] font-light text-slate-500 dark:text-slate-400 mb-1">Operational Model</span>
+              <span class="font-medium" x-text="formData.businessType || '—'"></span>
+              <span x-show="backendErrors.business_type" class="text-[10px] text-rose-500 mt-1 block" x-text="backendErrors.business_type"></span>
+            </div>
+
+            <div x-show="formData.address" class="pt-2 border-t border-slate-100 dark:border-white/5" :class="backendErrors.address ? 'text-rose-600 dark:text-rose-400' : ''">
+              <span class="block text-[11px] font-light text-slate-500 dark:text-slate-400">Physical Address</span>
+              <p class="mt-0.5 leading-relaxed font-light" x-text="formData.address"></p>
+              <span x-show="backendErrors.address" class="text-[10px] text-rose-500 mt-1 block" x-text="backendErrors.address"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>

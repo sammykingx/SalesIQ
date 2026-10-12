@@ -16,7 +16,8 @@ def url_name_registry(request: HttpRequest):
     
 def template_context(request: HttpRequest):
     is_previledged = False
-    if request.user.is_authenticated:
+    logged_in = getattr(request.user, "is_authenticated", False)
+    if logged_in:
         is_previledged = True if request.user.email in settings.PREVILEDGE_USERS else False # type: ignore
     return {
         "sidebar_nav_tree": SIDEBAR_NAV_TREE,

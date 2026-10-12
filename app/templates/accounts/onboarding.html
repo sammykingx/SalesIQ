@@ -104,7 +104,7 @@
             </svg>
           </span>
           <div>
-            <h2 class="text-lg font-medium text-slate-900 dark:text-white leading-tight">Welcome! Let's set up your business identity</h2>
+            <h2 class="text-base md:text-lg font-medium text-slate-900 dark:text-white leading-tight">Welcome! Let's set up your business identity</h2>
             <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5 font-light">Enter your official trading details to launch your custom hub.</p>
           </div>
         </div>
@@ -114,8 +114,8 @@
         <!-- Field 1: Business Name Card -->
         <div class="p-4 rounded-2xl bg-white/60 dark:bg-slate-900/40 border border-slate-200/80 dark:border-white/10 transition-all duration-200 hover:border-slate-300 dark:hover:border-white/20 flex flex-col justify-between">
           <div class="mb-3">
-            <label class="block text-xs font-medim text-slate-800 dark:text-slate-200 mb-1">Business Name *</label>
-            <p class="text-[11px] text-slate-400 dark:text-slate-500 font-light">Your registered trade or brand name.</p>
+            <label class="block text-xs font-medim text-slate-800 dark:text-slate-200 mb-1">Business Name <span class="text-rose-500 dark:text-rose-400">*</span></label>
+            <p class="text-[11px] text-slate-400 dark:text-slate-500 font-light">Your trade or brand name (max 45 chars).</p>
           </div>
           
           <div class="relative flex items-center">
@@ -127,6 +127,7 @@
             <input 
               type="text" 
               x-model="formData.businessName" 
+              maxlength="45"
               placeholder="e.g. Apex Retail Store"
               class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 font-light transition-all focus:outline-none focus:border-emerald-500 focus:ring-0 shadow-none"
             />
@@ -136,7 +137,7 @@
         <!-- Field 2: Official Phone Number Card -->
         <div class="p-4 rounded-2xl bg-white/60 dark:bg-slate-900/40 border border-slate-200/80 dark:border-white/10 transition-all duration-200 hover:border-slate-300 dark:hover:border-white/20 flex flex-col justify-between">
           <div class="mb-3">
-            <label class="block text-xs font-medim text-slate-800 dark:text-slate-200 mb-1">Official Phone Number *</label>
+            <label class="block text-xs font-medim text-slate-800 dark:text-slate-200 mb-1">Official Phone Number <span class="text-rose-500 dark:text-rose-400">*</span></label>
             <p class="text-[11px] text-slate-400 dark:text-slate-500 font-light">Primary line for customer contact.</p>
           </div>
 
@@ -150,6 +151,7 @@
               type="tel" 
               x-model="formData.officialNumber"
               @input="sanitizePhoneNumber"
+              maxlength="25"
               placeholder="e.g. +2348000000000"
               class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 font-light transition-all focus:outline-none focus:border-emerald-500 focus:ring-0 shadow-none"
             />
@@ -167,7 +169,7 @@
 
       <div class="space-y-5">
         <div>
-          <label class="block text-xs font-medim text-slate-900 dark:text-gray-300 mb-3">Business Operational Model *</label>
+          <label class="block text-xs font-medim text-slate-900 dark:text-gray-300 mb-3">Business Operational Model <span class="text-rose-500 dark:text-rose-400">*</span></label>
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
             <!-- Option 1: Online Only -->
             <button 
@@ -272,7 +274,7 @@
 
         <!-- Conditional Address Input -->
         <div x-show="formData.businessType === 'physical' || formData.businessType === 'both'" x-collapse>
-          <label class="block text-xs font-medim text-slate-900 dark:text-gray-300 mb-1.5">Physical Address *</label>
+          <label class="block text-xs font-medim text-slate-900 dark:text-gray-300 mb-1.5">Physical Address <span class="text-rose-500 dark:text-rose-400">*</span></label>
           <textarea 
             x-model="formData.address" 
             rows="3"
@@ -363,7 +365,10 @@
 
       <div class="space-y-3.5">
         <!-- Card 1: Core Identity -->
-        <div class="p-4 rounded-2xl bg-white/60 dark:bg-slate-900/40 border border-slate-200/80 dark:border-white/10 transition-all duration-200 hover:border-slate-300 dark:hover:border-white/20">
+        <div 
+          class="p-4 rounded-2xl border transition-all duration-200"
+          :class="(backendErrors.business_name || backendErrors.phone_number) ? 'bg-rose-50/60 dark:bg-rose-500/10 border-rose-500/50' : 'bg-white/60 dark:bg-slate-900/40 border-slate-200/80 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/20'"
+        >
           <div class="flex items-center justify-between mb-3">
             <div class="flex items-center space-x-2">
               <span class="w-7 h-7 rounded-lg bg-emerald-500/15 dark:bg-emerald-400/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
@@ -377,25 +382,29 @@
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs pt-1">
-            <div>
+            <div :class="backendErrors.business_name ? 'text-rose-600 dark:text-rose-400' : ''">
               <span class="block text-[11px] font-light text-slate-500 dark:text-slate-400">Legal / Trade Name</span>
-              <span class="text-slate-900 dark:text-white mt-0.5 block" x-text="formData.businessName || '—'"></span>
+              <span class="mt-0.5 block font-medium" x-text="formData.businessName || '—'"></span>
+              <span x-show="backendErrors.business_name" class="text-[10px] text-rose-500 mt-1 block" x-text="backendErrors.business_name"></span>
             </div>
-            <div>
+            <div :class="backendErrors.phone_number ? 'text-rose-600 dark:text-rose-400' : ''">
               <span class="block text-[11px] font-light text-slate-500 dark:text-slate-400">Official Phone Number</span>
-              <span class="text-slate-900 dark:text-white mt-0.5 block" x-text="formData.officialNumber || '—'"></span>
+              <span class="mt-0.5 block font-medium" x-text="formData.officialNumber || '—'"></span>
+              <span x-show="backendErrors.phone_number" class="text-[10px] text-rose-500 mt-1 block" x-text="backendErrors.phone_number"></span>
             </div>
           </div>
         </div>
 
         <!-- Card 2: Operational Model & Location -->
-        <div class="p-4 rounded-2xl bg-white/60 dark:bg-slate-900/40 border border-slate-200/80 dark:border-white/10 transition-all duration-200 hover:border-slate-300 dark:hover:border-white/20">
+        <div 
+          class="p-4 rounded-2xl border transition-all duration-200"
+          :class="(backendErrors.business_type || backendErrors.address) ? 'bg-rose-50/60 dark:bg-rose-500/10 border-rose-500/50' : 'bg-white/60 dark:bg-slate-900/40 border-slate-200/80 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/20'"
+        >
           <div class="flex items-center justify-between mb-3">
             <div class="flex items-center space-x-2">
               <span class="w-7 h-7 rounded-lg bg-lime-500/15 dark:bg-lime-400/10 text-lime-600 dark:text-lime-400 flex items-center justify-center">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
               </span>
               <span class="text-xs font-medim text-slate-900 dark:text-white">Model & Location</span>
@@ -404,31 +413,16 @@
           </div>
 
           <div class="space-y-3 text-xs pt-1">
-            <div>
+            <div :class="backendErrors.business_type ? 'text-rose-600 dark:text-rose-400' : ''">
               <span class="block text-[11px] font-light text-slate-500 dark:text-slate-400 mb-1">Operational Model</span>
-              <template x-if="formData.businessType === 'online'">
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] bg-lime-500/10 text-lime-700 dark:text-lime-400 border border-lime-500/30">
-                  Online Only
-                </span>
-              </template>
-              <template x-if="formData.businessType === 'physical'">
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] bg-fuchsia-500/10 text-fuchsia-700 dark:text-fuchsia-400 border border-fuchsia-500/30">
-                  Physical Store
-                </span>
-              </template>
-              <template x-if="formData.businessType === 'both'">
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] bg-sky-500/10 text-sky-700 dark:text-sky-400 border border-sky-500/30">
-                  Hybrid Model
-                </span>
-              </template>
-              <template x-if="!formData.businessType">
-                <span class="text-slate-400 font-light">—</span>
-              </template>
+              <span class="font-medium" x-text="formData.businessType || '—'"></span>
+              <span x-show="backendErrors.business_type" class="text-[10px] text-rose-500 mt-1 block" x-text="backendErrors.business_type"></span>
             </div>
 
-            <div x-show="formData.address" class="pt-2 border-t border-slate-100 dark:border-white/5">
+            <div x-show="formData.address" class="pt-2 border-t border-slate-100 dark:border-white/5" :class="backendErrors.address ? 'text-rose-600 dark:text-rose-400' : ''">
               <span class="block text-[11px] font-light text-slate-500 dark:text-slate-400">Physical Address</span>
-              <p class="text-slate-900 dark:text-white mt-0.5 leading-relaxed font-light" x-text="formData.address"></p>
+              <p class="mt-0.5 leading-relaxed font-light" x-text="formData.address"></p>
+              <span x-show="backendErrors.address" class="text-[10px] text-rose-500 mt-1 block" x-text="backendErrors.address"></span>
             </div>
           </div>
         </div>
@@ -472,7 +466,7 @@
           <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
         <p class="text-slate-600 dark:text-slate-400 font-light leading-relaxed">
-          Everything look ready? Click submit to generate your customized business hub profile.
+          Everything look ready? Complete setup below to launch your business profile.
         </p>
       </div>
     </div>

@@ -3,7 +3,6 @@ import pytest
 from django.db.models import Model
 from django.test import RequestFactory
 from django.urls import reverse
-from django.template.loader import render_to_string as django_render_to_string
 from unittest.mock import MagicMock
 
 from accounts.domains.exceptions import InvalidTokenError
@@ -19,24 +18,11 @@ NEW_PASSWORD = "N3w!password"
 FACTORY_PASSWORD = "securepassword123"
 
 def reload(obj: Model):
-    obj.refresh_from_db()
+    obj.refresh_from_db() # type: ignore
     return obj
 
 def reset_token(user, token_type=TokenType.PASSWORD_RESET) -> str:
     return TokenService().create_token(user_email=user.email, token_type=token_type).token
-
-
-# @pytest.fixture(autouse=True)
-# def mailer(monkeypatch):
-#     """
-#     Replaces AppMailerService for EVERY test in this file, so nothing can reach Resend,
-#     even a test that forgets to ask for it. Returns the instance the service will use.
-#     """
-#     mailer_cls = MagicMock(name="AppMailerService")
-#     instance = mailer_cls.return_value
-#     instance.prepare_message.return_value = instance
-#     monkeypatch.setattr(f"{SERVICES}.AppMailerService", mailer_cls)
-#     return instance
 
 @pytest.fixture
 def service(rf: RequestFactory, new_user):
@@ -48,13 +34,6 @@ def service(rf: RequestFactory, new_user):
 def bystander(db):
     """Provides a second, newly registered user on the platform."""
     return UserFactory()
-
-# @pytest.fixture
-# def render_spy(monkeypatch):
-#     """Records render_to_string calls but still renders the real template."""
-#     spy = MagicMock(wraps=django_render_to_string)
-#     monkeypatch.setattr(f"{SERVICES}.render_to_string", spy)
-#     return spy
 
 @pytest.fixture
 def send_spy(monkeypatch):

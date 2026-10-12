@@ -73,22 +73,27 @@ class BusinessOnboardingSchema(BaseModel):
     business_name: str = Field(
         ..., 
         min_length=2, 
-        max_length=48,
+        max_length=45,
         description="The official registered or trading name of the business."
     )
+
     phone_number: str = Field(
         ...,
-        max_length=48,
+        min_length=11,
+        max_length=17,
         description="Primary official phone number for customer contact and verification."
     )
+
     business_type: Literal["online", "physical", "both"] = Field(
         ..., 
         description="The operational model of the business (Online only, Physical storefront, or Hybrid)."
     )
+
     address: Optional[str] = Field(
         None, 
         description="Physical street address. Required if business type is physical or hybrid."
     )
+
     socials: Optional[SocialLinksSchema] = Field(
         default_factory=SocialLinksSchema, # type: ignore
         description="Optional collection of online and social media links."

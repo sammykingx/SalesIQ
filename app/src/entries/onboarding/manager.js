@@ -8,6 +8,7 @@ export function onboardingForm(endpointUrl = '') {
         completed: false,
         sameAsPersonalPhone: false,
         personalPhone: '',
+        backendErrors: {},
 
         // Form Model
         formData: {
@@ -38,8 +39,10 @@ export function onboardingForm(endpointUrl = '') {
         },
 
         get isStep1Valid() {
-            return this.formData.businessName.trim().length >= 2 &&
-                this.formData.officialNumber.trim().length >= 7;
+            return this.formData.businessName.trim().length >= 5 &&
+                this.formData.businessName.trim().length <= 45 &&
+                this.formData.officialNumber.trim().length >= 11 &&
+                this.formData.officialNumber.trim().length <= 17;
         },
 
         get isStep2Valid() {
@@ -74,6 +77,25 @@ export function onboardingForm(endpointUrl = '') {
             if (this.currentStep > 0 && !this.submitting) {
                 this.currentStep--;
             }
+        },
+
+        formatFriendlyError(field, type) {
+            if (field === 'business_name') {
+                if (type === 'string_too_long') return 'Your business name is too long. Please keep it under 45 characters.';
+                if (type === 'string_too_short') return 'Your business name is too short. Please use at least 2 characters.';
+                if (type === 'missing') return 'Please provide your business name.';
+            }
+            if (field === 'phone_number') {
+                if (type === 'string_too_long') return 'Your phone number is too long. Please keep it under 17 digits.';
+                if (type === 'string_too_short') return 'Please enter a valid phone number with at least 11 digits.';
+                if (type === 'missing') return 'Official phone number is required.';
+            }
+            if (field === 'address') {
+                if (type === 'string_too_short') return 'Please provide a complete physical address for your store.';
+            }
+
+            // Clean fallback if any slips through
+            return 'Please review this field and correct the data.';
         },
 
         async completeOnboarding() {
@@ -113,29 +135,38 @@ export function onboardingForm(endpointUrl = '') {
 
             try {
                 const response = await apiRequest(endpointUrl, 'POST', payload);
-
-                // If request is successful, bypass parsing and complete right away
                 if (response?.ok || response?.status === 'success') {
                     this.completed = true;
                     return;
                 }
 
-                // Otherwise, extract error body only when it fails
-                const errorBody = (typeof response?.json === 'function')
-                    ? await response.json().catch(() => null)
-                    : response;
+                const errorBody = await response.json().catch(() => { });
 
                 this.completed = false;
+
+                if (errorBody?.errors) {
+                    if (Array.isArray(errorBody?.errors)) {
+                        errorBody.errors.forEach(err => {
+                            const field = err.field;
+                            const type = err.type;
+                            const rawMessage = err.message;
+
+                            if (field) {
+                                this.backendErrors[field] = this.formatFriendlyError(field, type);
+                            }
+                        });
+                    }
+                }
+
                 this.triggerToast(
+                    errorBody?.title || 'Check Your Input',
                     errorBody?.message || 'An error occurred during onboarding.',
                     errorBody?.status || 'warning'
                 );
 
             } catch (err) {
                 this.completed = false;
-                if (typeof this.triggerToast === 'function') {
-                    this.triggerToast('Network error — please check your connection and try again.', 'warning');
-                }
+                this.triggerToast('Network error', 'please check your connection and try again.', 'warning');
             } finally {
                 this.submitting = false;
             }

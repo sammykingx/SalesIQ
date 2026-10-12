@@ -46,12 +46,6 @@ class BizAccountOnboardingView(LoginRequiredMixin, View):
                 business = BusinessSelector().get_user_business(user_email=request.user.email, as_instance=True) # type: ignore
                 if business:
                     return redirect(reverse(ACCOUNTS.DASHBOARD))
-                    # return JsonResponse({
-                    #     "message": "You already have a business account.",
-                    #     "status": "info",
-                    #     "redirect": True,
-                    #     "redirect_url": "/dashboard/",
-                    # }, status=302)
             except AccountsDomainException:
                 pass
 
@@ -65,13 +59,15 @@ class BizAccountOnboardingView(LoginRequiredMixin, View):
             data = BusinessOnboardingSchema.model_validate_json(request.body, strict=True)
             BusinessService(self.request.user).register_business(data) # type: ignore
             return JsonResponse({
+                "title": "Welcome Aboard",
                 "message": "Your business has been successfully registered.",
                 "status": "success",
             }, status=201)
             
         except ValidationError as err:
             return JsonResponse({
-                "message": "Please review the data provided",
+                "title": "Check Your Entries",
+                "message": "Some fields require your attention. Please check the errors and try again.",
                 "status": "warning",
                 "errors": format_pydantic_errors(err),
             }, status=422)
