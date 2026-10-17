@@ -30,15 +30,23 @@ class CreateCustomersView(LoginRequiredMixin, View):
         try:
             data = CreateCustomerSchema.model_validate_json(request.body, strict=True)
             biz_instance = self.biz_selector.get_user_business(user_email=request.user.email, as_instance=True) # type: ignore
-            if biz_instance:
-                CustomersRepo().create_and_link_customer(
-                    business=biz_instance, customer_data=data, display_name=data.display_name # type: ignore
-                ) 
+            if not biz_instance:
                 return JsonResponse({
-                    "message": "Customer successfully trapped in your business ecosystem. Another soul joins the fold!",
-                    "status": "success"
-                }, status=201)
+                    "message": "No registered business found. Please create a business profile before adding customers.",
+                    "status": "error"
+                }, status=200)
+                
+            CustomersRepo().create_and_link_customer(
+                business=biz_instance, customer_data=data, display_name=data.display_name # type: ignore
+            ) 
             
+            return JsonResponse({
+                "message": "Customer successfully trapped in your business ecosystem. Another soul joins the fold!",
+                "status": "success"
+            }, status=201)
+
+            
+
         except ValidationError as err:
             return JsonResponse({
                 "message": "Your data is looking a bit tragic. Fix your typos and try again.", 
@@ -78,4 +86,8 @@ class BusinessCustomersListView(LoginRequiredMixin, TemplateView):
             "customers_json": customers_data,
             "metrics": metrics_data,
         }
+        
+        
+class CustomerDetailView(TemplateView):
+    template_name = APP_TEMPLATES.CUSTOMERS.DETAIL
     

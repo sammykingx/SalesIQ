@@ -1,0 +1,203 @@
+{# customers/customer_detail.html #}
+{% extends "layouts/_base_app.html" %}
+{% load static %}
+
+{% block title %}salesiq | customer profile{% endblock %}
+
+{% block page_body %}
+{{ customer_json|json_script:"customer-data" }}
+
+<div x-data="customerDetailComponent()" class="space-y-6">
+    
+    <!-- PAGE HEADER / BACK BUTTON -->
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div class="flex items-center gap-3">
+            <a href="{% url CUSTOMERS.LIST %}" class="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-neutral-200 bg-white text-neutral-600 shadow-xs hover:bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-300 dark:hover:bg-neutral-800">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+            </a>
+            <div>
+                <div class="flex items-center gap-2">
+                    <h1 class="text-xl font-medium tracking-tight text-neutral-900 dark:text-white sm:text-2xl" x-text="fullName"></h1>
+                    <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium"
+                          :class="customer.status === 'VIP' ? 'bg-amber-50 text-amber-700 dark:bg-amber-950/60 dark:text-amber-400 border border-amber-200/60 dark:border-amber-900/60' : 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-400 border border-emerald-200/60 dark:border-emerald-900/60'"
+                          x-text="customer.status">
+                    </span>
+                </div>
+                <p class="text-xs text-neutral-500 dark:text-neutral-400">Client profile overview, lifetime value metrics, and purchase history.</p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+            <template x-if="!isEditing">
+                <button type="button" @click="toggleEdit()" class="inline-flex items-center gap-2 rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-xs font-medium text-neutral-700 shadow-xs hover:bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-200 dark:hover:bg-neutral-800">
+                    <svg class="h-4 w-4 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                    <span>Edit Client Info</span>
+                </button>
+            </template>
+            <template x-if="isEditing">
+                <div class="flex items-center gap-2">
+                    <button type="button" @click="toggleEdit()" class="rounded-xl border border-neutral-200 bg-white px-3.5 py-2 text-xs font-medium text-neutral-600 hover:bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-300">
+                        Cancel
+                    </button>
+                    <button type="button" @click="saveCustomerInfo()" :disabled="loading" class="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 disabled:opacity-50">
+                        <span x-show="!loading">Save Changes</span>
+                        <span x-show="loading">Saving...</span>
+                    </button>
+                </div>
+            </template>
+        </div>
+    </div>
+
+    <!-- FEEDBACK ALERTS -->
+    <template x-if="successMessage">
+        <div class="rounded-xl bg-emerald-50 p-3 text-xs font-medium text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-900/60" x-text="successMessage"></div>
+    </template>
+    <template x-if="errorMessage">
+        <div class="rounded-xl bg-rose-50 p-3 text-xs font-medium text-rose-800 dark:bg-rose-950/60 dark:text-rose-300 border border-rose-200/60 dark:border-rose-900/60" x-text="errorMessage"></div>
+    </template>
+
+    <!-- RESPONSIVE BENTO GRID -->
+    <div class="grid grid-cols-1 gap-5 lg:grid-cols-3">
+        
+        <!-- BENTO ITEM 1: Profile Summary & Editable Info (Span 1 or 2) -->
+        <div class="rounded-2xl border border-neutral-200/80 bg-white p-6 shadow-xs dark:border-neutral-800 dark:bg-neutral-900 lg:col-span-1 flex flex-col justify-between">
+            <div>
+                <div class="flex items-center gap-4">
+                    <template x-if="customer.avatar">
+                        <img :src="customer.avatar" alt="" class="h-16 w-16 rounded-2xl object-cover shadow-sm">
+                    </template>
+                    <template x-if="!customer.avatar">
+                        <div class="flex h-16 w-16 items-center justify-center rounded-2xl text-base font-semibold shadow-xs" :class="avatarBgColor" x-text="initials"></div>
+                    </template>
+                    <div>
+                        <h2 class="text-base font-medium text-neutral-900 dark:text-white" x-text="fullName"></h2>
+                        <p class="text-xs text-neutral-500 dark:text-neutral-400" x-text="'Member since ' + formatDate(customer.dateCreated)"></p>
+                    </div>
+                </div>
+
+                <div class="mt-6 border-t border-neutral-100 pt-5 dark:border-neutral-800">
+                    <!-- VIEW MODE -->
+                    <template x-if="!isEditing">
+                        <div class="space-y-3">
+                            <div>
+                                <span class="text-[11px] font-medium uppercase tracking-wider text-neutral-400 dark:text-neutral-500">Email Address</span>
+                                <p class="text-xs font-medium text-neutral-800 dark:text-neutral-200" x-text="customer.email || 'No email provided'"></p>
+                            </div>
+                            <div>
+                                <span class="text-[11px] font-medium uppercase tracking-wider text-neutral-400 dark:text-neutral-500">Phone Number</span>
+                                <p class="text-xs font-medium text-neutral-800 dark:text-neutral-200" x-text="customer.phone || 'No phone provided'"></p>
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- EDIT MODE -->
+                    <template x-if="isEditing">
+                        <div class="space-y-3">
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="block text-[11px] font-medium text-neutral-500 dark:text-neutral-400 mb-1">First Name</label>
+                                    <input type="text" x-model="editForm.firstName" class="w-full rounded-xl border border-neutral-200 bg-neutral-50 px-3 py-2 text-xs text-neutral-900 focus:bg-white focus:outline-hidden dark:border-neutral-800 dark:bg-neutral-950 dark:text-white">
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] font-medium text-neutral-500 dark:text-neutral-400 mb-1">Last Name</label>
+                                    <input type="text" x-model="editForm.lastName" class="w-full rounded-xl border border-neutral-200 bg-neutral-50 px-3 py-2 text-xs text-neutral-900 focus:bg-white focus:outline-hidden dark:border-neutral-800 dark:bg-neutral-950 dark:text-white">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-medium text-neutral-500 dark:text-neutral-400 mb-1">Email Address</label>
+                                <input type="email" x-model="editForm.email" class="w-full rounded-xl border border-neutral-200 bg-neutral-50 px-3 py-2 text-xs text-neutral-900 focus:bg-white focus:outline-hidden dark:border-neutral-800 dark:bg-neutral-950 dark:text-white">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-medium text-neutral-500 dark:text-neutral-400 mb-1">Phone Number</label>
+                                <input type="text" x-model="editForm.phone" class="w-full rounded-xl border border-neutral-200 bg-neutral-50 px-3 py-2 text-xs text-neutral-900 focus:bg-white focus:outline-hidden dark:border-neutral-800 dark:bg-neutral-950 dark:text-white">
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <div class="mt-6 rounded-xl bg-neutral-50 p-3.5 dark:bg-neutral-800/50">
+                <p class="text-[11px] text-neutral-500 dark:text-neutral-400">💡 Tip: Business owners can edit and save client particulars immediately without leaving this screen.</p>
+            </div>
+        </div>
+
+        <!-- BENTO ITEM 2: Customer Key Metrics (Total Spend & Repeat Percentage) -->
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:col-span-2">
+            
+            <!-- Spend Card -->
+            <div class="rounded-2xl border border-neutral-200/80 bg-white p-5 shadow-xs dark:border-neutral-800 dark:bg-neutral-900 flex flex-col justify-between">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-medium text-neutral-500 dark:text-neutral-400">Total Lifetime Spend</span>
+                    <span class="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 dark:bg-emerald-950/60 dark:text-emerald-400">
+                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </span>
+                </div>
+                <div class="mt-4">
+                    <p class="text-2xl font-medium tracking-tight text-neutral-900 dark:text-white" x-text="formatCurrency(customer.spend)"></p>
+                    <p class="mt-1 text-xs text-neutral-500 dark:text-neutral-400" x-text="customer.totalOrders + ' completed orders total'"></p>
+                </div>
+            </div>
+
+            <!-- Repeat Percentage Card -->
+            <div class="rounded-2xl border border-neutral-200/80 bg-white p-5 shadow-xs dark:border-neutral-800 dark:bg-neutral-900 flex flex-col justify-between">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-medium text-neutral-500 dark:text-neutral-400">Repeat Customer Rate</span>
+                    <span class="flex h-8 w-8 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600 dark:bg-indigo-950/60 dark:text-indigo-400">
+                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        </svg>
+                    </span>
+                </div>
+                <div class="mt-4">
+                    <p class="text-2xl font-medium tracking-tight text-neutral-900 dark:text-white" x-text="customer.repeatPercentage + '%'"></p>
+                    <p class="mt-1 text-xs text-emerald-600 dark:text-emerald-400 font-medium">High loyalty tier frequency</p>
+                </div>
+            </div>
+
+            <!-- BENTO ITEM 3: Last 5 Sales Purchases Log -->
+            <div class="rounded-2xl border border-neutral-200/80 bg-white p-6 shadow-xs dark:border-neutral-800 dark:bg-neutral-900 sm:col-span-2">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-sm font-medium text-neutral-900 dark:text-white">Last 5 Sales Purchases</h3>
+                    <span class="text-xs text-neutral-500 dark:text-neutral-400">Recent transactions</span>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs">
+                        <thead class="border-b border-neutral-100 text-[11px] font-medium uppercase text-neutral-400 dark:border-neutral-800 dark:text-neutral-500">
+                            <tr>
+                                <th class="pb-3 font-medium">Invoice ID</th>
+                                <th class="pb-3 font-medium">Date</th>
+                                <th class="pb-3 font-medium">Items Summary</th>
+                                <th class="pb-3 font-medium text-right">Total Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-neutral-100 dark:divide-neutral-800">
+                            <template x-for="sale in customer.recentSales" :key="sale.id">
+                                <tr class="group hover:bg-neutral-50/50 dark:hover:bg-neutral-800/50">
+                                    <td class="py-3 font-medium text-indigo-600 dark:text-indigo-400" x-text="sale.id"></td>
+                                    <td class="py-3 text-neutral-600 dark:text-neutral-300" x-text="formatDate(sale.date)"></td>
+                                    <td class="py-3 text-neutral-800 dark:text-neutral-200 truncate max-w-xs" x-text="sale.itemsSummary"></td>
+                                    <td class="py-3 text-right font-medium text-neutral-900 dark:text-white" x-text="formatCurrency(sale.total)"></td>
+                                </tr>
+                            </template>
+                            <template x-if="!customer.recentSales || customer.recentSales.length === 0">
+                                <tr>
+                                    <td colspan="4" class="py-4 text-center text-neutral-400">No purchase history recorded yet.</td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+{% endblock %}

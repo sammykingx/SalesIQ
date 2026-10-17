@@ -1,16 +1,12 @@
 from django.db import models
-from django.utils.text import slugify
+from customers.domains.customer_code import build_unique_customer_code
 
-import secrets
-
-
-_ALPHABET = "abcdefghjkmnpqrstuvwxyz23456789"
 class Customers(models.Model):
     """Canonical identity, used only for dedup matching across businesses."""
     
     first_name = models.CharField(max_length=30, default=None)
     last_name = models.CharField(max_length=30, default=None)
-    # code = models.CharField(max_length=100, unique=True, editable=False, help_text="A unique code to reference a customer")
+    # code = models.CharField(max_length=100, unique=True, editable=False, null=True, blank=True, help_text="A unique code to reference a customer")
     phone_number = models.CharField(max_length=20, unique=True, null=True, blank=True)
     email = models.EmailField(unique=True, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -31,16 +27,11 @@ class Customers(models.Model):
     
     # def save(self, *args, **kwargs):
     #     if not self.code:
-    #         self.code = self.build_customer_code(
-    #             first_name=self.first_name, 
-    #             last_name=self.last_name
+    #         self.code = build_unique_customer_code(
+    #             f_name=self.first_name, 
+    #             l_name=self.last_name
     #         )
     #     return super().save(*args, **kwargs)
-    
-    @staticmethod
-    def build_customer_code(*, first_name: str, last_name: str):
-        base = slugify(f"{first_name} {last_name}")[:25] or "customer"
-        return f"{base}-{''.join(secrets.choice(_ALPHABET) for _ in range(8))}"
     
     class Meta:
         db_table = "customers"

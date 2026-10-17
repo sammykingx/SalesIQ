@@ -12,7 +12,7 @@ import {
     Check, LockOpen, ShieldCheck, Eye, EyeOff, CheckCircle2, XCircle, Timer, Save,
     AlertTriangle, AlertCircle, Info, X, KeyRound, ShieldAlert, Share2, MessageSquare,
     Phone, Trash2, TriangleAlert, PackagePlus, Box, Download, Briefcase, Bold, Italic,
-    List, ListOrdered, Plus, UserCheck, UserPlus, ExternalLink, ShieldUser, Route, Road
+    List, ListOrdered, Plus, UserCheck, UserPlus, ExternalLink, ShieldUser, Route, Milestone
 } from "lucide";
 
 import { initAuthModule } from "./auth/index.js";
@@ -46,7 +46,7 @@ createIcons({
         KeyRound, ShieldAlert, Timer, Share2, MessageSquare, Save,
         Phone, Trash2, TriangleAlert, PackagePlus, Box, Download,
         Briefcase, Bold, Italic, List, ListOrdered, Plus, UserCheck,
-        UserPlus, ExternalLink, ShieldUser, Route, Road
+        UserPlus, ExternalLink, ShieldUser, Route,
     },
     attrs: { 'stroke-width': 1.75 },
 });
