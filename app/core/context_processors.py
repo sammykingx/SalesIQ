@@ -16,7 +16,8 @@ def url_name_registry(request: HttpRequest):
     
 def template_context(request: HttpRequest):
     is_previledged = False
-    logged_in = getattr(request.user, "is_authenticated", False)
+    user = getattr(request, "user", None)
+    logged_in = getattr(user, "is_authenticated", False)
     if logged_in:
         is_previledged = True if request.user.email in settings.PREVILEDGE_USERS else False # type: ignore
     return {
