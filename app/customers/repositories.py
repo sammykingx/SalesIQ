@@ -1,7 +1,12 @@
+from django.utils import timezone
+from django.db import transaction
+from django.db.models import Q
 from accounts.models import Business
 from customers.models import Customers, BusinessCustomers
 from customers.serializers import CreateCustomerSchema
-
+from customers.domains.customer_code import build_business_customer_slug
+from uuid import UUID
+from typing import Optional
 
 class CustomersRepo:
     def __init__(self) -> None:
@@ -45,6 +50,7 @@ class CustomersRepo:
             defaults={
                 "display_name": display_name,
                 "notes": notes,
+                "slug": build_business_customer_slug(display_name),
             }
         )
         return link
@@ -72,4 +78,21 @@ class CustomersRepo:
         """
         customer = self.get_or_create_canonical_customer(data=customer_data, created_by_business=business)
         return self.link_to_business(business, customer, display_name, notes)
+    
+    @transaction.atomic
+    def update_business_customer_info(self, *, business_id: UUID, customer_data: CreateCustomerSchema, client_id:Optional[int], profile_slug:Optional[int],):
+        filters = Q(business_id=business_id)
+        if client_id:
+            filters &= Q(client_id=client_id)
+            
+        if profile_slug:
+            filters &= Q(slug=profile_slug)
+            
+        self.biz_customer_model.objects.filter(
+            filters
+        ).update(
+            display_name=customer_data.display_name,
+            phone_number=customer_data.phone_number,
+            updated_at=timezone.now()   
+        )
     

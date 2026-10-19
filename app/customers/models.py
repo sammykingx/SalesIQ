@@ -2,7 +2,15 @@ from django.db import models
 from customers.domains.customer_code import build_unique_customer_code
 
 class Customers(models.Model):
-    """Canonical identity, used only for dedup matching across businesses."""
+    """
+        Represents a global canonical customer identity used for deduplication 
+        and cross-business matching.
+
+        A single customer record can be associated with multiple businesses via 
+        the `BusinessCustomers` through model. This allows different businesses 
+        to share the same underlying identity while maintaining independent 
+        tenant-specific relationships and metadata.
+    """
     
     first_name = models.CharField(max_length=30, default=None)
     last_name = models.CharField(max_length=30, default=None)
@@ -44,12 +52,25 @@ class Customers(models.Model):
 
 
 class BusinessCustomers(models.Model):
-    """The only thing a business actually sees/queries"""
+    """
+        Through model representing the scoped relationship between a Business and a Customer.
+
+        This acts as the tenant-specific bridge. It is the primary model individual 
+        businesses use to query, view, and manage their clients. It allows each business 
+        to attach custom, localized context (such as business-specific display names, 
+        slugs, and notes) to a shared global customer identity without affecting other businesses.
+    """
     
     business = models.ForeignKey("accounts.Business", on_delete=models.CASCADE, related_name="clients")
     client = models.ForeignKey(Customers, on_delete=models.PROTECT, related_name="business_links", to_field="email")
-
+    slug = models.SlugField(max_length=100, unique=True, blank=True, null=True, help_text="URL safe string to identify customer")
     display_name = models.CharField(max_length=50, blank=True, help_text="Optional Per business overide")
+    phone_number = models.CharField(
+        max_length=20, 
+        null=True, 
+        blank=True, 
+        help_text="Business-specific phone override. Changes apply only to this business, leaving the global profile untouched."
+    )
     notes = models.TextField(blank=True)
     added_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

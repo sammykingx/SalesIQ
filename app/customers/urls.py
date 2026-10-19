@@ -9,5 +9,5 @@ urlpatterns = [
     path("", RedirectView.as_view(url=reverse_lazy(CUSTOMERS.LIST))),
     path("b/all/", BusinessCustomersListView.as_view(template_name=APP_TEMPLATES.CUSTOMERS.LIST), name=CUSTOMERS.LIST),
     path("add-customer/", CreateCustomersView.as_view(), name=CUSTOMERS.ADD),
-    path("profile/", CustomerDetailView.as_view(), name=CUSTOMERS.DETAIL),
+    path("profile/<slug:slug>", CustomerDetailView.as_view(), name=CUSTOMERS.DETAIL),
 ]

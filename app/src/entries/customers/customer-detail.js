@@ -1,7 +1,8 @@
 // app/src/entries/customers/customer-detail.js
 import { demoCustomers } from './demo-data.js';
+import { inAppToast } from '../../lib/in-app-toast.js';
 
-export function customerDetailComponent() {
+export function customerDetailComponent(endpointUrl = '') {
     return {
         // State
         isEditing: false,
@@ -43,49 +44,78 @@ export function customerDetailComponent() {
                     const backendData = JSON.parse(scriptTag.textContent);
                     this.customer = this.normalizeCustomer(backendData);
                 } else {
-                    // Fallback to demo data (e.g., first demo customer with rich mock stats)
                     const sample = demoCustomers[0];
-                    this.customer = {
-                        id: sample.id,
-                        firstName: sample.firstName,
-                        lastName: sample.lastName,
-                        email: sample.email,
-                        phone: sample.phone,
-                        status: sample.status,
-                        dateCreated: sample.dateCreated,
-                        avatar: sample.avatar,
-                        spend: sample.spend,
-                        totalOrders: sample.totalOrders,
-                        repeatPercentage: 78.5, // Mock metric
-                        recentSales: [
-                            { id: 'INV-2026-142', date: '2026-04-12', itemsSummary: 'Premium Leather Bag, Dust Cover', total: 1850.00, status: 'Paid' },
-                            { id: 'INV-2026-118', date: '2026-03-28', itemsSummary: 'Wireless Earbuds Pro', total: 920.00, status: 'Paid' },
-                            { id: 'INV-2026-089', date: '2026-03-05', itemsSummary: 'Minimalist Card Holder', total: 350.00, status: 'Paid' },
-                            { id: 'INV-2026-045', date: '2026-02-14', itemsSummary: 'Designer Silk Scarf', total: 680.00, status: 'Paid' },
-                            { id: 'INV-2026-012', date: '2026-01-20', itemsSummary: 'Classic Chronograph Watch', total: 450.00, status: 'Paid' }
-                        ]
-                    };
+                    // this.customer = {
+                    //     id: sample.id,
+                    //     firstName: sample.firstName,
+                    //     lastName: sample.lastName,
+                    //     email: sample.email,
+                    //     phone: sample.phone,
+                    //     status: sample.status,
+                    //     dateCreated: sample.dateCreated,
+                    //     avatar: sample.avatar,
+                    //     spend: sample.spend,
+                    //     totalOrders: sample.totalOrders,
+                    //     repeatPercentage: 78.5, // Mock metric
+                    //     recentSales: [
+                    //         { displayId: 'SIQ-INV-4ZHG-64W6', slug: '5q6tnkcdc1mzt8selb4y6cbkjxm42ntfyp', dateDisplay: 'Oct 04', itemsSummary: 'Domain Name + 1 more', total: 25000.0, status: 'paid' },
+                    //         { displayId: 'SIQ-INV-4ZHG-EHKO', slug: '8l8l07dw7blsxde3dj2de4m9hc68a2fu1h', dateDisplay: 'Sep 24', itemsSummary: 'Web Development + 4 more', total: 825125.0, status: 'paid' }
+                    //     ]
+                    // };
                 }
             } catch (err) {
-                console.error('Failed to parse customer data:', err);
+                // console.error('Failed to parse customer data:', err);
+                inAppToast({
+                    title: "Failed to Load Customer Profile",
+                    message: "We couldn't process the customer's information correctly. Please refresh the page to try again.",
+                    type: "error"
+                });
             }
             this.resetEditForm();
         },
 
         normalizeCustomer(data) {
+            const toTitleCase = (str) => {
+                if (!str) return '';
+                return str.trim().toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
+            };
+
+            const parts = data.display_name.trim().split(/\s+/);
+            const firstName = parts[0] || '';
+            const lastName = parts.slice(1).join(' ') || '';
+
+            const rawSales = data.recent_sales || data.recentSales || [];
+            const normalizedSales = rawSales.map(sale => {
+                let summary = sale.first_item || sale.itemsSummary || 'Item';
+                const extra = sale.extra_count ?? sale.extraCount ?? 0;
+                if (extra > 0) {
+                    summary += ` + ${extra} more`;
+                }
+                return {
+                    displayId: sale.display_id || sale.displayId || sale.id || 'INV-000',
+                    slug: sale.slug || '',
+                    dateDisplay: sale.date_display || sale.dateDisplay || 'N/A',
+                    itemsSummary: summary,
+                    total: Number(sale.total || sale.amount || 0),
+                    status: sale.status || 'paid'
+                };
+            });
+
+            const custData = data.customer || data;
+
             return {
-                id: data.id || null,
-                firstName: data.first_name || data.firstName || '',
-                lastName: data.last_name || data.lastName || '',
-                email: data.email || '',
-                phone: data.phone || '',
+                id: custData.id || null,
+                firstName: toTitleCase(firstName || custData.first_name || ''),
+                lastName: toTitleCase(lastName || custData.last_name || ''),
+                email: custData.email || '',
+                phone: custData.phone_number || custData.phone || '',
                 status: data.status || 'Active',
                 dateCreated: data.date_created || data.dateCreated || new Date().toISOString(),
                 avatar: data.avatar || null,
-                spend: Number(data.spend || data.total_spend || 0),
-                totalOrders: Number(data.total_orders || data.totalOrders || 0),
-                repeatPercentage: Number(data.repeat_percentage || data.repeatPercentage || 0),
-                recentSales: data.recent_sales || data.recentSales || []
+                spend: Number(data.lifetime_spend || data.total_spend || data.spend || 0),
+                totalOrders: Number(data.order_count || data.totalOrders || 0),
+                repeatPercentage: Number(data.repeat_rate || data.repeatPercentage || 0),
+                recentSales: normalizedSales
             };
         },
 
@@ -142,24 +172,45 @@ export function customerDetailComponent() {
                 first_name: this.editForm.firstName.trim(),
                 last_name: this.editForm.lastName.trim(),
                 email: this.editForm.email.trim(),
-                phone: this.editForm.phone.trim()
+                phone_number: this.editForm.phone.trim()
             };
 
             try {
-                // Simulate backend API call or replace with actual endpoint
-                await new Promise(resolve => setTimeout(resolve, 600));
+                const response = await apiRequest(endpointUrl, 'POST', payload);
+                const data = await response.json().catch(() => ({}));
 
-                // Update local state on success
-                this.customer.firstName = payload.first_name;
-                this.customer.lastName = payload.last_name;
-                this.customer.email = payload.email;
-                this.customer.phone = payload.phone;
 
                 this.successMessage = 'Customer information updated successfully.';
                 this.isEditing = false;
 
-                // Dispatch custom event if parent listeners require it
-                window.dispatchEvent(new CustomEvent('customer-updated', { detail: this.customer }));
+                if (!response.ok) {
+                    if (response.status === 422) {
+                        const errorDetails = Array.isArray(data.error)
+                            ? data.error.map(err => {
+                                const formattedField = err.field
+                                    ? err.field.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+                                    : 'Field';
+                                return `${formattedField}: ${err.message}`;
+                            }).join(' | ')
+                            : (data.error || '')
+
+                        inAppToast(
+                            'Update Rejected 🚫',
+                            `${data.message}`,
+                            'warning',
+                            4500
+                        );
+                    } else {
+                        inAppToast('Ecosystem Glitch ⚠️', data.message || 'An unexpected error occurred.', 'error');
+                    }
+                    return;
+                }
+
+                inAppToast({
+                    title: "Client Updated Successfully",
+                    message: "The customer's profile information has been updated.",
+                    type: "success"
+                });
             } catch (err) {
                 this.errorMessage = err.message || 'Failed to update customer information.';
             } finally {
@@ -169,6 +220,16 @@ export function customerDetailComponent() {
 
         formatCurrency(amount) {
             return '₦' + Number(amount || 0).toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        },
+
+        getInvoiceUrl(slug) {
+            const container = document.querySelector('[data-invoice-base-url]');
+            if (container) {
+                const baseUrl = container.getAttribute('data-invoice-base-url');
+                return baseUrl.replace('__slug__', slug);
+            }
+
+            return '#';
         },
 
         formatDate(dateString) {

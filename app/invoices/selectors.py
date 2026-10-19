@@ -10,6 +10,7 @@ from uuid import UUID
 
 
 PERIOD_DAYS = {"7d": 7, "30d": 30, "90d": 90}
+
 # Django's ExtractWeekDay is 1=Sunday..7=Saturday
 WEEKDAY_LABELS = {1: "Sun", 2: "Mon", 3: "Tue", 4: "Wed", 5: "Thu", 6: "Fri", 7: "Sat"}
 WEEKDAY_DISPLAY_ORDER = [2, 3, 4, 5, 6, 7, 1]  # Mon → Sun
@@ -33,16 +34,19 @@ class InvoiceSelectors:
         """retunrs an invoice with the business, customer"""
         return self._base_detail_queryset().filter(display_id=display_id).first()
     
-    def get_recent_sales(self, *, business_id, limit: int = 7) -> list[dict]:
+    def get_recent_sales(self, *, business_id, limit: int = 7, client_id=None) -> list[dict]:
         """Last N sales regardless of status — a voided sale stays visible, not silently dropped."""
-        invoices = (
+        queryset = (
             self.inv_model.objects
             .filter(business_id=business_id)
             .select_related("customer", "customer__client")
             .prefetch_related("line_items")
-            .order_by("-created_at")[:limit]
+            .order_by("-created_at")
         )
+        if client_id:
+            queryset = queryset.filter(customer_id=client_id)
 
+        invoices = queryset[:limit]
         today = timezone.localdate()
         results = []
         for invoice in invoices:
@@ -70,6 +74,33 @@ class InvoiceSelectors:
                 "total": float(invoice.total),
             })
         return results
+    
+    def get_customer_recent_sale_summary(self, *, business_id, client_id, recent_limit: int = 10) -> dict:
+        """Lifetime value, repeat rate and latest sales for one customer of one business."""
+        totals = (
+            self.inv_model.objects
+            .filter(
+                business_id=business_id,
+                customer_id=client_id,
+                status=InvoiceStatus.PAID,
+            )
+            .aggregate(lifetime_spend=Sum("total"), order_count=Count("id"))
+        )
+        lifetime_spend = totals["lifetime_spend"] or Decimal("0")
+        order_count = totals["order_count"]
+
+        # Share of this customer's paid orders that were repeat purchases (first order doesn't count)
+        repeat_rate = round(((order_count - 1) / order_count) * 100) if order_count else 0
+
+        return {
+            "lifetime_spend": lifetime_spend,
+            "order_count": order_count,
+            "repeat_rate": repeat_rate,
+            "is_repeat_customer": order_count > 1,
+            "recent_sales": self.get_recent_sales(
+                business_id=business_id, client_id=client_id, limit=recent_limit
+            ),
+        }
 
     # Metrics
     def get_revenue_trend(self, *, business, period="7d"):

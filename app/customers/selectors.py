@@ -1,5 +1,8 @@
+from django.db.models import Count, Model, Q, Sum
+from django.urls import reverse
+
+from core.url_names import CUSTOMERS
 from customers.models import BusinessCustomers
-from django.db.models import Count, Q, Sum
 from customers.domains.entities import BusinessClientEntity, CustomerEntity
 from invoices.models import InvoiceStatus, Invoice
 from uuid import UUID
@@ -23,6 +26,7 @@ class CustomerSelector:
             customer=customer_entity,
             business_id=link.business_id, #type: ignore
             display_name=link.display_name,
+            slug=link.slug, #type: ignore
             notes=link.notes,
             added_at=link.added_at,
             updated_at=link.updated_at,
@@ -44,10 +48,35 @@ class CustomerSelector:
         links = self.model.objects.filter(business=biz_id).select_related("client")
         return [self._to_entity(link) for link in links]
 
-    def get_single_for_business(self, biz, customer_id: int) -> BusinessClientEntity | None:
-        """Retrieve a specific customer relationship for a given business, mapped to an entity."""
+    def get_single_for_business(
+        self, 
+        biz, 
+        customer_id: int | None = None, 
+        slug: str | None = None
+    ) -> BusinessClientEntity | None:
+        """
+        Retrieve a specific customer relationship for a given business 
+        using either customer_id, slug, or both, mapped to an entity.
+
+        Args:
+            biz: The Business instance scoping the lookup.
+            customer_id (int, optional): The canonical customer ID.
+            slug (str, optional): The business-specific customer slug.
+
+        Returns:
+            BusinessClientEntity | None: The mapped entity if found, otherwise None.
+        """
+        if customer_id is None and slug is None:
+            return None
+
+        filters = Q(business=biz)
+        if customer_id is not None:
+            filters &= Q(client_id=customer_id)
+        if slug is not None:
+            filters &= Q(slug=slug)
+
         link = (
-            self.model.objects.filter(business=biz, client_id=customer_id)
+            self.model.objects.filter(filters)
             .select_related("client")
             .first()
         )
@@ -80,6 +109,7 @@ class CustomerSelector:
                 "status": "Active",
                 "date_created": link.added_at.isoformat() if link.added_at else None,
                 "avatar": None,
+                "slug": link.slug,
             })
         return payload
     
@@ -155,3 +185,19 @@ class CustomerSelector:
             }
             for bc in queryset
         ]
+        
+    def ensure_valid_business_customer_slug(self, *, biz_instance: Model, slug:str) -> bool:
+        """
+        Validates whether a given customer slug belongs to a specific business.
+
+        This acts as a tenant-isolation and security check, ensuring that merchants 
+        can only view or access customer data associated with their own business entity.
+
+        Args:
+            biz_instance (Model): The Business instance verifying access.
+            slug (str): The customer slug to check.
+
+        Returns:
+            bool: True if the slug exists and belongs to the specified business, False otherwise.
+        """
+        return self.model.objects.filter(business=biz_instance, slug=slug).exists()

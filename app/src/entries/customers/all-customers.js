@@ -70,7 +70,8 @@ export function allCustomersComponent(useDemo = false) {
                 totalOrders: Number(c.total_orders ?? 0),
                 status: c.status ?? 'Active',
                 dateCreated: c.dateCreated ?? c.created_at ?? c.added_at ?? c.date_created ?? '',
-                avatar: c.avatar ?? c.avatar_url ?? null
+                avatar: c.avatar ?? c.avatar_url ?? null,
+                slug: c.slug || '#',
             };
         },
 

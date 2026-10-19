@@ -1,12 +1,16 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpRequest, JsonResponse
+from django.http import HttpRequest, HttpResponse, JsonResponse
+from django.shortcuts import redirect, render
+from django.urls import reverse
 from django.views.generic import TemplateView, View
 
 from accounts.selectors import BusinessSelector
 from core.template_names import APP_TEMPLATES
+from core.url_names import CUSTOMERS
 from customers.selectors import CustomerSelector
 from customers.serializers import CreateCustomerSchema, CustomerMetricsSchema
 from customers.repositories import CustomersRepo
+from invoices.selectors import InvoiceSelectors
 from utils.pydantic_formatter import format_pydantic_errors
 
 from pydantic import ValidationError
@@ -88,6 +92,74 @@ class BusinessCustomersListView(LoginRequiredMixin, TemplateView):
         }
         
         
-class CustomerDetailView(TemplateView):
+class CustomerDetailView(LoginRequiredMixin, View):
     template_name = APP_TEMPLATES.CUSTOMERS.DETAIL
+    biz_selector = BusinessSelector()
+    buisness_clients_selector = CustomerSelector()
+    business = None
+    slug = None
     
+    def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+        slug = kwargs.get("slug")
+        business = self.biz_selector.get_user_business(
+            user_email=self.request.user.email,     # type: ignore
+            as_instance=True
+        )
+        
+        if not self.buisness_clients_selector.ensure_valid_business_customer_slug(
+            biz_instance=business, slug=slug        # type: ignore
+        ):
+            return redirect(reverse(CUSTOMERS.LIST))
+        
+        self.business = business
+        self.slug = slug
+        
+        return super().dispatch(request, *args, **kwargs)
+    
+    def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
+        customer_data = self.buisness_clients_selector.get_single_for_business(
+            biz=self.business, slug=self.slug
+        )
+        
+        customers_profile_json = customer_data.to_dict() if customer_data else {}
+        transaction_record = InvoiceSelectors().get_customer_recent_sale_summary(
+            business_id=customer_data.business_id,  # type:ignore
+            client_id=customer_data.customer.id     # type:ignore
+        )
+
+        customers_profile_json.update(transaction_record)
+        
+        ctx = {"customer_json": customers_profile_json, "profile_slug": self.slug }
+        
+        return render(
+            request=request,
+            template_name=self.template_name,
+            context=ctx,
+        )
+        
+    def post(self, request: HttpRequest, *args, **kwargs) -> JsonResponse:
+        try:
+            data = CreateCustomerSchema.model_validate_json(request.body, strict=True)
+            return JsonResponse({
+                "title": "All Set! ✨",
+                "message": "Client profile updated successfully. Your local changes are now live.",
+                "status": "success",
+                
+            }, status=200)
+        except ValidationError as err:
+            return JsonResponse({
+                "message": "Your data is looking a bit tragic. Fix your typos and try again.", 
+                "error": format_pydantic_errors(err), 
+                "status": "error"
+            }, status=422)
+            
+        except Exception as err:
+            logger.exception(
+                "Failed to create customer for business owner '%s': %s",
+                getattr(request.user, "email", "unknown"),
+                err,
+            )
+            return JsonResponse({
+                "message": "The hamsters powering our servers just went on an unscheduled coffee break. We're waking them up.",
+                "status": "error"
+            }, status=500)

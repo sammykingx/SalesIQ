@@ -8,8 +8,8 @@ class CreateCustomerSchema(BaseModel):
     first_name: str = Field(..., min_length=3, max_length=28)
     last_name: str = Field(..., min_length=3, max_length=28)
     display_name: str
-    email: EmailStr = Field(..., min_length=3, max_length=28)
-    phone_number: str = Field(..., min_length=3, max_length=28)
+    email: EmailStr = Field(..., min_length=3, max_length=18)
+    phone_number: str = Field(..., min_length=3, max_length=18)
     
     
     @model_validator(mode="before")
