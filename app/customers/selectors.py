@@ -26,6 +26,7 @@ class CustomerSelector:
             customer=customer_entity,
             business_id=link.business_id, #type: ignore
             display_name=link.display_name,
+            phone_number=link.phone_number,     # type: ignore
             slug=link.slug, #type: ignore
             notes=link.notes,
             added_at=link.added_at,
@@ -103,7 +104,7 @@ class CustomerSelector:
                 "last_name": client.last_name,
                 "display_name": link.display_name.title(),
                 "email": client.email,
-                "phone": client.phone_number,
+                "phone": link.phone_number or client.phone_number,
                 "total_spend": link.total_spend or Decimal("0"), # type:ignore
                 "total_orders": link.total_orders, # type:ignore
                 "status": "Active",

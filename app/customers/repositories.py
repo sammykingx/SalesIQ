@@ -80,7 +80,38 @@ class CustomersRepo:
         return self.link_to_business(business, customer, display_name, notes)
     
     @transaction.atomic
-    def update_business_customer_info(self, *, business_id: UUID, customer_data: CreateCustomerSchema, client_id:Optional[int], profile_slug:Optional[int],):
+    def update_business_customer_info(
+        self, 
+        *, 
+        business_id: UUID, 
+        customer_data: CreateCustomerSchema, 
+        client_id:Optional[int] = None,
+        profile_slug:Optional[int] = None
+    ):
+        """Updates tenant-specific information for a customer linked to a business.
+
+        This method performs a bulk or targeted update on the `BusinessCustomers` 
+        through model, allowing a business to override shared customer profile details 
+        (such as display name or phone number) for their own scoped view without 
+        modifying the global customer identity. Executed within an atomic transaction.
+
+        Args:
+            business_id (UUID): The unique identifier of the business performing 
+                the update. Acts as the primary tenancy scope.
+            customer_data (CreateCustomerSchema): The validated payload containing 
+                the updated information (`display_name`, `phone_number`).
+            client_id (Optional[int], optional): Specific client ID to narrow down 
+                the target record. Defaults to None.
+            profile_slug (Optional[int], optional): URL-safe string identifier 
+                (`slug`) to narrow down the target record. Defaults to None.
+
+        Returns:
+            int: The number of rows successfully updated in the database.
+        """
+        updated_rows = 0
+        if not client_id and not profile_slug:
+            return updated_rows
+        
         filters = Q(business_id=business_id)
         if client_id:
             filters &= Q(client_id=client_id)
@@ -88,11 +119,13 @@ class CustomersRepo:
         if profile_slug:
             filters &= Q(slug=profile_slug)
             
-        self.biz_customer_model.objects.filter(
+        updated_rows = self.biz_customer_model.objects.filter(
             filters
         ).update(
             display_name=customer_data.display_name,
             phone_number=customer_data.phone_number,
             updated_at=timezone.now()   
         )
+        
+        return updated_rows
     

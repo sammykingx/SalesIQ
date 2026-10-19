@@ -1,6 +1,7 @@
 // app/src/entries/customers/customer-detail.js
 import { demoCustomers } from './demo-data.js';
 import { inAppToast } from '../../lib/in-app-toast.js';
+import { apiRequest } from '../../lib/http/api.js';
 
 export function customerDetailComponent(endpointUrl = '') {
     return {
@@ -108,7 +109,7 @@ export function customerDetailComponent(endpointUrl = '') {
                 firstName: toTitleCase(firstName || custData.first_name || ''),
                 lastName: toTitleCase(lastName || custData.last_name || ''),
                 email: custData.email || '',
-                phone: custData.phone_number || custData.phone || '',
+                phone: data.phone_number || custData.phone_number || '',
                 status: data.status || 'Active',
                 dateCreated: data.date_created || data.dateCreated || new Date().toISOString(),
                 avatar: data.avatar || null,
@@ -179,38 +180,48 @@ export function customerDetailComponent(endpointUrl = '') {
                 const response = await apiRequest(endpointUrl, 'POST', payload);
                 const data = await response.json().catch(() => ({}));
 
-
-                this.successMessage = 'Customer information updated successfully.';
-                this.isEditing = false;
-
                 if (!response.ok) {
                     if (response.status === 422) {
-                        const errorDetails = Array.isArray(data.error)
+                        const formattedErrors = Array.isArray(data.error)
                             ? data.error.map(err => {
                                 const formattedField = err.field
                                     ? err.field.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
                                     : 'Field';
-                                return `${formattedField}: ${err.message}`;
-                            }).join(' | ')
-                            : (data.error || '')
 
+                                // Strip technical terms/data types (e.g. "String ", "value ") from the Pydantic message
+                                let cleanMessage = (err.message || '')
+                                    .replace(/^string\s+/i, '')
+                                    .replace(/^value\s+/i, '');
+
+                                return `${formattedField}: ${cleanMessage}`;
+                            }).join(' | ')
+                            : (data.message || 'Please check your inputs and try again.');
+
+                        this.errorMessage = formattedErrors;
                         inAppToast(
-                            'Update Rejected 🚫',
-                            `${data.message}`,
+                            data.title || 'Update Rejected 🚫',
+                            data.message || 'Check your details and try again; our systems are fully operational.',
                             'warning',
                             4500
                         );
                     } else {
-                        inAppToast('Ecosystem Glitch ⚠️', data.message || 'An unexpected error occurred.', 'error');
+                        inAppToast(data.title || 'Ecosystem Glitch ⚠️', data.message || 'An unexpected error occurred.', 'error');
                     }
                     return;
                 }
 
-                inAppToast({
-                    title: "Client Updated Successfully",
-                    message: "The customer's profile information has been updated.",
-                    type: "success"
-                });
+                this.isEditing = false;
+                this.successMessage = 'Customer information updated successfully.';
+
+                this.customer.firstName = payload.first_name;
+                this.customer.lastName = payload.last_name;
+                this.customer.phone = payload.phone_number;
+
+                inAppToast(
+                    "Client Updated Successfully",
+                    "The customer's profile information has been updated.",
+                    "success",
+                );
             } catch (err) {
                 this.errorMessage = err.message || 'Failed to update customer information.';
             } finally {

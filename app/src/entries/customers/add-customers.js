@@ -91,7 +91,7 @@ export function addCustomerModal(endpointUrl = '') {
                             4500
                         );
                     } else {
-                        inAppToast('Ecosystem Glitch ⚠️', data.message || 'An unexpected error occurred.', 'error');
+                        inAppToast(data.title || 'Ecosystem Glitch ⚠️', data.message || 'An unexpected error occurred.', 'error');
                     }
                     return;
                 }

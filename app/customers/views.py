@@ -49,8 +49,6 @@ class CreateCustomersView(LoginRequiredMixin, View):
                 "status": "success"
             }, status=201)
 
-            
-
         except ValidationError as err:
             return JsonResponse({
                 "message": "Your data is looking a bit tragic. Fix your typos and try again.", 
@@ -65,8 +63,9 @@ class CreateCustomersView(LoginRequiredMixin, View):
                 err,
             )
             return JsonResponse({
-                "message": "The hamsters powering our servers just went on an unscheduled coffee break. We're waking them up.",
-                "status": "error"
+                "title": "System Notice",
+                "message": "We encountered an unexpected issue on our end. Our team has been notified, but please try again shortly.",
+                "status": "error",
             }, status=500)
           
             
@@ -140,26 +139,35 @@ class CustomerDetailView(LoginRequiredMixin, View):
     def post(self, request: HttpRequest, *args, **kwargs) -> JsonResponse:
         try:
             data = CreateCustomerSchema.model_validate_json(request.body, strict=True)
+            CustomersRepo().update_business_customer_info(
+                business_id=self.business.id, #type:ignore
+                customer_data=data,
+                profile_slug=self.slug
+            )
+            
             return JsonResponse({
                 "title": "All Set! ✨",
                 "message": "Client profile updated successfully. Your local changes are now live.",
                 "status": "success",
                 
             }, status=200)
+
         except ValidationError as err:
             return JsonResponse({
-                "message": "Your data is looking a bit tragic. Fix your typos and try again.", 
+                "title": "Oops, Try Again",
+                "message": "Invalid details provided. Please check your inputs and try again.", 
                 "error": format_pydantic_errors(err), 
                 "status": "error"
             }, status=422)
             
         except Exception as err:
             logger.exception(
-                "Failed to create customer for business owner '%s': %s",
-                getattr(request.user, "email", "unknown"),
+                "Failed to update customer profile for business '%s': %s",
+                getattr(self.business, "code", "unknown"),
                 err,
             )
             return JsonResponse({
-                "message": "The hamsters powering our servers just went on an unscheduled coffee break. We're waking them up.",
-                "status": "error"
+                "title": "System Notice",
+                "message": "We encountered an unexpected issue on our end. Our team has been notified, but please try again shortly.",
+                "status": "error",
             }, status=500)

@@ -8,7 +8,7 @@ class CreateCustomerSchema(BaseModel):
     first_name: str = Field(..., min_length=3, max_length=28)
     last_name: str = Field(..., min_length=3, max_length=28)
     display_name: str
-    email: EmailStr = Field(..., min_length=3, max_length=18)
+    email: EmailStr
     phone_number: str = Field(..., min_length=3, max_length=18)
     
     

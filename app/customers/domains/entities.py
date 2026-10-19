@@ -22,6 +22,7 @@ class BusinessClientEntity:
     customer: CustomerEntity
     business_id: UUID
     display_name: str
+    phone_number: str
     slug: str
     notes: str
     added_at: datetime
