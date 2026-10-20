@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     "mathfilters",
     
     "accounts.apps.AccountsConfig",
+    "backoffice.apps.BackofficeConfig",
     "customers.apps.CustomersConfig",
     "products.apps.ProductsConfig",
     "invoices.apps.InvoicesConfig",

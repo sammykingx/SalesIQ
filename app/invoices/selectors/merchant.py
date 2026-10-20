@@ -3,19 +3,14 @@ from django.db.models.functions import ExtractWeekDay, TruncDate
 from django.utils import timezone
 
 from invoices.models import Invoice, InvoiceLineItem, InvoiceStatus
+from ._trends import PERIOD_DAYS, WEEKDAY_DISPLAY_ORDER, WEEKDAY_LABELS
 
 from datetime import timedelta
 from decimal import Decimal
 from uuid import UUID
 
 
-PERIOD_DAYS = {"7d": 7, "30d": 30, "90d": 90}
-
-# Django's ExtractWeekDay is 1=Sunday..7=Saturday
-WEEKDAY_LABELS = {1: "Sun", 2: "Mon", 3: "Tue", 4: "Wed", 5: "Thu", 6: "Fri", 7: "Sat"}
-WEEKDAY_DISPLAY_ORDER = [2, 3, 4, 5, 6, 7, 1]  # Mon → Sun
-
-class InvoiceSelectors:
+class InvoiceMerchantSelector:
     def __init__(self) -> None:
         self.inv_model = Invoice
         self.inv_line_item_model = InvoiceLineItem

@@ -129,14 +129,14 @@
     <!-- Brand Logo -->
     <div class="flex flex-col items-center mb-6 text-center animate-fade-in-down">
       <a href="#" class="flex justify-center items-center mb-2 group focus:outline-none">
-        <template x-if="!theme">
+        <template x-if="theme === 'light'">
           <img 
             src="{% static 'images/logo/main-logo-light.png' %}" 
             alt="SalesIQ Logo" 
             class="h-14 sm:h-16 w-auto object-contain transition-transform duration-200 group-hover:scale-105"
           />
         </template>
-        <template x-if="theme">
+        <template x-if="theme === 'dark'">
           <img 
             src="{% static 'images/logo/main-logo-dark.png' %}" 
             alt="SalesIQ Logo" 

@@ -3,6 +3,7 @@
 _ACCOUNTS_BASE = 'accounts'
 _AUTH_BASE = f'{_ACCOUNTS_BASE}/auth'
 
+_BACKOFFICE_BASE = 'backoffice'
 _CUSTOMERS_BASE = 'customers'
 _PRODUCTS_BASE = 'products'
 _SALES_BASE = 'sales'
@@ -27,6 +28,9 @@ class APP_TEMPLATES:
             REGISTER = f'{_AUTH_BASE}/register.html'
             PASSWORD_RESET = f'{_AUTH_BASE}/password_reset.html'
             PASSWORD_CHANGE = f'{_AUTH_BASE}/password_change.html'
+            
+    class BACKOFFICE:
+        DASHBOARD = f'{_BACKOFFICE_BASE}/dashboard.html'
 
     class CUSTOMERS:
         LIST = f'{_CUSTOMERS_BASE}/list-all.html'

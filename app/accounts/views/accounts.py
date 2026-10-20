@@ -10,7 +10,7 @@ from accounts.selectors import UserSelector, BusinessSelector
 from customers.selectors import CustomerSelector
 from core.template_names import APP_TEMPLATES
 from core.url_names import ACCOUNTS
-from invoices.selectors import InvoiceSelectors
+from invoices.selectors import InvoiceMerchantSelector
 from products.selectors import ProductsSelector
 
 from typing import Any, Dict
@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 class DashboardView(LoginRequiredMixin, TemplateView):
     template_name = APP_TEMPLATES.ACCOUNTS.DASHBOARD
-    invoice_selector = InvoiceSelectors()
+    invoice_selector = InvoiceMerchantSelector()
     customer_selector = CustomerSelector()
     
     def get_context_data(self, **kwargs):

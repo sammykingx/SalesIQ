@@ -95,6 +95,10 @@
             </a>
         </div>
 
+        {% if is_previledged %}
+            {% include "components/partials/_nav-group.html" with item=back_office_urls %}
+        {% endif %}
+
         <!-- MODULES -->
         <p x-show="!$store.sidebar.collapsed || $store.sidebar.mobileOpen" class="px-3 pb-1 pt-4 text-xs font-sans uppercase tracking-wider text-neutral-400" role="presentation">Modules</p>
 

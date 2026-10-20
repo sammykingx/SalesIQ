@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.utils import timezone
 from django.views.generic import View
@@ -6,7 +7,7 @@ from django.shortcuts import render
 from accounts.selectors import BusinessSelector
 from customers.selectors import CustomerSelector
 from core.template_names import PUBLIC
-from invoices.selectors import InvoiceSelectors
+from invoices.selectors import InvoiceMerchantSelector
 from invoices.serializers import InvoiceListResponseSchema
 from products.selectors import ProductsSelector
 from products.serializers import ProductListItemSchema
@@ -133,20 +134,36 @@ class ComingSoonView(View):
         return JsonResponse({"message": msg}, status=200)
     
 
-class BusinessJSONDataView(View):
+class BusinessJSONDataView(LoginRequiredMixin, View):
     """
-        Returns a unified payload of customers, products, and sales records 
-        for client-side live search and autocomplete.
+    Returns a unified JSON payload of customers, products, and sales records 
+    scoped exclusively to the currently logged-in business owner's business.
+    
+    This view resolves the business entity associated with the authenticated 
+    user's email and aggregates their specific data to support client-side live 
+    search, autocomplete, or front-end components.
     """
+    def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> JsonResponse | HttpResponse:
+        business = BusinessSelector().get_user_business(user_email=request.user.email, as_instance=True) # type: ignore
+        if business is None:
+            return JsonResponse({
+                "customers_json": [],
+                "products_json": [],
+                "invoice_json": [],
+            }, status=200)
+            
+        self.business = business
+            
+        return super().dispatch(request, *args, **kwargs)
+    
     def get(self, request: HttpRequest) -> JsonResponse:
-        business = BusinessSelector().get_user_business(user_email=self.request.user.email, as_instance=True) # type: ignore
-        invoices = InvoiceSelectors().list_business_invoices(biz_id=business) # type: ignore
+        invoices = InvoiceMerchantSelector().list_business_invoices(biz_id=self.business) # type: ignore
         invoices_data = [InvoiceListResponseSchema.model_validate(invoice).model_dump() for invoice in invoices ]
         
-        products = ProductsSelector().get_business_products(business_id=business.id) # type: ignore
+        products = ProductsSelector().get_business_products(business_id=self.business.id) # type: ignore
         products_data = [ProductListItemSchema.model_validate(product).model_dump() for product in products]
         
-        customers_data = CustomerSelector().get_all_business_customers_frontend_json(biz_id=business.id) #type: ignore
+        customers_data = CustomerSelector().get_all_business_customers_frontend_json(biz_id=self.business.id) #type: ignore
          
         return JsonResponse({
             "customers_json": customers_data,

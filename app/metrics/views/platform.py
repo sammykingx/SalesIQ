@@ -5,7 +5,7 @@ from django.views.generic import View
 
 from accounts.selectors import BusinessSelector
 from accounts.selectors.business import ADOPTION_THRESHOLDS
-from invoices.selectors import InvoiceSelectors
+from invoices.selectors import InvoiceMerchantSelector
 from typing import Any
 
 
@@ -19,7 +19,7 @@ class PlatformGmvTrendView(LoginRequiredMixin, View):
     
     def get(self, request:HttpRequest):
         period = request.GET.get("period", "7d")
-        data = InvoiceSelectors().get_platform_gmv_trend(period=period)
+        data = InvoiceMerchantSelector().get_platform_gmv_trend(period=period)
         return JsonResponse(data)
     
 

@@ -24,6 +24,10 @@ ACCOUNTS = SimpleNamespace(
     )
 )
 
+BACK_OFFICE = SimpleNamespace(
+    DASHBOARD='backoffice_dashboard',
+)
+
 BUSINESS_DATA = 'business_data'
 
 PRODUCTS = SimpleNamespace(

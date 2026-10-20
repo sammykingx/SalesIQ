@@ -290,12 +290,7 @@
                 <i data-lucide="settings" class="h-4 w-4 shrink-0"></i>
                 Account Settings
             </a>
-            {% if is_previledged %}
-                <a class="flex items-center gap-2 rounded-lg px-3 py-2 text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800" role="menuitem" href="{% url ACCOUNTS.ANALYST_DASHBOARD %}">
-                    <i data-lucide="shield-user" class="h-4 w-4 shrink-0"></i>
-                    Platform Metrics
-                </a>
-            {% endif %}
+
             <a class="flex items-center gap-2 rounded-lg px-3 py-2 text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800" role="menuitem" href="{% url 'release-roadmap' %}">
                 <i data-lucide="route" class="h-4 w-4 shrink-0"></i>
                 Updates & Releases

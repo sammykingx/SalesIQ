@@ -6,7 +6,7 @@ from django.http.response import HttpResponse
 from django.views.generic import View
 
 from accounts.selectors import BusinessSelector
-from invoices.selectors import InvoiceSelectors
+from invoices.selectors import InvoiceMerchantSelector
 from typing import Union
 
 
@@ -20,7 +20,7 @@ class RevenueTrendView(LoginRequiredMixin, View):
     
     def get(self, request:HttpRequest) -> JsonResponse:
         period = request.GET.get("period", "7d")
-        revenue_data = InvoiceSelectors().get_revenue_trend(business=self.user_biz, period=period)
+        revenue_data = InvoiceMerchantSelector().get_revenue_trend(business=self.user_biz, period=period)
         return JsonResponse(revenue_data, status=200)
     
     
@@ -34,5 +34,5 @@ class BusinessBusiestDayBiew(LoginRequiredMixin, View):
         
     def get(self, request:HttpRequest) -> JsonResponse:
         window = request.GET.get("window", 90)
-        data = InvoiceSelectors().get_busiest_days(business_id=self.user_biz.id, window_days=window) # type: ignore
+        data = InvoiceMerchantSelector().get_busiest_days(business_id=self.user_biz.id, window_days=window) # type: ignore
         return JsonResponse(data, status=200)

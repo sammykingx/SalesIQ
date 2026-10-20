@@ -14,7 +14,7 @@ from core.url_names import INVOICES
 from customers.selectors import CustomerSelector
 from invoices.domains.exceptions import InvoiceDomainException
 from invoices.serializers import CreateSalesInvoiceSchema, InvoiceDetailResponseSchema, InvoiceListResponseSchema
-from invoices.selectors import InvoiceSelectors
+from invoices.selectors import InvoiceMerchantSelector
 from invoices.services import InvoiceService
 from products.selectors import ProductsSelector
 from products.serializers import ProductListItemSchema
@@ -39,7 +39,7 @@ class InvoiceListView(LoginRequiredMixin, TemplateView):
     
     def template_context(self) -> Dict[str, Any]:
         business = BusinessSelector().get_user_business(user_email=self.request.user.email, as_instance=True) # type: ignore
-        invoices = InvoiceSelectors().list_business_invoices(biz_id=business) # type: ignore
+        invoices = InvoiceMerchantSelector().list_business_invoices(biz_id=business) # type: ignore
         data = [InvoiceListResponseSchema.model_validate(invoice).model_dump() for invoice in invoices ]
 
         return {
@@ -113,7 +113,7 @@ class RecordSalesInvoiceView(LoginRequiredMixin, View):
 
 class InvoicesWebView(TemplateView):
     template_name = APP_TEMPLATES.INVOICE.VIEW
-    invoice_selector = InvoiceSelectors()
+    invoice_selector = InvoiceMerchantSelector()
     
     def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
         inv_slug = self.kwargs.get("slug", None)
@@ -156,7 +156,7 @@ class InvoicesWebView(TemplateView):
 
 class InvoicePDFDownloadView(TemplateView):
     template_name = APP_TEMPLATES.INVOICE.INVOICE_PDF
-    invoice_selector = InvoiceSelectors()
+    invoice_selector = InvoiceMerchantSelector()
 
     def get_invoice(self):
         """

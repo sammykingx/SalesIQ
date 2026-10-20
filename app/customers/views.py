@@ -10,7 +10,7 @@ from core.url_names import CUSTOMERS
 from customers.selectors import CustomerSelector
 from customers.serializers import CreateCustomerSchema, CustomerMetricsSchema
 from customers.repositories import CustomersRepo
-from invoices.selectors import InvoiceSelectors
+from invoices.selectors import InvoiceMerchantSelector
 from utils.pydantic_formatter import format_pydantic_errors
 
 from pydantic import ValidationError
@@ -121,7 +121,7 @@ class CustomerDetailView(LoginRequiredMixin, View):
         )
         
         customers_profile_json = customer_data.to_dict() if customer_data else {}
-        transaction_record = InvoiceSelectors().get_customer_recent_sale_summary(
+        transaction_record = InvoiceMerchantSelector().get_customer_recent_sale_summary(
             business_id=customer_data.business_id,  # type:ignore
             client_id=customer_data.customer.id     # type:ignore
         )

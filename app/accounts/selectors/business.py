@@ -4,7 +4,7 @@ from django.utils import timezone
 from accounts.domains.entities import BusinessEntity
 from accounts.models import Business
 from invoices.models import InvoiceStatus
-from invoices.selectors import InvoiceSelectors
+from invoices.selectors import InvoiceMerchantSelector
 
 from decimal import Decimal
 from datetime import timedelta
@@ -109,7 +109,7 @@ class BusinessSelector:
         )
         active_today_rate = round((active_today / total_businesses) * 100, 1) if total_businesses else 0.0
 
-        platform_volume = InvoiceSelectors().get_platform_volume()
+        platform_volume = InvoiceMerchantSelector().get_platform_volume()
 
         return {
             "active_merchants": active_merchants,
