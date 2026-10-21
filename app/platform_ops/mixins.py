@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse
 from core.url_names import ACCOUNTS
@@ -39,4 +39,29 @@ class BackofficeAccessMixin(LoginRequiredMixin):
             logger.warning(f"User {user_email} is not a privileged user")
             return redirect(reverse(ACCOUNTS.DASHBOARD))
                 
+        return super().dispatch(request, *args, **kwargs)
+    
+
+class PlatformJsonChartMixin(LoginRequiredMixin):
+    """
+        Mixin that restricts chart JSON endpoints to authorized internal staff.
+
+        Intercepts requests in `dispatch` to verify if the user's email is listed 
+        in `settings.PREVILEDGE_USERS`. If unauthorized, it returns a safe fallback 
+        JSON payload `{"has_data": False}` instead of a 403 Forbidden error, preventing 
+        errors or broken states in the Alpine.js frontend allowing it render it's empty
+        state data.
+        
+        Attributes:
+            skip_onboarding_check (bool): Flag used by the onboarding enforcement 
+                middleware to determine that users accessing this view are exempt 
+                from mandatory onboarding completion requirements.
+    """
+
+    skip_onboarding_check = True
+    
+    def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+        user_email = getattr(request.user, "email", None)
+        if user_email not in settings.PREVILEDGE_USERS:
+            return JsonResponse({"has_data": False})
         return super().dispatch(request, *args, **kwargs)

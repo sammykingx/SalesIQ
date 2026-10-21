@@ -1,7 +1,7 @@
 from django.urls import path, reverse_lazy
-from django.views.generic import TemplateView, RedirectView
+from django.views.generic import RedirectView
 from core.url_names import ACCOUNTS
-from core.template_names import APP_TEMPLATES
+
 from ..views import (
     AccountRegistrationView, GuestPasswordChangeView, RequestPassowrdResetView,
     AccountLoginView, UserPasswordUpdateView,

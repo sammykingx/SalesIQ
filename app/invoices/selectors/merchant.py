@@ -2,7 +2,8 @@ from django.db.models import Count, Prefetch, Q, QuerySet, Sum
 from django.db.models.functions import ExtractWeekDay, TruncDate
 from django.utils import timezone
 
-from invoices.models import Invoice, InvoiceLineItem, InvoiceStatus
+from invoices.models import Invoice, InvoiceStatus
+from ._base import InvoiceSelectorBase
 from ._trends import PERIOD_DAYS, WEEKDAY_DISPLAY_ORDER, WEEKDAY_LABELS
 
 from datetime import timedelta
@@ -10,14 +11,10 @@ from decimal import Decimal
 from uuid import UUID
 
 
-class InvoiceMerchantSelector:
-    def __init__(self) -> None:
-        self.inv_model = Invoice
-        self.inv_line_item_model = InvoiceLineItem
-        
+class InvoiceMerchantSelector(InvoiceSelectorBase):    
     def list_business_invoices(self, *, biz_id:UUID) -> QuerySet[Invoice]:
         return (
-            self.inv_model.objects
+            self.invoice_model.objects
             .select_related("customer", "customer__client")
             .filter(business=biz_id)
         )
@@ -32,7 +29,7 @@ class InvoiceMerchantSelector:
     def get_recent_sales(self, *, business_id, limit: int = 7, client_id=None) -> list[dict]:
         """Last N sales regardless of status — a voided sale stays visible, not silently dropped."""
         queryset = (
-            self.inv_model.objects
+            self.invoice_model.objects
             .filter(business_id=business_id)
             .select_related("customer", "customer__client")
             .prefetch_related("line_items")
@@ -73,7 +70,7 @@ class InvoiceMerchantSelector:
     def get_customer_recent_sale_summary(self, *, business_id, client_id, recent_limit: int = 10) -> dict:
         """Lifetime value, repeat rate and latest sales for one customer of one business."""
         totals = (
-            self.inv_model.objects
+            self.invoice_model.objects
             .filter(
                 business_id=business_id,
                 customer_id=client_id,
@@ -99,11 +96,27 @@ class InvoiceMerchantSelector:
 
     # Metrics
     def get_revenue_trend(self, *, business, period="7d"):
+        """Calculates the daily paid revenue trend for a business over a given period.
+
+        Queries paid invoices within the specified timeframe, groups them by calendar 
+        day, and fills in missing days with zero revenue so charts render contiguously.
+
+        Args:
+            business: The business instance or identifier to filter invoices by.
+            period (str): The timeframe string key (e.g., "7d", "30d") mapped via 
+                PERIOD_DAYS. Defaults to "7d".
+
+        Returns:
+            dict: A dictionary containing trend data for charting:
+                - labels (list[str]): Formatted date strings (e.g., "Jan 01") for each day.
+                - revenue (list[float]): Corresponding daily revenue totals.
+                - has_data (bool): True if at least one paid invoice exists in the period.
+        """
         days = PERIOD_DAYS.get(period, 7)
         start = timezone.now().date() - timedelta(days=days - 1)
 
         rows = (
-            self.inv_model.objects
+            self.invoice_model.objects
             .filter(business=business, status=InvoiceStatus.PAID, created_at__date__gte=start)
             .annotate(day=TruncDate("created_at"))
             .values("day")
@@ -119,10 +132,28 @@ class InvoiceMerchantSelector:
         return {"labels": labels, "revenue": revenue, "has_data": bool(by_day)}
     
     def get_busiest_days(self, *, business_id, window_days: int = 90):
+        """Analyzes revenue patterns by day of the week over a historical window.
+
+        Aggregates paid invoice totals grouped by weekday (Monday–Sunday) to 
+        identify when a business generates the most revenue.
+
+        Args:
+            business_id: The ID of the business being analyzed.
+            window_days (int): Number of past days to look back across. Defaults to 90.
+
+        Returns:
+            dict: Summary analytics of weekly distribution:
+                - labels (list[str]): Ordered weekday names (e.g., ["Mon", "Tue", ...]).
+                - revenue (list[float]): Total revenue corresponding to each weekday.
+                - has_data (bool): True if any paid transactions exist in the window.
+                - peak_index (int | None): The list index of the highest revenue day.
+                - peak_label (str | None): The name of the peak day (e.g., "Saturday").
+                - peak_pct (int | None): Percentage of total revenue generated on the peak day.
+        """
         start = timezone.now().date() - timedelta(days=window_days - 1)
 
         rows = (
-            self.inv_model.objects
+            self.invoice_model.objects
             .filter(business_id=business_id, status=InvoiceStatus.PAID, created_at__date__gte=start)
             .annotate(weekday=ExtractWeekDay("created_at"))
             .values("weekday")
@@ -148,9 +179,25 @@ class InvoiceMerchantSelector:
         }
     
     def get_top_products(self, *, business_id, limit: int = 5, since=None) -> list[dict]:
-        """Top products by revenue, grouped by snapshotted name — survives catalog edits/deletions."""
+        """
+        Retrieves the top-selling products by total revenue for a business.
+
+        Groups line items from paid invoices by their snapshotted product name 
+        (ensuring historical stats survive catalog edits or product deletions).
+
+        Args:
+            business_id: The ID of the business.
+            limit (int): Maximum number of top products to return. Defaults to 5.
+            since (date | None): Optional start date to filter invoices from.
+
+        Returns:
+            list[dict]: A list of product performance dictionaries, ordered by highest revenue:
+                - product_name (str): The snapshotted name of the product.
+                - total_sales (int): Total quantity/count of times sold.
+                - total_revenue (Decimal): Total revenue generated by the product.
+        """
         
-        queryset = self.inv_line_item_model.objects.filter(
+        queryset = self.line_item_model.objects.filter(
             invoice__business_id=business_id,
             invoice__status=InvoiceStatus.PAID,
         )
@@ -165,13 +212,29 @@ class InvoiceMerchantSelector:
         )
         
     def get_weekly_revenue_change(self, *, business_id) -> dict:
-        """One query, two conditional sums — no row fetching, no Python-side aggregation."""
+        """
+        Calculates week-over-week revenue growth percentage.
+
+        Compares current week-to-date revenue (starting Monday) against the 
+        previous week's corresponding period using an optimized single-query 
+        conditional aggregation.
+
+        Args:
+            business_id: The ID of the business.
+
+        Returns:
+            dict: Growth metrics comparing this week to last week:
+                - revenue_percent_change (int): Rounded percentage difference 
+                  (capped at 100% if going from zero to positive revenue).
+                - revenue_is_increase (bool): True if revenue increased or stayed flat (>= 0), 
+                  False if it decreased.
+        """
         today = timezone.localdate()
         this_week_start = today - timedelta(days=today.weekday())  # Monday
         last_week_start = this_week_start - timedelta(days=7)
 
         totals = (
-            self.inv_model.objects
+            self.invoice_model.objects
             .filter(business_id=business_id, status=InvoiceStatus.PAID, created_at__date__gte=last_week_start)
             .aggregate(
                 this_week=Sum("total", filter=Q(created_at__date__gte=this_week_start)),
@@ -190,42 +253,11 @@ class InvoiceMerchantSelector:
 
         return {"revenue_percent_change": percent_change, "revenue_is_increase": percent_change >= 0}
     
-    def get_platform_gmv_trend(self, *, period: str = "7d") -> dict:
-        """GMV = gross transaction volume across every business on the platform,
-        not SalesIQ's own revenue."""
-        days = PERIOD_DAYS.get(period, 7)
-        start = timezone.now().date() - timedelta(days=days - 1)
-
-        rows = (
-            self.inv_model.objects
-            .filter(status=InvoiceStatus.PAID, created_at__date__gte=start)
-            .annotate(day=TruncDate("created_at"))
-            .values("day")
-            .annotate(gmv=Sum("total"))
-        )
-        by_day = {r["day"]: r["gmv"] for r in rows}
-
-        labels, gmv = [], []
-        for i in range(days):
-            d = start + timedelta(days=i)
-            labels.append(d.strftime("%b %d"))
-            gmv.append(float(by_day.get(d, 0)))
-
-        return {"labels": labels, "gmv": gmv, "has_data": bool(by_day)}
-    
-    def get_platform_volume(self) -> Decimal:
-        platform_vol = (
-            self.inv_model.objects
-            .filter(status=InvoiceStatus.PAID).aggregate(total=Sum("total"))["total"]
-            or Decimal("0")
-        )
-        return platform_vol
-    
     def _base_detail_queryset(self):
         return (
-            self.inv_model.objects
+            self.invoice_model.objects
             .select_related("business", "customer", "customer__client")
             .prefetch_related(
-                Prefetch("line_items", queryset=self.inv_line_item_model.objects.select_related("product"))
+                Prefetch("line_items", queryset=self.line_item_model.objects.select_related("product"))
             )
         )

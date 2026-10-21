@@ -40,6 +40,7 @@ urlpatterns = [
     path("products/", include("products.urls")),
     path("invoices/", include("invoices.urls")),
     path("metrics/", include(metric_urls)),
+    path("platform/", include("platform_ops.urls")),
     # path("hostinger/", HostingerInvoiceView.as_view(), name="hostinger"),
     # path("test-feedback/", FeedbackView.as_view(), name="feedback"),
 ]

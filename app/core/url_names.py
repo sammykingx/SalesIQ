@@ -24,8 +24,13 @@ ACCOUNTS = SimpleNamespace(
     )
 )
 
-BACK_OFFICE = SimpleNamespace(
-    DASHBOARD='backoffice_dashboard',
+PLATFORM_OPS = SimpleNamespace(
+    DASHBOARD='platform_dashboard',
+    RECENT_SIGNUPS='platform_recent_signups',
+    CHARTS=SimpleNamespace(
+        ADOPTION='platform_charts_adoption',
+        GMV='platform_charts_gmv',
+    )
 )
 
 BUSINESS_DATA = 'business_data'
@@ -54,6 +59,6 @@ INVOICES = SimpleNamespace(
 METRICS = SimpleNamespace(
     BIZ_REVENUE="metrics_business_revenue",
     BUSIEST_DAYS="metrics_business_busiest_day",
-    PLATFORM_GMV="metrics_platform_gmv",
-    PLATFORM_ADOPTION="metrics_platform_adoption",
+    # PLATFORM_GMV="metrics_platform_gmv",
+    # PLATFORM_ADOPTION="metrics_platform_adoption",
 )

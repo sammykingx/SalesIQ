@@ -59,32 +59,32 @@ class DashboardView(LoginRequiredMixin, TemplateView):
             **revenue_change
         }
         
-class PlatformDashboardView(LoginRequiredMixin, TemplateView):
-    template_name = APP_TEMPLATES.ACCOUNTS.ANALYST_DASHBOARD
+# class PlatformDashboardView(LoginRequiredMixin, TemplateView):
+#     template_name = APP_TEMPLATES.ACCOUNTS.ANALYST_DASHBOARD
     
-    def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
-        user = request.user
-        user_email = getattr(user, "email", None)
-        if user_email not in settings.PREVILEDGE_USERS:
-            logger.warning(f"User {user_email} is not a privileged user")
-            return redirect(reverse(ACCOUNTS.DASHBOARD))
+#     def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+#         user = request.user
+#         user_email = getattr(user, "email", None)
+#         if user_email not in settings.PREVILEDGE_USERS:
+#             logger.warning(f"User {user_email} is not a privileged user")
+#             return redirect(reverse(ACCOUNTS.DASHBOARD))
             
-        return super().dispatch(request, *args, **kwargs)
+#         return super().dispatch(request, *args, **kwargs)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context.update(self.template_context())
-        return context
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context.update(self.template_context())
+#         return context
     
-    def template_context(self) -> Dict[str, Any]:
-        selector = BusinessSelector()
-        recent_signups = selector.get_recent_signups(limit=7)
-        platform_summary = selector.get_platform_summary()
+#     def template_context(self) -> Dict[str, Any]:
+#         selector = BusinessSelector()
+#         recent_signups = selector.recent_signups(limit=7)
+#         platform_summary = selector.summary()
         
-        return {
-            "recent_signups": recent_signups,
-            **platform_summary,
-        }
+#         return {
+#             "recent_signups": recent_signups,
+#             **platform_summary,
+#         }
 
 class UserProfileView(LoginRequiredMixin, TemplateView):
     template_name = APP_TEMPLATES.ACCOUNTS.PROFILE

@@ -1,5 +1,5 @@
 from django.urls import reverse_lazy
-from .url_names import ACCOUNTS, PRODUCTS, CUSTOMERS, INVOICES
+from .url_names import ACCOUNTS, PRODUCTS, CUSTOMERS, INVOICES, PLATFORM_OPS
 
 
 SIDEBAR_NAV_TREE = [
@@ -54,8 +54,8 @@ BACK_OFFICE_URLS = {
     "group_icon": "shield-user",
     "group_url": "#",
     "group_children": [
-        {"child_name": "dashboard", "child_label": "Dashboard", "child_url": reverse_lazy(ACCOUNTS.ANALYST_DASHBOARD)},
-        {"child_name": "signups", "child_label": "Recent Signups", "child_url": "#"},
+        {"child_name": "dashboard", "child_label": "Dashboard", "child_url": reverse_lazy(PLATFORM_OPS.DASHBOARD)},
+        {"child_name": "signups", "child_label": "Recent Signups", "child_url": reverse_lazy(PLATFORM_OPS.RECENT_SIGNUPS)},
         {"child_name": "leaderboard", "child_label": "Leaderboard", "child_url": "#"},
     ],
 }

@@ -1,7 +1,7 @@
 from django.http import HttpRequest
 from django.conf import settings
 from core.nav_tree import SIDEBAR_NAV_TREE, BACK_OFFICE_URLS
-from core.url_names import ACCOUNTS, BUSINESS_DATA, CUSTOMERS, PRODUCTS, INVOICES, METRICS
+from core.url_names import ACCOUNTS, BUSINESS_DATA, CUSTOMERS, PRODUCTS, INVOICES, METRICS, PLATFORM_OPS
 
 
 def url_name_registry(request: HttpRequest):
@@ -12,6 +12,7 @@ def url_name_registry(request: HttpRequest):
         "INVOICES": INVOICES,
         "BUSINESS_DATA": BUSINESS_DATA,
         "METRICS": METRICS,
+        "PLATFORM_OPS": PLATFORM_OPS, 
     }
     
 def template_context(request: HttpRequest):
