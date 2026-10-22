@@ -1,4 +1,4 @@
-from django.db.models import Count, Q
+from django.db.models import Count, Q, QuerySet
 
 from invoices.models import InvoiceStatus
 from ._base import BusinessSelectorBase
@@ -33,14 +33,39 @@ class BusinessPlatformSelector(BusinessSelectorBase):
     def get_total_count(self) -> int:
         return self.business_model.objects.count()
     
-    def recent_signups(self, *, limit: int = 7) -> list[dict]:
-        businesses = (
+    def get_annotated_queryset(self) -> QuerySet:
+        """
+        Returns the base QuerySet for businesses optimized for platform-level 
+        analytics and backoffice operations.
+        
+        Optimizations and Annotations included:
+        - select_related("owner"): Pre-fetches the related owner user object to avoid N+1 queries.
+        - annotate(sale_count): Computes the total number of unique PAID invoices 
+          associated with the business.
+        - order_by("-created_at"): Orders businesses by newest first.
+        """
+        return (
             self.business_model.objects
             .select_related("owner")
-            .annotate(sale_count=Count("invoices", filter=Q(invoices__status=InvoiceStatus.PAID), distinct=True))
-            .order_by("-created_at")[:limit]
+            .annotate(
+                sale_count=Count(
+                    "invoices", 
+                    filter=Q(invoices__status=InvoiceStatus.PAID), 
+                    distinct=True
+                )
+            )
+            .order_by("-created_at")
         )
+
     
+    def recent_signups(self, *, limit: int = 7) -> list[dict]:
+        """
+            Retrieves a formatted list of the most recent business signups, 
+            mapping model instances into lightweight presentation dictionaries 
+            for dashboard widgets or summary components.
+        """
+        businesses = self.get_annotated_queryset()[:limit]
+
         return [
             {
                 "name": biz.name,

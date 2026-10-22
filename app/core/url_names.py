@@ -26,7 +26,7 @@ ACCOUNTS = SimpleNamespace(
 
 PLATFORM_OPS = SimpleNamespace(
     DASHBOARD='platform_dashboard',
-    RECENT_SIGNUPS='platform_recent_signups',
+    MERCHANTS='platform_merchants',
     CHARTS=SimpleNamespace(
         ADOPTION='platform_charts_adoption',
         GMV='platform_charts_gmv',
