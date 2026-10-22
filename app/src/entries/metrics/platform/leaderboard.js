@@ -5,11 +5,23 @@ export function leaderboardComponent() {
     return {
         searchQuery: '',
         currentPage: 1,
+        timeframe: 'this_month',
         perPage: 5,
         allData: [],
 
         init() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const tfParam = urlParams.get('timeframe');
+            if (tfParam && ['this_week', 'this_month', 'all_time'].includes(tfParam)) {
+                this.timeframe = tfParam;
+            }
+
             const scriptTag = document.getElementById('leaderboard-data');
+            this.loadJSONData(scriptTag);
+        },
+
+        loadJSONData(scriptTag) {
+
             if (scriptTag && scriptTag.textContent.trim()) {
                 try {
                     const parsed = JSON.parse(scriptTag.textContent);
@@ -24,6 +36,50 @@ export function leaderboardComponent() {
                 }
             } else {
                 this.allData = [];
+            }
+        },
+
+        async setTimeframe(tf) {
+            if (this.loading || this.timeframe === tf) return;
+
+            this.timeframe = tf;
+            this.loading = true;
+
+            try {
+                // Fetch updated dataset from the backend asynchronously
+                const response = await fetch(`?timeframe=${tf}`, {
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                });
+
+                if (response.ok) {
+                    const htmlText = await response.text();
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(htmlText, 'text/html');
+                    const newScriptTag = doc.getElementById('leaderboard-data');
+
+                    this.loadJSONData(newScriptTag);
+
+                    // Update browser URL without refreshing the page
+                    const newUrl = new URL(window.location.href);
+                    newUrl.searchParams.set('timeframe', tf);
+                    window.history.pushState({}, '', newUrl);
+
+                    this.currentPage = 1;
+                } else {
+                    inAppToast(
+                        'Data Unavailable',
+                        "We couldn't load data for the selected time window. Please try a different range or try again.",
+                        'error'
+                    );
+                }
+            } catch (err) {
+                inAppToast(
+                    'Connection Lost',
+                    "We couldn't reach the server.Check your connection and try again in a moment.",
+                    'error'
+                );
+            } finally {
+                this.loading = false;
             }
         },
 

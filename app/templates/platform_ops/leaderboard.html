@@ -6,40 +6,8 @@
 
 
 {% block page_body %}
-<div class="space-y-6" x-data="{ 
-    searchQuery: '',
-    currentPage: 1,
-    perPage: 5,
-    timeframe: 'this_month',
-    allData: [
-        { rank: 1, name: 'Anna Emporium', code: 'BIZ-wRPcL23Tk2pX', owner: 'Nosa Raven', type: 'Online', total_sales: 142, revenue: '₦2,450,000', growth: '+28.4%' },
-        { rank: 2, name: 'Naoms Sigs', code: 'SIQ-BIZ-WPTHO93R8B', owner: 'Moffy Joe', type: 'Both', total_sales: 98, revenue: '₦1,820,000', growth: '+15.2%' },
-        { rank: 3, name: 'Luxe Beauty Hub', code: 'BIZ-LX992K1PaQ', owner: 'Titi Adeleke', type: 'Retail', total_sales: 76, revenue: '₦1,240,000', growth: '+9.8%' },
-        { rank: 4, name: 'Velvet Stitches', code: 'BIZ-VST8803MnL', owner: 'Amina Bello', type: 'Online', total_sales: 54, revenue: '₦980,000', growth: '+5.1%' },
-        { rank: 5, name: 'Kingx Tech Solutions', code: 'BIZ-AzK86H8UaKfa', owner: 'James McAtee', type: 'Services', total_sales: 41, revenue: '₦750,000', growth: '+2.4%' },
-        { rank: 6, name: 'Blush & Glow Studio', code: 'BIZ-BG9912XPT', owner: 'Zainab Idris', type: 'Retail', total_sales: 38, revenue: '₦680,000', growth: '+1.9%' },
-        { rank: 7, name: 'Urban Chic Apparel', code: 'BIZ-UCA7732PL', owner: 'Blessing Okoro', type: 'Online', total_sales: 29, revenue: '₦510,000', growth: '+0.8%' }
-    ],
-    
-    get filteredData() {
-        if (!this.searchQuery.trim()) return this.allData;
-        const query = this.searchQuery.toLowerCase();
-        return this.allData.filter(item => 
-            item.name.toLowerCase().includes(query) || 
-            item.owner.toLowerCase().includes(query) || 
-            item.code.toLowerCase().includes(query)
-        );
-    },
-
-    get totalPages() {
-        return Math.ceil(this.filteredData.length / this.perPage) || 1;
-    },
-
-    get paginatedData() {
-        const start = (this.currentPage - 1) * this.perPage;
-        return this.filteredData.slice(start, start + this.perPage);
-    }
-}">
+{{ leaderboard_json|json_script:"leaderboard-data" }}
+<div class="space-y-6" x-data="leaderboardComponent()">
 
     <!-- Banner -->
     <div class="relative overflow-hidden rounded-3xl bg-white dark:bg-neutral-900 p-6 sm:p-8 shadow-xs border border-neutral-200/80 dark:border-neutral-800 transition-colors">
@@ -71,13 +39,25 @@
 
             <!-- Timeframe Filter Toggles -->
             <div class="flex items-center gap-1.5 rounded-2xl bg-neutral-100/80 p-1.5 dark:bg-neutral-800/80 border border-neutral-200/60 dark:border-neutral-700/60 self-start lg:self-auto">
-                <button @click="timeframe = 'this_week'" :class="timeframe === 'this_week' ? 'bg-white text-neutral-900 shadow-xs dark:bg-neutral-900 dark:text-white' : 'text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white'" class="rounded-xl px-3.5 py-1.5 text-xs font-medium transition-all">
+                <button 
+                    @click="setTimeframe('this_week')" 
+                    :class="timeframe === 'this_week' ? 'bg-white text-neutral-900 shadow-xs dark:bg-neutral-900 dark:text-white' : 'text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white'" 
+                    class="rounded-xl px-3.5 py-1.5 text-xs font-medium transition-all"
+                    :disabled="loading">
                     This Week
                 </button>
-                <button @click="timeframe = 'this_month'" :class="timeframe === 'this_month' ? 'bg-white text-neutral-900 shadow-xs dark:bg-neutral-900 dark:text-white' : 'text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white'" class="rounded-xl px-3.5 py-1.5 text-xs font-medium transition-all">
+                <button 
+                    @click="setTimeframe('this_month')" 
+                    :class="timeframe === 'this_month' ? 'bg-white text-neutral-900 shadow-xs dark:bg-neutral-900 dark:text-white' : 'text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white'" 
+                    class="rounded-xl px-3.5 py-1.5 text-xs font-medium transition-all"
+                    :disabled="loading">
                     This Month
                 </button>
-                <button @click="timeframe = 'all_time'" :class="timeframe === 'all_time' ? 'bg-white text-neutral-900 shadow-xs dark:bg-neutral-900 dark:text-white' : 'text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white'" class="rounded-xl px-3.5 py-1.5 text-xs font-medium transition-all">
+                <button 
+                    @click="setTimeframe('all_time')" 
+                    :class="timeframe === 'all_time' ? 'bg-white text-neutral-900 shadow-xs dark:bg-neutral-900 dark:text-white' : 'text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white'" 
+                    class="rounded-xl px-3.5 py-1.5 text-xs font-medium transition-all"
+                    :disabled="loading">
                     All-Time
                 </button>
             </div>
@@ -93,14 +73,14 @@
             <div class="relative overflow-hidden rounded-3xl bg-white dark:bg-neutral-900 p-6 border border-neutral-200/80 dark:border-neutral-800 shadow-xs flex flex-col justify-between order-2 md:order-1">
                 <div class="flex items-start justify-between">
                     <span class="inline-flex h-9 w-9 items-center justify-center rounded-2xl bg-slate-100 text-slate-700 font-medium text-sm dark:bg-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-700">2nd</span>
-                    <span class="text-xs font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50 px-2.5 py-1 rounded-full" x-text="allData[1].growth"></span>
+                    {% comment %} <span class="text-xs font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50 px-2.5 py-1 rounded-full" x-text="allData[1].growth"></span> {% endcomment %}
                 </div>
                 <div class="mt-6 space-y-1">
                     <h3 class="text-base font-medium text-neutral-900 dark:text-white" x-text="allData[1].name"></h3>
                     <p class="text-xs text-neutral-500 dark:text-neutral-400">Owner: <span class="font-medium text-neutral-700 dark:text-neutral-300" x-text="allData[1].owner"></span></p>
                 </div>
                 <div class="mt-6 pt-4 border-t border-neutral-100 dark:border-neutral-800 flex items-center justify-between text-xs">
-                    <span class="text-neutral-500">Volume: <strong class="text-neutral-900 dark:text-white" x-text="allData[1].total_sales + ' sales'"></strong></span>
+                    <span class="text-neutral-500">Volume: <i class="text-neutral-900 dark:text-white" x-text="allData[1].total_sales + ' sales'"></i></span>
                     <span class="font-medium text-neutral-900 dark:text-white text-sm" x-text="allData[1].revenue"></span>
                 </div>
             </div>
@@ -112,7 +92,7 @@
                 <div class="absolute top-0 right-0 bg-amber-500 text-white text-[10px] font-medium uppercase tracking-wider px-3 py-1 rounded-bl-xl">Crown Holder</div>
                 <div class="flex items-start justify-between">
                     <span class="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-amber-500 text-white font-semibold text-base shadow-md shadow-amber-500/20">1st</span>
-                    <span class="text-xs font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50 px-2.5 py-1 rounded-full" x-text="allData[0].growth"></span>
+                    {% comment %} <span class="text-xs font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50 px-2.5 py-1 rounded-full" x-text="allData[0].growth"></span> {% endcomment %}
                 </div>
                 <div class="mt-6 space-y-1">
                     <h3 class="text-lg font-medium text-neutral-900 dark:text-white flex items-center gap-1.5">
@@ -122,7 +102,7 @@
                     <p class="text-xs text-neutral-500 dark:text-neutral-400">Owner: <span class="font-medium text-neutral-700 dark:text-neutral-300" x-text="allData[0].owner"></span></p>
                 </div>
                 <div class="mt-6 pt-4 border-t border-amber-500/20 dark:border-neutral-800 flex items-center justify-between text-xs">
-                    <span class="text-neutral-500">Volume: <strong class="text-neutral-900 dark:text-white" x-text="allData[0].total_sales + ' sales'"></strong></span>
+                    <span class="text-neutral-500">Volume: <i class="text-neutral-900 dark:text-white" x-text="allData[0].total_sales + ' sales'"></i></span>
                     <span class="font-medium text-amber-600 dark:text-amber-400 text-base" x-text="allData[0].revenue"></span>
                 </div>
             </div>
@@ -133,14 +113,14 @@
             <div class="relative overflow-hidden rounded-3xl bg-white dark:bg-neutral-900 p-6 border border-neutral-200/80 dark:border-neutral-800 shadow-xs flex flex-col justify-between order-3">
                 <div class="flex items-start justify-between">
                     <span class="inline-flex h-9 w-9 items-center justify-center rounded-2xl bg-amber-100/60 text-amber-800 font-medium text-sm dark:bg-amber-950/50 dark:text-amber-300 border border-amber-200/60 dark:border-amber-900">3rd</span>
-                    <span class="text-xs font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50 px-2.5 py-1 rounded-full" x-text="allData[2].growth"></span>
+                    {% comment %} <span class="text-xs font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50 px-2.5 py-1 rounded-full" x-text="allData[2].growth"></span> {% endcomment %}
                 </div>
                 <div class="mt-6 space-y-1">
                     <h3 class="text-base font-medium text-neutral-900 dark:text-white" x-text="allData[2].name"></h3>
                     <p class="text-xs text-neutral-500 dark:text-neutral-400">Owner: <span class="font-medium text-neutral-700 dark:text-neutral-300" x-text="allData[2].owner"></span></p>
                 </div>
                 <div class="mt-6 pt-4 border-t border-neutral-100 dark:border-neutral-800 flex items-center justify-between text-xs">
-                    <span class="text-neutral-500">Volume: <strong class="text-neutral-900 dark:text-white" x-text="allData[2].total_sales + ' sales'"></strong></span>
+                    <span class="text-neutral-500">Volume: <i class="text-neutral-900 dark:text-white" x-text="allData[2].total_sales + ' sales'"></i></span>
                     <span class="font-medium text-neutral-900 dark:text-white text-sm" x-text="allData[2].revenue"></span>
                 </div>
             </div>
@@ -175,7 +155,7 @@
         </div>
     </div>
 
-    <!-- FULL LEADERBOARD TABLE CONTAINER -->
+    <!-- LEADERBOARD TABLE CONTAINER -->
     <div class="overflow-hidden rounded-3xl border border-neutral-200/80 bg-white shadow-xs dark:border-neutral-800 dark:bg-neutral-900">
         
         <div class="p-5 border-b border-neutral-200/80 dark:border-neutral-800 flex items-center justify-between">
@@ -214,7 +194,7 @@
                                 <td class="whitespace-nowrap px-5 py-4">
                                     <span class="font-mono text-xs text-neutral-500 dark:text-neutral-400" x-text="item.code"></span>
                                 </td>
-                                <td class="whitespace-nowrap px-5 py-4 text-neutral-500 dark:text-neutral-400" x-text="item.type"></td>
+                                <td class="whitespace-nowrap px-5 py-4 text-neutral-500 dark:text-neutral-400" x-text="item.biz_type"></td>
                                 <td class="whitespace-nowrap px-5 py-4 text-right font-medium text-emerald-600 dark:text-emerald-400" x-text="item.total_sales + ' sales'"></td>
                                 <td class="whitespace-nowrap px-5 py-4 text-right font-medium text-neutral-900 dark:text-white" x-text="item.revenue"></td>
                             </tr>
@@ -255,7 +235,7 @@
 
     </div>
 
-    <!-- PAGINATION CONTROLS -->
+    <!-- PAGINATION -->
     <template x-if="totalPages > 1">
         <div class="flex items-center justify-between rounded-3xl border border-neutral-200/85 bg-white p-4 shadow-xs dark:border-neutral-800 dark:bg-neutral-900">
             <p class="text-xs text-neutral-500 dark:text-neutral-400">

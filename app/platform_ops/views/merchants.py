@@ -1,13 +1,13 @@
 from typing import Any
 
-from platform_ops.mixins import BackofficeAccessMixin
 from django.db.models import Q, QuerySet
 from django.http import HttpRequest, HttpResponse
 from django.views.generic import ListView, TemplateView
-from core.template_names import APP_TEMPLATES
+
 from accounts.selectors import BusinessPlatformSelector
-
-
+from core.template_names import APP_TEMPLATES
+from platform_ops.mixins import BackofficeAccessMixin
+from platform_ops.serializer import MerchantLeaderboardSchema
 class AllMerchantListsView(BackofficeAccessMixin, ListView):
     template_name = APP_TEMPLATES.PLATFORM_OPS.ALL_MERCHANTS
     context_object_name = "recent_signups"
@@ -41,10 +41,27 @@ class LeaderBoardView(BackofficeAccessMixin, TemplateView):
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        
+        ldr_json = self.leaderboard_json()
+        context["leaderboard_json"] = ldr_json
         return context
     
-    def template_context_data(self) -> dict[str, Any]:
+    def leaderboard_json(self) -> list[dict[str, Any]]:
         timeframe = self.request.GET.get('timeframe', 'this_month')
-        return {}
-    
+        qs = BusinessPlatformSelector().merchant_leaderboard(time_frame=timeframe)
+        json_payload = []
+        for idx, biz in enumerate(qs, start=1):
+            revenue_val = float(biz.total_revenue or 0)
+            owner_name = f"{biz.owner.first_name} {biz.owner.last_name}".title().strip()
+            data = MerchantLeaderboardSchema(
+                rank=idx,
+                name=biz.name.title(),
+                code=biz.code,
+                owner=owner_name,
+                biz_type=biz.business_type,
+                total_sales=biz.total_sales,
+                revenue_raw=revenue_val,
+                revenue=f"₦{revenue_val:,.2f}",
+                growth="+0.0%",
+            )
+            json_payload.append(data.model_dump())
+        return json_payload

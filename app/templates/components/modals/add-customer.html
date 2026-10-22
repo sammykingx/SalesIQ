@@ -5,7 +5,7 @@
             <i data-lucide="user-plus" class="h-5 w-5"></i>
         </div>
         <div>
-            <h3 class="text-base font-semibold text-neutral-900 dark:text-white">Create New Customer</h3>
+            <h3 class="text-base font-medium text-neutral-900 dark:text-white">Create New Customer</h3>
             <p class="text-xs text-neutral-500 dark:text-neutral-400">Add client contact details to your directory.</p>
         </div>
     </div>
@@ -114,7 +114,7 @@
                 type="submit" 
                 :disabled="!isFormValid || loading"
                 :class="isFormValid && !loading ? 'bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white cursor-pointer' : 'bg-neutral-100 text-neutral-400 cursor-not-allowed dark:bg-neutral-800 dark:text-neutral-600'"
-                class="inline-flex items-center gap-1.5 rounded-xl px-4 py-2 text-xs font-semibold shadow-xs transition-all"
+                class="inline-flex items-center gap-1.5 rounded-xl px-4 py-2 text-xs shadow-xs transition-all"
             >
                 <i data-lucide="user-check" class="h-3.5 w-3.5"></i>
                 <span x-text="loading ? 'Saving...' : 'Save Customer'"></span>

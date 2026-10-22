@@ -50,8 +50,7 @@ class Invoice(models.Model):
     class Meta:
         db_table = "invoices"
         # indexes = [
-        #     models.Index(fields=["business", "-created_at"]),
-        #     models.Index(fields=["customer", "-created_at"]),
+        #     models.Index(fields=["business", "status", "created_at"]),
         # ]
 
 

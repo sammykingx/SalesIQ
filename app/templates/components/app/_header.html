@@ -6,7 +6,7 @@
     <!-- 1 · SIDEBAR TOGGLE -->
     <button
         type="button"
-        class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white"
+        class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white cursor-pointer"
         @click="$store.sidebar.toggle()"
         aria-label="Toggle menu"
         :aria-expanded="!$store.sidebar.collapsed"
@@ -79,7 +79,7 @@
     <!-- 6 · LIGHT/DARK QUICK-TOGGLE -->
     <button
         type="button"
-        class="inline-flex h-9 w-9 items-center justify-center rounded-lg text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white hover:cursor-pointer"
+        class="inline-flex h-9 w-9 items-center cursor-pointer justify-center rounded-lg text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white hover:cursor-pointer"
         @click="toggleTheme()"
         
         aria-label="Toggle dark mode"

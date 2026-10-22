@@ -1,7 +1,7 @@
 // app/src/entries/metrics/busiest-days.js
 
-import { inAppToast } from '../../lib/in-app-toast.js';
-import { Chart } from '../../lib/register-chart.js';
+import { inAppToast } from '../../../lib/in-app-toast.js';
+import { Chart } from '../../../lib/register-chart.js';
 
 const PEAK = '#10b981'; // Primary highlight color
 const BASE = '#e5e7eb'; // Default bar color

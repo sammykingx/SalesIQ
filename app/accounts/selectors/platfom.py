@@ -85,7 +85,7 @@ class BusinessPlatformSelector(BusinessSelectorBase):
         - select_related("owner"): Avoids N+1 queries for owner details.
         - annotate(sale_count): Counts unique PAID invoices.
         - annotate(total_revenue): Sums the total monetary value of PAID invoices.
-        - order_by: Ranks primarily by volume (-sale_count) then revenue (-total_revenue).
+        - order_by: Ranks primarily by revenue (-total_revenue) then volume (-total_sales).
         """
         now = timezone.now()
         invoice_filter = Q(invoices__status=InvoiceStatus.PAID)
@@ -93,20 +93,21 @@ class BusinessPlatformSelector(BusinessSelectorBase):
         if time_frame == 'this_week':
             start_date = now - timedelta(days=7)
             invoice_filter &= Q(invoices__created_at__gte=start_date)
+
         elif time_frame == 'this_month':
             start_date = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-            invoice_filter &= Q(invoices__created_at__gte=start_date)
-            
-        return (
+            invoice_filter &= Q(invoices__created_at__gte=start_date) 
+        
+        business = (
             self.business_model.objects
             .select_related("owner")
             .annotate(
                 total_sales=Count(
                     "invoices", 
-                    filter=invoice_filter, 
-                    distinct=True
+                    filter=invoice_filter,
                 ),
                 total_revenue=Sum("invoices__total", filter=invoice_filter)
             )
-            .order_by("-total_sales", "-total_revenue")
         )
+        
+        return business.filter(total_sales__gt=0).order_by("-total_revenue", "-total_sales")
