@@ -1,35 +1,21 @@
-from django.db.models import Count, Q, QuerySet
+from django.db.models import Count, Q, QuerySet, Sum
+from django.utils import timezone
 
 from invoices.models import InvoiceStatus
 from ._base import BusinessSelectorBase
 
+from datetime import timedelta
+
 
 class BusinessPlatformSelector(BusinessSelectorBase):
-    # chart
-    # def adoption_breakdown(self, *, threshold: int = 1) -> dict:
-    #     """
-    #         Businesses with `threshold`+ paid invoices, vs everyone else.
-    #         Two COUNT(*) queries — no rows materialized, safe as adoption threshold grows.
-    #     """
-            
-    #     annotated = self.business_model.objects.annotate(
-    #         sale_count=Count("invoices", filter=Q(invoices__status=InvoiceStatus.PAID), distinct=True)
-    #     )
-    
-    #     total = annotated.count()
-    #     adopted = annotated.filter(sale_count__gte=threshold).count()
-    #     not_adopted = total - adopted
-    #     adoption_rate = round((adopted / total) * 100) if total else 0
-    
-    #     return {
-    #         "adopted": adopted,
-    #         "not_adopted": not_adopted,
-    #         "total": total,
-    #         "adoption_rate": adoption_rate,
-    #         "threshold": threshold,
-    #         "has_data": total > 0,
-    #     }
+    """
+        Selector responsible for retrieving and aggregating business information 
+        at the platform level (cross-merchant), rather than for a single business 
+        or individual merchant. 
 
+        Designed for backoffice operations, platform-wide analytics, admin dashboards, 
+        and global summary widgets.
+    """
     def get_total_count(self) -> int:
         return self.business_model.objects.count()
     
@@ -63,6 +49,12 @@ class BusinessPlatformSelector(BusinessSelectorBase):
             Retrieves a formatted list of the most recent business signups, 
             mapping model instances into lightweight presentation dictionaries 
             for dashboard widgets or summary components.
+            
+            Args:
+                limit (int): The maximum number of recent signups to return (default: 7).
+                
+            Returns:
+                list[dict]: A list of dictionaries containing formatted business and owner details.
         """
         businesses = self.get_annotated_queryset()[:limit]
 
@@ -78,33 +70,43 @@ class BusinessPlatformSelector(BusinessSelectorBase):
             }
             for biz in businesses
         ]
+
+    def merchant_leaderboard(self, *, time_frame:str="this_month") -> QuerySet:
+        """
+        Returns a QuerySet of businesses ranked by platform performance metrics 
+        (sales count and total revenue from paid invoices).
+        
+        Note:
+            Constructs a dedicated annotation query from scratch to avoid 
+            Cartesian product row-inflation caused by chaining multiple 
+            reverse-relation (invoices) annotations.
+        
+        Optimizations included:
+        - select_related("owner"): Avoids N+1 queries for owner details.
+        - annotate(sale_count): Counts unique PAID invoices.
+        - annotate(total_revenue): Sums the total monetary value of PAID invoices.
+        - order_by: Ranks primarily by volume (-sale_count) then revenue (-total_revenue).
+        """
+        now = timezone.now()
+        invoice_filter = Q(invoices__status=InvoiceStatus.PAID)
+        
+        if time_frame == 'this_week':
+            start_date = now - timedelta(days=7)
+            invoice_filter &= Q(invoices__created_at__gte=start_date)
+        elif time_frame == 'this_month':
+            start_date = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+            invoice_filter &= Q(invoices__created_at__gte=start_date)
             
-    # platform dashboard selector
-    # def summary(self, *, active_window_days: int = 30) -> dict:
-    #     today = timezone.localdate()
-    #     window_start = today - timedelta(days=active_window_days)
-    
-    #     total_businesses = self.business_model.objects.count()
-    
-    #     active_merchants = (
-    #         self.business_model.objects
-    #         .filter(invoices__status=InvoiceStatus.PAID, invoices__created_at__date__gte=window_start)
-    #         .distinct()
-    #         .count()
-    #     )
-    
-    #     active_today = (
-    #         self.business_model.objects
-    #         .filter(invoices__status=InvoiceStatus.PAID, invoices__created_at__date=today)
-    #         .distinct()
-    #         .count()
-    #     )
-    #     active_today_rate = round((active_today / total_businesses) * 100, 1) if total_businesses else 0.0
-    
-    #     platform_volume = InvoicePlatformSelector().get_platform_volume()
-    
-    #     return {
-    #         "active_merchants": active_merchants,
-    #         "platform_volume": float(platform_volume),
-    #         "active_today_rate": active_today_rate,
-    #     }
+        return (
+            self.business_model.objects
+            .select_related("owner")
+            .annotate(
+                total_sales=Count(
+                    "invoices", 
+                    filter=invoice_filter, 
+                    distinct=True
+                ),
+                total_revenue=Sum("invoices__total", filter=invoice_filter)
+            )
+            .order_by("-total_sales", "-total_revenue")
+        )

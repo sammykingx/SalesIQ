@@ -32,6 +32,7 @@ class APP_TEMPLATES:
     class PLATFORM_OPS:
         DASHBOARD = f'{_PLATFORM_OPS}/dashboard.html'
         ALL_MERCHANTS = F'{_PLATFORM_OPS}/list-merchants.html'
+        LEADERBOARD = F'{_PLATFORM_OPS}/leaderboard.html'
 
     class CUSTOMERS:
         LIST = f'{_CUSTOMERS_BASE}/list-all.html'

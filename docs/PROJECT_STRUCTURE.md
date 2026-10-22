@@ -49,6 +49,8 @@ app/
 |-- customers/                 # Django app (domain-driven design)
 |-- invoices/                  # Django app (domain-driven design)
 |-- products/                  # Django app (domain-driven design)
+|-- platform_ops/              # Django app for platform ops, pulse and metrics
+|-- metrics/                   # business metrics and analytics
 |-- ...
 |
 |-- src/                       # Vite input — source for compiled frontend assets
@@ -194,9 +196,9 @@ templates/
 │   └── _toast_alerts.html     # Django messages rendered as toasts
 │
 ├── public/                    # Public pages
-│   ├── index.html             # Extends _base_public.html
+│   ├── index.html             # standalone
 │   ├── coming_soon.html       # Standalone
-|   |
+|   ├── feedback.html          # Extends _base_landing for state feedback (i.e email veirified, etc)
 |   └── legal/
 │       ├── tos.html           # Extends _base_legal.html
 │       └── privacy.html       # Extends _base_legal.html
@@ -230,4 +232,3 @@ templates/
 | `app/static/images/` | Images served as-is by Django |
 | `app/static/dist/` | Vite's compiled output |
 | `app/templates/` | Django HTML templates |
-

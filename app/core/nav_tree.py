@@ -56,6 +56,6 @@ BACK_OFFICE_URLS = {
     "group_children": [
         {"child_name": "dashboard", "child_label": "Dashboard", "child_url": reverse_lazy(PLATFORM_OPS.DASHBOARD)},
         {"child_name": "merchants", "child_label": "Merchants", "child_url": reverse_lazy(PLATFORM_OPS.MERCHANTS)},
-        {"child_name": "leaderboard", "child_label": "Leaderboard", "child_url": "#"},
+        {"child_name": "leaderboard", "child_label": "Leaderboard", "child_url": reverse_lazy(PLATFORM_OPS.LEADERBOARD)},
     ],
 }

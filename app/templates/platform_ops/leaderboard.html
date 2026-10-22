@@ -1,0 +1,288 @@
+{# platform_ops/leaderboard.html #}
+{% extends "layouts/_base_app.html" %}
+{% load static humanize %}
+
+{% block title %}Sales IQ | Platform Operator - Business Leaderboard{% endblock %}
+
+
+{% block page_body %}
+<div class="space-y-6" x-data="{ 
+    searchQuery: '',
+    currentPage: 1,
+    perPage: 5,
+    timeframe: 'this_month',
+    allData: [
+        { rank: 1, name: 'Anna Emporium', code: 'BIZ-wRPcL23Tk2pX', owner: 'Nosa Raven', type: 'Online', total_sales: 142, revenue: '₦2,450,000', growth: '+28.4%' },
+        { rank: 2, name: 'Naoms Sigs', code: 'SIQ-BIZ-WPTHO93R8B', owner: 'Moffy Joe', type: 'Both', total_sales: 98, revenue: '₦1,820,000', growth: '+15.2%' },
+        { rank: 3, name: 'Luxe Beauty Hub', code: 'BIZ-LX992K1PaQ', owner: 'Titi Adeleke', type: 'Retail', total_sales: 76, revenue: '₦1,240,000', growth: '+9.8%' },
+        { rank: 4, name: 'Velvet Stitches', code: 'BIZ-VST8803MnL', owner: 'Amina Bello', type: 'Online', total_sales: 54, revenue: '₦980,000', growth: '+5.1%' },
+        { rank: 5, name: 'Kingx Tech Solutions', code: 'BIZ-AzK86H8UaKfa', owner: 'James McAtee', type: 'Services', total_sales: 41, revenue: '₦750,000', growth: '+2.4%' },
+        { rank: 6, name: 'Blush & Glow Studio', code: 'BIZ-BG9912XPT', owner: 'Zainab Idris', type: 'Retail', total_sales: 38, revenue: '₦680,000', growth: '+1.9%' },
+        { rank: 7, name: 'Urban Chic Apparel', code: 'BIZ-UCA7732PL', owner: 'Blessing Okoro', type: 'Online', total_sales: 29, revenue: '₦510,000', growth: '+0.8%' }
+    ],
+    
+    get filteredData() {
+        if (!this.searchQuery.trim()) return this.allData;
+        const query = this.searchQuery.toLowerCase();
+        return this.allData.filter(item => 
+            item.name.toLowerCase().includes(query) || 
+            item.owner.toLowerCase().includes(query) || 
+            item.code.toLowerCase().includes(query)
+        );
+    },
+
+    get totalPages() {
+        return Math.ceil(this.filteredData.length / this.perPage) || 1;
+    },
+
+    get paginatedData() {
+        const start = (this.currentPage - 1) * this.perPage;
+        return this.filteredData.slice(start, start + this.perPage);
+    }
+}">
+
+    <!-- Banner -->
+    <div class="relative overflow-hidden rounded-3xl bg-white dark:bg-neutral-900 p-6 sm:p-8 shadow-xs border border-neutral-200/80 dark:border-neutral-800 transition-colors">
+        <!-- Ambient Glow Elements -->
+        <div class="pointer-events-none absolute -top-24 -right-24 h-64 w-64 rounded-full bg-amber-500/10 blur-3xl dark:bg-amber-500/15"></div>
+        <div class="pointer-events-none absolute -bottom-24 -left-24 h-64 w-64 rounded-full bg-emerald-500/10 blur-3xl dark:bg-emerald-500/15"></div>
+
+        <div class="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6" x-data>
+            
+            <!-- Left Info -->
+            <div class="space-y-3 max-w-2xl">
+                <div class="flex items-center gap-3">
+                    <div class="inline-flex items-center gap-2 rounded-full bg-amber-50 px-3 py-1 text-xs font-medium text-amber-700 border border-amber-200 dark:bg-amber-950/60 dark:text-amber-400 dark:border-amber-800">
+                        <svg class="h-3.5 w-3.5 text-amber-500" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                        <span>Top Performers Spotlight</span>
+                    </div>
+                </div>
+
+                <h1 class="text-2xl sm:text-3xl font-medium tracking-tight text-neutral-900 dark:text-white">
+                    Merchant <span class="bg-linear-to-r from-amber-500 to-orange-500 bg-clip-text text-transparent">Leaderboard</span>
+                </h1>
+                
+                <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
+                    Highlighting the top-performing businesses driving sales volume, revenue growth, and high engagement across the Sales IQ ecosystem.
+                </p>
+            </div>
+
+            <!-- Timeframe Filter Toggles -->
+            <div class="flex items-center gap-1.5 rounded-2xl bg-neutral-100/80 p-1.5 dark:bg-neutral-800/80 border border-neutral-200/60 dark:border-neutral-700/60 self-start lg:self-auto">
+                <button @click="timeframe = 'this_week'" :class="timeframe === 'this_week' ? 'bg-white text-neutral-900 shadow-xs dark:bg-neutral-900 dark:text-white' : 'text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white'" class="rounded-xl px-3.5 py-1.5 text-xs font-medium transition-all">
+                    This Week
+                </button>
+                <button @click="timeframe = 'this_month'" :class="timeframe === 'this_month' ? 'bg-white text-neutral-900 shadow-xs dark:bg-neutral-900 dark:text-white' : 'text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white'" class="rounded-xl px-3.5 py-1.5 text-xs font-medium transition-all">
+                    This Month
+                </button>
+                <button @click="timeframe = 'all_time'" :class="timeframe === 'all_time' ? 'bg-white text-neutral-900 shadow-xs dark:bg-neutral-900 dark:text-white' : 'text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white'" class="rounded-xl px-3.5 py-1.5 text-xs font-medium transition-all">
+                    All-Time
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- PODIUM HIGHLIGHT CARDS (TOP 3 - ALWAYS SHOWS GLOBAL TOP 3) -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        
+        <!-- 2nd Place -->
+        <template x-if="allData[1]">
+            <div class="relative overflow-hidden rounded-3xl bg-white dark:bg-neutral-900 p-6 border border-neutral-200/80 dark:border-neutral-800 shadow-xs flex flex-col justify-between order-2 md:order-1">
+                <div class="flex items-start justify-between">
+                    <span class="inline-flex h-9 w-9 items-center justify-center rounded-2xl bg-slate-100 text-slate-700 font-medium text-sm dark:bg-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-700">2nd</span>
+                    <span class="text-xs font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50 px-2.5 py-1 rounded-full" x-text="allData[1].growth"></span>
+                </div>
+                <div class="mt-6 space-y-1">
+                    <h3 class="text-base font-medium text-neutral-900 dark:text-white" x-text="allData[1].name"></h3>
+                    <p class="text-xs text-neutral-500 dark:text-neutral-400">Owner: <span class="font-medium text-neutral-700 dark:text-neutral-300" x-text="allData[1].owner"></span></p>
+                </div>
+                <div class="mt-6 pt-4 border-t border-neutral-100 dark:border-neutral-800 flex items-center justify-between text-xs">
+                    <span class="text-neutral-500">Volume: <strong class="text-neutral-900 dark:text-white" x-text="allData[1].total_sales + ' sales'"></strong></span>
+                    <span class="font-medium text-neutral-900 dark:text-white text-sm" x-text="allData[1].revenue"></span>
+                </div>
+            </div>
+        </template>
+
+        <!-- 1st Place (Winner Podium - Elevated Styling) -->
+        <template x-if="allData[0]">
+            <div class="relative overflow-hidden rounded-3xl bg-linear-to-b from-amber-500/10 via-white to-white dark:via-neutral-900 dark:to-neutral-900 p-6 border-2 border-amber-500/40 shadow-md flex flex-col justify-between order-1 md:order-2 md:-translate-y-2">
+                <div class="absolute top-0 right-0 bg-amber-500 text-white text-[10px] font-medium uppercase tracking-wider px-3 py-1 rounded-bl-xl">Crown Holder</div>
+                <div class="flex items-start justify-between">
+                    <span class="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-amber-500 text-white font-semibold text-base shadow-md shadow-amber-500/20">1st</span>
+                    <span class="text-xs font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50 px-2.5 py-1 rounded-full" x-text="allData[0].growth"></span>
+                </div>
+                <div class="mt-6 space-y-1">
+                    <h3 class="text-lg font-medium text-neutral-900 dark:text-white flex items-center gap-1.5">
+                        <span x-text="allData[0].name"></span>
+                        <svg class="h-4 w-4 text-amber-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    </h3>
+                    <p class="text-xs text-neutral-500 dark:text-neutral-400">Owner: <span class="font-medium text-neutral-700 dark:text-neutral-300" x-text="allData[0].owner"></span></p>
+                </div>
+                <div class="mt-6 pt-4 border-t border-amber-500/20 dark:border-neutral-800 flex items-center justify-between text-xs">
+                    <span class="text-neutral-500">Volume: <strong class="text-neutral-900 dark:text-white" x-text="allData[0].total_sales + ' sales'"></strong></span>
+                    <span class="font-medium text-amber-600 dark:text-amber-400 text-base" x-text="allData[0].revenue"></span>
+                </div>
+            </div>
+        </template>
+
+        <!-- 3rd Place -->
+        <template x-if="allData[2]">
+            <div class="relative overflow-hidden rounded-3xl bg-white dark:bg-neutral-900 p-6 border border-neutral-200/80 dark:border-neutral-800 shadow-xs flex flex-col justify-between order-3">
+                <div class="flex items-start justify-between">
+                    <span class="inline-flex h-9 w-9 items-center justify-center rounded-2xl bg-amber-100/60 text-amber-800 font-medium text-sm dark:bg-amber-950/50 dark:text-amber-300 border border-amber-200/60 dark:border-amber-900">3rd</span>
+                    <span class="text-xs font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50 px-2.5 py-1 rounded-full" x-text="allData[2].growth"></span>
+                </div>
+                <div class="mt-6 space-y-1">
+                    <h3 class="text-base font-medium text-neutral-900 dark:text-white" x-text="allData[2].name"></h3>
+                    <p class="text-xs text-neutral-500 dark:text-neutral-400">Owner: <span class="font-medium text-neutral-700 dark:text-neutral-300" x-text="allData[2].owner"></span></p>
+                </div>
+                <div class="mt-6 pt-4 border-t border-neutral-100 dark:border-neutral-800 flex items-center justify-between text-xs">
+                    <span class="text-neutral-500">Volume: <strong class="text-neutral-900 dark:text-white" x-text="allData[2].total_sales + ' sales'"></strong></span>
+                    <span class="font-medium text-neutral-900 dark:text-white text-sm" x-text="allData[2].revenue"></span>
+                </div>
+            </div>
+        </template>
+
+    </div>
+
+    <!-- SEARCH & CONTROLS TOOLBAR -->
+    <div class="rounded-3xl border border-neutral-200/80 bg-white p-4 shadow-xs dark:border-neutral-800 dark:bg-neutral-900 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <!-- Search Bar -->
+        <div class="relative flex-1 w-full">
+            <svg class="pointer-events-none absolute left-3.5 top-3 h-4 w-4 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input 
+                type="text" 
+                x-model="searchQuery" 
+                @input="currentPage = 1"
+                placeholder="Search by business name, owner name, or code..." 
+                class="w-full rounded-2xl border border-neutral-200 bg-neutral-50/50 pl-10 pr-4 py-2.5 text-neutral-800 placeholder-neutral-400 focus:border-amber-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-amber-500/20 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-200 dark:focus:bg-neutral-900 transition-all"
+            />
+        </div>
+
+        <!-- Per Page Selector -->
+        <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+            <span class="text-xs text-neutral-500 dark:text-neutral-400 whitespace-nowrap">Show:</span>
+            <select x-model.number="perPage" @change="currentPage = 1" class="rounded-2xl border border-neutral-200 bg-white px-3 py-2 text-xs font-medium text-neutral-700 shadow-2xs focus:border-amber-500 focus:outline-none dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-200">
+                <option value="5">5 per page</option>
+                <option value="10">10 per page</option>
+                <option value="20">20 per page</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- FULL LEADERBOARD TABLE CONTAINER -->
+    <div class="overflow-hidden rounded-3xl border border-neutral-200/80 bg-white shadow-xs dark:border-neutral-800 dark:bg-neutral-900">
+        
+        <div class="p-5 border-b border-neutral-200/80 dark:border-neutral-800 flex items-center justify-between">
+            <h3 class="text-sm font-medium text-neutral-900 dark:text-white">Complete Rankings</h3>
+            <span class="text-xs text-neutral-500 dark:text-neutral-400" x-text="'Showing ' + paginatedData.length + ' of ' + filteredData.length + ' results'"></span>
+        </div>
+
+        <!-- TABLE VIEW -->
+        <template x-if="paginatedData.length > 0">
+            <div class="overflow-x-auto scrollbar-thin scrollbar-thumb-neutral-200 dark:scrollbar-thumb-neutral-700">
+                <table class="w-full text-left text-xs min-w-3xl">
+                    <thead class="border-b border-neutral-200/80 bg-neutral-50/80 text-[11px] font-medium text-neutral-500 uppercase tracking-wider dark:border-neutral-800 dark:bg-neutral-950/80 dark:text-neutral-400">
+                        <tr>
+                            <th class="px-5 py-3.5 whitespace-nowrap w-16">Rank</th>
+                            <th class="px-5 py-3.5 whitespace-nowrap">Business Name</th>
+                            <th class="px-5 py-3.5 whitespace-nowrap">Merchant Owner</th>
+                            <th class="px-5 py-3.5 whitespace-nowrap">Business Code</th>
+                            <th class="px-5 py-3.5 whitespace-nowrap">Model Type</th>
+                            <th class="px-5 py-3.5 whitespace-nowrap text-right">Total Sales</th>
+                            <th class="px-5 py-3.5 whitespace-nowrap text-right">Est. Revenue</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-neutral-100 dark:divide-neutral-800/60 text-neutral-700 dark:text-neutral-300">
+                        <template x-for="item in paginatedData" :key="item.code">
+                            <tr class="hover:bg-neutral-50/80 dark:hover:bg-neutral-800/40 transition-colors">
+                                <td class="whitespace-nowrap px-5 py-4 font-medium">
+                                    <span :class="{
+                                        'bg-amber-500 text-white px-2.5 py-1 rounded-xl': item.rank === 1,
+                                        'bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text-slate-200 px-2.5 py-1 rounded-xl': item.rank === 2,
+                                        'bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-300 px-2.5 py-1 rounded-xl': item.rank === 3,
+                                        'text-neutral-500': item.rank > 3
+                                    }" x-text="'#' + item.rank"></span>
+                                </td>
+                                <td class="whitespace-nowrap px-5 py-4 font-medium text-neutral-900 dark:text-white" x-text="item.name"></td>
+                                <td class="whitespace-nowrap px-5 py-4 text-neutral-700 dark:text-neutral-300" x-text="item.owner"></td>
+                                <td class="whitespace-nowrap px-5 py-4">
+                                    <span class="font-mono text-xs text-neutral-500 dark:text-neutral-400" x-text="item.code"></span>
+                                </td>
+                                <td class="whitespace-nowrap px-5 py-4 text-neutral-500 dark:text-neutral-400" x-text="item.type"></td>
+                                <td class="whitespace-nowrap px-5 py-4 text-right font-medium text-emerald-600 dark:text-emerald-400" x-text="item.total_sales + ' sales'"></td>
+                                <td class="whitespace-nowrap px-5 py-4 text-right font-medium text-neutral-900 dark:text-white" x-text="item.revenue"></td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+        </template>
+
+        <!-- SEARCH EMPTY STATE -->
+        <template x-if="paginatedData.length === 0 && searchQuery.trim() !== ''">
+            <div class="flex flex-col items-center justify-center gap-2 py-16 text-center px-4">
+                <div class="h-12 w-12 rounded-2xl bg-neutral-100 text-neutral-500 dark:bg-neutral-800 dark:text-neutral-400 flex items-center justify-center mb-1">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                </div>
+                <p class="text-sm font-medium text-neutral-900 dark:text-white">No matching businesses found</p>
+                <p class="max-w-xs text-xs text-neutral-500 dark:text-neutral-400">
+                    No merchant records match "<span class="font-semibold text-neutral-700 dark:text-neutral-300" x-text="searchQuery"></span>". Try checking the business name or code.
+                </p>
+                <button @click="searchQuery = ''" class="mt-2 inline-flex items-center rounded-xl bg-neutral-100 dark:bg-neutral-800 px-3 py-1.5 text-xs font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 transition-colors">
+                    Clear Search
+                </button>
+            </div>
+        </template>
+
+        <!-- GENERAL EMPTY STATE -->
+        <template x-if="paginatedData.length === 0 && searchQuery.trim() === ''">
+            <div class="flex flex-col items-center justify-center gap-2 py-16 text-center px-4">
+                <div class="h-12 w-12 rounded-2xl bg-amber-50 text-amber-600 dark:bg-amber-950/50 dark:text-amber-400 flex items-center justify-center mb-1">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+                </div>
+                <p class="text-sm font-medium text-neutral-900 dark:text-white">No leaderboard data available yet</p>
+                <p class="max-w-xs text-xs text-neutral-500 dark:text-neutral-400">
+                    Once merchants record sales transactions, rankings and revenue metrics will automatically populate here.
+                </p>
+            </div>
+        </template>
+
+    </div>
+
+    <!-- PAGINATION CONTROLS -->
+    <template x-if="totalPages > 1">
+        <div class="flex items-center justify-between rounded-3xl border border-neutral-200/85 bg-white p-4 shadow-xs dark:border-neutral-800 dark:bg-neutral-900">
+            <p class="text-xs text-neutral-500 dark:text-neutral-400">
+                Page <span class="font-medium text-neutral-800 dark:text-neutral-200" x-text="currentPage"></span> of <span class="font-medium text-neutral-800 dark:text-neutral-200" x-text="totalPages"></span>
+            </p>
+            
+            <div class="flex items-center gap-2">
+                <button 
+                    @click="if (currentPage > 1) currentPage--" 
+                    :disabled="currentPage === 1"
+                    :class="currentPage === 1 ? 'opacity-50 cursor-not-allowed bg-neutral-50 dark:bg-neutral-900 text-neutral-300 dark:text-neutral-600 border-neutral-100 dark:border-neutral-800' : 'bg-white hover:bg-neutral-50 text-neutral-700 dark:bg-neutral-950 dark:text-neutral-200 dark:hover:bg-neutral-800 border-neutral-200 dark:border-neutral-800 shadow-2xs'"
+                    class="inline-flex items-center gap-1 rounded-xl border px-3 py-1.5 text-xs font-medium transition-colors">
+                    <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                    <span>Previous</span>
+                </button>
+
+                <button 
+                    @click="if (currentPage < totalPages) currentPage++" 
+                    :disabled="currentPage === totalPages"
+                    :class="currentPage === totalPages ? 'opacity-50 cursor-not-allowed bg-neutral-50 dark:bg-neutral-900 text-neutral-300 dark:text-neutral-600 border-neutral-100 dark:border-neutral-800' : 'bg-white hover:bg-neutral-50 text-neutral-700 dark:bg-neutral-950 dark:text-neutral-200 dark:hover:bg-neutral-800 border-neutral-200 dark:border-neutral-800 shadow-2xs'"
+                    class="inline-flex items-center gap-1 rounded-xl border px-3 py-1.5 text-xs font-medium transition-colors">
+                    <span>Next</span>
+                    <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                </button>
+            </div>
+        </div>
+    </template>
+
+</div>
+{% endblock %}

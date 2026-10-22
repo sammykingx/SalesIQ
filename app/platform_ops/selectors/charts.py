@@ -8,7 +8,7 @@ ADOPTION_THRESHOLDS = [1, 5, 10, 15, 20]
 class PlatformDashboardChartSelector:
     """
         Selector class responsible for fetching and aggregating platform-wide 
-        metrics and chart data consumed by Alpine.js dashboard components.
+        metrics and chart JSON data consumed by Alpine.js dashboard components.
     """
     def __init__(self) -> None:
         self.businesses = BusinessPlatformSelector()

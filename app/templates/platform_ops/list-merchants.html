@@ -1,13 +1,11 @@
-{# platform_ops/recent_signups.html #}
+{# platform_ops/list-merchants.html #}
 {% extends "layouts/_base_app.html" %}
 {% load static humanize %}
 
 {% block title %}Sales IQ | Platform Operator - Recent Signups{% endblock %}
 
-{% block page_body %}
-<div class="space-y-6">
-
-    <!-- BANNER -->
+{% block page_header %}
+<!-- BANNER -->
     <div class="relative overflow-hidden rounded-2xl bg-white p-6 sm:p-8 shadow-xs border border-neutral-200/80 dark:border-neutral-800 dark:bg-neutral-900 ">
         <!-- Ambient Background Glows -->
         <div class="pointer-events-none absolute -top-24 -right-24 h-64 w-64 rounded-full bg-emerald-500/10 blur-3xl dark:bg-emerald-500/15"></div>
@@ -59,6 +57,12 @@
 
         </div>
     </div>
+{% endblock %}
+
+{% block page_body %}
+<div class="space-y-6">
+
+    
 
     <!-- SEARCH & CONTROLS TOOLBAR -->
     <div class="rounded-2xl border border-neutral-200/80 bg-white p-4 shadow-xs dark:border-neutral-800 dark:bg-neutral-900">

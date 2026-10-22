@@ -1,6 +1,6 @@
 // app/src/entries/metrics/adoption-chart.js
-import { inAppToast } from '../../lib/in-app-toast.js';
-import { Chart } from '../../lib/register-chart.js';
+import { inAppToast } from '../../../lib/in-app-toast.js';
+import { Chart } from '../../../lib/register-chart.js';
 
 const ADOPTED = '#10b981';     // emerald-500
 const NOT_ADOPTED = '#e5e5e5'; // neutral-200

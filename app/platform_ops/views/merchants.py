@@ -1,6 +1,9 @@
+from typing import Any
+
 from platform_ops.mixins import BackofficeAccessMixin
 from django.db.models import Q, QuerySet
-from django.views.generic import ListView
+from django.http import HttpRequest, HttpResponse
+from django.views.generic import ListView, TemplateView
 from core.template_names import APP_TEMPLATES
 from accounts.selectors import BusinessPlatformSelector
 
@@ -31,3 +34,17 @@ class AllMerchantListsView(BackofficeAccessMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['search_query'] = self.request.GET.get('q', '')
         return context
+    
+
+class LeaderBoardView(BackofficeAccessMixin, TemplateView):
+    template_name = APP_TEMPLATES.PLATFORM_OPS.LEADERBOARD
+
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        
+        return context
+    
+    def template_context_data(self) -> dict[str, Any]:
+        timeframe = self.request.GET.get('timeframe', 'this_month')
+        return {}
+    

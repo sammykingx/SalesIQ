@@ -1,3 +1,3 @@
 from .dashboard import PlatformDashboardView
-from .charts import AdoptionChartView, GMVTrendCharView
-from .merchants import AllMerchantListsView
+from .charts import AdoptionChartView, GMVCharTrendView
+from .merchants import AllMerchantListsView, LeaderBoardView

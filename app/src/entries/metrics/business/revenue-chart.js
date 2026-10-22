@@ -1,6 +1,6 @@
 // app/src/entries/metrics/revenue-chart.js
-import { inAppToast } from '../../lib/in-app-toast.js';
-import { Chart } from '../../lib/register-chart.js';
+import { inAppToast } from '../../../lib/in-app-toast.js';
+import { Chart } from '../../../lib/register-chart.js';
 
 const chartInstances = new WeakMap();
 

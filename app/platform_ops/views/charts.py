@@ -9,7 +9,7 @@ from typing import Any, Dict
 
 
 
-class GMVTrendCharView(PlatformJsonChartMixin, View):
+class GMVCharTrendView(PlatformJsonChartMixin, View):
     """
         API view serving platform-wide Gross Merchant Value (GMV) trend data 
         as JSON for Alpine.js chart components.
