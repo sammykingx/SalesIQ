@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+{% load static %}
+{% load humanize %}
+{% load mathfilters %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Receipt - {{ invoice.display_id }}</title>
+    <style>
+        /* Page setup for standard 80mm POS Thermal Roll */
+        @page {
+            size: 80mm auto;
+            margin: 4mm;
+        }
+
+        @media print {
+            body {
+                width: 100%;
+                margin: 0;
+                padding: 0;
+            }
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace, monospace;
+            color: #000000;
+            background-color: #ffffff;
+            margin: 0 auto;
+            padding: 4px;
+            width: 72mm; /* Fits inside standard 80mm roll printable area */
+            font-size: 11px;
+            line-height: 1.3;
+        }
+
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+        .text-left { text-align: left; }
+        .bold { font-weight: bold; }
+        .uppercase { text-transform: uppercase; }
+
+        /* Dashed Dividers typical for receipt printers */
+        .divider {
+            border-top: 1px dashed #000000;
+            margin: 8px 0;
+        }
+
+        .double-divider {
+            border-top: 2px dashed #000000;
+            margin: 8px 0;
+        }
+
+        /* Header / Merchant Details */
+        .brand-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin: 0 0 4px 0;
+            letter-spacing: 0.5px;
+        }
+
+        .merchant-name {
+            font-size: 14px;
+            font-weight: bold;
+            margin: 2px 0;
+        }
+
+        .meta-info {
+            font-size: 10px;
+            margin-bottom: 2px;
+        }
+
+        /* Items Layout */
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 4px;
+        }
+
+        .items-table th {
+            font-size: 10px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid #000000;
+        }
+
+        .items-table td {
+            padding: 4px 0;
+            vertical-align: top;
+            font-size: 10.5px;
+        }
+
+        .item-row-name {
+            font-weight: bold;
+            display: block;
+        }
+
+        .item-row-sub {
+            font-size: 9.5px;
+        }
+
+        /* Totals Block */
+        .totals-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 4px;
+        }
+
+        .totals-table td {
+            padding: 2px 0;
+            font-size: 11px;
+        }
+
+        .total-grand-row td {
+            font-size: 14px;
+            font-weight: bold;
+            padding-top: 4px;
+        }
+
+        /* Footer Notes */
+        .receipt-footer {
+            margin-top: 12px;
+            font-size: 9.5px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. PLATFORM & MERCHANT HEADER -->
+    <div class="text-center">
+        <div class="brand-title">SALESIQ</div>
+        <div class="meta-info">Know your sales, Grow your business</div>
+        <div class="divider"></div>
+        
+        <div class="merchant-name uppercase">{{ invoice.business.name|title }}</div>
+        {% if invoice.business.address %}
+            <div class="meta-info">{{ invoice.business.address }}</div>
+        {% endif %}
+        {% if invoice.business.phone_number %}
+            <div class="meta-info">TEL: {{ invoice.business.phone_number }}</div>
+        {% endif %}
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 2. INVOICE META & CUSTOMER DETAILS -->
+    <div class="meta-info">
+        <div style="display: flex; justify-content: space-between;">
+            <span>REF: <strong>#{{ invoice.display_id }}</strong></span>
+            <span>STATUS: <strong>{{ invoice.status|upper }}</strong></span>
+        </div>
+        <div>DATE: {{ invoice.created_at|date:'d/m/Y h:i A' }}</div>
+        {% if invoice.customer.first_name %}
+            <div>CUSTOMER: {{ invoice.customer.first_name|title }} {{ invoice.customer.last_name|title }}</div>
+        {% endif %}
+        {% if invoice.customer.phone_number %}
+            <div>CUST TEL: {{ invoice.customer.phone_number }}</div>
+        {% endif %}
+    </div>
+
+    <div class="double-divider"></div>
+
+    <!-- 3. LINE ITEMS TABLE -->
+    <table class="items-table">
+        <thead>
+            <tr>
+                <th class="text-left" style="width: 50%;">ITEM</th>
+                <th class="text-center" style="width: 15%;">QTY</th>
+                <th class="text-right" style="width: 35%;">AMOUNT</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in invoice.items %}
+                <tr>
+                    <td class="text-left">
+                        <span class="item-row-name">{{ item.product_name|title }}</span>
+                        <span class="item-row-sub">@ ₦{{ item.unit_price|floatformat:2|intcomma }}</span>
+                    </td>
+                    <td class="text-center">
+                        {% if item.product_type == 'service' %}1{% else %}{{ item.quantity }}{% endif %}
+                    </td>
+                    <td class="text-right bold">
+                        ₦{{ item.line_subtotal|floatformat:2|intcomma }}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="divider"></div>
+
+    <!-- 4. TOTALS & FINANCIAL SUMMARY -->
+    <table class="totals-table">
+        <tr>
+            <td class="text-left">SUBTOTAL:</td>
+            <td class="text-right">₦{{ invoice.subtotal|floatformat:2|intcomma }}</td>
+        </tr>
+        {% if invoice.discount_amount > 0 %}
+            <tr>
+                <td class="text-left">DISCOUNT ({{ invoice.discount_value|floatformat }}%):</td>
+                <td class="text-right">-₦{{ invoice.discount_amount|floatformat:2|intcomma }}</td>
+            </tr>
+        {% endif %}
+        {% if invoice.tax_amount > 0 %}
+            <tr>
+                <td class="text-left">{{ invoice.tax_name|upper }} ({{ invoice.tax_percentage|floatformat }}%):</td>
+                <td class="text-right">+₦{{ invoice.tax_amount|floatformat:2|intcomma }}</td>
+            </tr>
+        {% endif %}
+    </table>
+
+    <div class="double-divider"></div>
+
+    <table class="totals-table">
+        <tr class="total-grand-row">
+            <td class="text-left">TOTAL:</td>
+            <td class="text-right">₦{{ invoice.total|floatformat:2|intcomma }}</td>
+        </tr>
+    </table>
+
+    <div class="divider"></div>
+
+    <!-- 5. RECEIPT FOOTER -->
+    <div class="text-center receipt-footer">
+        <div>*** THANK YOU FOR YOUR BUSINESS ***</div>
+        <div style="margin-top: 4px;">Powered by SalesIQ</div>
+    </div>
+
+</body>
+</html>

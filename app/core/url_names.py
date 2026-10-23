@@ -54,6 +54,7 @@ INVOICES = SimpleNamespace(
     CREATE='create_invoices',
     VIEW='view_invoices',
     DOWNLOAD='download_invoices',
+    THERMAL_RECEIPT='invoices_thermal_receipts',
     LIST_SALES='list_sales_invoices'
 )
 

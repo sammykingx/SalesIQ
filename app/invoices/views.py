@@ -3,8 +3,10 @@ from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.urls import reverse
+from django.utils.decorators import method_decorator
+from django.views.decorators.clickjacking import xframe_options_sameorigin
 from django.views.generic import View, TemplateView
-# from django_weasyprint import WeasyTemplateView
+from django_weasyprint import WeasyTemplateView
 from weasyprint import HTML
 
 from accounts.domains.exceptions import AccountsDomainException
@@ -112,10 +114,22 @@ class RecordSalesInvoiceView(LoginRequiredMixin, View):
 
 
 class InvoicesWebView(TemplateView):
+    """
+        Base view for rendering web-based invoice pages.
+        
+        Handles fetching and caching the invoice by its slug during dispatch.
+        If the invoice doesn't exist, it gracefully redirects the user to the invoice creation page.
+    """
     template_name = APP_TEMPLATES.INVOICE.VIEW
     invoice_selector = InvoiceMerchantSelector()
     
     def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+        """
+            Intercepts the request to look up the invoice using the URL slug.
+            
+            Performs a guard check: if the invoice is not found, redirects to the 
+            invoice creation route; otherwise, proceeds with normal request handling.
+        """
         inv_slug = self.kwargs.get("slug", None)
         self._invoice = self.invoice_selector.get_invoice_by_slug(slug=inv_slug)
         if self._invoice is None:
@@ -123,16 +137,30 @@ class InvoicesWebView(TemplateView):
         return super().dispatch(request, *args, **kwargs)
     
     def get_context_data(self, **kwargs) -> Dict[str, Any]:
+        """
+        Injects the validated and serialized invoice object into the template context.
+        """
         context = super().get_context_data(**kwargs)
         invoice = InvoiceDetailResponseSchema.model_validate(self._invoice)
         context.update({"invoice": invoice})
         return context
     
+    
+@method_decorator(xframe_options_sameorigin, name="dispatch")
+class InvoiceThermalReceiptView(InvoicesWebView):
+    """
+        Specialized web view for rendering thermal printer receipts (80mm format).
+        
+        Inherits the invoice fetching and validation logic from InvoicesWebView,
+        but overrides the template name to use the thermal receipt layout. 
+        Permits iframe embedding from the same origin (useful for direct printing frames).
+    """
+    template_name = APP_TEMPLATES.INVOICE.THERMAL_RECEIPT
+    
 
 # class InvoicePDFDownloadView(WeasyTemplateView):
 #     template_name = APP_TEMPLATES.INVOICE.INVOICE_PDF
-#     # pdf_attachment = True
-#     invoice_selector = InvoiceSelectors()
+#     invoice_selector = InvoiceMerchantSelector
     
 #     def get_invoice(self):
 #         """
@@ -141,8 +169,16 @@ class InvoicesWebView(TemplateView):
 #         """
 #         if not hasattr(self, '_invoice'):
 #             inv_slug = self.kwargs.get("slug", None)
-#             self._invoice = self.invoice_selector.get_invoice_by_slug(slug=inv_slug)
+#             self._invoice = self.invoice_selector.get_invoice_by_slug(slug=inv_slug) # type: ignore
 #         return self._invoice
+    
+#     def get_template_names(self) -> list:
+#         """
+#         Dynamically switch template if ?print=thermal is present in query parameters.
+#         """
+#         if self.request.GET.get("print") == "thermal":
+#             return [APP_TEMPLATES.INVOICE.THERMAL_RECEIPT]
+#         return [self.template_name]
     
 #     def get_pdf_filename(self): # type:ignore
 #         invoice = self.get_invoice()

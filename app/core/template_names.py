@@ -55,6 +55,7 @@ class APP_TEMPLATES:
     class INVOICE:
         VIEW=f'{_INVOICES_BASE}/inv-view.html'
         INVOICE_PDF=f'{_INVOICES_BASE}/inv-pdf.html'
+        THERMAL_RECEIPT=F'{_INVOICES_BASE}/inv-thermal-receipt.html'
         
 class EMAIL_TEMPLATES:
     ACCOUNT_ACTIVATION = f'{_EMAIL_BASE_FOLDER}/account-activation.html'

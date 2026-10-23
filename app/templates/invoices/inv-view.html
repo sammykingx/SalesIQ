@@ -20,24 +20,70 @@
 
     <!-- Open Graph -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Invoice #{{ invoice.display_id }} — {{ invoice.business.name }}">
-    <meta property="og:description" content="View your invoice details and download a copy. Total amount: ₦{{ invoice.total|floatformat:2|intcomma }}.">
+    <meta property="og:title" content="Invoice #{{ invoice.display_id }} — {{ invoice.business.name|title }}">
+    <meta property="og:description" content="View your invoice details from {{ invoice.business.name|title }} and download a copy. Total amount: ₦{{ invoice.total|floatformat:2|intcomma }}.">
     <meta property="og:url" content="{{ request.build_absolute_uri }}">
-    {% comment %} <meta property="og:image" content="{% static 'images/og/invoice-share.png' %}">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630"> {% endcomment %}
     <meta property="og:site_name" content="SalesIQ">
     <meta property="og:locale" content="en_NG">
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Invoice #{{ invoice.display_id }} — {{ invoice.business.name }}">
-    <meta name="twitter:description" content="View your invoice details and download a copy. Total amount: ₦{{ invoice.total|floatformat:2|intcomma }}.">
-    {% comment %} <meta name="twitter:image" content="{% static 'images/og/invoice-share.png' %}"> {% endcomment %}
+    <meta name="twitter:description" content="View your invoice details from {{ invoice.business.name|title }} and download a copy. Total amount: ₦{{ invoice.total|floatformat:2|intcomma }}.">
 
-    {% vite_asset 'src/entries/invoices.js' %}
+    {% vite_asset 'src/entries/app.js' %}
+    <style>
+        @media print {
+            /* Force background graphics to print accurately */
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            
+            /* Hide everything on the page by default */
+            body * {
+                visibility: hidden !important;
+            }
+            
+            /* Show only the targeted invoice card and its children */
+            #invoice-card, #invoice-card * {
+                visibility: visible !important;
+            }
+            
+            /* Pin the invoice card to the top left for clean A4 rendering */
+            #invoice-card {
+                position: absolute !important;
+                left: 0 !important;
+                top: 0 !important;
+                width: 100% !important;
+                margin: 0 !important;
+                padding: 20px !important;
+                border: none !important;
+                box-shadow: none !important;
+                border-radius: 0 !important;
+            }
+
+            body {
+                background-color: #ffffff !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            
+            .bg-slate-900 {
+                background-color: #0f172a !important;
+                color: #ffffff !important;
+            }
+        }
+    </style>
 </head>
 <body class="font-sans min-h-screen text-slate-100 pb-16 antialiased selection:bg-emerald-500 selection:text-slate-950">
-    <header class="sticky top-4 z-50 px-4 sm:px-6 mb-8 sm:mb-12">
+    
+    <header 
+        class="sticky top-4 z-50 px-4 sm:px-6 mb-8 sm:mb-12 print:hidden" 
+        data-business-name="{{ invoice.business.name|upper }}" 
+        data-share-url="{{ request.build_absolute_uri|escapejs }}" 
+        data-invoice-id="{{ invoice.display_id }}" 
+        x-data="invoiceShare"
+    >
         <div class="max-w-4xl mx-auto flex items-center justify-between gap-4 bg-white/70 backdrop-blur-xl border border-slate-200/80 shadow-lg shadow-slate-900/5 rounded-full py-2.5 px-4 sm:px-6 transition-all">
             <div class="flex items-center gap-3">
                 <img src="{% static 'images/logo/main-logo-light.png' %}" 
@@ -49,21 +95,154 @@
                 </span>
             </div>
 
-            <div>
-                <a href="{% url INVOICES.DOWNLOAD slug=invoice.slug %}" 
-                class="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-medium px-4 py-2 rounded-full shadow-md shadow-emerald-500/20 transition-all duration-200 active:scale-95">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
-                    </svg>
-                    <span>Download PDF</span>
-                </a>
+            <div class="flex items-center gap-2">
+                
+                <!-- MOBILE ACTION BUTTONS -->
+                <template x-if="hasNativeShare">
+                    <div class="flex items-center gap-2">
+                        <button type="button" 
+                                @click="window.location.href = '{% url INVOICES.DOWNLOAD slug=invoice.slug %}'"
+                                class="inline-flex items-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-medium px-3.5 py-2 rounded-full shadow-md transition-all active:scale-95 cursor-pointer">
+                            <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                            </svg>
+                            <span>Download</span>
+                        </button>
+
+                        <button 
+                            @click="triggerShare()"
+                            type="button"
+                            class="inline-flex items-center gap-1.5 bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-medium px-3.5 py-2 rounded-full shadow-md shadow-emerald-500/25 transition-all active:scale-95 cursor-pointer">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+                            </svg>
+                            <span>Share</span>
+                        </button>
+                    </div>
+                </template>
+
+                <!-- Desktop Share & Export Dropdown Modal -->
+                <template x-if="!hasNativeShare">
+                    <div class="relative">
+                        <button
+                            type="button"
+                            @click="triggerShare()" 
+                            class="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-medium px-4 py-2 rounded-full shadow-md shadow-emerald-500/20 active:scale-95 cursor-pointer">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+                            </svg>
+                            <span>Share & Export</span>
+                        </button>
+
+                        <!-- Dropdown Modal -->
+                        <div x-show="open" 
+                            @click.away="open = false"
+                            x-transition:enter="transition ease-out duration-200"
+                            x-transition:enter-start="opacity-0 scale-95 translate-y-2"
+                            x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                            x-transition:leave="transition ease-in duration-150"
+                            x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+                            x-transition:leave-end="opacity-0 scale-95 translate-y-2"
+                            class="absolute right-0 mt-3 w-80 sm:w-96 bg-white rounded-2xl shadow-2xl border border-slate-200/80 p-5 text-slate-800 z-50 origin-top-right backdrop-blur-xl"
+                            style="display: none;">
+                            
+                            <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+                                <h3 class="text-xs font-semiboldbold uppercase tracking-wider text-slate-500">Share & Export Invoice</h3>
+                                <button type="button" @click="open = false" class="text-slate-400 hover:text-slate-600 rounded-lg p-1 cursor-pointer">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <!-- Section 1: Social & Link Sharing -->
+                            <div class="mb-5">
+                                <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wide block mb-3">Share Online</span>
+                                
+                                <div class="grid grid-cols-4 gap-2 text-center">
+                                    <button type="button" @click="shareToWhatsApp()" class="flex flex-col items-center gap-1.5 p-2 rounded-xl hover:bg-emerald-50 text-slate-600 hover:text-emerald-600 transition group cursor-pointer">
+                                        <div class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 group-hover:scale-105 transition">
+                                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                                        </div>
+                                        <span class="text-[10px] font-medium">WhatsApp</span>
+                                    </button>
+
+                                    <button type="button" @click="shareToEmail()" class="flex flex-col items-center gap-1.5 p-2 rounded-xl hover:bg-sky-50 text-slate-600 hover:text-sky-600 transition group cursor-pointer">
+                                        <div class="w-10 h-10 rounded-full bg-sky-100 flex items-center justify-center text-sky-600 group-hover:scale-105 transition">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                                        </div>
+                                        <span class="text-[10px] font-medium">Email</span>
+                                    </button>
+
+                                    <button type="button" @click="copyLink()" class="flex flex-col items-center gap-1.5 p-2 rounded-xl hover:bg-pink-50 text-slate-600 hover:text-pink-600 transition group cursor-pointer">
+                                        <div class="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 group-hover:scale-105 transition">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+                                        </div>
+                                        <span class="text-[10px] font-medium">Instagram</span>
+                                    </button>
+
+                                    <button type="button" @click="copyLink()" class="flex flex-col items-center gap-1.5 p-2 rounded-xl hover:bg-slate-100 text-slate-600 hover:text-slate-900 transition group cursor-pointer">
+                                        <div class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-800 group-hover:scale-105 transition">
+                                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg>
+                                        </div>
+                                        <span class="text-[10px] font-medium">TikTok</span>
+                                    </button>
+                                </div>
+
+                                <!-- copy to clipboard -->
+                                <div class="mt-4 flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-xl p-1.5">
+                                    <input type="text" readonly :value="shareUrl" class="bg-transparent text-xs text-slate-600 px-2 w-full focus:outline-none font-mono">
+                                    <button type="button" @click="copyLink()" 
+                                            class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-medium px-3 py-1.5 rounded-lg shrink-0 active:scale-95 cursor-pointer"
+                                            x-text="copied ? 'Copied!' : 'Copy'">
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Section 2: Download & Print Options -->
+                            <div class="pt-3 border-t border-slate-100 space-y-2">
+                                <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wide block mb-2">Export & Print</span>
+                                
+                                <button type="button" 
+                                        @click="window.location.href = '{% url INVOICES.DOWNLOAD slug=invoice.slug %}'"
+                                        class="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-slate-50 text-xs font-medium text-slate-700 transition cursor-pointer">
+                                    <span class="flex items-center gap-2.5">
+                                        <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                        <span>Download A4 PDF</span>
+                                    </span>
+                                    <span class="text-[10px] text-slate-400 font-mono">PDF</span>
+                                </button>
+
+                                <button type="button" @click="printA4()" 
+                                        class="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-slate-50 text-xs font-medium text-slate-700 transition text-left cursor-pointer">
+                                    <span class="flex items-center gap-2.5">
+                                        <svg class="w-4 h-4 text-sky-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                                        <span>Print A4 Document</span>
+                                    </span>
+                                    <span class="text-[10px] text-slate-400 font-mono">Browser</span>
+                                </button>
+
+                                <button type="button" @click="printThermal('{% url INVOICES.THERMAL_RECEIPT slug=invoice.slug %}')" 
+                                        class="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-slate-50 text-xs font-medium text-slate-700 transition text-left cursor-pointer">
+                                    <span class="flex items-center gap-2.5">
+                                        <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                        <span>Thermal Printer Receipt (80mm)</span>
+                                    </span>
+                                    <span class="text-[10px] text-purple-600 font-mono bg-purple-50 px-1.5 py-0.5 rounded">Thermal</span>
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </template>
+
             </div>
         </div>
     </header>
 
-    <!-- 2. MAIN INVOICE DOCUMENT CARD -->
+    <!-- MAIN INVOICE DOCUMENT CARD -->
     <main class="max-w-4xl mx-auto px-4 sm:px-6">
-        <div class="relative bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-200/80 text-slate-800 p-5 sm:p-10">
+        <div id="invoice-card" class="relative bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-200/80 text-slate-800 p-5 sm:p-10">
             
             <!-- WATERMARK -->
             <div class="absolute inset-0 pointer-events-none flex items-center justify-center overflow-hidden select-none z-0">
@@ -130,37 +309,58 @@
                 </div>
             </div>
 
-            <!-- Social Handles -->
+            <!-- Social Handles & Connect Bar -->
             {% if invoice.business.instagram_url or invoice.business.tiktok_url or invoice.business.website_url %}
-            <div class="relative z-10 bg-slate-50/80 backdrop-blur-sm border border-slate-200/80 rounded-xl px-4 py-3 mb-6 sm:mb-8 flex flex-wrap items-center gap-4 sm:gap-6 text-xs text-slate-600 font-medium">
-                {% if invoice.business.instagram_url %}
-                    <span class="flex items-center gap-2">
-                        <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-                            <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
-                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
-                            <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
-                        </svg>
-                        <span>{{ invoice.business.instagram_url }}</span>
-                    </span>
-                {% endif %}
-                {% if invoice.business.tiktok_url %}
-                    <span class="flex items-center gap-2">
-                        <svg class="w-4 h-4 text-slate-400" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
-                        </svg>
-                        <span>{{ invoice.business.tiktok_url }}</span>
-                    </span>
-                {% endif %}
+            <div class="relative z-10 bg-linear-to-r from-slate-50 via-slate-100/60 to-slate-50 border border-slate-200/80 rounded-2xl p-4 mb-6 sm:mb-8 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 text-xs text-slate-600">
+                
+                <!-- Left Group: Social Media Pills -->
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mr-1 hidden sm:inline-block">Connect:</span>
+                    
+                    <!-- Instagram Pill -->
+                    {% if invoice.business.instagram_url %}
+                        <a href="{{ invoice.business.instagram_url }}" target="_blank" rel="noopener noreferrer" 
+                           class="inline-flex items-center gap-2 bg-white hover:bg-pink-50/60 border border-slate-200/80 hover:border-pink-200 text-slate-700 hover:text-pink-700 px-3 py-2 sm:py-1.5 rounded-xl sm:rounded-full shadow-2xs transition-all duration-200 group">
+                            <div class="w-5 h-5 rounded-full bg-pink-100/80 flex items-center justify-center text-pink-600 shrink-0 group-hover:scale-110 transition-transform">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                                    <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
+                                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                                    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
+                                </svg>
+                            </div>
+                            <span class="font-medium truncate max-w-55 sm:max-w-xs">{{ invoice.business.instagram_url }}</span>
+                        </a>
+                    {% endif %}
+
+                    <!-- TikTok Pill -->
+                    {% if invoice.business.tiktok_url %}
+                        <a href="#" target="_blank" rel="noopener noreferrer" 
+                           class="inline-flex items-center gap-2 bg-white hover:bg-slate-900/5 border border-slate-200/80 hover:border-slate-400 text-slate-700 hover:text-slate-950 px-3 py-2 sm:py-1.5 rounded-xl sm:rounded-full shadow-2xs transition-all duration-200 group">
+                            <div class="w-5 h-5 rounded-full bg-slate-900 flex items-center justify-center text-white shrink-0 group-hover:scale-110 transition-transform">
+                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                                </svg>
+                            </div>
+                            <span class="font-medium truncate max-w-55 sm:max-w-xs">{{ invoice.business.tiktok_url }}</span>
+                        </a>
+                    {% endif %}
+                </div>
+
+                <!-- Right Group: Website Pill -->
                 {% if invoice.business.website_url %}
-                    <span class="flex items-center gap-2 sm:ml-auto">
-                        <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-                            <circle cx="12" cy="12" r="10"/>
-                            <line x1="2" x2="22" y1="12" y2="12"/>
-                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-                        </svg>
-                        <span>{{ invoice.business.website_url }}</span>
-                    </span>
+                    <a href="#" target="_blank" rel="noopener noreferrer" 
+                       class="inline-flex items-center gap-2 bg-white hover:bg-emerald-50/60 border border-slate-200/80 hover:border-emerald-200 text-slate-700 hover:text-emerald-700 px-3.5 py-2 sm:py-1.5 rounded-xl sm:rounded-full shadow-2xs transition-all duration-200 group sm:ml-auto">
+                        <div class="w-5 h-5 rounded-full bg-emerald-100/80 flex items-center justify-center text-emerald-600 shrink-0 group-hover:scale-110 transition-transform">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="2" x2="22" y1="12" y2="12"/>
+                                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                            </svg>
+                        </div>
+                        <span class="font-medium truncate max-w-55 sm:max-w-xs">{{ invoice.business.website_url }}</span>
+                    </a>
                 {% endif %}
+
             </div>
             {% endif %}
 
@@ -237,7 +437,7 @@
             <!-- Financial Summary Card -->
             <div class="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-6 items-start pt-6 border-t border-slate-100">
                 <div class="text-xs text-slate-500 bg-slate-50/70 backdrop-blur-sm p-4 rounded-2xl border border-dashed border-slate-200/80 leading-relaxed">
-                    <strong class="text-slate-800">Note:</strong> This document serves as official receipt of purchase. Items delivered and services rendered are subject to standard vendor terms.
+                    <strong class="text-slate-800">Note:</strong> This document serves as official receipt of purchase. Items delivered and services rendered are subject to standard merchant terms.
                 </div>
                 <div class="bg-slate-950 text-white p-6 rounded-2xl space-y-2.5 text-xs shadow-xl shadow-slate-950/5">
                     <div class="flex justify-between text-slate-400">

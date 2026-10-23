@@ -24,7 +24,8 @@ import { initAccountsModule } from "./accounts";
 import { initCustomerModule } from "./customers";
 import { initProductsModule } from "./products";
 import { initSalesModule } from "./sales";
-import { initMetricsModule } from "./metrics/index.js";
+import { initInvoicesModule } from "./invoices";
+import { initMetricsModule } from "./metrics/";
 
 
 initAuthModule(Alpine);
@@ -34,6 +35,7 @@ initAccountsModule(Alpine);
 initCustomerModule(Alpine);
 initProductsModule(Alpine);
 initSalesModule(Alpine);
+initInvoicesModule(Alpine);
 initMetricsModule(Alpine);
 
 

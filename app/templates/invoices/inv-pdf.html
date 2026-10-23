@@ -274,7 +274,7 @@
             <table class="layout-table" style="margin-bottom: 0;">
                 <tr>
                     <td>
-                        <h1 class="business-title">{{ invoice.business.name }}</h1>
+                        <h1 class="business-title">{{ invoice.business.name|title }}</h1>
                         {% if invoice.business.address %}
                             <p class="business-info">{{ invoice.business.address }}</p>
                         {% else %}
