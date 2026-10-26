@@ -32,7 +32,7 @@ class CreateCustomersView(LoginRequiredMixin, View):
 
     def post(self, request: HttpRequest):
         try:
-            data = CreateCustomerSchema.model_validate_json(request.body, strict=True)
+            data = CreateCustomerSchema.model_validate_json(request.body, strict=True)    
             biz_instance = self.biz_selector.get_user_business(user_email=request.user.email, as_instance=True) # type: ignore
             if not biz_instance:
                 return JsonResponse({
@@ -45,7 +45,7 @@ class CreateCustomersView(LoginRequiredMixin, View):
             ) 
             
             return JsonResponse({
-                "message": "Customer successfully trapped in your business ecosystem. Another soul joins the fold!",
+                "message": "Customer successfully locked-in your business ecosystem. Another soul joins the fold!",
                 "status": "success"
             }, status=201)
 

@@ -6,7 +6,8 @@ _ALPHABET = "abcdefghjkmnpqrstuvwxyz23456789"
 _SUFFIX_LEN = 10
 
 def build_unique_customer_code(*, f_name: str, l_name: str) -> str:
-    name = f"{f_name} {l_name}"[25:].strip("-") or "customer"
+    first_name, last_name = f_name.strip("-"), l_name.strip("-")
+    name = f"{first_name}-{last_name}"[:30] or "customer"
     base = slugify(name)
     return "{}-{}".format(base, generate(_ALPHABET, _SUFFIX_LEN))
 

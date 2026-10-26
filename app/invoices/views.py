@@ -13,11 +13,13 @@ from accounts.domains.exceptions import AccountsDomainException
 from accounts.selectors import BusinessSelector
 from core.template_names import APP_TEMPLATES
 from core.url_names import INVOICES
+from customers.domains.exceptions import CustomerDomainException
 from customers.selectors import CustomerSelector
 from invoices.domains.exceptions import InvoiceDomainException
 from invoices.serializers import CreateSalesInvoiceSchema, InvoiceDetailResponseSchema, InvoiceListResponseSchema
 from invoices.selectors import InvoiceMerchantSelector
 from invoices.services import InvoiceService
+from products.domain.exceptions import ProductDomainException
 from products.selectors import ProductsSelector
 from products.serializers import ProductListItemSchema
 from utils.pydantic_formatter import format_pydantic_errors
@@ -94,11 +96,16 @@ class RecordSalesInvoiceView(LoginRequiredMixin, View):
         except ValidationError as err:
             return JsonResponse({
                 "message": "Your data is looking a bit tragic. Fix your typos and try again.", 
-                "error": format_pydantic_errors(err), 
+                "error": format_pydantic_errors(err),
                 "status": "warning"
             }, status=422)
             
-        except (AccountsDomainException, InvoiceDomainException) as err:
+        except (
+            AccountsDomainException, 
+            CustomerDomainException, 
+            ProductDomainException, 
+            InvoiceDomainException
+        ) as err:
             return JsonResponse({
                 "title": err.title,
                 "message": err.message,
@@ -111,7 +118,6 @@ class RecordSalesInvoiceView(LoginRequiredMixin, View):
                 "message": "The hamsters powering our servers just went on an unscheduled coffee break. We're waking them up.",
                 "status": "error"
             }, status=500)        
-
 
 class InvoicesWebView(TemplateView):
     """

@@ -64,7 +64,7 @@ class InvoiceService:
             )
 
             for product in sale_data.products:
-                product_obj = product_repo.get_or_create_product(data=product)  # type: ignore
+                product_obj = product_repo.get_or_create_product(data=product, product_id=product.id)  # type: ignore
                 self.inv_repo.create_invoice_line_item(
                     invoice_obj=invoice_obj, product_obj=product_obj, line_item=product
                 )

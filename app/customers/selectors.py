@@ -17,15 +17,18 @@ class CustomerSelector:
         """Maps a BusinessCustomers model instance to a nested BusinessClient domain entity."""
         customer_entity = CustomerEntity(
             id=link.client.id, # type: ignore
+            code=link.client.code, # type: ignore
             first_name=link.client.first_name,
             last_name=link.client.last_name,
             email=link.client.email,
+            using_temp_email=link.client.using_temp_email,
             phone_number=link.client.phone_number,
         )
         return BusinessClientEntity(
             customer=customer_entity,
             business_id=link.business_id, #type: ignore
             display_name=link.display_name,
+            email=link.email,
             phone_number=link.phone_number,     # type: ignore
             slug=link.slug, #type: ignore
             notes=link.notes,
@@ -97,13 +100,17 @@ class CustomerSelector:
         
         payload = []
         for link in links:
+            cus_email = None
             client = link.client
+            if link.email or not client.using_temp_email:
+                cus_email = link.email or link.client.email
+                
             payload.append({
                 "id": client.id, # type:ignore
                 "first_name": client.first_name,
                 "last_name": client.last_name,
                 "display_name": link.display_name.title(),
-                "email": client.email,
+                "email": cus_email,
                 "phone": link.phone_number or client.phone_number,
                 "total_spend": link.total_spend or Decimal("0"), # type:ignore
                 "total_orders": link.total_orders, # type:ignore

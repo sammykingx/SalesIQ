@@ -102,13 +102,14 @@ export function customerDetailComponent(endpointUrl = '') {
                 };
             });
 
-            const custData = data.customer || data;
+            const custData = data.customer || null;
+            const bizCustomerEmail = data.email;
 
             return {
                 id: custData.id || null,
                 firstName: toTitleCase(firstName || custData.first_name || ''),
                 lastName: toTitleCase(lastName || custData.last_name || ''),
-                email: custData.email || '',
+                email: bizCustomerEmail || custData.email || '',
                 phone: data.phone_number || custData.phone_number || '',
                 status: data.status || 'Active',
                 dateCreated: data.date_created || data.dateCreated || new Date().toISOString(),
@@ -216,6 +217,7 @@ export function customerDetailComponent(endpointUrl = '') {
                 this.customer.firstName = payload.first_name;
                 this.customer.lastName = payload.last_name;
                 this.customer.phone = payload.phone_number;
+                this.customer.email = payload.email;
 
                 inAppToast(
                     "Client Updated Successfully",

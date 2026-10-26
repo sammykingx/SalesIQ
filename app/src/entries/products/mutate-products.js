@@ -1,10 +1,12 @@
 import { apiRequest } from '../../lib/http/api.js';
 import { inAppToast } from '../../lib/in-app-toast.js';
 
-export function modifyProductComponent(endpointUrl = '') {
+export function mutateProductComponent(endpointUrl = '') {
     return {
         endpoint: '',
         isLoading: false,
+        isDeleting: false,
+        showDeleteModal: false,
 
         productData: {
             id: '',
@@ -147,6 +149,47 @@ export function modifyProductComponent(endpointUrl = '') {
                 inAppToast('Connection Void 🌪️', err.message || 'Failed to reach the server. Check your network connection.', 'error');
             } finally {
                 this.isLoading = false;
+            }
+        },
+
+        async deleteProduct() {
+            if (this.isDeleting) return;
+
+            this.isDeleting = true;
+
+            const targetUrl = this.endpoint || endpointUrl || window.location.pathname;
+            const payload = {
+                product_id: this.productData.id
+            };
+
+            try {
+                const response = await apiRequest(targetUrl, 'DELETE', payload);
+                const data = await response.json().catch(() => ({}));
+
+                if (!response.ok) {
+                    inAppToast(
+                        data?.title || 'Deletion Failed 🚫',
+                        data?.message || 'Unable to remove product from catalog.',
+                        data?.status ||  'error',
+                    );
+                    return;
+                }
+
+                inAppToast(
+                    'Product Removed 🗑️',
+                    data?.message || 'The product has been permanently deleted.',
+                    'success'
+                );
+
+                this.showDeleteModal = false;
+
+                if (data.redirect_url) {
+                    window.location.href = data.redirect_url;
+                }
+            } catch (err) {
+                inAppToast('Connection Void 🌪️', err.message || 'Failed to reach the server.', 'error');
+            } finally {
+                this.isDeleting = false;
             }
         }
     };

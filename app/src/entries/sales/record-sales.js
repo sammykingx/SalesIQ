@@ -1,5 +1,3 @@
-// import { demoCustomers } from "../customers/demo-data.js";
-// import { demoProductsData } from "../products/demo-data.js";
 import { inAppToast } from "../../lib/in-app-toast.js";
 import { apiRequest } from "../../lib/http/api.js";
 

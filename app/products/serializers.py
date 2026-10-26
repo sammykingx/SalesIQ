@@ -24,7 +24,10 @@ class ModifyProductSchema(CreateProductsSchema):
         fields and requires the product_id for identification.
     """
     product_id: UUID
-
+    
+class DeleteProductSchema(BaseModel):
+    """Schema used for validating input when deleting a product."""
+    product_id: UUID
 
 class ProductListItemSchema(BaseModel):
     """

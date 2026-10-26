@@ -40,7 +40,7 @@ export function addCustomerModal(endpointUrl = '') {
             return isPhoneValid(this.phone);
         },
         get isFormValid() {
-            return this.isFirstNameValid && this.isLastNameValid && this.isEmailValid && this.isPhoneValid;
+            return this.isFirstNameValid && this.isLastNameValid && (this.isEmailValid || this.isPhoneValid);
         },
 
         resetForm() {
@@ -66,8 +66,8 @@ export function addCustomerModal(endpointUrl = '') {
                 first_name: this.firstName.trim(),
                 last_name: this.lastName.trim(),
                 display_name: this.computedDisplayName,
-                email: this.email.trim(),
-                phone_number: this.phone.trim()
+                email: this.email.trim() !== '' ? this.email.trim() : null,
+                phone_number: this.phone.trim() !== '' ? this.phone.trim() : null
             };
 
             try {

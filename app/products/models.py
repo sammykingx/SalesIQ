@@ -24,7 +24,7 @@ class Products(models.Model):
         db_table = "products"
         constraints = [
             models.UniqueConstraint(
-                fields=["business", "name"],
+                fields=["business", "id"],
                 name="unique_product_per_business"
             )
         ]

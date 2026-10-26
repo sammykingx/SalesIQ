@@ -6,15 +6,38 @@ from typing import Optional
 
 @dataclass
 class CustomerEntity:
+    """
+    Represents an individual customer entity who is not associated with any business.
+
+    Attributes:
+        id (int): The primary database identifier for the customer record.
+        code (str): A system-unique, human-friendly reference code for the customer 
+            that is also utilized for relationships/lookups in the `BusinessCustomers` through model.
+        first_name (str): The customer's first name.
+        last_name (str): The customer's last name.
+        email (Optional[str]): The customer's email address, if available.
+        using_temp_email (bool): Flag indicating whether the record was created using a 
+            system-generated temporary email (True) or the customer's actual email (False).
+        phone_number (Optional[str]): The customer's phone number, if available.
+    """
     id: int
+    code: str
     first_name: str
     last_name: str
     email: Optional[str]
+    using_temp_email: bool
     phone_number: Optional[str]
     
     def to_dict(self) -> dict:
         """Convert the customer entity to a standard dictionary."""
-        return asdict(self)
+        return {
+            "id": self.id,
+            "code": self.code,
+            "first_name": self.first_name,
+            "last_name": self.last_name,
+            "email": None if self.using_temp_email else self.email,
+            "phone_number": self.phone_number,
+        }
     
 
 @dataclass
@@ -22,7 +45,8 @@ class BusinessClientEntity:
     customer: CustomerEntity
     business_id: UUID
     display_name: str
-    phone_number: str
+    email: Optional[str]
+    phone_number: Optional[str]
     slug: str
     notes: str
     added_at: datetime

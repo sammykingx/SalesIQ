@@ -9,7 +9,7 @@ from accounts.domains.exceptions import AccountsDomainException
 from accounts.selectors import BusinessSelector
 from core.template_names import APP_TEMPLATES
 from core.url_names import PRODUCTS
-from products.serializers import CreateProductsSchema, ModifyProductSchema, ProductListItemSchema
+from products.serializers import CreateProductsSchema, ModifyProductSchema, ProductListItemSchema, DeleteProductSchema
 from products.domain.demo_data import PRODUCTS_DATA
 from products.domain.exceptions import ProductDomainException
 from products.selectors import ProductsSelector
@@ -20,6 +20,9 @@ from dataclasses import asdict
 from pydantic import ValidationError
 from typing import Any
 
+import logging
+
+logger = logging.getLogger(__name__)
 
 class CreateProductsView(LoginRequiredMixin, View):
     """
@@ -53,23 +56,22 @@ class CreateProductsView(LoginRequiredMixin, View):
             }, status=400)
             
         except Exception as err:
-            import traceback
-            traceback.print_exc()
+            logger.exception("unhandled exception when creating a product")
             return JsonResponse({
                 "message": "The hamsters powering our servers just went on an unscheduled coffee break. We're waking them up.",
                 "status": "error"
             }, status=500)
             
             
-class UpdateProductsView(LoginRequiredMixin, View):
+class ManageProductsView(LoginRequiredMixin, View):
     """
-    Handles incoming HTTP PUT requests to update a new product record 
-    directly to the authenticated user's business.
+        Handles incoming HTTP PUT requests to update an existing product record 
+        and HTTP DELETE requests to remove a product from the authenticated user's business.
     """
-    biz_selector = BusinessSelector()
-    
 
+    biz_selector = BusinessSelector()
     def put(self, request: HttpRequest):
+        """Updates an existing product in the business catalogue."""
         try:
             data = ModifyProductSchema.model_validate_json(request.body, strict=True)
             ProductsService(request=request).update_product(product_data=data)
@@ -95,8 +97,40 @@ class UpdateProductsView(LoginRequiredMixin, View):
             }, status=400)
             
         except Exception as err:
-            import traceback
-            traceback.print_exc()
+            logger.exception("unhandled exception whilst updating a product")
+            return JsonResponse({
+                "message": "The hamsters powering our servers just went on an unscheduled coffee break. We're waking them up.",
+                "status": "error"
+            }, status=500)
+            
+    def delete(self, request: HttpRequest):
+        """Deletes a product from the business catalogue based on the provided payload or identifier."""
+        try:
+            data = DeleteProductSchema.model_validate_json(request.body, strict=True)
+            ProductsService(request=request).delete_business_product(product_id=data.product_id)
+            return JsonResponse({
+                "message": "Product successfully deleted from your catalog.",
+                "status": "success",
+                "redirect": True,
+                "redirect_url": reverse(PRODUCTS.LIST),
+            }, status=200)
+            
+        except ValidationError as err:
+            return JsonResponse({
+                "message": "Unable to delete product. A valid product identifier was not provided.", 
+                "error": format_pydantic_errors(err),
+                "status": "warning"
+            }, status=422)
+            
+        except (AccountsDomainException, ProductDomainException) as err:
+            return JsonResponse({
+                "title": err.title,
+                "message": err.message,
+                "status": err.err_type,
+            }, status=400)
+            
+        except Exception as err:
+            logger.exception("unhandled exception whilst deleting a product")
             return JsonResponse({
                 "message": "The hamsters powering our servers just went on an unscheduled coffee break. We're waking them up.",
                 "status": "error"
@@ -123,7 +157,7 @@ class ProductsListView(LoginRequiredMixin, TemplateView):
         }
         
 class ProductDetailView(LoginRequiredMixin, TemplateView):
-    template_name = APP_TEMPLATES.PRODUCTS.DETAIL
+    template_name = APP_TEMPLATES.PRODUCTS.MANAGE
     product_selector = ProductsSelector()
     biz_selector = BusinessSelector()
 

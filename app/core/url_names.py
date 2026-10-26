@@ -40,7 +40,7 @@ PRODUCTS = SimpleNamespace(
     LIST='products_list',
     ADD='products_add',
     DETAIL='products_detail',
-    UPDATE='products_update',
+    MANAGE = 'products_manage'
 )
 
 CUSTOMERS = SimpleNamespace(

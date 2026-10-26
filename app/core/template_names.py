@@ -42,9 +42,8 @@ class APP_TEMPLATES:
             
     class PRODUCTS:
         LIST = f'{_PRODUCTS_BASE}/store-products.html'
-        DETAIL = f'{_PRODUCTS_BASE}/detail.html'
+        MANAGE = f'{_PRODUCTS_BASE}/manage.html'
         ADD = f'{_PRODUCTS_BASE}/add.html'
-        EDIT = f'{_PRODUCTS_BASE}/edit.html'
         
     class SALES:
         LIST = f'{_SALES_BASE}/list.html'

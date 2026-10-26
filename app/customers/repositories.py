@@ -1,10 +1,11 @@
 from django.utils import timezone
-from django.db import transaction
+from django.db import transaction, IntegrityError
 from django.db.models import Q
 from accounts.models import Business
+from customers.domains.exceptions import CustomerAlreadyExistsError
 from customers.models import Customers, BusinessCustomers
 from customers.serializers import CreateCustomerSchema
-from customers.domains.customer_code import build_business_customer_slug
+from customers.domains.customer_code import build_business_customer_slug, build_unique_customer_code
 from uuid import UUID
 from typing import Optional
 
@@ -13,34 +14,77 @@ class CustomersRepo:
         self.customer_model = Customers
         self.biz_customer_model = BusinessCustomers
         
-    def get_or_create_canonical_customer(self, *, data: CreateCustomerSchema, created_by_business:Business) -> Customers:
+    def _build_lookup_query(self, *, data: CreateCustomerSchema) -> Q:
+        """Builds a dynamic Q object for deduplication lookups."""
+        query = Q()
+        if data.email:
+            query |= Q(email=data.email)
+        if data.phone_number:
+            query |= Q(phone_number=data.phone_number)
+        return query
+    
+    def _find_existing_customer(self, *, data: CreateCustomerSchema) -> Optional[Customers]:
+        """Searches for an existing customer matching the unique identifiers."""
+        lookup_query = self._build_lookup_query(data=data)
+        if not lookup_query:
+            return None
+        return self.customer_model.objects.filter(lookup_query).first()
+
+    def _resolve_customer_email(self, *, data: CreateCustomerSchema, customer_code: str) -> tuple[str, bool]:
+        """Resolves whether to use the user's email or a system-generated fallback temp email."""
+        if data.email:
+            return data.email, False
+        return f"{customer_code}@example.com", True
+    
+    def _create_new_customer(
+        self, *, data: CreateCustomerSchema, created_by_business: Business
+    ) -> Customers:
+        """Provisions and saves a brand-new canonical customer entity."""
+        customer_code = build_unique_customer_code(
+            f_name=data.first_name, 
+            l_name=data.last_name
+        )
+        resolved_email, using_temp = self._resolve_customer_email(
+            data=data, 
+            customer_code=customer_code
+        )
+    
+        try:
+            return self.customer_model.objects.create(
+                first_name=data.first_name,
+                last_name=data.last_name,
+                email=resolved_email,
+                phone_number=data.phone_number,
+                code=customer_code,
+                created_by_business=created_by_business,
+                using_temp_email=using_temp
+            )
+    
+        except IntegrityError:
+            raise CustomerAlreadyExistsError()
+    
+    def get_or_create_canonical_customer(
+        self, *, data: CreateCustomerSchema, created_by_business: Business
+    ) -> Customers:
         """Retrieves an existing canonical customer or creates a new global identity.
 
-        Performs a deduplication check based primarily on the customer's email address. 
-        If a customer record already exists, it is returned untouched; otherwise, a 
-        new global identity is provisioned with attribution to the creating business.
+        Performs a deduplication check based on the customer's email address or phone number.
+        If an existing record is found, it is returned untouched; otherwise, a new global 
+        identity is provisioned.
 
         Args:
             data (CreateCustomerSchema): The validated incoming payload containing customer 
                 details (first name, last name, email, phone number).
-            created_by_business (UUID): The unique identifier of the business that originally 
+            created_by_business (Business): The business instance that originally 
                 imported or created this canonical customer record.
 
         Returns:
             Customers: The retrieved or newly created canonical customer model instance.
         """
-        customer, _ = self.customer_model.objects.get_or_create(
-            email=data.email,
-            defaults={
-                "first_name": data.first_name,
-                "last_name": data.last_name,
-                "phone_number": data.phone_number,
-                "created_by_business": created_by_business
-                
-            }
+        return (
+            self._find_existing_customer(data=data)
+            or self._create_new_customer(data=data, created_by_business=created_by_business)
         )
-
-        return customer
 
     def link_to_business(self, business: Business, customer: Customers, display_name: str, notes: str = "") -> BusinessCustomers:
         """Handles only the business-specific relationship link."""
@@ -124,6 +168,7 @@ class CustomersRepo:
         ).update(
             display_name=customer_data.display_name,
             phone_number=customer_data.phone_number,
+            email=customer_data.email,
             updated_at=timezone.now()   
         )
         
