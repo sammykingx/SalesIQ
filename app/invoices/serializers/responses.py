@@ -28,6 +28,7 @@ class CustomerSummarySchema(BaseModel):
     first_name: str
     last_name: str
     email: str
+    using_temp_email: bool
     phone_number: Optional[str]
 
 

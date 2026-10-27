@@ -319,7 +319,7 @@
                     <div class="info-card">
                         <span class="card-title">Billed To</span>
                         <div class="customer-name">{{ invoice.customer.first_name|title }} {{ invoice.customer.last_name|title }}</div>
-                        {% if invoice.customer.email %}
+                        {% if not invoice.customer.using_temp_email %}
                             <div style="color: #64748b; font-size: 10px; margin-top: 3px;">{{ invoice.customer.email }}</div>
                         {% endif %}
                         {% if invoice.customer.phone_number %}

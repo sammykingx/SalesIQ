@@ -1,8 +1,7 @@
 // app/src/entries/app.js
 // vite entry point
 
-import "../styles/theme.css";
-import "../styles/keyframes.css";
+import "../styles/app.css";
 
 import Alpine from "alpinejs";
 

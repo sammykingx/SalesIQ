@@ -1,5 +1,4 @@
-import "../styles/theme.css";
-import "../styles/keyframes.css";
+import "../styles/app.css";
 import Alpine from 'alpinejs';
 
 import { apiRequest } from '../lib/http/index.js';

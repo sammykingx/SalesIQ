@@ -251,7 +251,6 @@
                     class="w-md sm:w-150 h-auto object-contain opacity-[0.06] rotate-2 filter grayscale">
             </div>
 
-            <!-- ENHANCED HERO HEADER -->
             <div class="relative z-10 bg-slate-900 text-white rounded-2xl p-6 sm:p-8 mb-6 sm:mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 shadow-2xl shadow-slate-950/20 overflow-hidden border border-slate-800/80 group">
                 
                 <!-- Atmospheric Background Glow Accent -->
@@ -368,7 +367,7 @@
                 <div class="bg-slate-50/70 backdrop-blur-sm border border-slate-100 p-4 sm:p-5 rounded-2xl">
                     <span class="text-[11px] uppercase font-medium text-slate-400 tracking-wider block mb-2">Billed To</span>
                     <div class="font-medium text-slate-900 text-base">{{ invoice.customer.first_name|title }} {{ invoice.customer.last_name|title }}</div>
-                    {% if invoice.customer.email %}
+                    {% if not invoice.customer.using_temp_email %}
                         <div class="text-slate-500 text-xs mt-1">{{ invoice.customer.email }}</div>
                     {% endif %}
                     {% if invoice.customer.phone_number %}
@@ -396,7 +395,6 @@
                 </div>
             </div>
 
-            <!-- HIDDEN SCROLLBAR HORIZONTALLY SCROLLABLE TABLE -->
             <div class="relative overflow-x-auto mb-8 scrollbar-none [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
                 <table class="w-full min-w-150 text-left text-xs bg-transparent">
                     <thead>

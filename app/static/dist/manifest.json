@@ -115,11 +115,15 @@
     "file": "fonts/space-grotesk-vietnamese-400-normal.B7xT_GF5.woff2",
     "src": "../node_modules/@fontsource/space-grotesk/files/space-grotesk-vietnamese-400-normal.woff2"
   },
-  "_api.6d7J2OVE.js": {
-    "file": "js/api.6d7J2OVE.js",
+  "_api.Cg3Mn1ni.css": {
+    "file": "css/api.Cg3Mn1ni.css",
+    "src": "_api.Cg3Mn1ni.css"
+  },
+  "_api.DKmcfmcj.js": {
+    "file": "js/api.DKmcfmcj.js",
     "name": "api",
     "css": [
-      "css/api.DpNnhQu2.css"
+      "css/api.Cg3Mn1ni.css"
     ],
     "assets": [
       "fonts/inter-cyrillic-ext-400-normal.BQZuk6qB.woff2",
@@ -153,26 +157,22 @@
       "fonts/jetbrains-mono-latin-400-normal.6-qcROiO.woff"
     ]
   },
-  "_api.DpNnhQu2.css": {
-    "file": "css/api.DpNnhQu2.css",
-    "src": "_api.DpNnhQu2.css"
-  },
   "src/entries/app.js": {
-    "file": "js/app.DoxWN9Uj.js",
+    "file": "js/app.BNFzXH_M.js",
     "name": "app",
     "src": "src/entries/app.js",
     "isEntry": true,
     "imports": [
-      "_api.6d7J2OVE.js"
+      "_api.DKmcfmcj.js"
     ]
   },
   "src/entries/coming-soon.js": {
-    "file": "js/coming-soon.uys7zQbD.js",
+    "file": "js/coming-soon.CT_fbwou.js",
     "name": "coming-soon",
     "src": "src/entries/coming-soon.js",
     "isEntry": true,
     "imports": [
-      "_api.6d7J2OVE.js"
+      "_api.DKmcfmcj.js"
     ]
   }
 }

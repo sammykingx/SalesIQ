@@ -1,5 +1,3 @@
-@import "../styles/base.css";
-
 @theme {
     /* Brand colors — from brand guide */
     --color-primary: #10B981;      /* green — CTAs, positive metrics, active states */

@@ -1,6 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpRequest, JsonResponse
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse
 from django.shortcuts import redirect
 from django.views.generic import TemplateView, View
 from urllib.parse import urlencode
@@ -10,7 +10,6 @@ from accounts.selectors import BusinessSelector
 from core.template_names import APP_TEMPLATES
 from core.url_names import PRODUCTS
 from products.serializers import CreateProductsSchema, ModifyProductSchema, ProductListItemSchema, DeleteProductSchema
-from products.domain.demo_data import PRODUCTS_DATA
 from products.domain.exceptions import ProductDomainException
 from products.selectors import ProductsSelector
 from products.service import ProductsService
@@ -69,7 +68,6 @@ class ManageProductsView(LoginRequiredMixin, View):
         and HTTP DELETE requests to remove a product from the authenticated user's business.
     """
 
-    biz_selector = BusinessSelector()
     def put(self, request: HttpRequest):
         """Updates an existing product in the business catalogue."""
         try:
@@ -148,7 +146,7 @@ class ProductsListView(LoginRequiredMixin, TemplateView):
          return context
      
     def template_context(self) -> dict[str, Any]:
-        biz = BusinessSelector().get_user_business(user_email=self.request.user.email) # type:ignore
+        biz = self.biz_selector.get_user_business(user_email=self.request.user.email) # type:ignore
         products = self.product_selector.get_business_products(business_id=biz.id) # type:ignore
         products_data = [ProductListItemSchema.model_validate(product).model_dump() for product in products]
         
@@ -157,6 +155,20 @@ class ProductsListView(LoginRequiredMixin, TemplateView):
         }
         
 class ProductDetailView(LoginRequiredMixin, TemplateView):
+    """
+    View for displaying detailed information about a product and rendering 
+    the interface/form where business owners can make updates.
+
+    This view ensures that:
+        - The user is authenticated.
+        - A valid product reference (`p_ref`) is provided in the request parameters.
+        - The product belongs to the currently logged-in business owner.
+
+    Attributes:
+        template_name (str): The template used to render the manage/detail page.
+        product_selector (ProductsSelector): Selector for fetching product data.
+        biz_selector (BusinessSelector): Selector for fetching business data.
+    """
     template_name = APP_TEMPLATES.PRODUCTS.MANAGE
     product_selector = ProductsSelector()
     biz_selector = BusinessSelector()
