@@ -1,12 +1,12 @@
 @layer components {
-  .section-tint {
+  .patterned-circle {
     --tint: var(--color-primary);
     position: relative;
     isolation: isolate;
     background-color: color-mix(in oklab, var(--tint) 7%, white);
   }
 
-  .section-tint::before {
+  .patterned-circle::before {
     content: "";
     position: absolute;
     inset: 0;
@@ -20,14 +20,14 @@
     mask-size: 80px 80px;
   }
 
-  .section-dots {
+  .patterned-dots {
     --base: var(--color-surface);
     position: relative;
     isolation: isolate;
     background-color: var(--base);
   }
  
-  .section-dots::before {
+  .patterned-dots::before {
     content: "";
     position: absolute;
     inset: 0;
@@ -40,27 +40,15 @@
     -webkit-mask-size: 24px 24px;
     mask-size: 24px 24px;
   }
- 
-  /* Add to .section-dots when it sits right under the hero:
-     fades the dots in so the pattern doesn't start abruptly. */
-  .fade-top::after {
-    content: "";
-    position: absolute;
-    inset: 0 0 auto 0;
-    height: 8rem;
-    z-index: -1;
-    pointer-events: none;
-    background: linear-gradient(to bottom, var(--base), transparent);
-  }
 
-  .bright-section-dots {
+  .bright-patterned-dots {
     --base: var(--color-surface);
     position: relative;
     isolation: isolate;
     background-color: var(--base);
   }
  
-  .bright-section-dots::before {
+  .bright-patterned-dots::before {
     content: "";
     position: absolute;
     inset: 0;
@@ -71,8 +59,6 @@
     background-size: 36px 36px;
   }
  
-  /* /* Add next to .section-dots when it sits directly under the hero:
-     fades the dots in so the pattern doesn't start abruptly. */
   .fade-top::after {
     content: "";
     position: absolute;
@@ -80,7 +66,7 @@
     height: 8rem;
     z-index: -1;
     pointer-events: none;
-    background: linear-gradient(to bottom, var(--base), transparent);
+    background: linear-gradient(to bottom, var(--color-primary), transparent);
   }
 
   /* .section-glow {
@@ -93,7 +79,7 @@
       radial-gradient(30rem 20rem at 100% 0%, color-mix(in oklab, var(--color-accent) 11%, transparent), transparent 70%);
   } */
 
-  /* Colour variants: add next to .section-tint */
+  /* Colour variants: add next to .patterned-circle */
   .tint-rose   { --tint: var(--color-rose-500); }
   .tint-accent { --tint: var(--color-accent); }
 }

@@ -50,6 +50,7 @@
         </script>
 
         {% vite_asset 'src/entries/app.js' %}
+        {% vite_asset 'src/entries/landing-page.js' %}
     </head>
     <body class="bg-surface text-ink antialiased selection:bg-primary/20 selection:text-ink min-h-dvh flex flex-col overflow-x-hidden font-sans">
 
@@ -64,28 +65,28 @@
 
                 <!-- Desktop Navigation Links -->
                 <div class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
-                    <a href="#features" class="hover:text-primary transition-colors">Features</a>
-                    <a href="#analytics" class="hover:text-primary transition-colors">Analytics</a>
-                    <a href="#workflow" class="hover:text-primary transition-colors">How It Works</a>
-                    <a href="#pricing" class="hover:text-primary transition-colors">Pricing</a>
+                    <a href="#testimonials" class="hover:text-primary ">Reviews</a>
+                    <a href="#workflow" class="hover:text-primary ">How It Works</a>
+                    <a href="#faq-trust" class="hover:text-primary ">FAQ</a>
+                    <a href="#pricing" class="hover:text-primary ">Pricing</a>
                 </div>
 
                 <!-- Auth & Action Buttons -->
                 <div class="flex items-center gap-3">
-                    <a href="{% url ACCOUNTS.AUTH.LOGIN %}" class="hidden sm:inline-flex items-center text-sm font-medium text-slate-200 hover:text-white px-3 py-2 transition-colors">
+                    <a href="{% url ACCOUNTS.AUTH.LOGIN %}" class="hidden sm:inline-flex items-center text-sm font-medium text-slate-200 hover:text-white px-3 py-2 ">
                         Sign In
                     </a>
-                    <a href="{% url ACCOUNTS.AUTH.REGISTER %}" class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-ink bg-primary hover:bg-primary-500 rounded-full shadow-sm shadow-primary/25 transition-all hover:scale-[1.02] active:scale-[0.98]">
+                    <a href="{% url ACCOUNTS.AUTH.REGISTER %}" class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-ink bg-primary hover:bg-primary-500 rounded-full shadow-sm shadow-primary/25 hover:scale-[1.02] active:scale-[0.98]">
                         Get Started Free
                     </a>
                 </div>
             </nav>
         </header>
 
-        <main class="section-tint">
+        <main class="patterned-circle">
 
             <!-- ================= HERO SECTION ================= -->
-            <section class="grow min-h-[95vh] lg:min-h-screen relative flex items-center pt-28 pb-16 lg:pt-36 lg:pb-24 overflow-hidden bg-ink selection:bg-primary selection:text-white">
+            <section class="grow min-h-[95vh] lg:min-h-screen relative flex items-center pt-28 pb-20 lg:pt-36 lg:pb-28 overflow-hidden bg-ink selection:bg-primary selection:text-white">
                 
                 <!-- Background Video & Images -->
                 <div class="absolute inset-0 z-0 overflow-hidden">
@@ -111,31 +112,31 @@
                     <div class="absolute inset-0 bg-ink/85 sm:bg-ink/80 lg:bg-ink/75 backdrop-blur-[2px] z-10"></div>
                     <div class="absolute inset-0 bg-linear-to-t from-ink via-transparent to-ink/40 z-10 pointer-events-none"></div>
                     
-                    <!-- Bottom Soft Blur -->
-                    <div class="absolute bottom-0 inset-x-0 h-22 bg-linear-to-t from-surface to-transparent z-10"></div>
+                    <!-- Seamless Bottom Fade (Removes the harsh straight line) -->
+                    <div class="absolute bottom-0 inset-x-0 h-32 bg-linear-to-t from-ink via-ink/60 to-transparent z-10 pointer-events-none"></div>
                 </div>
 
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-20">
                     <div class="max-w-2xl lg:max-w-3xl flex flex-col items-start text-left">
                         
-                        <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.05] mb-6 font-heading">
+                        <h1 data-hero class="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.05] mb-6 font-heading">
                             SalesIQ<span class="text-primary">.</span>
                         </h1>
 
-                        <h2 class="text-2xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-slate-100 leading-tight mb-6 font-heading">
+                        <h2 data-hero class="text-2xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-slate-100 leading-tight mb-6 font-heading">
                             Every sale <span class="text-transparent bg-clip-text bg-linear-to-r from-primary via-emerald-400 to-accent">accounted for</span>.
                         </h2>
 
-                        <p class="text-base sm:text-lg lg:text-xl text-slate-300 mb-8 leading-relaxed max-w-xl font-normal">
+                        <p data-hero class="text-base sm:text-lg lg:text-xl text-slate-300 mb-8 leading-relaxed max-w-xl font-normal">
                             From WhatsApp orders to walk-in customers, keep every sale organized, send professional digital receipts, and see how your business is performing all in one place.
                         </p>
 
                         <div class="flex flex-row items-center gap-3 w-auto mb-12">
-                            <a href="{% url ACCOUNTS.AUTH.REGISTER %}" class="inline-flex items-center justify-center px-6 sm:px-7 py-3.5 text-sm sm:text-base text-ink bg-primary hover:bg-primary-500 rounded-xl shadow-lg shadow-primary/20 transition-all hover:-translate-y-0.5 active:translate-y-0 whitespace-nowrap font-medium">
+                            <a href="{% url ACCOUNTS.AUTH.REGISTER %}" class="inline-flex items-center justify-center px-6 sm:px-7 py-3.5 text-sm sm:text-base text-ink bg-primary hover:bg-primary-500 rounded-xl shadow-lg shadow-primary/20 hover:-translate-y-0.5 active:translate-y-0 whitespace-nowrap font-medium">
                                 Get started
                                 <svg class="w-5 h-5 ml-2 -mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                             </a>
-                            <a href="#analytics" class="inline-flex items-center justify-center px-5 sm:px-6 py-3.5 text-sm sm:text-base font-light text-slate-200 bg-white/10 hover:bg-white/15 border border-white/20 backdrop-blur-sm rounded-xl transition-all whitespace-nowrap">
+                            <a href="#analytics" class="inline-flex items-center justify-center px-5 sm:px-6 py-3.5 text-sm sm:text-base font-light text-slate-200 bg-white/10 hover:bg-white/15 border border-white/20 backdrop-blur-sm rounded-xl whitespace-nowrap">
                                 Live Demo
                             </a>
                         </div>
@@ -172,7 +173,7 @@
                         </div>
                         
                         <h2 class="font-heading text-3xl font-extrabold tracking-tight text-ink sm:text-4xl lg:text-5xl leading-tight mb-4">
-                            Loved by founders who <span class="text-transparent bg-clip-text bg-linear-to-r from-primary via-emerald-500 to-accent">mean business</span>.
+                            Loved by sellers who've <span class="text-transparent bg-clip-text bg-linear-to-r from-primary via-emerald-500 to-accent">stopped guessing</span>.
                         </h2>
                         
                         <p class="text-base sm:text-lg text-slate-600 leading-relaxed">
@@ -181,10 +182,10 @@
                     </div>
 
                     <!-- 4-Card Grid (3 Text Cards + 1 Video Card) -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
+                    <div data-hero-content class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
 
                         <!-- Card 1: Text Testimonial -->
-                        <div class="group flex flex-col justify-between rounded-3xl bg-white border border-slate-200/80 p-6 sm:p-8 shadow-sm hover:shadow-md hover:border-primary/40 transition-all duration-300">
+                        <div data-reveal class="group flex flex-col justify-between rounded-3xl bg-white border border-slate-200/80 p-6 sm:p-8 shadow-sm hover:shadow-md hover:border-primary/40 duration-300">
                             <div>
                                 <!-- Stars -->
                                 <div class="flex items-center gap-1 text-amber-400 mb-4">
@@ -210,7 +211,7 @@
                         </div>
 
                         <!-- Card 2: Video Testimonial Card -->
-                        <div class="group relative flex flex-col justify-between rounded-3xl bg-slate-900 border border-slate-800 p-4 shadow-xl overflow-hidden">
+                        <div data-reveal class="group relative flex flex-col justify-between rounded-3xl bg-slate-900 border border-slate-800 p-4 shadow-xl overflow-hidden">
                             <!-- Video Thumbnail Background -->
                             <div class="absolute inset-0 z-0">
                                 <img src="{% static 'images/mockups/founder-video-poster.jpg' %}" 
@@ -246,7 +247,7 @@
                         </div>
 
                         <!-- Card 3: Text Testimonial -->
-                        <div class="group flex flex-col justify-between rounded-3xl bg-white border border-slate-200/80 p-6 sm:p-8 shadow-sm hover:shadow-md hover:border-primary/40 transition-all duration-300">
+                        <div data-reveal class="group flex flex-col justify-between rounded-3xl bg-white border border-slate-200/80 p-6 sm:p-8 shadow-sm hover:shadow-md hover:border-primary/40 duration-300">
                             <div>
                                 <!-- Stars -->
                                 <div class="flex items-center gap-1 text-amber-400 mb-4">
@@ -272,7 +273,7 @@
                         </div>
 
                         <!-- Card 4: Text Testimonial -->
-                        <div class="group flex flex-col justify-between rounded-3xl bg-white border border-slate-200/80 p-6 sm:p-8 shadow-sm hover:shadow-md hover:border-primary/40 transition-all duration-300">
+                        <div data-reveal class="group flex flex-col justify-between rounded-3xl bg-white border border-slate-200/80 p-6 sm:p-8 shadow-sm hover:shadow-md hover:border-primary/40 duration-300">
                             <div>
                                 <!-- Stars -->
                                 <div class="flex items-center gap-1 text-amber-400 mb-4">
@@ -332,13 +333,13 @@
                             <div class="space-y-6 relative z-10">
 
                                 <!-- Step 1 Card -->
-                                <div class="group relative flex items-start gap-5 p-5 sm:p-6 rounded-2xl bg-white/90 backdrop-blur-md border border-slate-200/80 shadow-sm hover:shadow-md hover:border-primary/40 transition-all duration-300">
-                                    <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary font-heading font-medium text-sm border border-primary/20 group-hover:bg-primary group-hover:text-white transition-colors">
+                                <div data-reveal class="group relative flex items-start gap-5 p-5 sm:p-6 rounded-2xl bg-white/90 backdrop-blur-md border border-slate-200/80 shadow-sm hover:shadow-md hover:border-primary/40 duration-300">
+                                    <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary font-heading font-medium text-sm border border-primary/20 group-hover:bg-primary group-hover:text-white ">
                                         01
                                     </div>
                                     <div class="flex-1">
                                         <div class="flex items-center justify-between mb-1">
-                                            <h3 class="font-heading text-lg font-medium text-ink group-hover:text-primary transition-colors">Record the sale in seconds</h3>
+                                            <h3 class="font-heading text-lg font-medium text-ink group-hover:text-primary ">Record the sale in seconds</h3>
                                             <span class="text-[10px] uppercase tracking-wider text-slate-400 bg-slate-100 px-2 py-0.5 rounded">Instant</span>
                                         </div>
                                         <p class="text-sm leading-relaxed font-light text-slate-600">
@@ -348,43 +349,43 @@
                                 </div>
 
                                 <!-- Step 2 Card -->
-                                <div class="group relative flex items-start gap-5 p-5 sm:p-6 rounded-2xl bg-white/90 backdrop-blur-md border border-slate-200/80 shadow-sm hover:shadow-md hover:border-primary/40 transition-all duration-300 sm:ml-4">
-                                    <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-indigo-500/10 text-secondary font-heading font-medium text-sm border border-secondary/20 group-hover:bg-secondary group-hover:text-white transition-colors">
+                                <div data-reveal class="group relative flex items-start gap-5 p-5 sm:p-6 rounded-2xl bg-white/90 backdrop-blur-md border border-slate-200/80 shadow-sm hover:shadow-md hover:border-primary/40 duration-300 sm:ml-4">
+                                    <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-indigo-500/10 text-secondary font-heading font-medium text-sm border border-secondary/20 group-hover:bg-secondary group-hover:text-white ">
                                         02
                                     </div>
                                     <div class="flex-1">
                                         <div class="flex items-center justify-between mb-1">
-                                            <h3 class="font-heading text-lg font-medium text-ink group-hover:text-secondary transition-colors">Send a receipt they'll keep</h3>
+                                            <h3 class="font-heading text-lg font-medium text-ink group-hover:text-secondary ">Share store receipts</h3>
                                             <span class="text-[10px] uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">Social share</span>
                                         </div>
                                         <p class="text-sm leading-relaxed text-slate-600 mb-4 font-light">
-                                            Share a branded, verified <span class="font-medium text-ink">PAID</span> receipt via WhatsApp link or PDF with one tap. No customer account needed.
+                                            Share <span class="font-medium text-ink">PAID</span> receipt via socials or PDF with one tap. No customer account needed.
                                         </p>
 
-                                        <!-- Thermal POS Sub-Badge (Added Feature) -->
+                                        <!-- Thermal POS  -->
                                         <div class="flex items-center gap-2.5 p-3 rounded-xl bg-slate-50 border border-slate-200/75 text-xs text-slate-700">
                                             <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-emerald-100 text-emerald-600 font-medium">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
                                             </span>
                                             <div>
-                                                <span class="font-medium text-ink">Have a thermal printer?</span> Connect your Bluetooth POS printer to print crisp paper receipts instantly at the counter.
+                                                <span class="font-medium text-ink">Have a thermal printer?</span> Connect via Bluetooth or USB to print crisp paper receipts instantly at the counter.
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
                                 <!-- Step 3 Card -->
-                                <div class="group relative flex items-start gap-5 p-5 sm:p-6 rounded-2xl bg-white/90 backdrop-blur-md border border-slate-200/80 shadow-sm hover:shadow-md hover:border-primary/40 transition-all duration-300">
-                                    <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-sky-500/10 text-sky-600 font-heading font-medium text-sm border border-sky-500/20 group-hover:bg-accent group-hover:text-white transition-colors">
+                                <div data-reveal class="group relative flex items-start gap-5 p-5 sm:p-6 rounded-2xl bg-white/90 backdrop-blur-md border border-slate-200/80 shadow-sm hover:shadow-md hover:border-primary/40 duration-300">
+                                    <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-sky-500/10 text-sky-600 font-heading font-medium text-sm border border-sky-500/20 group-hover:bg-accent group-hover:text-white ">
                                         03
                                     </div>
                                     <div class="flex-1">
                                         <div class="flex items-center justify-between mb-1">
-                                            <h3 class="font-heading text-lg font-medium text-ink group-hover:text-accent transition-colors">Know your best buyers</h3>
+                                            <h3 class="font-heading text-lg font-medium text-ink group-hover:text-accent ">Know your best buyers</h3>
                                             <span class="text-[10px] uppercase tracking-wider text-sky-600 bg-sky-50 px-2 py-0.5 rounded">Smart Insights</span>
                                         </div>
                                         <p class="text-sm leading-relaxed text-slate-600 font-light">
-                                            Revenue, repeat rates, and customer lifetime value update automatically so you instantly know who keeps coming back.
+                                            Revenue, repeat rates, and customer lifetime value updates automatically so you instantly know who keeps coming back.
                                         </p>
                                     </div>
                                 </div>
@@ -394,7 +395,7 @@
                             <!-- Action CTA Group -->
                             <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 z-10 relative">
                                 <a href="{% url ACCOUNTS.AUTH.REGISTER %}"
-                                class="inline-flex items-center rounded-full bg-primary px-7 py-3.5 text-sm font-medium text-white shadow-lg shadow-primary/25 transition-all hover:bg-primary-600 hover:-translate-y-0.5 active:translate-y-0">
+                                class="inline-flex items-center rounded-full bg-primary px-7 py-3.5 text-sm font-medium text-white shadow-lg shadow-primary/25 hover:bg-primary-600 hover:-translate-y-0.5 active:translate-y-0">
                                     Start tracking free
                                     <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                                 </a>
@@ -440,7 +441,7 @@
             </section>
 
             <!-- ================= THE PROBLEM / HIDDEN COST SECTION ================= -->
-            <section class="py-20 lg:py-28 section-dots relative overflow-hidden border-b border-slate-200/60">
+            <section class="py-20 lg:py-28 patterned-dots relative overflow-hidden border-b border-slate-200/60">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     
                     <!-- Section Header -->
@@ -462,7 +463,7 @@
                     <!-- Dual-Card Comparison Layout (Mirrors Reference Design Style) -->
                     <div class="grid lg:grid-cols-2 gap-8 items-stretch">
                         
-                        <!-- Left Card: Current Reality (Dark Navy Card with Soft Rounded Corners) -->
+                        <!-- Left Card: Current Reality -->
                         <div class="bg-ink rounded-[2.5rem] p-8 sm:p-12 flex flex-col justify-between text-white shadow-xl relative overflow-hidden">
                             <!-- Subtle ambient glow -->
                             <div class="absolute -right-20 -bottom-20 w-60 h-60 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
@@ -506,7 +507,7 @@
                             </div>
                         </div>
 
-                        <!-- Right Card: The SalesIQ Solution (Clean White Card with Soft Rounded Corners) -->
+                        <!-- Right Card: The SalesIQ Solution -->
                         <div class="bg-white rounded-[2.5rem] border border-slate-200/80 p-8 sm:p-12 flex flex-col justify-between text-ink shadow-xl relative overflow-hidden">
                             <div>
                                 <span class="text-xs font-semibold uppercase tracking-widest text-primary block mb-4">
@@ -579,10 +580,10 @@
                         <div class="lg:col-span-7 space-y-4">
 
                             <!-- FAQ Item 1 -->
-                            <details class="group rounded-2xl bg-white border border-slate-200/80 p-6 shadow-sm hover:border-primary/40 transition-all duration-300 open:ring-1 open:ring-primary/20">
+                            <details data-reveal class="group rounded-2xl bg-white border border-slate-200/80 p-6 shadow-sm hover:border-primary/40 duration-300 open:ring-1 open:ring-primary/20">
                                 <summary class="flex cursor-pointer items-center justify-between font-heading text-lg font-medium text-ink select-none">
                                     <span>Do my customers need to download an app to view receipts?</span>
-                                    <span class="ml-4 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-600 group-open:bg-primary group-open:text-white transition-colors">
+                                    <span class="ml-4 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-600 group-open:bg-primary group-open:text-white ">
                                         <svg class="h-4 w-4 transform group-open:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
                                     </span>
                                 </summary>
@@ -592,10 +593,10 @@
                             </details>
 
                             <!-- FAQ Item 2 -->
-                            <details class="group rounded-2xl bg-white border border-slate-200/80 p-6 shadow-sm hover:border-primary/40 transition-all duration-300 open:ring-1 open:ring-primary/20">
+                            <details data-reveal class="group rounded-2xl bg-white border border-slate-200/80 p-6 shadow-sm hover:border-primary/40 duration-300 open:ring-1 open:ring-primary/20">
                                 <summary class="flex cursor-pointer items-center justify-between font-heading text-lg font-medium text-ink select-none">
                                     <span>How long does it take to record a sale?</span>
-                                    <span class="ml-4 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-600 group-open:bg-primary group-open:text-white transition-colors">
+                                    <span class="ml-4 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-600 group-open:bg-primary group-open:text-white ">
                                         <svg class="h-4 w-4 transform group-open:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
                                     </span>
                                 </summary>
@@ -605,10 +606,10 @@
                             </details>
 
                             <!-- FAQ Item 3 -->
-                            <details class="group rounded-2xl bg-white border border-slate-200/80 p-6 shadow-sm hover:border-primary/40 transition-all duration-300 open:ring-1 open:ring-primary/20">
+                            <details data-reveal class="group rounded-2xl bg-white border border-slate-200/80 p-6 shadow-sm hover:border-primary/40 duration-300 open:ring-1 open:ring-primary/20">
                                 <summary class="flex cursor-pointer items-center justify-between font-heading text-lg font-medium text-ink select-none">
                                     <span>Is my business data secure and private?</span>
-                                    <span class="ml-4 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-600 group-open:bg-primary group-open:text-white transition-colors">
+                                    <span class="ml-4 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-600 group-open:bg-primary group-open:text-white ">
                                         <svg class="h-4 w-4 transform group-open:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
                                     </span>
                                 </summary>
@@ -618,10 +619,10 @@
                             </details>
 
                             <!-- FAQ Item 4 -->
-                            <details class="group rounded-2xl bg-white border border-slate-200/80 p-6 shadow-sm hover:border-primary/40 transition-all duration-300 open:ring-1 open:ring-primary/20">
+                            <details data-reveal class="group rounded-2xl bg-white border border-slate-200/80 p-6 shadow-sm hover:border-primary/40 duration-300 open:ring-1 open:ring-primary/20">
                                 <summary class="flex cursor-pointer items-center justify-between font-heading text-lg font-medium text-ink select-none">
                                     <span>Can I try SalesIQ before committing?</span>
-                                    <span class="ml-4 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-600 group-open:bg-primary group-open:text-white transition-colors">
+                                    <span class="ml-4 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-600 group-open:bg-primary group-open:text-white ">
                                         <svg class="h-4 w-4 transform group-open:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
                                     </span>
                                 </summary>
@@ -683,7 +684,7 @@
             </section>
 
             <!-- ================= PRICING PLAN SECTION ================= -->
-            <section id="pricing" class="relative overflow-hidden py-20 lg:py-28 section-dots">
+            <section id="pricing" class="relative overflow-hidden py-20 lg:py-28 patterned-dots">
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
                     <!-- Section Header -->
@@ -706,7 +707,7 @@
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto items-stretch">
 
                         <!-- FREE PLAN CARD -->
-                        <div class="group relative flex flex-col justify-between rounded-3xl bg-white border border-slate-200/80 p-8 sm:p-10 shadow-sm hover:shadow-md hover:border-primary/40 transition-all duration-300">
+                        <div class="group relative flex flex-col justify-between rounded-3xl bg-white border border-slate-200/80 p-8 sm:p-10 shadow-sm hover:shadow-md hover:border-primary/40 duration-300">
                             <div>
                                 
                                 <div class="flex items-center justify-between mb-4">
@@ -818,7 +819,7 @@
                             <!-- CTA Button -->
                             <div class="relative z-10">
                                 <a href="{% url ACCOUNTS.AUTH.REGISTER %}"
-                                class="w-full inline-flex items-center justify-center rounded-full bg-primary px-6 py-3.5 text-sm font-medium text-white shadow-lg shadow-primary/25 transition-all hover:bg-primary-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
+                                class="w-full inline-flex items-center justify-center rounded-full bg-primary px-6 py-3.5 text-sm font-medium text-white shadow-lg shadow-primary/25 hover:bg-primary-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
                                     Upgrade to Pro
                                 </a>
                                 <p class="text-[11px] text-center text-slate-400 mt-3">Cancel anytime on your terms</p>
@@ -856,7 +857,7 @@
                             <div class="lg:col-span-5 flex flex-col justify-center items-start lg:items-end space-y-4">
                                 <div class="w-full sm:w-auto flex flex-col sm:flex-row lg:flex-col gap-3">
                                     <a href="{% url ACCOUNTS.AUTH.REGISTER %}"
-                                    class="w-full inline-flex items-center justify-center rounded-2xl bg-primary px-8 py-4 text-sm font-medium text-white shadow-lg shadow-primary/25 transition-all hover:bg-primary-600 hover:-translate-y-0.5 active:translate-y-0">
+                                    class="w-full inline-flex items-center justify-center rounded-2xl bg-primary px-8 py-4 text-sm font-medium text-white shadow-lg shadow-primary/25 hover:bg-primary-600 hover:-translate-y-0.5 active:translate-y-0">
                                         Start tracking free today
                                         <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                                     </a>
@@ -878,7 +879,6 @@
                 </div>
             </section>
         </main>
-        
 
         <!-- ================= FOOTER ================= -->
         <footer class="bg-slate-950 text-slate-400 pt-16 pb-12 border-t border-slate-800">
@@ -894,20 +894,20 @@
                             <a href="#" class="inline-block focus:outline-none focus:ring-1 focus:ring-primary rounded-lg">
                                 <img src="{% static 'images/logo/main-logo-dark.png' %}" 
                                     alt="SalesIQ Logo" 
-                                    class="h-8 sm:h-9 w-auto object-contain">
+                                    class="h-10 sm:h-11 w-auto object-contain">
                             </a>
                         </div>
 
                         <p class="text-sm leading-relaxed text-slate-400 max-w-sm">
-                            SalesIQ turns every Instagram DM, WhatsApp order, and shop counter sale into an organized record, a verified PAID receipt, and trusted business intelligence.
+                            SalesIQ turns every Instagram DM, WhatsApp order, and shop counter sale into an organized record and trusted business intelligence.
                         </p>
 
-                        <!-- Location / Operational Node Info -->
+                        {% comment %} <!-- Location / Operational Node Info -->
                         <div class="pt-2 space-y-1 text-xs text-slate-500">
                             <p class="font-medium text-slate-400">Clarove Systems Operations</p>
                             <p>Kingsway Towers, 12 Ikoyi Road, Ikoyi, Lagos, Nigeria</p>
                             <p>71-75 Shelton Street, Covent Garden, London, WC2H 9JQ, UK</p>
-                        </div>
+                        </div> {% endcomment %}
                     </div>
 
                     <!-- Col 2: Product Links -->
@@ -915,7 +915,6 @@
                         <p class="font-heading text-sm font-semibold uppercase tracking-wider text-white">Product</p>
                         <ul class="space-y-2.5 text-sm">
                             <li><a href="#workflow" class="transition hover:text-white">Workflow</a></li>
-                            <li><a href="#features" class="transition hover:text-white">Features</a></li>
                             <li><a href="#pricing" class="transition hover:text-white">Pricing</a></li>
                             <li><a href="#faq-trust" class="transition hover:text-white">FAQ</a></li>
                             <li><a href="#testimonials" class="transition hover:text-white">Wall of Love</a></li>
@@ -946,21 +945,32 @@
 
                 </div>
 
-                <!-- Bottom Bar: Copyright & Socials -->
-                <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-                    <p>&copy; <script>document.write(new Date().getFullYear())</script> SalesIQ / Clarove Systems. All rights reserved.</p>
+                <!-- Bottom Bar: Copyright & Socials (3-Column Layout with Mobile Reordering) -->
+                <div class="pt-8 flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-slate-500">
                     
-                    <div class="flex items-center gap-6">
+                    <!-- Left: Powered by Clarove Systems (Order 3 on mobile, Order 1 on desktop) -->
+                    <div class="order-3 md:order-1 text-center md:text-left">
+                        Powered &amp; engineered by <a href="https://clarovesystems.com" target="_blank" rel="noopener noreferrer" class="text-[#C5A043] md:text-slate-400 font-medium hover:text-[#C5A043]">Clarove Systems Limited</a>.
+                    </div>
+                    
+                    <!-- Middle: Copyright (Order 1 on mobile, Order 2 on desktop) -->
+                    <div class="order-1 md:order-2 text-center">
+                        &copy; <script>document.write(new Date().getFullYear())</script> SalesIQ. All rights reserved.
+                    </div>
+
+                    <!-- Right: Social Icons (Order 2 on mobile, Order 3 on desktop) -->
+                    <div class="order-2 md:order-3 flex items-center gap-6">
                         <a href="#" class="transition hover:text-slate-300" aria-label="Twitter">
                             <svg class="h-4 w-4 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
                         </a>
                         <a href="#" class="transition hover:text-slate-300" aria-label="Instagram">
                             <svg class="h-4 w-4 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
                         </a>
-                        <a href="#" class="transition hover:text-slate-300" aria-label="WhatsApp Support">
+                        <a href="#" class="hover:text-slate-300" aria-label="WhatsApp Support">
                             <svg class="h-4 w-4 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
                         </a>
                     </div>
+
                 </div>
 
             </div>
