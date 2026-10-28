@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views.decorators.clickjacking import xframe_options_sameorigin
 from django.views.generic import View, TemplateView
-from django_weasyprint import WeasyTemplateView
+# from django_weasyprint import WeasyTemplateView
 from weasyprint import HTML
 
 from accounts.domains.exceptions import AccountsDomainException
