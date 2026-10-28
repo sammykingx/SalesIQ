@@ -82,806 +82,803 @@
             </nav>
         </header>
 
-        <!-- ================= HERO SECTION ================= -->
-        <section class="grow min-h-[95vh] lg:min-h-screen relative flex items-center pt-28 pb-16 lg:pt-36 lg:pb-24 overflow-hidden bg-ink selection:bg-primary selection:text-white">
-            
-            <!-- Background Video & Images -->
-            <div class="absolute inset-0 z-0 overflow-hidden">
-                <!-- Background Video -->
-                <video 
-                    autoplay
-                    muted 
-                    loop 
-                    playsinline
-                    disablepictureinpicture
-                    disableremoteplayback
-                    controlslist="nodownload nofullscreen noremoteplayback"
-                    class="absolute inset-0 w-full h-full object-cover object-center z-0"
-                >
-                    <source src="{% static 'videos/hero-bg.mp4' %}" type="video/mp4">
-                </video>
+        <main class="section-tint">
 
-                <!-- Fallback Static Background Images -->
-                <img src="{% static 'images/backgrounds/index-hero-mbl-3.jpg' %}" alt="Social Commerce Sales Intelligence" class="block lg:hidden w-full h-full object-cover object-center absolute inset-0 -z-10">
-                <img src="{% static 'images/backgrounds/index-hero.jpg' %}" alt="Social Commerce Sales Intelligence" class="hidden lg:block w-full h-full object-cover object-right absolute inset-0 -z-10">
+            <!-- ================= HERO SECTION ================= -->
+            <section class="grow min-h-[95vh] lg:min-h-screen relative flex items-center pt-28 pb-16 lg:pt-36 lg:pb-24 overflow-hidden bg-ink selection:bg-primary selection:text-white">
                 
-                <!-- Full-Screen Ambient Overlay -->
-                <div class="absolute inset-0 bg-ink/85 sm:bg-ink/80 lg:bg-ink/75 backdrop-blur-[2px] z-10"></div>
-                <div class="absolute inset-0 bg-linear-to-t from-ink via-transparent to-ink/40 z-10 pointer-events-none"></div>
-                
-                <!-- Bottom Soft Blur -->
-                <div class="absolute bottom-0 inset-x-0 h-22 bg-linear-to-t from-surface to-transparent z-10"></div>
-            </div>
-
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-20">
-                <div class="max-w-2xl lg:max-w-3xl flex flex-col items-start text-left">
+                <!-- Background Video & Images -->
+                <div class="absolute inset-0 z-0 overflow-hidden">
                     
-                    <!-- Main Brand Headline -->
-                    <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.05] mb-6 font-heading">
-                        SalesIQ<span class="text-primary">.</span>
-                    </h1>
+                    <video 
+                        autoplay
+                        muted 
+                        loop 
+                        playsinline
+                        disablepictureinpicture
+                        disableremoteplayback
+                        controlslist="nodownload nofullscreen noremoteplayback"
+                        class="absolute inset-0 w-full h-full object-cover object-center z-0"
+                    >
+                        <source src="{% static 'videos/hero-bg.mp4' %}" type="video/mp4">
+                    </video>
 
-                    <!-- Hero Title Tagline -->
-                    <h2 class="text-2xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-slate-100 leading-tight mb-6 font-heading">
-                        Every sale <span class="text-transparent bg-clip-text bg-linear-to-r from-primary via-emerald-400 to-accent">accounted for</span>.
-                    </h2>
-
-                    <!-- Subtitle / Value Description -->
-                    <p class="text-base sm:text-lg lg:text-xl text-slate-300 mb-8 leading-relaxed max-w-xl font-normal">
-                        From WhatsApp orders to walk-in customers, keep every sale organized, send professional digital receipts, and see how your business is performing all in one place.
-                    </p>
-
-                    <!-- Primary Actions -->
-                    <div class="flex flex-row items-center gap-3 w-auto mb-12">
-                        <a href="{% url ACCOUNTS.AUTH.REGISTER %}" class="inline-flex items-center justify-center px-6 sm:px-7 py-3.5 text-sm sm:text-base text-ink bg-primary hover:bg-primary-500 rounded-xl shadow-lg shadow-primary/20 transition-all hover:-translate-y-0.5 active:translate-y-0 whitespace-nowrap font-bold">
-                            Get started
-                            <svg class="w-5 h-5 ml-2 -mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-                        </a>
-                        <a href="#analytics" class="inline-flex items-center justify-center px-5 sm:px-6 py-3.5 text-sm sm:text-base font-semibold text-slate-200 bg-white/10 hover:bg-white/15 border border-white/20 backdrop-blur-sm rounded-xl transition-all whitespace-nowrap">
-                            Live Demo
-                        </a>
-                    </div>
-
-                    <!-- Subtle Footer Credit/Trust Metric Row -->
-                    <div class="pt-6 border-t border-white/15 grid grid-cols-3 gap-6 w-full max-w-lg">
-                        <div>
-                            <p class="text-xl sm:text-2xl font-bold text-white font-heading">₦748.2K</p>
-                            <p class="text-[11px] text-slate-400 uppercase tracking-wider mt-0.5 font-medium">Daily Revenue</p>
-                        </div>
-                        <div>
-                            <p class="text-xl sm:text-2xl font-bold text-white font-heading">+24.8%</p>
-                            <p class="text-[11px] text-slate-400 uppercase tracking-wider mt-0.5 font-medium">Growth Rate</p>
-                        </div>
-                        <div>
-                            <p class="text-xl sm:text-2xl font-bold text-white font-heading">100%</p>
-                            <p class="text-[11px] text-slate-400 uppercase tracking-wider mt-0.5 font-medium">Traceable Sales</p>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
-        <!-- ================= TESTIMONIALS & FOUNDER STORIES SECTION ================= -->
-        <section id="testimonials" class="relative overflow-hidden bg-linear-to-b from-white via-slate-50/40 to-white py-20 lg:py-28 border-b border-slate-200/60">
-            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-
-                <!-- Section Header -->
-                <div class="mx-auto max-w-2xl text-center mb-16">
-                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary-50 border border-primary/20 text-primary text-xs font-semibold uppercase tracking-wider mb-4 shadow-xs">
-                        <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
-                        Wall of Love
-                    </div>
+                    <!-- Fallback Static Background Images -->
+                    <img src="{% static 'images/backgrounds/index-hero-mbl-3.jpg' %}" alt="Social Commerce Sales Intelligence" class="block lg:hidden w-full h-full object-cover object-center absolute inset-0 -z-10">
+                    <img src="{% static 'images/backgrounds/index-hero.jpg' %}" alt="Social Commerce Sales Intelligence" class="hidden lg:block w-full h-full object-cover object-right absolute inset-0 -z-10">
                     
-                    <h2 class="font-heading text-3xl font-extrabold tracking-tight text-ink sm:text-4xl lg:text-5xl leading-tight mb-4">
-                        Loved by founders who <span class="text-transparent bg-clip-text bg-linear-to-r from-primary via-emerald-500 to-accent">mean business</span>.
-                    </h2>
+                    <!-- Full-Screen Ambient Overlay -->
+                    <div class="absolute inset-0 bg-ink/85 sm:bg-ink/80 lg:bg-ink/75 backdrop-blur-[2px] z-10"></div>
+                    <div class="absolute inset-0 bg-linear-to-t from-ink via-transparent to-ink/40 z-10 pointer-events-none"></div>
                     
-                    <p class="text-base sm:text-lg text-slate-600 leading-relaxed">
-                        See how social sellers, Instagram store owners, and shop counter merchants across Lagos use SalesIQ to take control of their revenue.
-                    </p>
+                    <!-- Bottom Soft Blur -->
+                    <div class="absolute bottom-0 inset-x-0 h-22 bg-linear-to-t from-surface to-transparent z-10"></div>
                 </div>
 
-                <!-- 4-Card Grid (3 Text Cards + 1 Video Card) -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-20">
+                    <div class="max-w-2xl lg:max-w-3xl flex flex-col items-start text-left">
+                        
+                        <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.05] mb-6 font-heading">
+                            SalesIQ<span class="text-primary">.</span>
+                        </h1>
 
-                    <!-- Card 1: Text Testimonial -->
-                    <div class="group flex flex-col justify-between rounded-3xl bg-white border border-slate-200/80 p-6 sm:p-8 shadow-sm hover:shadow-md hover:border-primary/40 transition-all duration-300">
-                        <div>
-                            <!-- Stars -->
-                            <div class="flex items-center gap-1 text-amber-400 mb-4">
-                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
-                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
-                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
-                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
-                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
-                            </div>
-                            <p class="text-slate-700 text-sm sm:text-base leading-relaxed mb-6 font-medium">
-                                "Sending professional WhatsApp receipts in seconds makes my skincare brand look instantly high-end. My customers love how clean it is."
-                            </p>
+                        <h2 class="text-2xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-slate-100 leading-tight mb-6 font-heading">
+                            Every sale <span class="text-transparent bg-clip-text bg-linear-to-r from-primary via-emerald-400 to-accent">accounted for</span>.
+                        </h2>
+
+                        <p class="text-base sm:text-lg lg:text-xl text-slate-300 mb-8 leading-relaxed max-w-xl font-normal">
+                            From WhatsApp orders to walk-in customers, keep every sale organized, send professional digital receipts, and see how your business is performing all in one place.
+                        </p>
+
+                        <div class="flex flex-row items-center gap-3 w-auto mb-12">
+                            <a href="{% url ACCOUNTS.AUTH.REGISTER %}" class="inline-flex items-center justify-center px-6 sm:px-7 py-3.5 text-sm sm:text-base text-ink bg-primary hover:bg-primary-500 rounded-xl shadow-lg shadow-primary/20 transition-all hover:-translate-y-0.5 active:translate-y-0 whitespace-nowrap font-medium">
+                                Get started
+                                <svg class="w-5 h-5 ml-2 -mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                            </a>
+                            <a href="#analytics" class="inline-flex items-center justify-center px-5 sm:px-6 py-3.5 text-sm sm:text-base font-light text-slate-200 bg-white/10 hover:bg-white/15 border border-white/20 backdrop-blur-sm rounded-xl transition-all whitespace-nowrap">
+                                Live Demo
+                            </a>
                         </div>
-                        <div class="flex items-center gap-3 pt-4 border-t border-slate-100">
-                            <div class="h-10 w-10 rounded-full bg-primary/15 flex items-center justify-center font-heading font-semibold text-primary text-sm">
-                                AO
+
+                        <!-- Subtle Footer Credit/Trust Metric Row -->
+                        <div class="pt-6 border-t border-white/15 grid grid-cols-3 gap-6 w-full max-w-lg">
+                            <div>
+                                <p class="text-xl sm:text-2xl font-bold text-white font-heading">₦748.2K</p>
+                                <p class="text-[11px] text-slate-400 uppercase tracking-wider mt-0.5 font-medium">Daily Revenue</p>
                             </div>
                             <div>
-                                <p class="font-heading font-semibold text-sm text-ink">Amina O.</p>
-                                <p class="text-xs text-slate-500">Founder, Glow Skincare Lagos</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Card 2: Video Testimonial Card -->
-                    <div class="group relative flex flex-col justify-between rounded-3xl bg-slate-900 border border-slate-800 p-4 shadow-xl overflow-hidden">
-                        <!-- Video Thumbnail Background -->
-                        <div class="absolute inset-0 z-0">
-                            <img src="{% static 'images/mockups/founder-video-poster.jpg' %}" 
-                                alt="Chidi K. sharing his SalesIQ founder story"
-                                width="600" height="800" loading="lazy"
-                                class="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-500">
-                            <div class="absolute inset-0 bg-linear-to-t from-slate-950 via-slate-900/40 to-transparent"></div>
-                        </div>
-
-                        <!-- Top Duration Pill -->
-                        <div class="relative z-10 flex items-center justify-between">
-                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md text-white text-[10px] font-semibold tracking-wide border border-white/10">
-                                <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
-                                1 Min Story
-                            </span>
-                            <span class="text-xs text-slate-300 font-medium bg-black/40 px-2 py-0.5 rounded-md backdrop-blur-sm">Founder POV</span>
-                        </div>
-
-                        <!-- Center Play Button Trigger -->
-                        <div class="relative z-10 my-auto flex justify-center py-6">
-                            <button type="button" 
-                                    class="group/btn flex h-14 w-14 items-center justify-center rounded-full bg-primary text-white shadow-lg shadow-primary/40 ring-4 ring-white/20 group-hover:scale-110 transition-all"
-                                    aria-label="Play founder testimonial video">
-                                <svg class="w-6 h-6 ml-0.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                            </button>
-                        </div>
-
-                        <!-- Bottom Video Author Meta -->
-                        <div class="relative z-10 pt-4 border-t border-white/10">
-                            <p class="font-heading font-semibold text-sm text-white">Chidi K.</p>
-                            <p class="text-xs text-slate-300">Owner, Ikeja Gadgets Hub</p>
-                        </div>
-                    </div>
-
-                    <!-- Card 3: Text Testimonial -->
-                    <div class="group flex flex-col justify-between rounded-3xl bg-white border border-slate-200/80 p-6 sm:p-8 shadow-sm hover:shadow-md hover:border-primary/40 transition-all duration-300">
-                        <div>
-                            <!-- Stars -->
-                            <div class="flex items-center gap-1 text-amber-400 mb-4">
-                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
-                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
-                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
-                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
-                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
-                            </div>
-                            <p class="text-slate-700 text-sm sm:text-base leading-relaxed mb-6 font-medium">
-                                "I used to lose count of my Instagram DM orders in messy notebook pages. SalesIQ gave me a clear, trusted picture of my daily numbers overnight."
-                            </p>
-                        </div>
-                        <div class="flex items-center gap-3 pt-4 border-t border-slate-100">
-                            <div class="h-10 w-10 rounded-full bg-secondary/15 flex items-center justify-center font-heading font-semibold text-secondary text-sm">
-                                TW
+                                <p class="text-xl sm:text-2xl font-bold text-white font-heading">+24.8%</p>
+                                <p class="text-[11px] text-slate-400 uppercase tracking-wider mt-0.5 font-medium">Growth Rate</p>
                             </div>
                             <div>
-                                <p class="font-heading font-semibold text-sm text-ink">Tolu W.</p>
-                                <p class="text-xs text-slate-500">Founder, Crown Fashion Lekki</p>
+                                <p class="text-xl sm:text-2xl font-bold text-white font-heading">100%</p>
+                                <p class="text-[11px] text-slate-400 uppercase tracking-wider mt-0.5 font-medium">Traceable Sales</p>
                             </div>
                         </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- ================= TESTIMONIALS & FOUNDER STORIES SECTION ================= -->
+            <section id="testimonials" class="fade-top py-20 lg:py-28">
+                <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+
+                    <!-- Section Header -->
+                    <div class="mx-auto max-w-2xl text-center mb-16">
+                        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary-50 border border-primary/20 text-primary text-xs uppercase tracking-wider mb-4 shadow-xs">
+                            <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                            Wall of Love
+                        </div>
+                        
+                        <h2 class="font-heading text-3xl font-extrabold tracking-tight text-ink sm:text-4xl lg:text-5xl leading-tight mb-4">
+                            Loved by founders who <span class="text-transparent bg-clip-text bg-linear-to-r from-primary via-emerald-500 to-accent">mean business</span>.
+                        </h2>
+                        
+                        <p class="text-base sm:text-lg text-slate-600 leading-relaxed">
+                            See how social sellers, Instagram store owners, and shop counter merchants across Lagos use SalesIQ to take control of their revenue.
+                        </p>
                     </div>
 
-                    <!-- Card 4: Text Testimonial -->
-                    <div class="group flex flex-col justify-between rounded-3xl bg-white border border-slate-200/80 p-6 sm:p-8 shadow-sm hover:shadow-md hover:border-primary/40 transition-all duration-300">
-                        <div>
-                            <!-- Stars -->
-                            <div class="flex items-center gap-1 text-amber-400 mb-4">
-                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
-                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
-                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
-                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
-                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
-                            </div>
-                            <p class="text-slate-700 text-sm sm:text-base leading-relaxed mb-6 font-medium">
-                                "Knowing my repeat customer rate of 57% changed how I reward my regulars. It feels like having a personal finance manager in my pocket."
-                            </p>
-                        </div>
-                        <div class="flex items-center gap-3 pt-4 border-t border-slate-100">
-                            <div class="h-10 w-10 rounded-full bg-accent/15 flex items-center justify-center font-heading font-semibold text-accent text-sm">
-                                ZB
-                            </div>
+                    <!-- 4-Card Grid (3 Text Cards + 1 Video Card) -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
+
+                        <!-- Card 1: Text Testimonial -->
+                        <div class="group flex flex-col justify-between rounded-3xl bg-white border border-slate-200/80 p-6 sm:p-8 shadow-sm hover:shadow-md hover:border-primary/40 transition-all duration-300">
                             <div>
-                                <p class="font-heading font-semibold text-sm text-ink">Zainab B.</p>
-                                <p class="text-xs text-slate-500">Baker, Victoria Island Treats</p>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-        </section>
-
-        <!-- ================= HOW IT WORKS SECTION ================= -->
-        <section id="workflow" class="relative overflow-hidden border-b border-slate-200/60 section-tint py-20 lg:py-28">
-            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-
-                <!-- Section Header -->
-                <div class="mx-auto max-w-3xl text-center mb-16">
-                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary-50 border border-primary/20 text-primary text-xs font-semibold uppercase tracking-wider mb-4 shadow-xs">
-                        <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
-                        The SalesIQ Workflow
-                    </div>
-                    
-                    <h2 class="font-heading text-3xl font-extrabold tracking-tight text-ink sm:text-4xl lg:text-5xl leading-tight mb-4">
-                        From a DM or walk-in to <span class="text-transparent bg-clip-text bg-linear-to-r from-primary via-emerald-500 to-accent">total clarity</span>.
-                    </h2>
-                    
-                    <p class="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto">
-                        Sell on Instagram, WhatsApp, or at your shop counter. SalesIQ turns every order into an organized record, a shareable receipt, and trusted business insights.
-                    </p>
-                </div>
-
-                <div class="grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
-
-                    <!-- Left: Compact Fancy Zig-Zag Connected Cards -->
-                    <div class="lg:col-span-7 relative">
-                        <!-- Subtle connecting path line behind cards on desktop -->
-                        <div class="hidden sm:block absolute left-10 top-12 bottom-12 w-0.5 bg-linear-to-b from-primary/40 via-accent/40 to-primary/20 z-0"></div>
-
-                        <div class="space-y-6 relative z-10">
-
-                            <!-- Step 1 Card -->
-                            <div class="group relative flex items-start gap-5 p-5 sm:p-6 rounded-2xl bg-white/90 backdrop-blur-md border border-slate-200/80 shadow-sm hover:shadow-md hover:border-primary/40 transition-all duration-300">
-                                <div class="relative z-10 flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary font-heading text-base font-semibold text-white shadow-md shadow-primary/25 ring-4 ring-primary-50 group-hover:scale-105 transition-transform">
-                                    1
+                                <!-- Stars -->
+                                <div class="flex items-center gap-1 text-amber-400 mb-4">
+                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
                                 </div>
-                                <div class="flex-1">
-                                    <div class="flex items-center justify-between mb-1">
-                                        <h3 class="font-heading text-lg font-semibold text-ink group-hover:text-primary transition-colors">Record the sale in seconds</h3>
-                                        <span class="text-[10px] font-medium uppercase tracking-wider text-slate-400 bg-slate-100 px-2 py-0.5 rounded">Instant</span>
+                                <p class="text-slate-700 text-sm sm:text-base leading-relaxed mb-6 font-medium">
+                                    "Sending professional WhatsApp receipts in seconds makes my skincare brand look instantly high-end. My customers love how clean it is."
+                                </p>
+                            </div>
+                            <div class="flex items-center gap-3 pt-4 border-t border-slate-100">
+                                <div class="h-10 w-10 rounded-full bg-primary/15 flex items-center justify-center font-heading font-semibold text-primary text-sm">
+                                    AO
+                                </div>
+                                <div>
+                                    <p class="font-heading font-medium text-sm text-ink">Amina O.</p>
+                                    <p class="text-xs text-slate-500">Founder, Glow Skincare Lagos</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 2: Video Testimonial Card -->
+                        <div class="group relative flex flex-col justify-between rounded-3xl bg-slate-900 border border-slate-800 p-4 shadow-xl overflow-hidden">
+                            <!-- Video Thumbnail Background -->
+                            <div class="absolute inset-0 z-0">
+                                <img src="{% static 'images/mockups/founder-video-poster.jpg' %}" 
+                                    alt="Chidi K. sharing his SalesIQ founder story"
+                                    width="600" height="800" loading="lazy"
+                                    class="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-500">
+                                <div class="absolute inset-0 bg-linear-to-t from-slate-950 via-slate-900/40 to-transparent"></div>
+                            </div>
+
+                            <!-- Top Duration Pill -->
+                            <div class="relative z-10 flex items-center justify-between">
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md text-white text-[10px] font-semibold tracking-wide border border-white/10">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
+                                    1 Min Story
+                                </span>
+                                <span class="text-xs text-slate-300 font-medium bg-black/40 px-2 py-0.5 rounded-md backdrop-blur-sm">Founder POV</span>
+                            </div>
+
+                            <!-- Center Play Button Trigger -->
+                            <div class="relative z-10 my-auto flex justify-center py-6">
+                                <button type="button" 
+                                        class="group/btn flex h-14 w-14 items-center justify-center rounded-full bg-primary text-white shadow-lg shadow-primary/40 ring-4 ring-white/20 group-hover:scale-110 transition-all"
+                                        aria-label="Play founder testimonial video">
+                                    <svg class="w-6 h-6 ml-0.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                </button>
+                            </div>
+
+                            <!-- Bottom Video Author Meta -->
+                            <div class="relative z-10 pt-4 border-t border-white/10">
+                                <p class="font-heading font-medium text-sm text-white">Chidi K.</p>
+                                <p class="text-xs text-slate-300">Owner, Ikeja Gadgets Hub</p>
+                            </div>
+                        </div>
+
+                        <!-- Card 3: Text Testimonial -->
+                        <div class="group flex flex-col justify-between rounded-3xl bg-white border border-slate-200/80 p-6 sm:p-8 shadow-sm hover:shadow-md hover:border-primary/40 transition-all duration-300">
+                            <div>
+                                <!-- Stars -->
+                                <div class="flex items-center gap-1 text-amber-400 mb-4">
+                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                                </div>
+                                <p class="text-slate-700 text-sm sm:text-base leading-relaxed mb-6 font-medium">
+                                    "I used to lose count of my Instagram DM orders in messy notebook pages. SalesIQ gave me a clear, trusted picture of my daily numbers overnight."
+                                </p>
+                            </div>
+                            <div class="flex items-center gap-3 pt-4 border-t border-slate-100">
+                                <div class="h-10 w-10 rounded-full bg-secondary/15 flex items-center justify-center font-heading font-semibold text-secondary text-sm">
+                                    TW
+                                </div>
+                                <div>
+                                    <p class="font-heading font-medium text-sm text-ink">Tolu W.</p>
+                                    <p class="text-xs text-slate-500">Founder, Crown Fashion Lekki</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 4: Text Testimonial -->
+                        <div class="group flex flex-col justify-between rounded-3xl bg-white border border-slate-200/80 p-6 sm:p-8 shadow-sm hover:shadow-md hover:border-primary/40 transition-all duration-300">
+                            <div>
+                                <!-- Stars -->
+                                <div class="flex items-center gap-1 text-amber-400 mb-4">
+                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                                </div>
+                                <p class="text-slate-700 text-sm sm:text-base leading-relaxed mb-6 font-medium">
+                                    "Knowing my repeat customer rate of 57% changed how I reward my regulars. It feels like having a personal finance manager in my pocket."
+                                </p>
+                            </div>
+                            <div class="flex items-center gap-3 pt-4 border-t border-slate-100">
+                                <div class="h-10 w-10 rounded-full bg-accent/15 flex items-center justify-center font-heading font-semibold text-accent text-sm">
+                                    ZB
+                                </div>
+                                <div>
+                                    <p class="font-heading font-medium text-sm text-ink">Zainab B.</p>
+                                    <p class="text-xs text-slate-500">Baker, Victoria Island Treats</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- ================= HOW IT WORKS SECTION ================= -->
+            <section id="workflow" class="relative overflow-hidden py-20 lg:py-28">
+                <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+
+                    <!-- Section Header -->
+                    <div class="mx-auto max-w-3xl text-center mb-16">
+                        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary-50 border border-primary/20 text-primary text-xs uppercase tracking-wider mb-4 shadow-xs">
+                            <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                            The SalesIQ Workflow
+                        </div>
+                        
+                        <h2 class="font-heading text-3xl font-extrabold tracking-tight text-ink sm:text-4xl lg:text-5xl leading-tight mb-4">
+                            From a DM or walk-in to <span class="text-transparent bg-clip-text bg-linear-to-r from-primary via-emerald-500 to-accent">total clarity</span>.
+                        </h2>
+                        
+                        <p class="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto">
+                            Sell on Instagram, WhatsApp, or at your shop counter. SalesIQ turns every order into an organized record, a shareable receipt, and trusted business insights.
+                        </p>
+                    </div>
+
+                    <div class="grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
+
+                        <!-- Left: Compact Fancy Zig-Zag Connected Cards -->
+                        <div class="lg:col-span-7 relative">
+                            <!-- Subtle connecting path line behind cards on desktop -->
+                            <div class="hidden sm:block absolute left-10 top-12 bottom-12 w-0.5 bg-linear-to-b from-primary/40 via-accent/40 to-primary/20 z-0"></div>
+
+                            <div class="space-y-6 relative z-10">
+
+                                <!-- Step 1 Card -->
+                                <div class="group relative flex items-start gap-5 p-5 sm:p-6 rounded-2xl bg-white/90 backdrop-blur-md border border-slate-200/80 shadow-sm hover:shadow-md hover:border-primary/40 transition-all duration-300">
+                                    <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary font-heading font-medium text-sm border border-primary/20 group-hover:bg-primary group-hover:text-white transition-colors">
+                                        01
                                     </div>
-                                    <p class="text-sm leading-relaxed text-slate-600">
-                                        Start typing a customer or product, SalesIQ autofills the rest and saves new details automatically. Zero setup required.
-                                    </p>
-                                </div>
-                            </div>
-
-                            <!-- Step 2 Card -->
-                            <div class="group relative flex items-start gap-5 p-5 sm:p-6 rounded-2xl bg-white/90 backdrop-blur-md border border-slate-200/80 shadow-sm hover:shadow-md hover:border-primary/40 transition-all duration-300 sm:ml-4">
-                                <div class="relative z-10 flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-secondary font-heading text-base font-semibold text-white shadow-md shadow-secondary/25 ring-4 ring-indigo-50 group-hover:scale-105 transition-transform">
-                                    2
-                                </div>
-                                <div class="flex-1">
-                                    <div class="flex items-center justify-between mb-1">
-                                        <h3 class="font-heading text-lg font-semibold text-ink group-hover:text-secondary transition-colors">Send a receipt they'll keep</h3>
-                                        <span class="text-[10px] font-medium uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">Social share</span>
+                                    <div class="flex-1">
+                                        <div class="flex items-center justify-between mb-1">
+                                            <h3 class="font-heading text-lg font-medium text-ink group-hover:text-primary transition-colors">Record the sale in seconds</h3>
+                                            <span class="text-[10px] uppercase tracking-wider text-slate-400 bg-slate-100 px-2 py-0.5 rounded">Instant</span>
+                                        </div>
+                                        <p class="text-sm leading-relaxed font-light text-slate-600">
+                                            Start typing a customer or product, SalesIQ autofills the rest and saves new details automatically. Zero setup required.
+                                        </p>
                                     </div>
-                                    <p class="text-sm leading-relaxed text-slate-600 mb-4">
-                                        Share a branded, verified <span class="font-semibold text-ink">PAID</span> receipt via WhatsApp link or PDF with one tap. No customer account needed.
-                                    </p>
+                                </div>
 
-                                    <!-- Thermal POS Sub-Badge (Added Feature) -->
-                                    <div class="flex items-center gap-2.5 p-3 rounded-xl bg-slate-50 border border-slate-200/75 text-xs text-slate-700">
-                                        <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-emerald-100 text-emerald-600">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
-                                        </span>
-                                        <div>
-                                            <span class="font-semibold text-ink">Have a thermal printer?</span> Connect your Bluetooth POS printer to print crisp paper receipts instantly at the counter.
+                                <!-- Step 2 Card -->
+                                <div class="group relative flex items-start gap-5 p-5 sm:p-6 rounded-2xl bg-white/90 backdrop-blur-md border border-slate-200/80 shadow-sm hover:shadow-md hover:border-primary/40 transition-all duration-300 sm:ml-4">
+                                    <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-indigo-500/10 text-secondary font-heading font-medium text-sm border border-secondary/20 group-hover:bg-secondary group-hover:text-white transition-colors">
+                                        02
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="flex items-center justify-between mb-1">
+                                            <h3 class="font-heading text-lg font-medium text-ink group-hover:text-secondary transition-colors">Send a receipt they'll keep</h3>
+                                            <span class="text-[10px] uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">Social share</span>
+                                        </div>
+                                        <p class="text-sm leading-relaxed text-slate-600 mb-4 font-light">
+                                            Share a branded, verified <span class="font-medium text-ink">PAID</span> receipt via WhatsApp link or PDF with one tap. No customer account needed.
+                                        </p>
+
+                                        <!-- Thermal POS Sub-Badge (Added Feature) -->
+                                        <div class="flex items-center gap-2.5 p-3 rounded-xl bg-slate-50 border border-slate-200/75 text-xs text-slate-700">
+                                            <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-emerald-100 text-emerald-600 font-medium">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                                            </span>
+                                            <div>
+                                                <span class="font-medium text-ink">Have a thermal printer?</span> Connect your Bluetooth POS printer to print crisp paper receipts instantly at the counter.
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <!-- Step 3 Card -->
-                            <div class="group relative flex items-start gap-5 p-5 sm:p-6 rounded-2xl bg-white/90 backdrop-blur-md border border-slate-200/80 shadow-sm hover:shadow-md hover:border-primary/40 transition-all duration-300">
-                                <div class="relative z-10 flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-accent font-heading text-base font-semibold text-white shadow-md shadow-accent/25 ring-4 ring-sky-50 group-hover:scale-105 transition-transform">
-                                    3
-                                </div>
-                                <div class="flex-1">
-                                    <div class="flex items-center justify-between mb-1">
-                                        <h3 class="font-heading text-lg font-semibold text-ink group-hover:text-accent transition-colors">Know your best buyers</h3>
-                                        <span class="text-[10px] font-medium uppercase tracking-wider text-sky-600 bg-sky-50 px-2 py-0.5 rounded">Smart Insights</span>
+                                <!-- Step 3 Card -->
+                                <div class="group relative flex items-start gap-5 p-5 sm:p-6 rounded-2xl bg-white/90 backdrop-blur-md border border-slate-200/80 shadow-sm hover:shadow-md hover:border-primary/40 transition-all duration-300">
+                                    <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-sky-500/10 text-sky-600 font-heading font-medium text-sm border border-sky-500/20 group-hover:bg-accent group-hover:text-white transition-colors">
+                                        03
                                     </div>
-                                    <p class="text-sm leading-relaxed text-slate-600">
-                                        Revenue, repeat rates, and customer lifetime value update automatically so you instantly know who keeps coming back.
-                                    </p>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <!-- Action CTA Group -->
-                        <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 z-10 relative">
-                            <a href="{% url ACCOUNTS.AUTH.REGISTER %}"
-                            class="inline-flex items-center rounded-full bg-primary px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-primary/25 transition-all hover:bg-primary-600 hover:-translate-y-0.5 active:translate-y-0">
-                                Start tracking free
-                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-                            </a>
-                            <span class="text-xs sm:text-sm text-slate-500 font-medium">No setup required. First sale in under a minute.</span>
-                        </div>
-                    </div>
-
-                    <!-- Right: Compact Clean Phone Mockup with Floating Chips -->
-                    <div class="lg:col-span-5 relative flex justify-center">
-                        <div class="relative mx-auto w-full max-w-xs sm:max-w-sm">
-
-                            <!-- Soft glowing backdrop ring -->
-                            <div class="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-64 w-64 rounded-full bg-primary/15 blur-3xl"></div>
-
-                            <!-- Compact Phone Image Container -->
-                            <div class="relative mx-auto w-full rotate-3 hover:rotate-6 transition-transform duration-500 ease-out transform-gpu">
-                                <img src="{% static 'images/mockups/mobile-mkp.png' %}"
-                                    alt="SalesIQ customer directory showing total customers, average lifetime value, repeat rate and total revenue"
-                                    width="1080" height="1920" loading="lazy"
-                                    class="relative mx-auto w-full max-w-70 sm:max-w-76 drop-shadow-2xl rounded-3xl object-contain">
-                            </div>
-
-                            <!-- Receipt Sent Floating Chip -->
-                            <div class="absolute -left-2 sm:-left-6 top-16 flex items-center gap-3 rounded-2xl border border-slate-200/80 bg-white/95 p-3.5 shadow-xl backdrop-blur-md animate-bounce duration-1000">
-                                <span class="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 shrink-0">
-                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                                </span>
-                                <div>
-                                    <p class="text-xs font-semibold text-ink">Receipt sent</p>
-                                    <p class="text-[11px] text-slate-500 font-medium">Marked PAID ✓</p>
-                                </div>
-                            </div>
-
-                            <!-- Insight Floating Chip -->
-                            <div class="absolute -right-2 sm:-right-6 bottom-12 rounded-2xl border border-slate-200/80 bg-white/95 p-3.5 shadow-xl backdrop-blur-md">
-                                <p class="text-[11px] text-slate-500 font-medium">Repeat Customers</p>
-                                <p class="font-heading text-lg font-extrabold text-primary">57.1%</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ================= THE PROBLEM / HIDDEN COST SECTION ================= -->
-        <section class="py-20 lg:py-28 bg-surface relative overflow-hidden border-b border-slate-200/60">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                
-                <!-- Section Header -->
-                <div class="max-w-3xl mx-auto text-center mb-16">
-                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary-50 border border-primary/20 text-primary text-xs font-semibold uppercase tracking-wider mb-4 shadow-xs">
-                        <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
-                        The Unseen Challenges
-                    </div>
-                    
-                    <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-ink font-heading leading-tight mb-6">
-                        Making sales, but blind to the numbers?
-                    </h2>
-                    
-                    <p class="text-base sm:text-lg text-slate-600 leading-relaxed">
-                        When orders are scattered across WhatsApp chats, DMs, and bank alerts, tracking your real revenue and top products turns into guesswork.
-                    </p>
-                </div>
-
-                <!-- Dual-Card Comparison Layout (Mirrors Reference Design Style) -->
-                <div class="grid lg:grid-cols-2 gap-8 items-stretch">
-                    
-                    <!-- Left Card: Current Reality (Dark Navy Card with Soft Rounded Corners) -->
-                    <div class="bg-ink rounded-[2.5rem] p-8 sm:p-12 flex flex-col justify-between text-white shadow-xl relative overflow-hidden">
-                        <!-- Subtle ambient glow -->
-                        <div class="absolute -right-20 -bottom-20 w-60 h-60 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
-
-                        <div>
-                            <span class="text-xs font-semibold uppercase tracking-widest text-primary-400 block mb-4">
-                                Current Reality
-                            </span>
-                            
-                            <h3 class="text-2xl sm:text-3xl font-semibold text-white mb-6 font-heading tracking-tight">
-                                What your daily sales workflow looks like
-                            </h3>
-                            
-                            <p class="text-sm sm:text-base text-slate-300 mb-8 leading-relaxed">
-                                Customer chats, order confirmations, payment notifications, and paper notes locked in different places with no single source of truth.
-                            </p>
-
-                            <!-- List of Scattered Pain Points -->
-                            <ul class="space-y-4 mb-8">
-                                <li class="flex items-start gap-3.5 text-sm text-slate-200">
-                                    <span class="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center shrink-0 mt-0.5 text-slate-400 font-semibold text-xs">✕</span>
-                                    <span>Orders buried across multiple WhatsApp groups and Instagram DMs</span>
-                                </li>
-                                <li class="flex items-start gap-3.5 text-sm text-slate-200">
-                                    <span class="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center shrink-0 mt-0.5 text-slate-400 font-semibold text-xs">✕</span>
-                                    <span>Manual calculation of bank alerts to figure out daily earnings</span>
-                                </li>
-                                <li class="flex items-start gap-3.5 text-sm text-slate-200">
-                                    <span class="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center shrink-0 mt-0.5 text-slate-400 font-semibold text-xs">✕</span>
-                                    <span>No easy way to know who your repeat buyers or top products are</span>
-                                </li>
-                                <li class="flex items-start gap-3.5 text-sm text-slate-200">
-                                    <span class="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center shrink-0 mt-0.5 text-slate-400 font-semibold text-xs">✕</span>
-                                    <span>Guesswork when answering basic revenue and growth questions</span>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <div class="pt-6 border-t border-white/10 text-xs text-slate-400 font-medium italic">
-                            Result: Your business generates data every day, but you lack a unified lens to view it.
-                        </div>
-                    </div>
-
-                    <!-- Right Card: The SalesIQ Solution (Clean White Card with Soft Rounded Corners) -->
-                    <div class="bg-white rounded-[2.5rem] border border-slate-200/80 p-8 sm:p-12 flex flex-col justify-between text-ink shadow-xl relative overflow-hidden">
-                        <div>
-                            <span class="text-xs font-semibold uppercase tracking-widest text-primary block mb-4">
-                                The SalesIQ Standard
-                            </span>
-                            
-                            <h3 class="text-2xl sm:text-3xl font-semibold text-ink mb-6 font-heading tracking-tight">
-                                Turn every transaction into business clarity
-                            </h3>
-                            
-                            <p class="text-sm sm:text-base text-slate-600 mb-8 leading-relaxed">
-                                Bring your social commerce records into one lightweight engine designed specifically to keep your sales organized and visible.
-                            </p>
-
-                            <!-- List of SalesIQ Solutions -->
-                            <ul class="space-y-4 mb-8">
-                                <li class="flex items-start gap-3.5 text-sm text-slate-700 font-medium">
-                                    <span class="w-6 h-6 rounded-full bg-primary-50 flex items-center justify-center shrink-0 mt-0.5 text-primary font-semibold">✓</span>
-                                    <span>Effortless sales logging with instant customer and product autocomplete</span>
-                                </li>
-                                <li class="flex items-start gap-3.5 text-sm text-slate-700 font-medium">
-                                    <span class="w-6 h-6 rounded-full bg-primary-50 flex items-center justify-center shrink-0 mt-0.5 text-primary font-semibold">✓</span>
-                                    <span>Professional digital receipts shareable instantly via WhatsApp or PDF</span>
-                                </li>
-                                <li class="flex items-start gap-3.5 text-sm text-slate-700 font-medium">
-                                    <span class="w-6 h-6 rounded-full bg-primary-50 flex items-center justify-center shrink-0 mt-0.5 text-primary font-semibold">✓</span>
-                                    <span>Real-time tracking of total recorded revenue and top-grossing products</span>
-                                </li>
-                                <li class="flex items-start gap-3.5 text-sm text-slate-700 font-medium">
-                                    <span class="w-6 h-6 rounded-full bg-primary-50 flex items-center justify-center shrink-0 mt-0.5 text-primary font-semibold">✓</span>
-                                    <span>Clear buyer insights identifying repeat customers with zero friction</span>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <div class="pt-6 border-t border-slate-100">
-                            <a href="{% url ACCOUNTS.AUTH.REGISTER %}" class="inline-flex items-center text-sm font-semibold text-primary hover:text-primary-600 group">
-                                Experience structured sales tracking
-                                <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-                            </a>
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-        </section>
-
-        <!-- ================= FAQ & TRUST SECTION (PRE-CTA) ================= -->
-        <section id="faq-trust" class="relative overflow-hidden section-tint py-20 lg:py-28 border-b border-slate-200/60">
-            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-
-                <!-- Section Header -->
-                <div class="mx-auto max-w-2xl text-center mb-16">
-                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary-50 border border-primary/20 text-primary text-xs font-medium uppercase tracking-wider mb-4 shadow-xs">
-                        <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
-                        Got Questions?
-                    </div>
-                    <h2 class="font-heading text-3xl font-extrabold tracking-tight text-ink sm:text-4xl lg:text-5xl leading-tight mb-4">
-                        Everything you need to know <span class="text-transparent bg-clip-text bg-linear-to-r from-primary via-emerald-500 to-accent">before you start</span>.
-                    </h2>
-                    <p class="text-base sm:text-lg text-slate-600 leading-relaxed">
-                        Running a business on WhatsApp or Instagram shouldn't feel like bookkeeping. Here is how SalesIQ keeps things effortless.
-                    </p>
-                </div>
-
-                <div class="grid items-start gap-12 lg:grid-cols-12 lg:gap-16">
-
-                    <!-- Left: FAQ Accordion / List (7 Cols) -->
-                    <div class="lg:col-span-7 space-y-4">
-
-                        <!-- FAQ Item 1 -->
-                        <details class="group rounded-2xl bg-white border border-slate-200/80 p-6 shadow-sm hover:border-primary/40 transition-all duration-300 open:ring-2 open:ring-primary/20">
-                            <summary class="flex cursor-pointer items-center justify-between font-heading text-lg font-semibold text-ink select-none">
-                                <span>Do my customers need to download an app to view receipts?</span>
-                                <span class="ml-4 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-600 group-open:bg-primary group-open:text-white transition-colors">
-                                    <svg class="h-4 w-4 transform group-open:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-                                </span>
-                            </summary>
-                            <p class="mt-4 text-sm sm:text-base leading-relaxed text-slate-600">
-                                Not at all! When you share a receipt via WhatsApp or link, your customer opens a clean, beautifully branded web page showing their items, total, and a verified <span class="font-semibold text-ink">PAID</span> stamp instantly. No downloads or accounts required.
-                            </p>
-                        </details>
-
-                        <!-- FAQ Item 2 -->
-                        <details class="group rounded-2xl bg-white border border-slate-200/80 p-6 shadow-sm hover:border-primary/40 transition-all duration-300 open:ring-2 open:ring-primary/20">
-                            <summary class="flex cursor-pointer items-center justify-between font-heading text-lg font-semibold text-ink select-none">
-                                <span>How long does it take to record a sale?</span>
-                                <span class="ml-4 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-600 group-open:bg-primary group-open:text-white transition-colors">
-                                    <svg class="h-4 w-4 transform group-open:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-                                </span>
-                            </summary>
-                            <p class="mt-4 text-sm sm:text-base leading-relaxed text-slate-600">
-                                Less than 10 seconds. Start typing your customer's name or product—SalesIQ autofills previous details instantly. New customer names and products are saved automatically for next time.
-                            </p>
-                        </details>
-
-                        <!-- FAQ Item 3 -->
-                        <details class="group rounded-2xl bg-white border border-slate-200/80 p-6 shadow-sm hover:border-primary/40 transition-all duration-300 open:ring-2 open:ring-primary/20">
-                            <summary class="flex cursor-pointer items-center justify-between font-heading text-lg font-semibold text-ink select-none">
-                                <span>Is my business data secure and private?</span>
-                                <span class="ml-4 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-600 group-open:bg-primary group-open:text-white transition-colors">
-                                    <svg class="h-4 w-4 transform group-open:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-                                </span>
-                            </summary>
-                            <p class="mt-4 text-sm sm:text-base leading-relaxed text-slate-600">
-                                Yes. Your customer directory, revenue metrics, and sales records are encrypted and stored securely. Only you have access to your business dashboard and financial intelligence numbers.
-                            </p>
-                        </details>
-
-                        <!-- FAQ Item 4 -->
-                        <details class="group rounded-2xl bg-white border border-slate-200/80 p-6 shadow-sm hover:border-primary/40 transition-all duration-300 open:ring-2 open:ring-primary/20">
-                            <summary class="flex cursor-pointer items-center justify-between font-heading text-lg font-semibold text-ink select-none">
-                                <span>Can I try SalesIQ before committing?</span>
-                                <span class="ml-4 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-600 group-open:bg-primary group-open:text-white transition-colors">
-                                    <svg class="h-4 w-4 transform group-open:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-                                </span>
-                            </summary>
-                            <p class="mt-4 text-sm sm:text-base leading-relaxed text-slate-600">
-                                Absolutely. You can start tracking sales immediately with our free tier—no setup fees, spreadsheets, or credit card required to record your first sale.
-                            </p>
-                        </details>
-
-                    </div>
-
-                    <!-- Right: Testimonial & Trust Card (5 Cols) with Subtle Right Tilt -->
-                    <div class="lg:col-span-5 relative flex justify-center">
-                        <div class="relative w-full max-w-md">
-
-                            <!-- Soft background glow ring -->
-                            <div class="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-72 w-72 rounded-full bg-accent/10 blur-3xl"></div>
-
-                            <!-- Tilting Testimonial Card Container -->
-                            <div class="relative rounded-3xl border border-primary/20 bg-linear-to-br from-white via-primary-50/40 to-white p-8 shadow-2xl rotate-3 hover:rotate-0 transition-transform duration-500 ease-out transform-gpu">
-                                
-                                <!-- Rating Stars -->
-                                <div class="flex items-center gap-1 text-amber-400 mb-6">
-                                    <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
-                                    <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
-                                    <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
-                                    <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
-                                    <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
-                                </div>
-
-                                <!-- Quote -->
-                                <blockquote class="font-heading text-lg sm:text-xl font-medium text-ink leading-relaxed mb-6">
-                                    "SalesIQ completely changed how I run my Instagram store. Sending professional WhatsApp receipts in seconds makes my business look instantly high-end."
-                                </blockquote>
-
-                                <!-- Author Meta -->
-                                <div class="flex items-center gap-4 pt-6 border-t border-slate-200/60">
-                                    <div class="h-12 w-12 rounded-full bg-primary/20 flex items-center justify-center font-heading font-semibold text-primary text-base">
-                                        AO
-                                    </div>
-                                    <div>
-                                        <p class="font-heading font-semibold text-ink">Amina O.</p>
-                                        <p class="text-xs text-slate-500 font-medium">Founder, Glow Skincare Lagos</p>
+                                    <div class="flex-1">
+                                        <div class="flex items-center justify-between mb-1">
+                                            <h3 class="font-heading text-lg font-medium text-ink group-hover:text-accent transition-colors">Know your best buyers</h3>
+                                            <span class="text-[10px] uppercase tracking-wider text-sky-600 bg-sky-50 px-2 py-0.5 rounded">Smart Insights</span>
+                                        </div>
+                                        <p class="text-sm leading-relaxed text-slate-600 font-light">
+                                            Revenue, repeat rates, and customer lifetime value update automatically so you instantly know who keeps coming back.
+                                        </p>
                                     </div>
                                 </div>
 
-                                <!-- Metric Badge Footer inside card -->
-                                <div class="mt-6 pt-4 border-t border-slate-200/40 flex items-center justify-between text-xs font-semibold text-slate-600">
-                                    <span>⚡ Average setup time:</span>
-                                    <span class="text-primary font-semibold">Under 60 seconds</span>
-                                </div>
-
                             </div>
 
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
-        <!-- ================= PRICING PLAN SECTION ================= -->
-        <section id="pricing" class="relative overflow-hidden section-tint py-20 lg:py-28 border-b border-slate-200/60">
-            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-
-                <!-- Section Header -->
-                <div class="mx-auto max-w-2xl text-center mb-16">
-                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary-50 border border-primary/20 text-primary text-xs font-semibold uppercase tracking-wider mb-4 shadow-xs">
-                        <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
-                        Simple Pricing
-                    </div>
-                    
-                    <h2 class="font-heading text-3xl font-extrabold tracking-tight text-ink sm:text-4xl lg:text-5xl leading-tight mb-4">
-                        Invest in your growth. <span class="text-transparent bg-clip-text bg-linear-to-r from-primary via-emerald-500 to-accent">Start for free</span>.
-                    </h2>
-                    
-                    <p class="text-base sm:text-lg text-slate-600 leading-relaxed">
-                        No complex bookkeeping software or hidden setup fees. Pick the plan that fits your business stage.
-                    </p>
-                </div>
-
-                <!-- Pricing Cards Grid (Free vs Pro) -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto items-stretch">
-
-                    <!-- FREE PLAN CARD -->
-                    <div class="group relative flex flex-col justify-between rounded-3xl bg-white border border-slate-200/80 p-8 sm:p-10 shadow-sm hover:shadow-md hover:border-primary/40 transition-all duration-300">
-                        <div>
-                            <!-- Plan Header -->
-                            <div class="flex items-center justify-between mb-4">
-                                <h3 class="font-heading text-xl font-semibold text-ink">Starter Free</h3>
-                                <span class="text-xs font-semibold uppercase tracking-wider text-slate-500 bg-slate-100 px-3 py-1 rounded-full">For Side Hustles</span>
-                            </div>
-                            
-                            <p class="text-sm sm:text-base text-slate-600 mb-6">
-                                Everything you need to record your first sale, send digital receipts, and ditch messy paper notebooks.
-                            </p>
-
-                            <!-- Price -->
-                            <div class="flex items-baseline gap-1 mb-8 pb-8 border-b border-slate-100">
-                                <span class="font-heading text-4xl sm:text-5xl font-extrabold text-ink">₦0</span>
-                                <span class="text-slate-500 font-medium text-sm">/ forever</span>
-                            </div>
-
-                            <!-- Features List -->
-                            <ul class="space-y-4 mb-8 text-sm sm:text-base text-slate-700 font-medium">
-                                <li class="flex items-center gap-3">
-                                    <span class="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 shrink-0">
-                                        <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                                    </span>
-                                    Record sales in under 10 seconds
-                                </li>
-                                <li class="flex items-center gap-3">
-                                    <span class="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 shrink-0">
-                                        <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                                    </span>
-                                    WhatsApp verified PAID receipts
-                                </li>
-                                <li class="flex items-center gap-3">
-                                    <span class="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 shrink-0">
-                                        <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                                    </span>
-                                    Up to 50 customer records / month
-                                </li>
-                                <li class="flex items-center gap-3 text-slate-400">
-                                    <span class="flex h-5 w-5 items-center justify-center rounded-full bg-slate-100 text-slate-400 shrink-0">
-                                        <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-                                    </span>
-                                    Advanced lifetime value analytics
-                                </li>
-                            </ul>
-                        </div>
-
-                        <!-- CTA Button -->
-                        <div>
-                            <a href="{% url ACCOUNTS.AUTH.REGISTER %}"
-                            class="w-full inline-flex items-center justify-center rounded-full bg-slate-100 px-6 py-3.5 text-sm font-semibold text-slate-800 transition hover:bg-slate-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-500">
-                                Get started free
-                            </a>
-                            <p class="text-[11px] text-center text-slate-400 mt-3 font-medium">No credit card required</p>
-                        </div>
-                    </div>
-
-                    <!-- PRO PLAN CARD (Highlighted) -->
-                    <div class="group relative flex flex-col justify-between rounded-3xl bg-slate-900 border-2 border-primary p-8 sm:p-10 shadow-xl overflow-hidden text-white">
-                        <!-- Background Glow -->
-                        <div class="pointer-events-none absolute -right-12 -top-12 h-64 w-64 rounded-full bg-primary/20 blur-3xl"></div>
-                        
-                        <div class="relative z-10">
-                            <!-- Plan Header -->
-                            <div class="flex items-center justify-between mb-4">
-                                <h3 class="font-heading text-xl font-semibold text-white">SalesIQ Pro</h3>
-                                <span class="text-[10px] font-semibold uppercase tracking-wider text-white bg-primary px-3 py-1 rounded-full shadow-sm">Most Popular</span>
-                            </div>
-                            
-                            <p class="text-sm sm:text-base text-slate-300 mb-6">
-                                For growing social sellers and shop owners who want deep customer insights, custom branding, and unlimited scale.
-                            </p>
-
-                            <!-- Price -->
-                            <div class="flex items-baseline gap-2 mb-8 pb-8 border-b border-white/10">
-                                <span class="font-heading text-4xl sm:text-5xl font-extrabold text-white">₦7,000</span>
-                                <span class="text-slate-400 font-medium text-sm">/ month <span class="text-xs text-emerald-500">(billed monthly or yearly)</span></span>
-                            </div>
-
-                            <!-- Features List -->
-                            <ul class="space-y-4 mb-8 text-sm sm:text-base text-slate-200 font-medium">
-                                <li class="flex items-center gap-3">
-                                    <span class="flex h-5 w-5 items-center justify-center rounded-full bg-primary/20 text-primary-400 shrink-0">
-                                        <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                                    </span>
-                                    <strong class="text-white">Unlimited</strong> customer records & orders
-                                </li>
-                                <li class="flex items-center gap-3">
-                                    <span class="flex h-5 w-5 items-center justify-center rounded-full bg-primary/20 text-primary-400 shrink-0">
-                                        <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                                    </span>
-                                    Advanced repeat rate & lifetime value analytics
-                                </li>
-                                <li class="flex items-center gap-3">
-                                    <span class="flex h-5 w-5 items-center justify-center rounded-full bg-primary/20 text-primary-400 shrink-0">
-                                        <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                                    </span>
-                                    Custom brand logo & colors on PDF/WhatsApp receipts
-                                </li>
-                                <li class="flex items-center gap-3">
-                                    <span class="flex h-5 w-5 items-center justify-center rounded-full bg-primary/20 text-primary-400 shrink-0">
-                                        <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                                    </span>
-                                    Priority support & data export tools
-                                </li>
-                            </ul>
-                        </div>
-
-                        <!-- CTA Button -->
-                        <div class="relative z-10">
-                            <a href="{% url ACCOUNTS.AUTH.REGISTER %}"
-                            class="w-full inline-flex items-center justify-center rounded-full bg-primary px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-primary/25 transition-all hover:bg-primary-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
-                                Upgrade to Pro
-                            </a>
-                            <p class="text-[11px] text-center text-slate-400 mt-3 font-medium">Cancel anytime on your terms</p>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
-        <!-- ================= REDESIGNED CLOSING CTA SECTION ================= -->
-        <section id="cta" class="relative overflow-hidden section-tint py-20 lg:py-28 border-t border-slate-200/60">
-            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div class="relative overflow-hidden rounded-3xl bg-slate-900 border border-slate-800 p-8 sm:p-12 lg:p-16 shadow-2xl">
-                    
-                    <!-- Ambient Background Glow Elements -->
-                    <div class="absolute -left-24 -top-24 h-80 w-80 rounded-full bg-primary/20 blur-3xl pointer-events-none"></div>
-                    <div class="absolute -right-24 -bottom-24 h-80 w-80 rounded-full bg-emerald-500/15 blur-3xl pointer-events-none"></div>
-
-                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center relative z-10">
-                        
-                        <!-- Left Column: Copy & Pitch -->
-                        <div class="lg:col-span-7 space-y-6 text-left">
-                            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary/20 border border-primary/30 text-primary text-xs font-semibold uppercase tracking-wider">
-                                <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
-                                Zero Setup. Instant Clarity.
-                            </div>
-
-                            <h2 class="font-heading text-3xl font-extrabold tracking-tight text-white sm:text-4xl lg:text-5xl leading-tight">
-                                Stop juggling DMs. Start <span class="text-transparent bg-clip-text bg-linear-to-r from-primary-400 via-emerald-400 to-accent">scaling your revenue</span>.
-                            </h2>
-
-                            <p class="text-slate-300 text-base sm:text-lg leading-relaxed max-w-xl">
-                                Join social sellers and shop owners who traded messy notebooks for trusted digital records, verified WhatsApp receipts, and real-time business intelligence.
-                            </p>
-                        </div>
-
-                        <!-- Right Column: Actions & Trust Pill -->
-                        <div class="lg:col-span-5 flex flex-col justify-center items-start lg:items-end space-y-4">
-                            <div class="w-full sm:w-auto flex flex-col sm:flex-row lg:flex-col gap-3">
+                            <!-- Action CTA Group -->
+                            <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 z-10 relative">
                                 <a href="{% url ACCOUNTS.AUTH.REGISTER %}"
-                                class="w-full inline-flex items-center justify-center rounded-2xl bg-primary px-8 py-4 text-sm font-semibold text-white shadow-lg shadow-primary/25 transition-all hover:bg-primary-600 hover:-translate-y-0.5 active:translate-y-0">
-                                    Start tracking free today
+                                class="inline-flex items-center rounded-full bg-primary px-7 py-3.5 text-sm font-medium text-white shadow-lg shadow-primary/25 transition-all hover:bg-primary-600 hover:-translate-y-0.5 active:translate-y-0">
+                                    Start tracking free
                                     <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                                 </a>
-                                <a href="#pricing"
-                                class="w-full inline-flex items-center justify-center rounded-2xl bg-white/10 px-8 py-4 text-sm font-semibold text-white backdrop-blur-md transition hover:bg-white/20 border border-white/15">
-                                    Explore Pro features
-                                </a>
+                                <span class="text-xs sm:text-sm text-slate-500 font-medium">No setup required. First sale in under a minute.</span>
+                            </div>
+                        </div>
+
+                        <!-- Right: Compact Clean Phone Mockup with Floating Chips -->
+                        <div class="lg:col-span-5 relative flex justify-center">
+                            <div class="relative mx-auto w-full max-w-xs sm:max-w-sm">
+
+                                <!-- Soft glowing backdrop ring -->
+                                <div class="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-64 w-64 rounded-full bg-teal-500/25 blur-3xl"></div>
+
+                                <!-- Compact Phone Image Container -->
+                                <div class="relative mx-auto w-full rotate-3 hover:rotate-6 transition-transform duration-500 ease-out transform-gpu">
+                                    <img src="{% static 'images/mockups/mobile-mkp.png' %}"
+                                        alt="SalesIQ customer directory showing total customers, average lifetime value, repeat rate and total revenue"
+                                        width="1080" height="1920" loading="lazy"
+                                        class="relative mx-auto w-full max-w-70 sm:max-w-76 drop-shadow-2xl rounded-3xl object-contain">
+                                </div>
+
+                                <!-- Receipt Sent Floating Chip -->
+                                <div class="absolute -left-2 sm:-left-6 top-16 flex items-center gap-3 rounded-2xl border border-slate-200/80 bg-white/95 p-3.5 shadow-xl backdrop-blur-md animate-bounce duration-1000">
+                                    <span class="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 shrink-0">
+                                        <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                    </span>
+                                    <div>
+                                        <p class="text-xs font-medium text-ink">Receipt sent</p>
+                                        <p class="text-[11px] text-slate-500">Marked PAID ✓</p>
+                                    </div>
+                                </div>
+
+                                <!-- Insight Floating Chip -->
+                                <div class="absolute -right-2 sm:-right-6 bottom-12 rounded-2xl border border-slate-200/80 bg-white/95 p-3.5 shadow-xl backdrop-blur-md">
+                                    <p class="text-[11px] text-slate-500 font-medium">Repeat Customers</p>
+                                    <p class="font-heading text-lg font-extrabold text-primary">57.1%</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ================= THE PROBLEM / HIDDEN COST SECTION ================= -->
+            <section class="py-20 lg:py-28 section-dots relative overflow-hidden border-b border-slate-200/60">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    
+                    <!-- Section Header -->
+                    <div class="max-w-3xl mx-auto text-center mb-16">
+                        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary-50 border border-primary/20 text-primary text-xs uppercase tracking-wider mb-4 shadow-xs">
+                            <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                            The Unseen Challenges
+                        </div>
+                        
+                        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-ink font-heading leading-tight mb-6">
+                            Making sales, but blind to the numbers?
+                        </h2>
+                        
+                        <p class="text-base sm:text-lg text-slate-600 leading-relaxed">
+                            When orders are scattered across WhatsApp chats, DMs, and bank alerts, tracking your real revenue and top products turns into guesswork.
+                        </p>
+                    </div>
+
+                    <!-- Dual-Card Comparison Layout (Mirrors Reference Design Style) -->
+                    <div class="grid lg:grid-cols-2 gap-8 items-stretch">
+                        
+                        <!-- Left Card: Current Reality (Dark Navy Card with Soft Rounded Corners) -->
+                        <div class="bg-ink rounded-[2.5rem] p-8 sm:p-12 flex flex-col justify-between text-white shadow-xl relative overflow-hidden">
+                            <!-- Subtle ambient glow -->
+                            <div class="absolute -right-20 -bottom-20 w-60 h-60 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
+
+                            <div>
+                                <span class="text-xs font-semibold uppercase tracking-widest text-primary-400 block mb-4">
+                                    Current Reality
+                                </span>
+                                
+                                <h3 class="text-2xl sm:text-3xl font-semibold text-white mb-6 font-heading tracking-tight">
+                                    What your daily sales workflow looks like
+                                </h3>
+                                
+                                <p class="text-sm sm:text-base text-slate-300 mb-8 leading-relaxed">
+                                    Customer chats, order confirmations, payment notifications, and paper notes locked in different places with no single source of truth.
+                                </p>
+
+                                <!-- List of Scattered Pain Points -->
+                                <ul class="space-y-4 mb-8">
+                                    <li class="flex items-start gap-3.5 text-sm text-slate-200">
+                                        <span class="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center shrink-0 mt-0.5 text-slate-400 font-semibold text-xs">✕</span>
+                                        <span>Orders buried across multiple WhatsApp groups and Instagram DMs</span>
+                                    </li>
+                                    <li class="flex items-start gap-3.5 text-sm text-slate-200">
+                                        <span class="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center shrink-0 mt-0.5 text-slate-400 font-semibold text-xs">✕</span>
+                                        <span>Manual calculation of bank alerts to figure out daily earnings</span>
+                                    </li>
+                                    <li class="flex items-start gap-3.5 text-sm text-slate-200">
+                                        <span class="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center shrink-0 mt-0.5 text-slate-400 font-semibold text-xs">✕</span>
+                                        <span>No easy way to know who your repeat buyers or top products are</span>
+                                    </li>
+                                    <li class="flex items-start gap-3.5 text-sm text-slate-200">
+                                        <span class="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center shrink-0 mt-0.5 text-slate-400 font-semibold text-xs">✕</span>
+                                        <span>Guesswork when answering basic revenue and growth questions</span>
+                                    </li>
+                                </ul>
                             </div>
 
-                            <div class="flex items-center gap-2 text-xs text-slate-400 pt-2">
-                                <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                                <span>No credit card required &bull; First sale in under 1 minute</span>
+                            <div class="pt-6 border-t border-white/10 text-xs text-slate-400 font-medium italic">
+                                Result: Your business generates data every day, but you lack a unified lens to view it.
+                            </div>
+                        </div>
+
+                        <!-- Right Card: The SalesIQ Solution (Clean White Card with Soft Rounded Corners) -->
+                        <div class="bg-white rounded-[2.5rem] border border-slate-200/80 p-8 sm:p-12 flex flex-col justify-between text-ink shadow-xl relative overflow-hidden">
+                            <div>
+                                <span class="text-xs font-semibold uppercase tracking-widest text-primary block mb-4">
+                                    The SalesIQ Standard
+                                </span>
+                                
+                                <h3 class="text-2xl sm:text-3xl font-semibold text-ink mb-6 font-heading tracking-tight">
+                                    Turn every transaction into business clarity
+                                </h3>
+                                
+                                <p class="text-sm sm:text-base text-slate-600 mb-8 leading-relaxed">
+                                    Bring your social commerce records into one lightweight engine designed specifically to keep your sales organized and visible.
+                                </p>
+
+                                <!-- List of SalesIQ Solutions -->
+                                <ul class="space-y-4 mb-8">
+                                    <li class="flex items-start gap-3.5 text-sm text-slate-700 font-medium">
+                                        <span class="w-6 h-6 rounded-full bg-primary-50 flex items-center justify-center shrink-0 mt-0.5 text-primary font-semibold">✓</span>
+                                        <span>Effortless sales logging with instant customer and product autocomplete</span>
+                                    </li>
+                                    <li class="flex items-start gap-3.5 text-sm text-slate-700 font-medium">
+                                        <span class="w-6 h-6 rounded-full bg-primary-50 flex items-center justify-center shrink-0 mt-0.5 text-primary font-semibold">✓</span>
+                                        <span>Professional digital receipts shareable instantly via WhatsApp or PDF</span>
+                                    </li>
+                                    <li class="flex items-start gap-3.5 text-sm text-slate-700 font-medium">
+                                        <span class="w-6 h-6 rounded-full bg-primary-50 flex items-center justify-center shrink-0 mt-0.5 text-primary font-semibold">✓</span>
+                                        <span>Real-time tracking of total recorded revenue and top-grossing products</span>
+                                    </li>
+                                    <li class="flex items-start gap-3.5 text-sm text-slate-700 font-medium">
+                                        <span class="w-6 h-6 rounded-full bg-primary-50 flex items-center justify-center shrink-0 mt-0.5 text-primary font-semibold">✓</span>
+                                        <span>Clear buyer insights identifying repeat customers with zero friction</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="pt-6 border-t border-slate-100">
+                                <a href="{% url ACCOUNTS.AUTH.REGISTER %}" class="inline-flex items-center text-sm font-light text-primary hover:text-primary-600 group">
+                                    Experience structured sales tracking
+                                    <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                                </a>
                             </div>
                         </div>
 
                     </div>
 
                 </div>
-            </div>
-        </section>
+            </section>
+
+            <!-- ================= FAQ & TRUST SECTION (PRE-CTA) ================= -->
+            <section id="faq-trust" class="relative overflow-hidden py-20 lg:py-28 border-b border-slate-200/60">
+                <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+
+                    <!-- Section Header -->
+                    <div class="mx-auto max-w-2xl text-center mb-16">
+                        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary-50 border border-primary/20 text-primary text-xs font-medium uppercase tracking-wider mb-4 shadow-xs">
+                            <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                            Got Questions?
+                        </div>
+                        <h2 class="font-heading text-3xl font-extrabold tracking-tight text-ink sm:text-4xl lg:text-5xl leading-tight mb-4">
+                            Everything you need to know <span class="text-transparent bg-clip-text bg-linear-to-r from-primary via-emerald-500 to-accent">before you start</span>.
+                        </h2>
+                        <p class="text-base sm:text-lg text-slate-600 leading-relaxed">
+                            Running a business on WhatsApp or Instagram shouldn't feel like bookkeeping. Here is how SalesIQ keeps things effortless.
+                        </p>
+                    </div>
+
+                    <div class="grid items-start gap-12 lg:grid-cols-12 lg:gap-16">
+
+                        <!-- Left: FAQ Accordion / List (7 Cols) -->
+                        <div class="lg:col-span-7 space-y-4">
+
+                            <!-- FAQ Item 1 -->
+                            <details class="group rounded-2xl bg-white border border-slate-200/80 p-6 shadow-sm hover:border-primary/40 transition-all duration-300 open:ring-1 open:ring-primary/20">
+                                <summary class="flex cursor-pointer items-center justify-between font-heading text-lg font-medium text-ink select-none">
+                                    <span>Do my customers need to download an app to view receipts?</span>
+                                    <span class="ml-4 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-600 group-open:bg-primary group-open:text-white transition-colors">
+                                        <svg class="h-4 w-4 transform group-open:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                                    </span>
+                                </summary>
+                                <p class="mt-4 text-sm sm:text-base leading-relaxed text-slate-600">
+                                    Not at all! When you share a receipt via WhatsApp or link, your customer opens a clean, beautifully branded web page showing their items, total, and a verified <span class="font-semibold text-ink">PAID</span> stamp instantly. No downloads or accounts required.
+                                </p>
+                            </details>
+
+                            <!-- FAQ Item 2 -->
+                            <details class="group rounded-2xl bg-white border border-slate-200/80 p-6 shadow-sm hover:border-primary/40 transition-all duration-300 open:ring-1 open:ring-primary/20">
+                                <summary class="flex cursor-pointer items-center justify-between font-heading text-lg font-medium text-ink select-none">
+                                    <span>How long does it take to record a sale?</span>
+                                    <span class="ml-4 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-600 group-open:bg-primary group-open:text-white transition-colors">
+                                        <svg class="h-4 w-4 transform group-open:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                                    </span>
+                                </summary>
+                                <p class="mt-4 text-sm sm:text-base leading-relaxed text-slate-600">
+                                    Less than 10 seconds. Start typing your customer's name or product—SalesIQ autofills previous details instantly. New customer names and products are saved automatically for next time.
+                                </p>
+                            </details>
+
+                            <!-- FAQ Item 3 -->
+                            <details class="group rounded-2xl bg-white border border-slate-200/80 p-6 shadow-sm hover:border-primary/40 transition-all duration-300 open:ring-1 open:ring-primary/20">
+                                <summary class="flex cursor-pointer items-center justify-between font-heading text-lg font-medium text-ink select-none">
+                                    <span>Is my business data secure and private?</span>
+                                    <span class="ml-4 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-600 group-open:bg-primary group-open:text-white transition-colors">
+                                        <svg class="h-4 w-4 transform group-open:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                                    </span>
+                                </summary>
+                                <p class="mt-4 text-sm sm:text-base leading-relaxed text-slate-600">
+                                    Yes. Your customer directory, revenue metrics, and sales records are encrypted and stored securely. Only you have access to your business dashboard and financial intelligence numbers.
+                                </p>
+                            </details>
+
+                            <!-- FAQ Item 4 -->
+                            <details class="group rounded-2xl bg-white border border-slate-200/80 p-6 shadow-sm hover:border-primary/40 transition-all duration-300 open:ring-1 open:ring-primary/20">
+                                <summary class="flex cursor-pointer items-center justify-between font-heading text-lg font-medium text-ink select-none">
+                                    <span>Can I try SalesIQ before committing?</span>
+                                    <span class="ml-4 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-600 group-open:bg-primary group-open:text-white transition-colors">
+                                        <svg class="h-4 w-4 transform group-open:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                                    </span>
+                                </summary>
+                                <p class="mt-4 text-sm sm:text-base leading-relaxed text-slate-600">
+                                    Absolutely. You can start tracking sales immediately with our free tier—no setup fees, spreadsheets, or credit card required to record your first sale.
+                                </p>
+                            </details>
+
+                        </div>
+
+                        <!-- Right: Testimonial & Trust Card (5 Cols) with Subtle Right Tilt -->
+                        <div class="lg:col-span-5 relative flex justify-center">
+                            <div class="relative w-full max-w-md">
+
+                                <!-- Soft background glow ring -->
+                                <div class="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-72 w-72 rounded-full bg-accent/10 blur-3xl"></div>
+
+                                <!-- Tilting Testimonial Card Container -->
+                                <div class="relative rounded-3xl border border-primary/20 bg-linear-to-br from-white via-primary-50/40 to-white p-8 shadow-2xl rotate-3 hover:rotate-0 transition-transform duration-500 ease-out transform-gpu">
+                                    
+                                    <!-- Rating Stars -->
+                                    <div class="flex items-center gap-1 text-amber-400 mb-6">
+                                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                                    </div>
+
+                                    <!-- Quote -->
+                                    <blockquote class="font-heading text-lg sm:text-xl font-medium text-ink leading-relaxed mb-6">
+                                        "SalesIQ completely changed how I run my Instagram store. Sending professional WhatsApp receipts in seconds makes my business look instantly high-end."
+                                    </blockquote>
+
+                                    <!-- Author Meta -->
+                                    <div class="flex items-center gap-4 pt-6 border-t border-slate-200/60">
+                                        <div class="h-12 w-12 rounded-full bg-primary/20 flex items-center justify-center font-heading font-semibold text-primary text-base">
+                                            AO
+                                        </div>
+                                        <div>
+                                            <p class="font-heading font-semibold text-ink">Amina O.</p>
+                                            <p class="text-xs text-slate-500 font-medium">Founder, Glow Skincare Lagos</p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Metric Badge Footer inside card -->
+                                    <div class="mt-6 pt-4 border-t border-slate-200/40 flex items-center justify-between text-xs text-slate-600">
+                                        <span>⚡ Average setup time:</span>
+                                        <span class="text-primary font-medium">Under 60 seconds</span>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- ================= PRICING PLAN SECTION ================= -->
+            <section id="pricing" class="relative overflow-hidden py-20 lg:py-28 section-dots">
+                <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+
+                    <!-- Section Header -->
+                    <div class="mx-auto max-w-2xl text-center mb-16">
+                        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary-50 border border-primary/20 text-primary text-xs uppercase tracking-wider mb-4 shadow-xs">
+                            <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                            Simple Pricing
+                        </div>
+                        
+                        <h2 class="font-heading text-3xl font-extrabold tracking-tight text-ink sm:text-4xl lg:text-5xl leading-tight mb-4">
+                            Invest in your growth. <span class="text-transparent bg-clip-text bg-linear-to-r from-primary via-emerald-500 to-accent">Start for free</span>.
+                        </h2>
+                        
+                        <p class="text-base sm:text-lg text-slate-600 leading-relaxed">
+                            No complex bookkeeping software or hidden setup fees. Pick the plan that fits your business stage.
+                        </p>
+                    </div>
+
+                    <!-- Pricing Cards Grid (Free vs Pro) -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto items-stretch">
+
+                        <!-- FREE PLAN CARD -->
+                        <div class="group relative flex flex-col justify-between rounded-3xl bg-white border border-slate-200/80 p-8 sm:p-10 shadow-sm hover:shadow-md hover:border-primary/40 transition-all duration-300">
+                            <div>
+                                
+                                <div class="flex items-center justify-between mb-4">
+                                    <h3 class="font-heading text-xl text-ink">Starter Free</h3>
+                                    <span class="text-xs font-light uppercase tracking-wider text-slate-500 bg-slate-100 px-3 py-1 rounded-full">For Side Hustles</span>
+                                </div>
+                                
+                                <p class="text-sm sm:text-base text-slate-600 mb-6">
+                                    Everything you need to record your first sale, send digital receipts, and ditch messy paper notebooks.
+                                </p>
+
+                                
+                                <div class="flex items-baseline gap-1 mb-8 pb-8 border-b border-slate-100">
+                                    <span class="font-heading text-4xl sm:text-5xl font-extrabold text-ink">₦0</span>
+                                    <span class="text-slate-500 font-medium text-sm">/ forever</span>
+                                </div>
+
+                                <!-- Features List -->
+                                <ul class="space-y-4 mb-8 text-sm sm:text-base text-slate-700 font-medium">
+                                    <li class="flex items-center gap-3">
+                                        <span class="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 shrink-0">
+                                            <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                        </span>
+                                        Limited sales recording
+                                    </li>
+                                    <li class="flex items-center gap-3">
+                                        <span class="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 shrink-0">
+                                            <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                        </span>
+                                        WhatsApp verified PAID receipts
+                                    </li>
+                                    <li class="flex items-center gap-3">
+                                        <span class="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 shrink-0">
+                                            <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                        </span>
+                                        Unlimited products catalogue
+                                    </li>
+                                    <li class="flex items-center gap-3 text-slate-400">
+                                        <span class="flex h-5 w-5 items-center justify-center rounded-full bg-slate-100 text-slate-400 shrink-0">
+                                            <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                                        </span>
+                                        Advanced lifetime value analytics
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div>
+                                <a href="{% url ACCOUNTS.AUTH.REGISTER %}"
+                                class="w-full inline-flex items-center justify-center rounded-full bg-slate-900 px-6 py-3.5 text-sm text-white transition hover:bg-slate-800 shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900">
+                                    Get started free
+                                </a>
+                                <p class="text-[11px] text-center text-slate-400 mt-3 font-light">No credit card required</p>
+                            </div>
+                        </div>
+
+                        <!-- PRO PLAN CARD (Highlighted) -->
+                        <div class="group relative flex flex-col justify-between rounded-3xl bg-slate-900 border border-primary p-8 sm:p-10 shadow-xl overflow-hidden text-white">
+                            <div class="pointer-events-none absolute -right-12 -top-12 h-64 w-64 rounded-full bg-primary/20 blur-3xl"></div>
+                            
+                            <div class="relative z-10">
+
+                                <div class="flex items-center justify-between mb-4">
+                                    <h3 class="font-heading text-xl font-semibold text-white">SalesIQ Pro</h3>
+                                    <span class="text-[10px] uppercase tracking-wider text-white bg-primary px-3 py-1 rounded-full shadow-sm font-medium">Most Popular</span>
+                                </div>
+                                
+                                <p class="text-sm sm:text-base text-slate-300 mb-6">
+                                    For growing social sellers and shop owners who want deep customer insights, custom branding, and unlimited scale.
+                                </p>
+
+                                <!-- Price -->
+                                <div class="mb-8 pb-8 border-b border-white/10">
+                                    <div class="flex items-baseline gap-2">
+                                        <span class="font-heading text-4xl sm:text-5xl font-extrabold text-white">₦7,000</span>
+                                        <span class="text-slate-400 font-medium text-sm">/ month</span>
+                                    </div>
+                                    <p class="text-xs text-emerald-400 font-medium mt-1.5">(billed monthly or yearly)</p>
+                                </div>
+
+                                <!-- Features List -->
+                                <ul class="space-y-4 mb-8 text-sm sm:text-base text-slate-200 font-medium">
+                                    <li class="flex items-center gap-3">
+                                        <span class="flex h-5 w-5 items-center justify-center rounded-full bg-primary/20 text-primary-400 shrink-0">
+                                            <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                        </span>
+                                        <strong class="text-white">Unlimited</strong> customer records & orders
+                                    </li>
+                                    <li class="flex items-center gap-3">
+                                        <span class="flex h-5 w-5 items-center justify-center rounded-full bg-primary/20 text-primary-400 shrink-0">
+                                            <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                        </span>
+                                        Advanced repeat rate & lifetime value analytics
+                                    </li>
+                                    <li class="flex items-center gap-3">
+                                        <span class="flex h-5 w-5 items-center justify-center rounded-full bg-primary/20 text-primary-400 shrink-0">
+                                            <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                        </span>
+                                        Custom brand logo & colors on PDF/WhatsApp receipts
+                                    </li>
+                                    <li class="flex items-center gap-3">
+                                        <span class="flex h-5 w-5 items-center justify-center rounded-full bg-primary/20 text-primary-400 shrink-0">
+                                            <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                        </span>
+                                        Priority support & data export tools
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <!-- CTA Button -->
+                            <div class="relative z-10">
+                                <a href="{% url ACCOUNTS.AUTH.REGISTER %}"
+                                class="w-full inline-flex items-center justify-center rounded-full bg-primary px-6 py-3.5 text-sm font-medium text-white shadow-lg shadow-primary/25 transition-all hover:bg-primary-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
+                                    Upgrade to Pro
+                                </a>
+                                <p class="text-[11px] text-center text-slate-400 mt-3">Cancel anytime on your terms</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- ================= CTA SECTION ================= -->
+            <section id="cta" class="relative overflow-hidden py-20 lg:py-28">
+                <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                    <div class="relative overflow-hidden rounded-3xl bg-ink border border-slate-800 p-8 sm:p-12 lg:p-16 shadow-2xl">
+
+                        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center relative z-10">
+                            
+                            <!-- Left Column: Copy & Pitch -->
+                            <div class="lg:col-span-7 space-y-6 text-left">
+                                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary/20 border border-primary/30 text-primary text-xs uppercase tracking-wider">
+                                    <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                                    Zero Setup. Instant Clarity.
+                                </div>
+
+                                <h2 class="font-heading text-2xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-white leading-[1.2] sm:leading-tight">
+                                    Stop juggling DMs. Start <span class="inline-block text-transparent bg-clip-text bg-linear-to-r from-emerald-400 via-primary-400 to-accent pb-1">scaling your revenue</span>.
+                                </h2>
+
+                                <p class="text-slate-300 text-base sm:text-lg leading-relaxed max-w-xl">
+                                    Join social sellers and shop owners who traded messy notebooks for trusted digital records, verified WhatsApp receipts, and real-time business intelligence.
+                                </p>
+                            </div>
+
+                            <!-- Right Column: Actions & Trust Pill -->
+                            <div class="lg:col-span-5 flex flex-col justify-center items-start lg:items-end space-y-4">
+                                <div class="w-full sm:w-auto flex flex-col sm:flex-row lg:flex-col gap-3">
+                                    <a href="{% url ACCOUNTS.AUTH.REGISTER %}"
+                                    class="w-full inline-flex items-center justify-center rounded-2xl bg-primary px-8 py-4 text-sm font-medium text-white shadow-lg shadow-primary/25 transition-all hover:bg-primary-600 hover:-translate-y-0.5 active:translate-y-0">
+                                        Start tracking free today
+                                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                                    </a>
+                                    <a href="#pricing"
+                                    class="w-full inline-flex items-center justify-center rounded-2xl bg-white/10 px-8 py-4 text-sm font-medium text-white backdrop-blur-md transition hover:bg-white/20 border border-white/15">
+                                        Explore Pro features
+                                    </a>
+                                </div>
+
+                                <div class="flex items-center gap-2 text-xs text-slate-400 pt-2">
+                                    <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                    <span>No credit card required &bull; First sale in under 1 minute</span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+        </main>
+        
 
         <!-- ================= FOOTER ================= -->
         <footer class="bg-slate-950 text-slate-400 pt-16 pb-12 border-t border-slate-800">
@@ -894,7 +891,7 @@
                     <div class="lg:col-span-2 space-y-4">
                         
                         <div class="flex items-center">
-                            <a href="#" class="inline-block focus:outline-none focus:ring-2 focus:ring-primary rounded-lg">
+                            <a href="#" class="inline-block focus:outline-none focus:ring-1 focus:ring-primary rounded-lg">
                                 <img src="{% static 'images/logo/main-logo-dark.png' %}" 
                                     alt="SalesIQ Logo" 
                                     class="h-8 sm:h-9 w-auto object-contain">
