@@ -46,7 +46,7 @@
                 <div class="rounded-xl bg-neutral-50 dark:bg-neutral-800/50 p-4 border border-neutral-100 dark:border-neutral-800/80 min-w-32">
                     <span class="block text-xs font-medium text-neutral-500 dark:text-neutral-400">All Merchants</span>
                     <span class="mt-1 block text-xl font-medium text-neutral-900 dark:text-white">
-                        {{ recent_signups|length|default:"0"|compact_number }}
+                        {{ total_merchants|default:"0"|compact_number }}
                     </span>
                 </div>
 

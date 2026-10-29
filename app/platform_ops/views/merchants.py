@@ -10,6 +10,7 @@ from platform_ops.mixins import BackofficeAccessMixin
 from platform_ops.serializer import MerchantLeaderboardSchema
 class AllMerchantListsView(BackofficeAccessMixin, ListView):
     template_name = APP_TEMPLATES.PLATFORM_OPS.ALL_MERCHANTS
+    selector_cls = BusinessPlatformSelector()
     context_object_name = "recent_signups"
     paginate_by = 15
 
@@ -19,7 +20,7 @@ class AllMerchantListsView(BackofficeAccessMixin, ListView):
             BusinessPlatformSelector query logic. This ensures performance consistency 
             and eliminates query duplication across backoffice features.
         """
-        qs = BusinessPlatformSelector().get_annotated_queryset()
+        qs = self.selector_cls.get_annotated_queryset()
         search_query = self.request.GET.get('q', '').strip()
         if search_query:
             qs = qs.filter(
@@ -33,6 +34,7 @@ class AllMerchantListsView(BackofficeAccessMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['search_query'] = self.request.GET.get('q', '')
+        context['total_merchants'] = self.selector_cls.get_total_count()
         return context
     
 

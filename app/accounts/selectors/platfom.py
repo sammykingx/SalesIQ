@@ -17,6 +17,7 @@ class BusinessPlatformSelector(BusinessSelectorBase):
         and global summary widgets.
     """
     def get_total_count(self) -> int:
+        """Returns the businesses/merchants on the platform"""
         return self.business_model.objects.count()
     
     def get_annotated_queryset(self) -> QuerySet:

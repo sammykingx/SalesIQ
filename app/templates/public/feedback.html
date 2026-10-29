@@ -33,9 +33,9 @@
     {% endif %}"
   >
     <!-- Background Ambient Flare inside Card -->
-    <div class="absolute -top-24 left-1/2 -translate-x-1/2 w-48 h-48 rounded-full blur-3xl pointer-events-none opacity-40
+    {% comment %} <div class="absolute -top-24 left-1/2 -translate-x-1/2 w-48 h-48 rounded-full blur-3xl pointer-events-none opacity-40
       {% if is_error == 'error' %} bg-rose-500 {% elif is_error == 'warning' %} bg-amber-500 {% else %} bg-emerald-500 {% endif %}"
-    ></div>
+    ></div> {% endcomment %}
 
     <!-- Status Icon Badge -->
     <div class="mx-auto mb-6 w-16 h-16 sm:w-20 sm:h-20 rounded-2xl flex items-center justify-center border shadow-inner animate-in zoom-in duration-300 delay-100 fill-mode-both
@@ -49,17 +49,17 @@
     >
       {% if is_error == 'error' %}
         <!-- Error / X Icon -->
-        <svg class="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="w-8 h-8 sm:w-10 sm:h-10 font-medium" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
         </svg>
       {% elif is_error == 'warning' %}
         <!-- Warning / Exclamation Icon -->
-        <svg class="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="w-8 h-8 sm:w-10 sm:h-10 font-medium" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
         </svg>
       {% else %}
         <!-- Success / Checkmark Icon -->
-        <svg class="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="w-8 h-8 sm:w-10 sm:h-10 font-medium" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M5 13l4 4L19 7" />
         </svg>
       {% endif %}
@@ -108,7 +108,7 @@
       {% if secondary_btn_url %}
         <a 
           href="{{ secondary_btn_url }}" 
-          class="w-full inline-flex items-center justify-center py-3 px-5 rounded-xl border border-slate-300 dark:border-white/10 bg-white/50 dark:bg-ink-800/50 hover:bg-slate-100 dark:hover:bg-ink-800 text-ink-700 dark:text-slate-300 font-medium text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/40 active:scale-[0.99]"
+          class="w-full inline-flex items-center justify-center py-3 px-5 rounded-xl border border-slate-300 dark:border-white/10 bg-white/50 dark:bg-ink/50 hover:bg-slate-100 dark:hover:bg-ink-800 text-ink-700 dark:text-slate-300 font-medium text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/40 active:scale-[0.99]"
         >
           {{ secondary_btn_label|default:"Back" }}
         </a>

@@ -1,6 +1,7 @@
 export function invoiceShareComponent() {
     return {
-        open: false,
+        openShare: false,
+        openExport: false,
         copied: false,
         hasNativeShare: false,
         shareUrl: '',
@@ -15,7 +16,8 @@ export function invoiceShareComponent() {
             this.businessName = this.$el.dataset.businessName || '';
         },
 
-        triggerShare() {
+        // Handles the "Share" button click
+        handleShareClick() {
             if (this.hasNativeShare) {
                 navigator.share({
                     title: `Invoice #${this.invoiceID} — ${this.businessName}`,
@@ -23,8 +25,16 @@ export function invoiceShareComponent() {
                     url: this.shareUrl,
                 }).catch(() => { });
             } else {
-                this.open = !this.open;
+                // Open the custom Share modal with WhatsApp, Email, and Copy Link
+                this.openExport = false; // Close export modal if open
+                this.openShare = true;
             }
+        },
+
+        // Handles the "Download / Print" button click
+        handleExportClick() {
+            this.openShare = false; // Close share modal if open
+            this.openExport = !this.openExport;
         },
 
         copyLink() {
@@ -48,21 +58,19 @@ export function invoiceShareComponent() {
         },
 
         printA4() {
-            this.open = false;
+            this.openExport = false;
             setTimeout(() => {
                 window.print();
             }, 100);
         },
 
         printThermal(receiptUrl) {
-            this.open = false;
+            this.openExport = false;
             document.getElementById('thermal-print-frame')?.remove();
 
             const frame = document.createElement('iframe');
             frame.id = 'thermal-print-frame';
             frame.setAttribute('aria-hidden', 'true');
-            
-            // Not display:none, some browsers print a blank page from hidden iframes
             frame.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0;';
 
             frame.onload = () => {

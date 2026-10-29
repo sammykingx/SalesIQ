@@ -6,7 +6,7 @@
 <div 
   x-data="{
     theme: document.documentElement.classList.contains('dark') ? 'dark' : 'light',
-    selectedLang: 'Africa/Lagos',
+    detectedRegion: Intl.DateTimeFormat().resolvedOptions().timeZone || 'Africa/Lagos',
     showToast: false,
     toastMessage: '',
     toastType: 'success', // 'success' | 'error' | 'warning' | 'info'
@@ -82,11 +82,7 @@
   </div>
 
   <div class="fixed inset-0 z-0 pointer-events-none">
-    {% comment %} <div 
-      class="absolute inset-0 bg-cover bg-center bg-no-repeat"
-      style="background-image: url('{% static 'images/backgrounds/auth-bg.jpg' %}');"
-    ></div> {% endcomment %}
-
+   
     <div 
       class="absolute inset-0 bg-cover bg-center bg-no-repeat bg-(image:--bg-mobile) md:bg-(image:--bg-desktop)"
       style="--bg-mobile: url('{% static 'images/backgrounds/auth-bg-mobile.jpg' %}'); --bg-desktop: url('{% static 'images/backgrounds/auth-bg.jpg' %}');"
@@ -102,14 +98,14 @@
   <!-- Utility Header -->
   <header class="relative z-10 w-full max-w-7xl px-4 sm:px-6 py-5 flex justify-end items-center gap-3 sm:gap-4 animate-fade-in-down">
     
-    <!-- Language / Region -->
+    <!-- User Region -->
     <div class="group relative flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-white/80 dark:bg-neutral-900/80 backdrop-blur-md border border-neutral-200/80 dark:border-neutral-800 text-xs text-neutral-600 dark:text-neutral-300 shadow-xs hover:border-emerald-500/40 hover:text-emerald-600 dark:hover:text-emerald-400 transition-all duration-200 cursor-pointer">
         <div class="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
             </svg>
         </div>
-        <span x-text="selectedLang"></span>
+        <span x-text="detectedRegion"></span>
     </div>
 
     <!-- Theme Toggle Switch Button -->

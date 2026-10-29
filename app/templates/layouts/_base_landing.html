@@ -6,7 +6,7 @@
 <div 
   x-data="{
     theme: document.documentElement.classList.contains('dark') ? 'dark' : 'light',
-    selectedLang: 'Africa/Lagos',
+    selectedLang: Intl.DateTimeFormat().resolvedOptions().timeZone || 'Africa/Lagos',
     toastTitle: '',
     showToast: false,
     toastMessage: '',
@@ -28,7 +28,7 @@
       setTimeout(() => { this.showToast = false; }, 4000);
     }
   }"
-  class="relative min-h-screen font-sans text-ink-900 dark:text-surface flex flex-col justify-between items-center overflow-x-hidden transition-colors duration-300"
+  class="relative min-h-screen patterned-dots font-sans text-ink-900 dark:text-surface flex flex-col justify-between items-center overflow-x-hidden transition-colors duration-300"
 >
 
   <!-- Soft-Tone Responsive Toast Notification (Pill Design) -->
@@ -109,7 +109,7 @@
   </div>
 
   <!-- Background Image & Ambient Orbs -->
-  <div class="fixed inset-0 z-0 pointer-events-none">
+  {% comment %} <div class="fixed inset-0 z-0 pointer-events-none">
     <div 
       class="absolute inset-0 bg-cover bg-center bg-no-repeat"
       style="background-image: url('{% static 'images/backgrounds/onboarding-bg.jpg' %}');"
@@ -120,21 +120,21 @@
     <div class="absolute -top-40 -left-40 w-md h-112 bg-primary/15 dark:bg-primary/20 rounded-full blur-[120px] mix-blend-multiply dark:mix-blend-screen"></div>
     <div class="absolute -bottom-40 -right-40 w-md h-112 bg-secondary/15 dark:bg-secondary/20 rounded-full blur-[120px] mix-blend-multiply dark:mix-blend-screen"></div>
     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-140 h-140 bg-accent/10 dark:bg-accent/15 rounded-full blur-[160px] pointer-events-none"></div>
-  </div>
+  </div> {% endcomment %}
 
   <!-- Utility Header -->
   <header class="relative z-10 w-full max-w-7xl px-4 sm:px-8 py-5 flex justify-between items-center animate-fade-in-down">
     
     <!-- Brand Logo Anchor -->
     <a href="/" class="flex items-center group focus:outline-none">
-      <template x-if="!theme">
+      <template x-if="theme === 'light'">
         <img 
           src="{% static 'images/logo/main-logo-light.png' %}" 
           alt="SalesIQ Logo" 
           class="h-8 sm:h-10 w-auto object-contain transition-transform duration-200 group-hover:scale-105"
         />
       </template>
-      <template x-if="theme">
+      <template x-if="theme === 'dark'">
         <img 
           src="{% static 'images/logo/main-logo-dark.png' %}" 
           alt="SalesIQ Logo" 
